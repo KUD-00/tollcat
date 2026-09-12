@@ -36,6 +36,7 @@ struct GalleryCatStatesView: View {
                                     .lineLimit(1)
                             }
                             .frame(maxWidth: .infinity)
+                            .meterListRowHitTarget()
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(mood.galleryTitle)

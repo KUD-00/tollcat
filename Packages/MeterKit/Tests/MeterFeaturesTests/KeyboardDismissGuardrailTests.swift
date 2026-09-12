@@ -54,7 +54,12 @@ struct KeyboardDismissGuardrailTests {
         #expect(offenders.isEmpty, Comment(rawValue: offenders.joined(separator: "\n")))
     }
 
+    /// 输入框住在别的屏幕里的「节」：完成栏由承载它的屏幕挂，再挂一份会出现两个「完成」。
+    /// `scripts/check-design-lint.py` 的 `KEYBOARD_DISMISS_HOSTED_BY_SCREEN` 同一份名单，改了两边一起改。
+    private static let hostedByScreen: Set<String> = ["SetupFeedbackSection.swift"]
+
     private static func offenders(in file: URL, repoRoot: URL) throws -> [String] {
+        if hostedByScreen.contains(file.lastPathComponent) { return [] }
         let original = try String(contentsOf: file, encoding: .utf8)
         let masked = maskCommentsAndStrings(original)
         let ns = masked as NSString
