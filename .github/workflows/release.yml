@@ -24,6 +24,10 @@ on:
         description: Put Android on this train (AAB attached to the Release; Play upload stays manual for now)
         type: boolean
         default: false
+      windows:
+        description: Put the Windows placeholder on this train (dotnet tests + appinstaller stub in the Release; nothing ships to users yet)
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -627,6 +631,10 @@ jobs:
 
   windows:
     name: Windows MSIX placeholder
+    # Opt-in only. Windows has never shipped and its Environment has no signing
+    # material; a rejected approval here counts as a failure and blocks the
+    # publish job, which is how the first tag-push train lost its draft Release.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.windows }}
     needs: preflight
     runs-on: windows-latest
     environment: windows

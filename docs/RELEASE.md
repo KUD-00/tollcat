@@ -25,7 +25,7 @@
 |---|---|---|---|
 | `.github/workflows/ci.yml` | 六道静态闸、iOS 单测、Worker typecheck、Windows 单测、站点构建、Maestro UI 冒烟 | push main / PR（私有期：手动） | 无 |
 | `.github/workflows/beta.yml` | 从 main 头部归档上传 TestFlight，build 号 = run number | push main（私有期：手动） | `app-store` environment |
-| `.github/workflows/release.yml` | tag → 勾了的端：iOS 上 ASC、Mac 直发公证 + Sparkle、Mac 商店 .pkg 上 ASC、Android AAB、Windows 占位 → draft Release + 溯源证明；跟车的端打 `ios-v*` `mac-v*` `mac-appstore-v*` `android-v*` 记账。各端挂 Environment，审批在这里停 | tag `v*`（默认 iOS + Mac 直发；**Mac 商店只能 dispatch 手动勾**） | `app-store` `mac-direct` `windows` `google-play` |
+| `.github/workflows/release.yml` | tag → 勾了的端：iOS 上 ASC、Mac 直发公证 + Sparkle、Mac 商店 .pkg 上 ASC、Android AAB、Windows 占位 → draft Release + 溯源证明；跟车的端打 `ios-v*` `mac-v*` `mac-appstore-v*` `android-v*` 记账。各端挂 Environment，审批在这里停。**拒掉任何一个已起的 job 等于这班车没有 draft**，不想发的端别让它起（Mac 商店 / Android / Windows 都是 dispatch 才起） | tag `v*`（默认 iOS + Mac 直发；**Mac 商店、Android、Windows 只能 dispatch 手动勾**） | `app-store` `mac-direct` `windows` `google-play` |
 | `.github/workflows/mac-appcast.yml` | Release 被 Publish 时，把它的 appcast.xml 和 zip 副本覆盖到滚动 Release `mac-appcast`。没有 Mac 资产的 Release（iOS-only）不动清单 | release published（私有期：手动填 tag） | 无 |
 | `.github/workflows/deploy-edge.yml` | D1 迁移 → 部署 toll-api；构建 → 部署 tollcat.app | push main 且 worker/ site/ 契约 目录有改动（私有期：手动） | `api` environment |
 | `.github/workflows/release-status.yml` | 跑 `release-status.sh`，有该发的端就开 issue，没有就关 | 每周一（私有期：手动） | 无 |
