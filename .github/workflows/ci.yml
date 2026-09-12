@@ -135,8 +135,13 @@ jobs:
   test:
     name: Test
     runs-on: macos-26
+    # The whole suite takes under three minutes locally. Once on CI xcodebuild
+    # went silent after compiling and sat there for 85 minutes; without a cap
+    # the default is six hours.
+    timeout-minutes: 45
     env:
       DERIVED_DATA: /tmp/dd-verify
+      RESULT_BUNDLE: /tmp/dd-verify/TollCat.xcresult
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -176,9 +181,13 @@ jobs:
       - name: Check committed projects are in sync
         run: git diff --exit-code -- TollCat.xcodeproj TollCatMac.xcodeproj ':!*.xcscheme'
 
+      # Ad-hoc signed, not unsigned: with CODE_SIGNING_ALLOWED=NO the Keychain
+      # returns -34018 and KeychainCredentialStoreTests / StoreResetTests fail.
+      # Same flags scripts/maestro-smoke.sh uses for ADHOC_SIGN=1.
       - name: Test
         run: |
           set -euo pipefail
+          rm -rf "$RESULT_BUNDLE"
           dest='platform=iOS Simulator,name=iPhone 17 Pro'
           if ! xcrun simctl list devices available | grep -F 'iPhone 17 Pro' >/dev/null; then
             name="$(xcrun simctl list devices available | awk '/iPhone/{sub(/^[[:space:]]+/, ""); sub(/ \(.*/, ""); print; exit}')"
@@ -190,11 +199,21 @@ jobs:
             -scheme TollCat \
             -destination "${dest}" \
             -derivedDataPath "${DERIVED_DATA}" \
-            CODE_SIGNING_ALLOWED=NO
+            -resultBundlePath "${RESULT_BUNDLE}" \
+            DEVELOPMENT_TEAM= CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER=
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresult-ios
+          path: /tmp/dd-verify/TollCat.xcresult
+          if-no-files-found: ignore
 
   ui-smoke:
     name: UI smoke (Maestro, iOS Simulator)
     runs-on: macos-26
+    timeout-minutes: 40
     env:
       DERIVED: /tmp/dd-maestro
       MAESTRO_CLI_NO_ANALYTICS: "1"
