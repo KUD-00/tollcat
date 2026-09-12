@@ -1,7 +1,11 @@
 <!-- GENERATED — 由 scripts/generate-shared.py 从 shared/changelog.json 生成。 -->
 <div style="font: -apple-system-body; -webkit-text-size-adjust: none">
-  <h2 style="margin:0 0 .5em">TollCat 1.0：云账单，装进口袋</h2>
+  <h2 style="margin:0 0 .5em">TollCat 1.1：看哪个月，就说哪个月</h2>
   <ul style="margin:0; padding-left:1.2em">
-    <li><b>第一版上架了</b><br>先从 iPhone 和 iPad 开始。把各家云和 AI 服务的花费加在一起，打开就能看到这个月到现在一共花了多少。</li>
+    <li><b>换了月份，页面上的字也跟着换</b><br>选了七月或者近 3 个月，仪表盘上原来写「本月」的地方都会改成那段时间。「之最」那一节也一样。固定订阅卡在跨月区间里列的是那几个月实际扣过的每一笔，中途退掉的也算在里面。</li>
+    <li><b>订阅金额搬到日期上面</b><br>算进固定订阅的时候，大数字底下多一行「（订阅 $X）」，告诉你总数里有多少是订阅。关掉订阅这一行就不出现，不再写「已计入」「未计入」。</li>
+    <li><b>155 家的接入说明重写了</b><br>每一步都指到真正创建密钥的那一页，顺手写清要哪些权限、密钥只显示一次这类容易踩的坑。连接失败时的提示也按每家的实际情况改准了。</li>
+    <li><b>DigitalOcean、Stripe、Botpress、Neo4j Aura 用真实账单核对过了</b><br>这四家从「待验证」升为「完全支持」。接上去，数字就是你账单上的数字。</li>
+    <li><b>反馈里附带的响应，打码更严了</b><br>发反馈时选择附带测试连接的响应，所有以 token 结尾的字段一律打掉，之前有几家的写法漏了。用量统计里的 tokens 数字不受影响。</li>
   </ul>
 </div>

@@ -1,3 +1,7 @@
-TollCat 1.0: your cloud bills, in your pocket
+TollCat 1.1: says the month you’re looking at
 
-· The first release
+· Pick a month, and the page talks about that month
+· The subscription amount now sits above the date
+· Setup guides for 155 services, rewritten
+· DigitalOcean, Stripe, Botpress and Neo4j Aura checked against real bills
+· Stricter redaction in feedback attachments

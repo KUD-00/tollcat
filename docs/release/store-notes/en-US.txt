@@ -1,4 +1,12 @@
-TollCat 1.0: your cloud bills, in your pocket
+TollCat 1.1: says the month you’re looking at
 
-· The first release
-  iPhone and iPad first. TollCat adds up what you spend across your cloud and AI services, so one glance tells you how much this month has cost so far.
+· Pick a month, and the page talks about that month
+  Choose July or the last 3 months and every spot that used to say “this month” now names that period, the superlatives section included. Over a multi-month range the subscriptions card lists what was actually charged in those months, cancelled ones too.
+· The subscription amount now sits above the date
+  With subscriptions included, a line like “(Subscriptions $20)” appears under the big number so you can see how much of the total is subscriptions. Turn them off and the line goes away. No more “included” or “not included”.
+· Setup guides for 155 services, rewritten
+  Each step now points at the exact page where the key gets created, and calls out the traps along the way: which permission to tick, keys that are shown only once. The messages you see when a connection fails were made specific to each service too.
+· DigitalOcean, Stripe, Botpress and Neo4j Aura checked against real bills
+  These four move from “pending verification” to fully supported. Connect one and the number you see is the number on your bill.
+· Stricter redaction in feedback attachments
+  If you attach the test-connection response to a feedback report, every field ending in “token” is now blanked out. A few services spelled theirs in a way that slipped through before. Usage counts like total_tokens are untouched.
