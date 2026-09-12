@@ -80,15 +80,6 @@ jobs:
       - name: Check follow-up map
         run: python3 scripts/check-follow-up.py check
 
-      # Android 的 .so 只在 release.yml 手动勾 android 时才编，于是桥里一个
-      # 少写的 import 能一路躺到打 tag 那天（2026-09-09 就发生过一次）。
-      # 完整交叉编译要 Swift Android SDK + NDK，太重；但桥的 Swift 在 host 上
-      # 就能编——编译错误九成在这一层，这一步几十秒就能挡住。
-      - name: Build the Android bridge (host)
-        run: |
-          swift build --package-path Android/native --target MeterBridge \
-            -Xswiftc -target -Xswiftc arm64-apple-macosx26.0
-
   secrets:
     name: Secret scan (gitleaks)
     runs-on: ubuntu-latest
@@ -150,6 +141,16 @@ jobs:
           sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
           sw_vers
+
+      # Android 的 .so 只在 release.yml 手动勾 android 时才编，于是桥里一个
+      # 少写的 import 能一路躺到打 tag 那天（2026-09-09 就发生过一次）。
+      # 完整交叉编译要 Swift Android SDK + NDK，太重；但桥的 Swift 在 macOS host 上
+      # 就能编——编译错误九成在这一层，这一步几十秒就能挡住。
+      # 必须在 macOS job 里：-target arm64-apple-macosx 在 ubuntu 上没有标准库。
+      - name: Build the Android bridge (host)
+        run: |
+          swift build --package-path Android/native --target MeterBridge \
+            -Xswiftc -target -Xswiftc arm64-apple-macosx26.0
 
       - name: Install xcodegen
         run: brew install xcodegen
