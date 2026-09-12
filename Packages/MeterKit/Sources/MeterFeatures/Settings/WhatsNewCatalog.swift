@@ -12,6 +12,21 @@ import MeterDesign
 /// 而抽屉在「更新后第一次冷启动」弹，那一刻远程缓存里按定义没有这条。
 /// 以后若要支持远程改错别字，能被覆盖的只有 `title` / `body`，按 `WhatsNewItem.id` 认。
 enum WhatsNewCatalog {
-    /// 还没发过正式版。发版时在 shared/changelog.json 顶上加一条。
-    static let entries: [WhatsNewEntry] = []
+    static let entries: [WhatsNewEntry] = [
+        WhatsNewEntry(
+            version: "1.0.0",
+            platforms: [.ios],
+            showsDrawer: false,
+            hero: .cat(.normal),
+            title: WhatsNewText(zh: "TollCat 1.0：云账单，装进口袋", en: "TollCat 1.0: your cloud bills, in your pocket", ja: "TollCat 1.0：クラウドの請求を、ポケットに"),
+            items: [
+                WhatsNewItem(
+                    id: "firstRelease",
+                    symbol: "sparkles",
+                    title: WhatsNewText(zh: "第一版上架了", en: "The first release", ja: "はじめてのリリース"),
+                    body: WhatsNewText(zh: "先从 iPhone 和 iPad 开始。把各家云和 AI 服务的花费加在一起，打开就能看到这个月到现在一共花了多少。", en: "iPhone and iPad first. TollCat adds up what you spend across your cloud and AI services, so one glance tells you how much this month has cost so far.", ja: "まずは iPhone と iPad から。クラウドや AI サービスの利用料をまとめて、今月ここまでいくら使ったかがひと目でわかります。")
+                ),
+            ]
+        ),
+    ]
 }

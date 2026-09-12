@@ -37,7 +37,46 @@ export const platformNames: Record<ChangelogPlatform, string> = {
   windows: 'Windows',
 };
 
-export const changelog: readonly ChangelogEntry[] = [];
+export const changelog: readonly ChangelogEntry[] = [
+    {
+      "version": "1.0.0",
+      "platforms": [
+        "ios"
+      ],
+      "copy": {
+        "zh": {
+          "title": "TollCat 1.0：云账单，装进口袋",
+          "items": [
+            {
+              "id": "firstRelease",
+              "title": "第一版上架了",
+              "body": "先从 iPhone 和 iPad 开始。把各家云和 AI 服务的花费加在一起，打开就能看到这个月到现在一共花了多少。"
+            }
+          ]
+        },
+        "en": {
+          "title": "TollCat 1.0: your cloud bills, in your pocket",
+          "items": [
+            {
+              "id": "firstRelease",
+              "title": "The first release",
+              "body": "iPhone and iPad first. TollCat adds up what you spend across your cloud and AI services, so one glance tells you how much this month has cost so far."
+            }
+          ]
+        },
+        "ja": {
+          "title": "TollCat 1.0：クラウドの請求を、ポケットに",
+          "items": [
+            {
+              "id": "firstRelease",
+              "title": "はじめてのリリース",
+              "body": "まずは iPhone と iPad から。クラウドや AI サービスの利用料をまとめて、今月ここまでいくら使ったかがひと目でわかります。"
+            }
+          ]
+        }
+      }
+    }
+];
 
 export function latestChangelog(): ChangelogEntry | undefined {
   return changelog[0];

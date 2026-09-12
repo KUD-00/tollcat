@@ -38,5 +38,21 @@ data class WhatsNewEntry(
 
 /** 新的在上。编译期铺进来，不下发——理由见 shared/changelog.json 的注释。 */
 object WhatsNewCatalog {
-    val entries: List<WhatsNewEntry> = emptyList()
+    val entries: List<WhatsNewEntry> = listOf(
+        WhatsNewEntry(
+            version = "1.0.0",
+            platforms = setOf("ios"),
+            showsDrawer = false,
+            hero = WhatsNewHero.Cat("normal"),
+            title = WhatsNewText(zh = "TollCat 1.0：云账单，装进口袋", en = "TollCat 1.0: your cloud bills, in your pocket", ja = "TollCat 1.0：クラウドの請求を、ポケットに"),
+            items = listOf(
+                WhatsNewItem(
+                    id = "firstRelease",
+                    symbol = null,
+                    title = WhatsNewText(zh = "第一版上架了", en = "The first release", ja = "はじめてのリリース"),
+                    body = WhatsNewText(zh = "先从 iPhone 和 iPad 开始。把各家云和 AI 服务的花费加在一起，打开就能看到这个月到现在一共花了多少。", en = "iPhone and iPad first. TollCat adds up what you spend across your cloud and AI services, so one glance tells you how much this month has cost so far.", ja = "まずは iPhone と iPad から。クラウドや AI サービスの利用料をまとめて、今月ここまでいくら使ったかがひと目でわかります。"),
+                ),
+            ),
+        ),
+    )
 }
