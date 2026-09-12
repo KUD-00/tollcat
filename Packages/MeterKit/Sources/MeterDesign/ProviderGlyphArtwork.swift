@@ -309,6 +309,8 @@ enum ProviderGlyphArtwork {
         case "idcf": 0.92
         case "ionos": 0.8
         case "modal": 0.8
+        case "nomos": 0.9
+        case "once": 0.8
         case "telnyx": 0.8
         case "terraform": 0.74
         case "tinybird": 0.8

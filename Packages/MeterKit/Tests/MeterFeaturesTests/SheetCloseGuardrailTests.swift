@@ -131,7 +131,9 @@ struct SheetCloseGuardrailTests {
     func credentialManagementPushesInsteadOfDrawer() throws {
         let text = try GuardrailSourceScan.sourceText(named: "CredentialManagementSheet.swift")
         let detail = try GuardrailSourceScan.sourceText(named: "ProviderDetailView.swift")
-        #expect(detail.contains("NavigationLink"))
+        // 推进用 MeterColumnPushLink：iPhone 上就是 NavigationLink，Mac 上进分栏。
+        // 裸 NavigationLink 在宽壳里会掉出分栏，所以这里认的是封装而不是原语。
+        #expect(detail.contains("MeterColumnPushLink"))
         #expect(detail.contains("CredentialManagementSheet"))
         #expect(!detail.contains("isPresentingCredentialManagement"))
         #expect(!text.contains("meterDrawerChrome"))

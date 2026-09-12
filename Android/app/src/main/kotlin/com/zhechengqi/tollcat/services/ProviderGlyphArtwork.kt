@@ -53,6 +53,8 @@ internal object ProviderGlyphArtwork {
         "idcf" -> 0.92f
         "ionos" -> 0.8f
         "modal" -> 0.8f
+        "nomos" -> 0.9f
+        "once" -> 0.8f
         "telnyx" -> 0.8f
         "terraform" -> 0.74f
         "tinybird" -> 0.8f

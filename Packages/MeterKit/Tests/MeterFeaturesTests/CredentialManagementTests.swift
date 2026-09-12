@@ -80,7 +80,8 @@ struct CredentialManagementTests {
         let detail = try GuardrailSourceScan.sourceText(named: "ProviderDetailView.swift")
         let sheet = try GuardrailSourceScan.sourceText(named: "CredentialManagementSheet.swift")
         #expect(detail.contains("L(\"管理凭据\")"))
-        #expect(detail.contains("NavigationLink"))
+        // 同 SheetCloseGuardrailTests：推进走 MeterColumnPushLink（iPhone 即 NavigationLink，Mac 进分栏）。
+        #expect(detail.contains("MeterColumnPushLink"))
         #expect(detail.contains("CredentialManagementSheet"))
         #expect(!detail.contains("重新填写凭据"))
         #expect(!detail.contains("再接一笔按量账单"))

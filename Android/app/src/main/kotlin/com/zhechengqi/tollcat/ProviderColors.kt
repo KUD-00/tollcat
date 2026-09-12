@@ -213,7 +213,7 @@ object ProviderColors {
             "ocamba" -> if (dark) 0xFFFF8A70 else 0xFFFF5A36
             "octopusenergy" -> if (dark) 0xFFF291F6 else 0xFFEA4EF1
             "okta" -> if (dark) 0xFF6FB8EC else 0xFF005A9E
-            "once" -> if (dark) 0xFF77BEDC else 0xFF2496C6
+            "once" -> if (dark) 0xFF77BEDC else 0xFF1F86B3
             "onesignal" -> if (dark) 0xFFFF8085 else 0xFFC01B20
             "openai" -> if (dark) 0xFF2FB5A0 else 0xFF0D8C7A
             "openprovider" -> if (dark) 0xFFFB7284 else 0xFFF81B39
@@ -350,7 +350,7 @@ object ProviderColors {
             "loginet" -> if (dark) 0xFF34D399 else 0xFF059669
             "idcloudhost" -> if (dark) 0xFFFB7185 else 0xFFE11D48
             "iwinv" -> if (dark) 0xFF60A5FA else 0xFF2563EB
-            "frankenergie" -> if (dark) 0xFFFB923C else 0xFFF97316
+            "frankenergie" -> if (dark) 0xFFFB923C else 0xFFEA580C
             "dilmune" -> if (dark) 0xFF2DD4BF else 0xFF0D9488
             "hubble" -> if (dark) 0xFF979DFF else 0xFF5761FF
             "filescom" -> if (dark) 0xFF60A5FA else 0xFF2563EB

@@ -23,6 +23,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -461,6 +462,38 @@ def check_persistence_contract(root: Path, errors: list[str]) -> None:
         for token in ("import SwiftUI", "import SwiftData"):
             if token in text:
                 errors.append(f"MeterProviders/{path.name} {token}")
+
+
+def check_catalog_copyables(root: Path, errors: list[str]) -> None:
+    """`copyable` 是给「要整段粘进控制台的原文」（AWS 的 IAM 策略 JSON）用的重型 UI。
+
+    几个字的表单值（名称、网址）直接写在步骤文字里就够，配复制按钮和三语标签
+    只是加重界面。`CatalogTests` 里同一份允许名单，改了两边一起改。
+    2026-09 Stripe 指南把 copyable 当成「表单填什么」的提示用，单元测试抓到了，
+    但那条测试当时只在 CI 上跑、CI 又是手动触发，于是内容漂了一周没人发现——
+    所以规则也进提交闸。
+    """
+    allowed = {"IAM 策略"}
+    catalog_json = (
+        root / "Packages" / "MeterKit" / "Sources" / "MeterPersistence" / "Catalog" / "catalog.json"
+    )
+    try:
+        data = json.loads(catalog_json.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"读不了 {catalog_json.relative_to(root)}：{exc}")
+        return
+    for guide_id, guide in (data.get("guides") or {}).items():
+        for part in guide.get("parts") or []:
+            for step in part.get("steps") or []:
+                copyable = step.get("copyable")
+                if not isinstance(copyable, dict):
+                    continue
+                label = copyable.get("label")
+                if label not in allowed:
+                    errors.append(
+                        f"catalog.json guides.{guide_id}: copyable「{label}」不在允许名单 {sorted(allowed)}。"
+                        "copyable 只给要整段粘贴的原文；几个字的值写进步骤文字即可。"
+                    )
 
 
 def check_declined_providers(root: Path, errors: list[str]) -> None:
@@ -2173,6 +2206,7 @@ def main() -> int:
     check_ledger_read_not_swallowed(root, errors)
     check_persistence_contract(root, errors)
     check_catalog_sync(root, errors)
+    check_catalog_copyables(root, errors)
     check_declined_providers(root, errors)
     check_provider_wiring(root, errors)
     check_credential_fields_match_guides(root, errors)

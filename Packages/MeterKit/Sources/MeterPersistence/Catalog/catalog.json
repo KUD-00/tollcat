@@ -2444,16 +2444,6 @@
               "emphasized": [
                 "TollCat"
               ],
-              "copyable": {
-                "label": "名称",
-                "value": "TollCat",
-                "en": {
-                  "label": "Name"
-                },
-                "ja": {
-                  "label": "名前"
-                }
-              },
               "en": {
                 "text": "Enter TollCat as the third-party name.",
                 "emphasized": [
@@ -2472,16 +2462,6 @@
               "emphasized": [
                 "tollcat.app"
               ],
-              "copyable": {
-                "label": "网站",
-                "value": "tollcat.app",
-                "en": {
-                  "label": "Website"
-                },
-                "ja": {
-                  "label": "サイト"
-                }
-              },
               "en": {
                 "text": "For the website, enter tollcat.app with the https scheme.",
                 "emphasized": [
