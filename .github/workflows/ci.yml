@@ -114,10 +114,15 @@ jobs:
       # 提交元数据两条规矩：身份只允许 GitHub noreply（作者不让任何真实邮箱进历史），
       # 消息只许英文（commit log 是所有人都读的那一面）。本机有同样的钩子，这里给
       # 别的机器和 fork PR 兜底。
+      # author 必须是 <id>+<login>@users.noreply.github.com（人和 dependabot 都是这种）；
+      # committer 还允许 noreply@github.com——网页上的 Squash 合并和 Dependabot 的提交
+      # 都由 GitHub 代签，用的就是这个地址。
       - name: Check commit identities
         run: |
           set -euo pipefail
-          bad="$(git log --all --format='%h %ae %ce' | awk '$2 !~ /@users\.noreply\.github\.com$/ || $3 !~ /@users\.noreply\.github\.com$/' || true)"
+          bad="$(git log --all --format='%h %ae %ce' \
+            | awk '$2 !~ /@users\.noreply\.github\.com$/ || ($3 !~ /@users\.noreply\.github\.com$/ && $3 != "noreply@github.com")' \
+            || true)"
           if [[ -n "$bad" ]]; then
             echo "commits with a non-noreply author/committer:" >&2
             echo "$bad" >&2
