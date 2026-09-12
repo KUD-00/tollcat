@@ -4,11 +4,9 @@ name: Release status
 # scripts/release-status.sh weekly, open (or update) an issue when a platform is
 # due, do nothing otherwise. Zero secrets.
 #
-# The repo is still private — manual dispatch only until it goes public.
-# After going public, restore:
-#   schedule:
-#     - cron: "0 1 * * 1"   # Mondays 10:00 JST
 on:
+  schedule:
+    - cron: "0 1 * * 1"   # Mondays 10:00 JST
   workflow_dispatch:
 
 permissions:

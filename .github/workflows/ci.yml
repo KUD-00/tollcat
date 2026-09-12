@@ -1,12 +1,12 @@
 name: CI
 
-# The repo is still private and macOS runners bill by the minute, so nothing
-# triggers automatically until it goes public — manual dispatch only. After
-# going public, restore:
-#   push:
-#     branches: [main]
-#   pull_request:
+# Public repository: standard GitHub-hosted runners are free, so every push to
+# main and every pull request runs the full matrix. Manual dispatch stays for
+# re-runs.
 on:
+  push:
+    branches: [main]
+  pull_request:
   workflow_dispatch:
 
 # No secrets. A fork must be able to run this job as-is.
