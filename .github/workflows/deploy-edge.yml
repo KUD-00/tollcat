@@ -5,8 +5,9 @@ name: Deploy edge (toll-api, tollcat.app)
 # CI and ties D1 migrations to the Worker deploy as one step — if the migration
 # fails, nothing deploys.
 #
-# The repo is still private — manual dispatch only until it goes public.
-# After going public, restore:
+# Public now, but still manual on purpose: this deploys straight to production
+# on every push touching worker/ or site/, and the api token has not been
+# exercised yet. Flip it once one manual run has gone through:
 #   push:
 #     branches: [main]
 #     paths:

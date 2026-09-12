@@ -10,11 +10,11 @@ name: Mac appcast
 # update actually ships.
 # Zero secrets: only GITHUB_TOKEN, moving two assets.
 #
-# The repo is still private — manual dispatch only until it goes public.
-# After going public, restore:
-#   release:
-#     types: [published]
+# Runs when a Release is published (the human Publish click is the gate).
+# Manual dispatch stays for re-pointing the feed at an existing tag.
 on:
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       tag:

@@ -2,7 +2,9 @@ name: Beta (TestFlight)
 
 # TestFlight is the only secret-bearing job with no human approval gate:
 # it is the buffer itself. The repo is still private — manual dispatch only
-# until it goes public. After going public, restore:
+# until it goes public. Public now, but still manual on purpose: this fires on
+# every push to main and uploads to TestFlight, and the app-store secrets have
+# not been exercised yet. Flip it once one manual run has gone through:
 #   push:
 #     branches: [main]
 #     paths-ignore: ["site/**", "worker/**", "docs/**", "**/*.md"]

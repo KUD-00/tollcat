@@ -1,11 +1,11 @@
 name: Release
 
-# The repo is still private — manual dispatch only until it goes public.
-# After going public, restore:
-#   push:
-#     tags:
-#       - "v*"
+# A tag is a release: pushing vX.Y.Z starts the train. Manual dispatch stays
+# for re-running a platform on an existing tag.
 on:
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
       ios:
