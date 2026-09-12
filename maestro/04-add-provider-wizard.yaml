@@ -8,6 +8,10 @@ appId: com.zhechengqi.tollcat
       -skip-onboarding: true
       -skip-demo-seed: true
       -clock-preset=design: true
+      # 目录已有五百多家，按分组再按字母排，Cloudflare 离首屏很远；靠滚动找它
+      # 会在 speed 40 一屏一屏地跳时错过。iOS 用启动参数把搜索词预置好，
+      # 列表只剩几行；Android 没有这个参数，仍靠下面放慢的滚动。
+      -add-search=Cloudflare: true
       skip_onboarding: true
       clock_preset: design
 # 首次冷启动（Android 要解压 Swift 资源包）十几秒，默认等待不够。
@@ -21,11 +25,13 @@ appId: com.zhechengqi.tollcat
     id: services.empty.add
 - assertVisible:
     id: addProvider.list
-# 目录按字母排，Cloudflare 在首屏之下。
+# iOS 已经被搜索词过滤到首屏；Android 还得滚。放慢速度，免得一次滑过一整屏把它跳过去。
 - scrollUntilVisible:
     element:
       id: addProvider.row.cloudflare
     direction: DOWN
+    speed: 15
+    timeout: 90000
 - tapOn:
     id: addProvider.row.cloudflare
 - tapOn:
