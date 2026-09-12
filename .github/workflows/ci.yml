@@ -164,8 +164,11 @@ jobs:
 
       # The committed pbxproj is an artifact. If a spec changed without
       # regenerating, fail here — not when the next person to clone trips over it.
+      # Schemes are excluded: Xcode saves them as format 1.3, XcodeGen writes 1.7.
+      # Same meaning, different bytes, and any open Xcode rewrites them within a
+      # second — so they can never match byte-for-byte on a developer machine.
       - name: Check committed projects are in sync
-        run: git diff --exit-code TollCat.xcodeproj TollCatMac.xcodeproj
+        run: git diff --exit-code -- TollCat.xcodeproj TollCatMac.xcodeproj ':!*.xcscheme'
 
       - name: Test
         run: |
