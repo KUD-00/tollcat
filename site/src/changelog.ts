@@ -40,6 +40,7 @@ export const platformNames: Record<ChangelogPlatform, string> = {
 export const changelog: readonly ChangelogEntry[] = [
     {
       "version": "1.0.0",
+      "date": "2026-09-12",
       "platforms": [
         "ios"
       ],
