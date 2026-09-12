@@ -233,7 +233,10 @@
     <value>システム</value>
   </data>
   <data name="SettingsHideCat" xml:space="preserve">
-    <value>猫をしまう</value>
+    <value>猫を出す</value>
+  </data>
+  <data name="SettingsHideCatNote" xml:space="preserve">
+    <value>ホームから猫がいなくなります。</value>
   </data>
   <data name="SettingsRefreshTitle" xml:space="preserve">
     <value>アプリを開くたびに使用量を更新</value>

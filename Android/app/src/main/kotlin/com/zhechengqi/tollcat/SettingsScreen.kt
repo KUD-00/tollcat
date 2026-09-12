@@ -304,10 +304,10 @@ fun SettingsScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                 TextButton(
                     onClick = {
                         session.clearAll()
-                        appearance = AppearancePreference.SYSTEM
+                        appearance = AppearancePreference.DARK
                         colorSource = ColorSourcePreference.DYNAMIC
                         refreshOnActivate = false
-                        hidesCat = false
+                        hidesCat = true
                         reminder.refresh()
                         stack = listOf(SettingsDestination.Root)
                         confirming = false
@@ -423,8 +423,8 @@ private fun SettingsRoot(
                 SettingsSwitchRow(
                     title = stringResource(R.string.settings_hide_cat),
                     subtitle = stringResource(R.string.settings_hide_cat_note),
-                    checked = hidesCat,
-                    onCheckedChange = onHidesCatChange,
+                    checked = !hidesCat,
+                    onCheckedChange = { onHidesCatChange(!it) },
                     modifier = Modifier.testTag(UITestId.SETTINGS_HIDE_CAT),
                 )
                 SettingsNavRow(

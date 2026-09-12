@@ -73,7 +73,7 @@ screen_args() {
     [[ "$orientation" == landscape* ]] && split=1
     case "$screen" in
         dashboard)
-            # 商店图不带猫（和设置里「关闭猫猫」同一开关）。
+            # 商店图不带猫（和设置里「打开猫猫」关着同一开关）。
             echo "-seed-demo -skip-onboarding -hide-cat"
             ;;
         services)
@@ -253,6 +253,43 @@ screenshot_settled() {
     fi
 }
 
+# 演示种子还没灌完时，画面只有状态栏和底色（猫还在角落）。那种图不能交。
+# 切掉状态栏和右下角，剩下中间几乎是单色 = 还没出来。
+screenshot_is_blank() {
+    python3 -c '
+from PIL import Image
+import sys
+image = Image.open(sys.argv[1])
+width, height = image.size
+crop = image.crop((int(width * 0.05), int(height * 0.12), int(width * 0.75), int(height * 0.88)))
+small = crop.resize((80, 50)).convert("RGB")
+colors = small.getcolors(maxcolors=4000)
+count = len(colors) if colors else 4000
+sys.exit(0 if count < 24 else 1)
+' "$1"
+}
+
+wait_for_populated_screenshot() {
+    local udid="$1"
+    local out="$2"
+    local orientation="$3"
+    local want_w="$4"
+    local want_h="$5"
+    local attempt
+
+    screenshot_settled "$udid" "$out" "$orientation" "$want_w" "$want_h"
+    for attempt in 1 2 3 4 5 6; do
+        if ! screenshot_is_blank "$out"; then
+            return 0
+        fi
+        echo "    blank screenshot ($attempt), waiting for the app"
+        sleep 3
+        screenshot_settled "$udid" "$out" "$orientation" "$want_w" "$want_h"
+    done
+    echo "screenshot still blank after waiting: $out" >&2
+    exit 1
+}
+
 # iPad 的状态栏上除了时间还有**日期**，而那一行是系统画的，跟 App 的
 # `-AppleLanguages` 无关——不改设备语言的话，中文和英文那两套截图上会挂着一行
 # 日文日期。`simctl status_bar override` 管得了时间，管不了日期，所以只能改设备语言。
@@ -344,7 +381,7 @@ launch_and_capture() {
     size="$(expected_size "$prefix")"
     want_w="${size%% *}"
     want_h="${size##* }"
-    screenshot_settled "$udid" "$out" "$orientation" "$want_w" "$want_h"
+    wait_for_populated_screenshot "$udid" "$out" "$orientation" "$want_w" "$want_h"
     echo "    wrote $out"
 }
 

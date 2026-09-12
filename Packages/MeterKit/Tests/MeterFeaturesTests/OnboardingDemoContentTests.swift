@@ -4,13 +4,12 @@ import MeterCore
 @testable import MeterFeatures
 
 struct OnboardingDemoContentTests {
-    @Test("按新用户默认口径（仅从量）：大数字 43.20，订阅那行说未计入，构成里没有订阅段")
+    @Test("按新用户默认口径（仅从量）：大数字 43.20，订阅那行不出现，构成里没有订阅段")
     func heroFollowsDefaultUsageOnlyScope() throws {
         let presentation = MoneyPresentation.usd
         let month = OnboardingDemoContent.monthToDateModule(presentation: presentation)
         #expect(month.amountText == "$43.20")
-        #expect(month.subscriptionCaption?.contains("$4.00") == true)
-        #expect(month.subscriptionCaption?.contains("未计入") == true)
+        #expect(month.subscriptionCaption == nil)
         #expect(!month.includesSubscriptions)
         #expect(month.showsSubscriptionScope)
 

@@ -11,7 +11,7 @@ extension ProviderCatalog {
         tierReason: "北欧邮政/包裹物流的强挑战者，挪威与北欧电商物流短名单。",
         colorKey: "bring",
         billingURL: URL(string: "https://www.mybring.com/")!,
-        credentialSetupURL: URL(string: "https://developer.bring.com/api/invoice/")!,
+        credentialSetupURL: URL(string: "https://www.mybring.com/useradmin/account/settings/api")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 12,
@@ -28,7 +28,7 @@ extension ProviderCatalog {
         tierReason: "中东即时配送平台的细分选手，体量小于全球货运 TMS 短名单。",
         colorKey: "armada",
         billingURL: URL(string: "https://www.armadadelivery.com/")!,
-        credentialSetupURL: URL(string: "https://docs.armadadelivery.com/v2/invoices/")!,
+        credentialSetupURL: URL(string: "https://business.armadadelivery.com")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 24,
@@ -45,7 +45,7 @@ extension ProviderCatalog {
         tierReason: "欧洲支付收单的强挑战者，与 Stripe / Adyen 并列商户支付基建短名单。",
         colorKey: "mollie",
         billingURL: URL(string: "https://my.mollie.com/")!,
-        credentialSetupURL: URL(string: "https://docs.mollie.com/reference/list-invoices")!,
+        credentialSetupURL: URL(string: "https://my.mollie.com/dashboard/developers/api-access-tokens")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 24,
@@ -62,7 +62,7 @@ extension ProviderCatalog {
         tierReason: "全球收单的强挑战者，与 Stripe / Mollie / Adyen 并列商户支付基建短名单。",
         colorKey: "checkout",
         billingURL: URL(string: "https://dashboard.checkout.com/")!,
-        credentialSetupURL: URL(string: "https://checkoutdocs.readme.io/docs/statements-endpoint")!,
+        credentialSetupURL: URL(string: "https://dashboard.checkout.com/developers/keys")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 24,
@@ -79,12 +79,15 @@ extension ProviderCatalog {
         tierReason: "按需印刷 POD 的强挑战者，与 Printful / Gelato 并列电商履约短名单。",
         colorKey: "printify",
         billingURL: URL(string: "https://printify.com/")!,
-        credentialSetupURL: URL(string: "https://developers.printify.com/")!,
+        credentialSetupURL: URL(string: "https://printify.com/app/account/api")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 12,
         accessStatus: .pendingVerification,
-        searchKeywords: ["printify", "POD", "orders", "cost", "shop_id", "cents"]
+        searchKeywords: ["printify", "POD", "orders", "cost", "shop_id", "cents"],
+        guideURLs: [
+            "findShopID": URL(string: "https://developers.printify.com/#retrieving-shop-id")!,
+        ]
     )
 
     public static let teelaunch = ProviderDescriptor(

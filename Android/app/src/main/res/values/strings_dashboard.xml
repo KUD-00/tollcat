@@ -41,7 +41,7 @@
     <string name="dashboard_filter_last_3">近 3 个月</string>
     <string name="dashboard_filter_last_6">近 6 个月</string>
     <string name="dashboard_filter_ytd">今年至今</string>
-    <string name="dashboard_filter_all_time">全期间</string>
+    <string name="dashboard_filter_all_time">有数据以来</string>
     <string name="dashboard_filter_a_month">某个月</string>
     <string name="dashboard_filter_include_subscriptions">算进固定订阅</string>
     <string name="dashboard_filter_exclude_all">一个账号都没留，总数会是 $0。</string>

@@ -11,7 +11,7 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
     /// **统计区间不在这里**，在 `periodCaption`。两半分开存，2×2 那一档才能
     /// 只留前半句——126pt 宽里「预计月底 $87.70 · 9月1日至6日」要折成三行。
     public var projectedCaption: String?
-    /// 「9月1日至6日」；没有可推的月份时是自带前缀的「整月 · 七月」/「合计 · 五月–七月」。
+    /// 「9月1日至6日」；过去某个整月是「整月 · 七月」。多月就是日期本身，不加「合计」。
     public var periodCaption: String?
     public var projectedValue: Double
     public var spokenProjected: String?
@@ -24,7 +24,7 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
     public var filterNote: String?
     /// 不是美元时挂一句「按人民币显示」。美元不写——那是默认，写了是噪音。
     public var currencyNote: String?
-    /// 「本月订阅 $4 · 已计入」。没有订阅就是 nil。
+    /// 「（订阅 $4）」。只在算进订阅时出现；关掉或没有订阅就是 nil。
     public var subscriptionCaption: String?
     public var spokenSubscription: String?
     /// 只有一个账号时首屏那一行可以推进详情。

@@ -5,7 +5,7 @@ import MeterModules
 
 /// 开场预览用的设计稿数字。SPEC 第 04 节那组：从量 43.20、订阅 4.00、合计 47.20。
 /// 不是运行时取数。按新用户的默认口径（仅从量）摆：大数字 43.20，
-/// 订阅单独一行「未计入」，构成里没有订阅段——和第一次打开仪表盘看到的一致。
+/// 订阅那行不出现，构成里没有订阅段——和第一次打开仪表盘看到的一致。
 enum OnboardingDemoContent {
     static let variableUSD = Money(roundedUSD: 43.20)
     static let subscriptionUSD = Money(roundedUSD: 4.00)
@@ -33,7 +33,7 @@ enum OnboardingDemoContent {
         }
         // 默认口径不含订阅：没有 subscriptionIncluded fact（真算的时候
         // 计算器也不会发），totalUSD 就等于从量。订阅金额单独带着，
-        // 首屏那行「本月订阅 $4.00 · 未计入」由它驱动。
+        // 切换还在；默认按量，那行括号不出现。
         return MonthToDate(
             totalUSD: variableUSD,
             projectedMonthEndUSD: projectedVariableUSD,

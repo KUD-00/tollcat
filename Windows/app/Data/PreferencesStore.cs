@@ -20,7 +20,7 @@ internal sealed class PreferencesStore
 
     public string Appearance
     {
-        get => Get("appearance", "system");
+        get => Get("appearance", "dark");
         set => _values["appearance"] = value;
     }
 
@@ -32,7 +32,7 @@ internal sealed class PreferencesStore
 
     public bool HidesCat
     {
-        get => GetBool("hidesCat", false);
+        get => GetBool("hidesCat", true);
         set => _values["hidesCat"] = value;
     }
 

@@ -202,8 +202,8 @@ public final class SettingsModel {
             clearSuccessToken += 1
             reminderIntentEnabled = false
             reminderSchedule = .default
-            appearance = .system
-            hidesCat = false
+            appearance = .default
+            hidesCat = true
             menuBarStyle = .default
             hidesDockIconWhenWindowClosed = false
             refreshesUsageOnActivate = false

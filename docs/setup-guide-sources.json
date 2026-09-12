@@ -1,0 +1,1206 @@
+{
+  "schemaVersion": 1,
+  "doc": "教程出处。App 和 Worker 都不读这份文件。改 catalog.json 某家的 fields / steps 必须同步核对 sourceURL，然后 python3 scripts/refresh-setup-guide-source.py <id>。",
+  "guides": {
+    "active24": {
+      "sourceURL": "https://faq.active24.com/eng/739445-REST-API-for-developers",
+      "verified": true,
+      "stepsFingerprint": "sha256:341aefa50a18b442960cdb458e8963765cb23fd0c8211f93a43f01babd6760e4"
+    },
+    "aimlapi": {
+      "sourceURL": "https://aimlapi.com/app/keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:9d364f7fc061bd490a1a2f2ff2865dfff16c14cd5cd4a17a210994cf3b4029d0"
+    },
+    "aiven": {
+      "sourceURL": "https://aiven.io/docs/platform/howto/create_authentication_token",
+      "verified": false,
+      "stepsFingerprint": "sha256:ddebf844adcc9b8be30c3d969186f1e823852518a1e2b86a7253708b0a20dc04"
+    },
+    "akamai": {
+      "sourceURL": "https://techdocs.akamai.com/developer/docs/edgegrid",
+      "verified": true,
+      "stepsFingerprint": "sha256:938a4b56c58dd7ed85397b15992843332cec57ad91e3f1bd0b0e5e28106cb78a"
+    },
+    "alchemy": {
+      "sourceURL": "https://www.alchemy.com/docs/how-to-create-access-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:0448f12be4f7d9f686ad8cf677c1960ee72a95ca9d913ce3cd0c8fd240fd5879"
+    },
+    "alibabacloud": {
+      "sourceURL": "https://www.alibabacloud.com/help/zh/ram/user-guide/create-an-accesskey-pair",
+      "verified": true,
+      "stepsFingerprint": "sha256:6ee06fe365a95935a592c26a1b4c312b50f2877056d60e8f6c321f6d1028dd71"
+    },
+    "anthropic": {
+      "sourceURL": "https://console.anthropic.com/settings/admin-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:c5c7c37b7dcbd04077baa043429b6b4183d168dd40dcfc31d6692c2f4180ce35"
+    },
+    "api2pdf": {
+      "sourceURL": "https://www.api2pdf.com/",
+      "verified": true,
+      "stepsFingerprint": "sha256:5f5452da11d6f2d04af4c54aaa40f2b2ea3dc085e7b09fb8955a143b3e7d882e"
+    },
+    "apify": {
+      "sourceURL": "https://console.apify.com/settings/integrations",
+      "verified": false,
+      "stepsFingerprint": "sha256:809165fa0acbfd4413ff0d565a5899f8fe511e8ec5873d82e7da7f0ac97f84e3"
+    },
+    "armada": {
+      "sourceURL": "https://docs.armadadelivery.com/v2/quickstart",
+      "verified": true,
+      "stepsFingerprint": "sha256:f35dabcc3d6f45f51dd830e5cb0bc0b603bafd593a43cd6f2c438474306ac336"
+    },
+    "atlas": {
+      "sourceURL": "https://cloud.mongodb.com/v2#/access/serviceAccounts",
+      "verified": false,
+      "stepsFingerprint": "sha256:c7bfb17ec66806a7bcd86aa5d8bbd222cca3f3c28c851b34891807699677ad58"
+    },
+    "aws": {
+      "sourceURL": "https://console.aws.amazon.com/iamv2/home#/users/create",
+      "verified": false,
+      "stepsFingerprint": "sha256:e98fc6a63090aeee0e2b9716a67f04f1e8662358315445b0c61514edb53c7504"
+    },
+    "azion": {
+      "sourceURL": "https://www.azion.com/en/documentation/products/guides/personal-tokens/",
+      "verified": true,
+      "stepsFingerprint": "sha256:adc08b984bd623ade039fb7d2609d57907b6c94871a00128418564660f528b42"
+    },
+    "azure": {
+      "sourceURL": "https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade",
+      "verified": false,
+      "stepsFingerprint": "sha256:fe46f932f5957f1e18eb0919fa69bcb4c06b05e58e94ef90b3ae337048dc362c"
+    },
+    "baseten": {
+      "sourceURL": "https://docs.baseten.co/organization/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:6f91ec7de71a48f83d15b97e49d30674d8f5a0a472f8de192c80f1233daee028"
+    },
+    "betterstack": {
+      "sourceURL": "https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:c924deea9a3ddd15290e64bba283e6d268d94c56f04b7f61c43d4d4ff80d9360"
+    },
+    "binarylane": {
+      "sourceURL": "https://support.binarylane.com.au/support/solutions/articles/11000125203-getting-started-with-binarylane-api",
+      "verified": true,
+      "stepsFingerprint": "sha256:90fc442f955efbf33e5533595130284d96d62a80e23545ed260c95628d6da9e0"
+    },
+    "bitlaunch": {
+      "sourceURL": "https://developers.bitlaunch.io/docs/getting-started",
+      "verified": true,
+      "stepsFingerprint": "sha256:ff1b71d3965a010b0ab2b00f022cf8f0b3f9f564360b7db78a0a56337b9c7395"
+    },
+    "botpress": {
+      "sourceURL": "https://viber.botpress.cloud/account",
+      "verified": false,
+      "stepsFingerprint": "sha256:b8171965920260eb5c50ebf27f9e7996151697b55d3cf7d9b3d992b3a75ccd59"
+    },
+    "bring": {
+      "sourceURL": "https://developer.bring.com/api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:59eb3e2ad3fd5a44062fba097ba1e1ddefedf1f7796eed106ca794d6b6110bdc"
+    },
+    "bunny": {
+      "sourceURL": "https://docs.bunny.net/account/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:00d6f842ba543c2202a151956b367331ee6b59aa96d0f88a089446c056a23e5a"
+    },
+    "catalystvm": {
+      "sourceURL": "https://my.catalystvm.com/userapi/",
+      "verified": true,
+      "stepsFingerprint": "sha256:974e09bdf90be869c42136a558755c6465b9383cf0ecb62635f5475e0ddb85a9"
+    },
+    "cerebrium": {
+      "sourceURL": "https://cerebrium.ai/docs/deployments/ci-cd",
+      "verified": true,
+      "stepsFingerprint": "sha256:d6c896d5bf98f3f21ad607e5e79a7d1f7a9743e7b1c4794f16f5154197edbdba"
+    },
+    "checkout": {
+      "sourceURL": "https://www.checkout.com/docs/business-operations/use-the-dashboard/developers",
+      "verified": true,
+      "stepsFingerprint": "sha256:32fd4adaf2f81d8a11d87f939d1ae7334a9cf76a14cb41aa6786db436929c0d6"
+    },
+    "clerk": {
+      "sourceURL": "https://dashboard.clerk.com/last-active?path=api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:cd8e83b56b7d61a7d83b345b2df0392bf69c997d3060522ae0b6bf760accbc90"
+    },
+    "clevercloud": {
+      "sourceURL": "https://www.clever.cloud/developers/api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:fa7ab91b9e5a6a83ddefd5df7384c4a0714f6e62ce34adb58adc15062ba0f3d4"
+    },
+    "click2mail": {
+      "sourceURL": "https://developers.click2mail.com/docs/getting-access-to-the-api",
+      "verified": true,
+      "stepsFingerprint": "sha256:dcd7cf49c6bcdb04633d4a89bb35978a2ea358d645cf48f971f4bccc224ff5fa"
+    },
+    "clickhouse": {
+      "sourceURL": "https://clickhouse.com/docs/cloud/manage/openapi",
+      "verified": false,
+      "stepsFingerprint": "sha256:ddccf6da3caa89fb50a29350f374f6ebd77c76ec5b81908d80096a2c1ff0cbb7"
+    },
+    "clicksend": {
+      "sourceURL": "https://developers.clicksend.com/docs",
+      "verified": false,
+      "stepsFingerprint": "sha256:44c70fdbccd764f0e3d66533037d7cb4f84f5a83ee79f5c59bbbddef178facd8"
+    },
+    "cloudflare": {
+      "sourceURL": "https://dash.cloudflare.com/profile/api-tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:57bcc1a700e456515ddcb643a0f5f54bab7d4b31dfd3bd49e28d03e0cf89364b"
+    },
+    "cloudheed": {
+      "sourceURL": "https://docs.cloudheed.com/getting-started/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:d7f8e0055b733c0a8d6de3a590606bb23708dac2246ed4e6eeba43d0b7801a4f"
+    },
+    "cloudsigma": {
+      "sourceURL": "https://docs.cloudsigma.com/en/latest/general.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:9dd188fd3dad5c6c06519d6f574608c0867a681ca32301952db727eca27fe8fd"
+    },
+    "cmcom": {
+      "sourceURL": "https://knowledgecenter.cm.com/knowledge-center/communications-platform/sms/business-messaging-api/where-can-i-find-my-product-token",
+      "verified": true,
+      "stepsFingerprint": "sha256:b8430a254cac8f4ce8141ddf1cb1e09ffb420c03888d6f2e66c444d87397d277"
+    },
+    "cockroach": {
+      "sourceURL": "https://www.cockroachlabs.com/docs/cockroachcloud/managing-access",
+      "verified": false,
+      "stepsFingerprint": "sha256:9a72c0385d0e7c135874f65c2f3b0e5a8aeb2e68dd42ebe7aee681e0c17fa7bf"
+    },
+    "coned": {
+      "sourceURL": "https://www.coned.com/en/accounts-billing/share-energy-usage-data/become-a-third-party",
+      "verified": true,
+      "stepsFingerprint": "sha256:821c5d2c9d110b57039b732d881b3b8a51c5132f271e95d4fcd3711da87f5b0b"
+    },
+    "confluent": {
+      "sourceURL": "https://confluent.cloud/settings/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:762123b80028893c9b394bfd5543902186a74301b9a074bb7136a38f80cd11d4"
+    },
+    "conoha": {
+      "sourceURL": "https://support.conoha.jp/v/addapiuser/",
+      "verified": true,
+      "stepsFingerprint": "sha256:55350052eb8f281e8f938441c756570ed7b784610889aec3243c12bf9be597b5"
+    },
+    "cudocompute": {
+      "sourceURL": "https://www.cudocompute.com/docs/api/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:33bd5fe190ade56e3d01c1a327d224c062a295e564942229ce4304667da8b079"
+    },
+    "cursor": {
+      "sourceURL": "https://cursor.com/docs/models-and-pricing",
+      "verified": false,
+      "stepsFingerprint": "sha256:aad80e9405771b933419492c8d5154c0d9b1f34215bbe04d25f4aae6d5c649f0"
+    },
+    "datadog": {
+      "sourceURL": "https://app.datadoghq.com/organization-settings/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:74135cd4d123640372df848a755a976c97568c2cdae184b23b0c4b2fb4f2a965"
+    },
+    "datapacket": {
+      "sourceURL": "https://api.datapacket.com/",
+      "verified": true,
+      "stepsFingerprint": "sha256:2008a701c45fcd93abc5f9345e9a0e5b580be9fd497785e2c8a49ca6b2a74a73"
+    },
+    "deel": {
+      "sourceURL": "https://developer.deel.com/api/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:017851ed169efd9f9390cf334e6b7fac067318e1fc09cbfecd4d15f2a3085f64"
+    },
+    "deepgram": {
+      "sourceURL": "https://developers.deepgram.com/docs/create-additional-api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:4a8765479344dd85b2abc42b327961df93ff81f767edfa2774dbc6095fcca40a"
+    },
+    "deepinfra": {
+      "sourceURL": "https://docs.deepinfra.com/account/authentication",
+      "verified": false,
+      "stepsFingerprint": "sha256:78622158d90b6617ffd488a262be590ecb4cf09aae1a791a56a7f4f602d12351"
+    },
+    "deepseek": {
+      "sourceURL": "https://platform.deepseek.com/api_keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:be1ed7afe394ef72c0eff7f33ce80d581e2369dca882c91c03a7e9b1ac94cbed"
+    },
+    "digicert": {
+      "sourceURL": "https://docs.digicert.com/en/certcentral/get-started/set-up-your-certcentral-account/generate-an-api-key.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:03deebb93265707752d11fecfe5fda744a1a7cd2446dcdc31e241eb81685c0b2"
+    },
+    "digitalocean": {
+      "sourceURL": "https://cloud.digitalocean.com/account/api/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:f95bb570fdd4ba5d7f034a9bb53b07e1144f17a17088eb05643a6927afa81f78"
+    },
+    "dilmune": {
+      "sourceURL": "https://docs.dilmune.com/openapi.yaml",
+      "verified": true,
+      "stepsFingerprint": "sha256:06edd64673f9c4393191323ab4572c16395a05359a0195a0b65e558fd3100730"
+    },
+    "dnscale": {
+      "sourceURL": "https://dnscale.eu/api/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:60695ddb52e80a95dd62f47d095b1ba09326ffb4c3d26b808966db17547df33c"
+    },
+    "dnsimple": {
+      "sourceURL": "https://support.dnsimple.com/articles/api-access-token/",
+      "verified": true,
+      "stepsFingerprint": "sha256:b5d85a3ee6dbc29d734aeb47db0fb3b521591a63e0c2a56d92b6c4dbbb0f9c19"
+    },
+    "doit": {
+      "sourceURL": "https://developer.doit.com/docs/start",
+      "verified": true,
+      "stepsFingerprint": "sha256:78a4ccf01359a2f80ff3339d6aaeb2096b83eb90b1f76f9e670662a598aa01c3"
+    },
+    "domeneshop": {
+      "sourceURL": "https://api.domeneshop.no/docs/",
+      "verified": true,
+      "stepsFingerprint": "sha256:0a54769fe339fef4e38028553e21960a00516fdfaf383ba8fe1fbae1047bad8f"
+    },
+    "dynatrace": {
+      "sourceURL": "https://docs.dynatrace.com/docs/manage/identity-access-management/access-tokens-and-oauth-clients/oauth-clients",
+      "verified": true,
+      "stepsFingerprint": "sha256:25663a9223cc7ab42a5231070fb89b167c634c4c23a5af02d1c06718f5e8b8bb"
+    },
+    "easypost": {
+      "sourceURL": "https://support.easypost.com/hc/en-us/articles/360004588571-API-Keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:275bb85a283f55bde99c102db1dad56a9793e263c49c42640d97286cdf875e0b"
+    },
+    "easyship": {
+      "sourceURL": "https://developers.easyship.com/v2023.01/reference/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:bf08d2280c2973e60cd73a7e48c44b2aab56add08a2ceef66c845a3839e06370"
+    },
+    "elastic": {
+      "sourceURL": "https://www.elastic.co/docs/api/doc/cloud-billing/authentication",
+      "verified": false,
+      "stepsFingerprint": "sha256:d2b8522dfe18bb028537f3c0eeb97f0798a6389ad32d1a704ae295d710b21381"
+    },
+    "elastx": {
+      "sourceURL": "https://docs.elastx.cloud/docs/openstack-iaas/guides/application_credentials/",
+      "verified": true,
+      "stepsFingerprint": "sha256:88467613f8691ee5fcf11ff5e98520f804347ea72b790614a0df436bd4306e90"
+    },
+    "elevenlabs": {
+      "sourceURL": "https://elevenlabs.io/app/settings/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:dce8bd55567e7a91b7448366d5cd2b129550f676299617fe1d281d9dedb59e14"
+    },
+    "exa": {
+      "sourceURL": "https://dashboard.exa.ai/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:3eb2ff88fe41e6e6ceb213bd1554b04cf6d1b6f766ab08e73b6ee58b2cc32a8e"
+    },
+    "expo": {
+      "sourceURL": "https://expo.dev/settings/access-tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:1f82c92b2776bc68621078a422ae71683cc13e2b0b5a12ba03e5edc8cf310e96"
+    },
+    "fal": {
+      "sourceURL": "https://fal.ai/dashboard/keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:3e4ce1afff929efc027b3661612c19389a66ea54f182888fd177c903128a81ef"
+    },
+    "fastly": {
+      "sourceURL": "https://manage.fastly.com/account/personal/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:4f5a8e7f5e5b017d9ae247ef7b01f98f23d9bf05ece924d94adb1071c011742d"
+    },
+    "figma": {
+      "sourceURL": "https://help.figma.com/hc/en-us/articles/360039811114-Manage-your-plan",
+      "verified": false,
+      "stepsFingerprint": "sha256:acc2a5a0c2dcc4d101a7f56679d6e309e3fec13fa4efc66b5b82cbd9eb043a2d"
+    },
+    "filescom": {
+      "sourceURL": "https://www.files.com/docs/clients-and-protocols/sdk-and-apis/api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:11c3a34517ea23e158e231570a8c24f83971b11de51f72524d49a95b722cd20e"
+    },
+    "firecrawl": {
+      "sourceURL": "https://www.firecrawl.dev/app/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:318b53c57baf463e6c323d52a45741556983a540adb73ba3fc77588aca130580"
+    },
+    "fireworks": {
+      "sourceURL": "https://app.fireworks.ai/settings/users/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:036ca57c35f74fa63a39be0e84f05637b37c15f1630dc4b8625c86dc9b1f4bae"
+    },
+    "fiskil": {
+      "sourceURL": "https://docs.fiskil.com/data-api/guides/getting-started/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:2b9677d7b87fa9fb9df16b880984cc8323f9cb46003af54f3870030777a86c8d"
+    },
+    "flexport": {
+      "sourceURL": "https://developers.flexport.com/tutorials/using-api-credentials/",
+      "verified": true,
+      "stepsFingerprint": "sha256:be5c3d446b869f879854a9d3d3f0a98347b6634fec908442eeadab2f3f78a13f"
+    },
+    "flutterwave": {
+      "sourceURL": "https://developer.flutterwave.com/v3.0/docs/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:7fb66ea8468c6ed2f2c003361029815be07dcb9c8b9a811f658450e69634ebe9"
+    },
+    "fly": {
+      "sourceURL": "https://fly.io/dashboard/personal/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:146f7e5c59d2f969254761e4bab9822f01f4bb5721f959539ae2f64c847456c1"
+    },
+    "formspring": {
+      "sourceURL": "https://formspring.io/docs/api/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:66375f726d0725c203e19291c3e20e405576209f64d0a5ed629785a30e221ea3"
+    },
+    "frankenergie": {
+      "sourceURL": "https://github.com/HiDiHo01/python-frank-energie",
+      "verified": true,
+      "stepsFingerprint": "sha256:ed586fe9eed6e7497ab09e9216dfb2fae43d116f4cbffdad261b0f54009c0582"
+    },
+    "friendli": {
+      "sourceURL": "https://friendli.ai/docs/guides/suite/personal_api_keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:b1d93d3c04e94a088e226a75adf4f480f496410644fc9f4405f345fd61cd941e"
+    },
+    "gandi": {
+      "sourceURL": "https://docs.gandi.net/en/managing_an_organization/organizations/personal_access_token.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:b25fee0d7c71e3e12ea105c5f80caaba3fb70d5cbf65bf22055ed82cefe039d9"
+    },
+    "gcore": {
+      "sourceURL": "https://docs.gcore.com/account-settings/api-tokens",
+      "verified": true,
+      "stepsFingerprint": "sha256:4efd62464f512e6c6bfe491c16057b356d69742da92e56231dcc46408a3e4bc6"
+    },
+    "gcp": {
+      "sourceURL": "https://console.cloud.google.com/iam-admin/serviceaccounts",
+      "verified": false,
+      "stepsFingerprint": "sha256:a33802f14b6b4aeb01f9eef3a08a01866c062effe4005aac0f9ca03300e930cf"
+    },
+    "gelato": {
+      "sourceURL": "https://support.gelato.com/en/articles/8996574-how-do-i-add-remove-deactivate-or-replace-an-api-key",
+      "verified": true,
+      "stepsFingerprint": "sha256:c90113d98e15a04487221f01cd84d0eb943d40b944871b52bd21c295788273f2"
+    },
+    "github": {
+      "sourceURL": "https://github.com/settings/personal-access-tokens/new?expires_in=none&plan=read",
+      "verified": false,
+      "stepsFingerprint": "sha256:a5ad49619320711606c9ff6cd9edbeed316a1ff7e319d999e9616d5a9ff9a090"
+    },
+    "gitlab": {
+      "sourceURL": "https://customers.gitlab.com",
+      "verified": false,
+      "stepsFingerprint": "sha256:40dd885568d6f6f632eed6e2c2b058c22b416f5e5fe83e7ec914b772fd5feb49"
+    },
+    "glesys": {
+      "sourceURL": "https://github.com/glesys/glesys-go",
+      "verified": true,
+      "stepsFingerprint": "sha256:9a4dea148a12ccbd618819c5235c31944f4bea55988404af16174ac302dad5c1"
+    },
+    "gooten": {
+      "sourceURL": "https://www.gooten.com/api-documentation/getting-started/",
+      "verified": true,
+      "stepsFingerprint": "sha256:02421c30e3855b9d00eb90559560457c2de96fede0a0fe0a75ccc5b046a24053"
+    },
+    "grafana": {
+      "sourceURL": "https://grafana.com/docs/grafana-cloud/security-and-account-management/authentication-and-permissions/access-policies/create-access-policies/",
+      "verified": false,
+      "stepsFingerprint": "sha256:a9cc5321471c8b8c6ad177992e45d427254eab4675be9361a4a7d943c033592f"
+    },
+    "gridscale": {
+      "sourceURL": "https://my.gridscale.io/product-documentation/cloud-computing/apis/public-api/introduction/",
+      "verified": true,
+      "stepsFingerprint": "sha256:8012ade5ba379071f95ca69ca0616fcb2116af6e5f3b93818c3446ce4c41c338"
+    },
+    "hedra": {
+      "sourceURL": "https://www.hedra.com/docs/pages/developer/v3/quickstart",
+      "verified": true,
+      "stepsFingerprint": "sha256:349cd2534f78e11f8a39718a662840b34a6e8018e607507973b7f43da49774e4"
+    },
+    "heroku": {
+      "sourceURL": "https://dashboard.heroku.com/account/applications",
+      "verified": false,
+      "stepsFingerprint": "sha256:1bb5156c3fa2d497bd4439e41deefcdd28166a4f1427b4bdfe9687500b5facce"
+    },
+    "hetrixtools": {
+      "sourceURL": "https://docs.hetrixtools.com/api-key/",
+      "verified": true,
+      "stepsFingerprint": "sha256:05f67f64a5de296e99302da67f3d69af4ec052fe92757ad5626f46f9550bb2e3"
+    },
+    "hivelocity": {
+      "sourceURL": "https://developers.hivelocity.net/docs/api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:0854dea0c1a71bf70b7fa0a052dad08eb2627a9abcc70df74a6e34324d1fd632"
+    },
+    "hostcircle": {
+      "sourceURL": "https://my.hostcircle.com/userapi/",
+      "verified": true,
+      "stepsFingerprint": "sha256:661361f73f002f51ae638b6eb4e585630cfe9b10b9eb8061d5e5976e262fe05f"
+    },
+    "hostens": {
+      "sourceURL": "https://billing.hostens.com/userapi",
+      "verified": true,
+      "stepsFingerprint": "sha256:fece54c760324dd6ac18b6a633144b4b04625bdf98014c55ed8e557639c6fcd5"
+    },
+    "hostup": {
+      "sourceURL": "https://developer.hostup.se/",
+      "verified": true,
+      "stepsFingerprint": "sha256:68079dc6f7d3f927f4f607c18e701d6392aed37e48649f1c62b19e6114d2873a"
+    },
+    "huaweicloud": {
+      "sourceURL": "https://support.huaweicloud.com/intl/en-us/api-oce/en-us_topic_0075195203.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:044624641de7d39b7997f1b1bc55f35e1660794e09e6736b4672fe05cf122b05"
+    },
+    "hubble": {
+      "sourceURL": "https://hubble.com/docs/api-specification/hubble-platform-api",
+      "verified": true,
+      "stepsFingerprint": "sha256:11c6731220ad9f3b38a5b7dcdb7ef40d873431633ccde9761ce900cbfefe4f63"
+    },
+    "huggingface": {
+      "sourceURL": "https://huggingface.co/settings/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:e2bb4ba14c867599763c4e81e5dab7322d5f6ee32a386e5df9fbe68e5bc20d92"
+    },
+    "hyperstack": {
+      "sourceURL": "https://docs.hyperstack.cloud/docs/api-reference/quickstart",
+      "verified": true,
+      "stepsFingerprint": "sha256:ee2ba1e5c10a642913abb1c36e671b9555a726cdfa4134bea7e8bb628b66a1bc"
+    },
+    "i3dnet": {
+      "sourceURL": "https://docs.i3d.net/game-hosting/overview/apiv3-authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:bc93179a622c687d3a3b682a2231044ae11fdd570584eeb74ea7a284c67d14bf"
+    },
+    "ibm": {
+      "sourceURL": "https://cloud.ibm.com/iam/apikeys",
+      "verified": false,
+      "stepsFingerprint": "sha256:b93549c9a29ae645d64e7e47d8b31737e6d280ccc02076cc08caeddab1f1851b"
+    },
+    "idcf": {
+      "sourceURL": "https://faq.idcf.jp/faq/show/79?site_domain=default",
+      "verified": true,
+      "stepsFingerprint": "sha256:5c9e0a62c2931221a9b2f0f78e163f1f05d3762e7dc4fba9976b2b254e5ce645"
+    },
+    "idcloudhost": {
+      "sourceURL": "https://idcloudhost.com/panduan/membuat-token-akses-pribadi-untuk-api-idcloudhost/",
+      "verified": true,
+      "stepsFingerprint": "sha256:78899a5de580f79b459e6e98cd15a3232be4e5f8e02973cf56236de9bc097153"
+    },
+    "inferencesh": {
+      "sourceURL": "https://inference.sh/docs/api/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:ac84cdb988e7625659e82874bafd8d11719a3e761801de316a8e54e0beb44ee8"
+    },
+    "infobip": {
+      "sourceURL": "https://www.infobip.com/docs/essentials/api-authentication",
+      "verified": false,
+      "stepsFingerprint": "sha256:dc5d40cf2a6b89cbf0d8734f6f83752bb6a0bddcd10ba43e7b77b415a0d60837"
+    },
+    "internetx": {
+      "sourceURL": "https://help.internetx.com/display/APIXMLEN/Authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:fdaa4ae94793d67566b295c21ecf485a013995a8d01b7bbec78b65fb85757eab"
+    },
+    "ionos": {
+      "sourceURL": "https://docs.ionos.com/cloud/set-up-ionos-cloud/management/identity-access-management/token-manager",
+      "verified": false,
+      "stepsFingerprint": "sha256:6662ea0d04ed95e761310761ed9ebdaf070b3d105bc31c1df0148a11eac4b5d9"
+    },
+    "iwinv": {
+      "sourceURL": "https://api.iwinv.kr/doc-637859",
+      "verified": true,
+      "stepsFingerprint": "sha256:fd1ecda08741aa7f8d7a80d146b4e2fbad62ff0f9cfa87f56fb6826eec277098"
+    },
+    "kingsoftcloud": {
+      "sourceURL": "https://docs.ksyun.com/documents/39976?type=3",
+      "verified": true,
+      "stepsFingerprint": "sha256:a95baa019fb0c16e02451d551f2eea0f607356a9e1a1f976b14a235be8750bb3"
+    },
+    "klaviyo": {
+      "sourceURL": "https://developers.klaviyo.com/en/docs/authenticate_",
+      "verified": true,
+      "stepsFingerprint": "sha256:76c0c59626f21ed29a6561f34eed168c3bf98a95692c426384042ba1f1efda66"
+    },
+    "latitudesh": {
+      "sourceURL": "https://www.latitude.sh/docs/api-reference/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:0cb16148227bb7902da084b46af05df20e0d182d9ea803eac2a5a7320a7cd419"
+    },
+    "leaseweb": {
+      "sourceURL": "https://kb.leaseweb.com/kb/customer-portal-api/customer-portal-api-api-key-management/",
+      "verified": true,
+      "stepsFingerprint": "sha256:046d9e3df91801dbe80df5ad4eb8376c4fce01bfefa63174192e2dfbbd21c56a"
+    },
+    "linear": {
+      "sourceURL": "https://linear.app/settings/api",
+      "verified": false,
+      "stepsFingerprint": "sha256:9798bba7d3bebf80c7a71f32bfd87d12b415e0c00dde5fff52b401579590cfd5"
+    },
+    "linode": {
+      "sourceURL": "https://cloud.linode.com/profile/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:378907253a48a34b9da014f0b4d1775e268cf307323d87e0c88fd9ffcbc8b8a8"
+    },
+    "loginet": {
+      "sourceURL": "https://my.loginet.ee/index.php?/userapi/",
+      "verified": true,
+      "stepsFingerprint": "sha256:197605f6057e422d37bfcc670aab4d1570542f2392c2d135ea3ff8c9b7c96010"
+    },
+    "magalucloud": {
+      "sourceURL": "https://docs.magalu.cloud/docs/devops-tools/api-keys/how-to/other-products/create-api-key",
+      "verified": true,
+      "stepsFingerprint": "sha256:e91c5dc5b1362a9214170aa52d207198c7b3faab8c1e5102692d0e46417fbad9"
+    },
+    "make": {
+      "sourceURL": "https://developers.make.com/api-documentation/authentication/create-authentication-token",
+      "verified": true,
+      "stepsFingerprint": "sha256:16a30138e96ff20ef4b26b90b75faa3a5fffd7a9cf5a1967f28b9daf938f3bd7"
+    },
+    "mariadb": {
+      "sourceURL": "https://app.skysql.com/user-profile/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:6ecd33bf9bfc99151bd5208bf6eb669ac7f77dc0e0f13cb3ac099a1f0be9dc40"
+    },
+    "melbicom": {
+      "sourceURL": "https://docs.api.melbicom.net/",
+      "verified": true,
+      "stepsFingerprint": "sha256:9c6010f0c5699f4f8ff8c2c6b6b3a9fd172c678c23e9d5604cb23f081708c8b5"
+    },
+    "memset": {
+      "sourceURL": "https://www.memset.com/apidocs/intro.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:8309cfbc5782a62627e35791ba16f26dd4415b830207950378eb7745b6b4e528"
+    },
+    "messagebird": {
+      "sourceURL": "https://dashboard.messagebird.com/en/developers/access",
+      "verified": false,
+      "stepsFingerprint": "sha256:853cb864361a066b8237c33519936e0685bd52c3e1c4a1074465cb7772f24ed5"
+    },
+    "mikrocloud": {
+      "sourceURL": "https://mikrocloud.com/documentation/api-reference/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:00492442330262fa288a8d80013369164d8a613a7d6801a1a6c35e9474fe4011"
+    },
+    "mistral": {
+      "sourceURL": "https://backoffice.mistral.ai",
+      "verified": false,
+      "stepsFingerprint": "sha256:ebcc56f527536b0858e7a2e0b4ffda353dad982b19416358173679c6358f3d30"
+    },
+    "mittwald": {
+      "sourceURL": "https://developer.mittwald.de/docs/v2/api/intro/",
+      "verified": true,
+      "stepsFingerprint": "sha256:c82f365b7d2304d9ae20e950702781bae945737ea8b9cdfc1e170866b789552b"
+    },
+    "mixpeek": {
+      "sourceURL": "https://mixpeek.com/docs/integrations/developer-tools/javascript-sdk",
+      "verified": true,
+      "stepsFingerprint": "sha256:959823404cde0e60e6e0e7338ab6f657ad6b3fc07c53649e1479d6bb4026efaf"
+    },
+    "mollie": {
+      "sourceURL": "https://docs.mollie.com/reference/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:21057d91c6af49a770e6fb62754267b2ea4282b7b40f1665c8b40cecb1e82f63"
+    },
+    "moonshot": {
+      "sourceURL": "https://platform.kimi.com/console/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:7f61749426890d067c90eb850a1ca639210bc6f5a122cf69ee3305a1df69d8d4"
+    },
+    "moonshotai": {
+      "sourceURL": "https://platform.moonshot.ai/console/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:ffde54e44d616adb4707496cd3dd808f2c19eafb4bb18904ac9a9f059564c726"
+    },
+    "mysendingbox": {
+      "sourceURL": "https://docs.mysendingbox.fr/",
+      "verified": true,
+      "stepsFingerprint": "sha256:8a0f6fa813b00510dfecff8d3db8196a0758010fa844c15929721ccdec956ba9"
+    },
+    "namecheap": {
+      "sourceURL": "https://www.namecheap.com/support/api/intro/",
+      "verified": true,
+      "stepsFingerprint": "sha256:7d377f57961008e1087b8e41f9507524f8bff62ded298e3c0bc0ad1fa6423259"
+    },
+    "namecom": {
+      "sourceURL": "https://docs.name.com/guides/getting-started",
+      "verified": true,
+      "stepsFingerprint": "sha256:d944d84c6047865ef1a0e07a69c5f9220bd02c6a696475d93e8cff0241d628dc"
+    },
+    "ncloud": {
+      "sourceURL": "https://api.ncloud-docs.com/docs/en/common-ncpapi",
+      "verified": true,
+      "stepsFingerprint": "sha256:d0885327d6f32ef084e77c331bf0af52788326fab4c70a1859430c63e25ebe3b"
+    },
+    "neo4j": {
+      "sourceURL": "https://console.neo4j.io/account/client-credentials",
+      "verified": false,
+      "stepsFingerprint": "sha256:d2573c785bfbcbaef7b6ac785a6223b72466322818ecd11ebf248e98b066bba3"
+    },
+    "neon": {
+      "sourceURL": "https://console.neon.tech/app/settings/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:ba01544874154196fd01ae13025bce2a577878cd2b1f5242511d35592c0dc7ce"
+    },
+    "nomos": {
+      "sourceURL": "https://docs.nomos.energy/api-references/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:49cac4a2ddc426085d04b622b0b39d8876a0e603339e784d485bf96e38ff3af8"
+    },
+    "northflank": {
+      "sourceURL": "https://northflank.com/docs/v1/application/secure/grant-api-access",
+      "verified": true,
+      "stepsFingerprint": "sha256:2693c224491b8f0fc25a527be03902f2e5c634202da55c70501f7b8d90079430"
+    },
+    "notion": {
+      "sourceURL": "https://www.notion.so/my-integrations",
+      "verified": false,
+      "stepsFingerprint": "sha256:0acfc316d9b2771bdc94e66029aea2f881e3e2f31f110eeb0a190fbd4bf901b7"
+    },
+    "novita": {
+      "sourceURL": "https://novita.ai/settings/key-management",
+      "verified": false,
+      "stepsFingerprint": "sha256:c09aa63ca53cd61dab53eb2ded44439b2cda6af855826da656b36e77849a2cff"
+    },
+    "ocamba": {
+      "sourceURL": "https://docs.ocamba.com/user/core/core-platform-settings/api-tokens/",
+      "verified": true,
+      "stepsFingerprint": "sha256:fcc8dec9425316755d1c737a52e0252b01e7af7fcebe4597472c494bf111fbe5"
+    },
+    "octopusenergy": {
+      "sourceURL": "https://octopus.energy/help-and-faqs/articles/how-do-i-access-the-octopus-api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:c97967456095fa9ca035d9c4a55eae3e6027a20cf9146ffac8d0085041878780"
+    },
+    "once": {
+      "sourceURL": "https://help.1nce.com/docs/1nce-portal/portal-users-organisations/",
+      "verified": true,
+      "stepsFingerprint": "sha256:fcef4689e052bd4f51fdb2c796f2af5d457c9615136d9e5756c21a0ccd3a4eb4"
+    },
+    "openai": {
+      "sourceURL": "https://platform.openai.com/settings/organization/admin-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:5e4d0e69623d8a80eb97b7ba35d6b2d51d20a7c9f891931dba9f1667cc3ff265"
+    },
+    "openprovider": {
+      "sourceURL": "https://support.openprovider.eu/hc/en-us/articles/360025683173-Getting-started-with-Openprovider-API",
+      "verified": true,
+      "stepsFingerprint": "sha256:bb297f2f281ce8aaaafb5f39848562514ba3a183a69e069ca5035ae8855a8ee9"
+    },
+    "openrouter": {
+      "sourceURL": "https://openrouter.ai/settings/keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:a69e0c1811ca31731fdf7eefd88eec963b21b4e5c42b45fa4d2f2ae43f5e4702"
+    },
+    "orangecloud": {
+      "sourceURL": "https://cloud.orange-business.com/wp-content/uploads/2025/01/CloudCustomerSpace_api-POSTMAN-COLLECTION-USER-GUIDE-EN.pdf",
+      "verified": true,
+      "stepsFingerprint": "sha256:b474a7e41eb2fbdb14469019b371b3c406ffd615ec69cdd5cb1eb32a48eefff2"
+    },
+    "outscale": {
+      "sourceURL": "https://docs.outscale.com/en/userguide/Creating-an-Access-Key.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:93c5867a2725facb7c3e30c0029abb32e4ae1b65a23583960d1777b6bff7bfd4"
+    },
+    "ovhcloud": {
+      "sourceURL": "https://docs.ovhcloud.com/en/guides/manage-and-operate/api/first-steps",
+      "verified": true,
+      "stepsFingerprint": "sha256:0b95b96be22e17ea4b2f238745c3a99b808317d6da275ee0af6fb30417737f53"
+    },
+    "oxahost": {
+      "sourceURL": "https://my.oxahost.com/userapi/",
+      "verified": true,
+      "stepsFingerprint": "sha256:0f956da3eaac1bff069cb737c329650caacc4843b03fc3c8e03de272c9194d7f"
+    },
+    "oyster": {
+      "sourceURL": "https://docs.oysterhr.com/docs/customer-guide-to-creating-and-authorizing-a-developer-application",
+      "verified": true,
+      "stepsFingerprint": "sha256:f18a11a0361f44ea698963d592e7159f1c016c3695e61348bb06daf43322b923"
+    },
+    "parasail": {
+      "sourceURL": "https://docs.parasail.io/parasail-docs/security-and-account-management/account-api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:2c206fc5307a77bd94a2b65a736e5c430824c10b70093a10ef4967c05b520c4e"
+    },
+    "paypal": {
+      "sourceURL": "https://developer.paypal.com/api/rest",
+      "verified": true,
+      "stepsFingerprint": "sha256:d80adfca05ad023bdf38d848343cee231755f7a0847352621f9d8eb842d74b0f"
+    },
+    "paystack": {
+      "sourceURL": "https://paystack.com/docs/api/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:b87fc98b52a7a3944bf132abf1c738fd937e9d3fb3aecb6442f234205c21a33a"
+    },
+    "pdfshift": {
+      "sourceURL": "https://docs.pdfshift.io/docs/getting-an-api-key",
+      "verified": true,
+      "stepsFingerprint": "sha256:04c65d5598d54287dfd81ae424d98caffcbd5f4c7bfe5cde0c9b2310d2c953d9"
+    },
+    "pge": {
+      "sourceURL": "https://www.pge.com/en/save-energy-and-money/energy-usage-and-tips/understand-my-usage/share-my-data.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:41b07796596c1a3d147bf0aee207c80768c589cb662ea34da4e0923665dedc8f"
+    },
+    "phaxio": {
+      "sourceURL": "https://www.phaxio.com/docs/api/v2.1/",
+      "verified": true,
+      "stepsFingerprint": "sha256:a71b19388b7b52e0470c31a230452cce2a5fa4b390fb67249193167021247a37"
+    },
+    "phoenixnap": {
+      "sourceURL": "https://phoenixnap.com/kb/bare-metal-cloud-portal-quick-start-guide",
+      "verified": true,
+      "stepsFingerprint": "sha256:d11f704646c49dbb5c4e4d9be943780bf00cb7fa58d66873fde629cadc365c0e"
+    },
+    "pika": {
+      "sourceURL": "https://dev.pika.art/llms.txt",
+      "verified": true,
+      "stepsFingerprint": "sha256:698a1cd831c0f738ddc37d7c231fe5c8c9e912d0f327cbbb31a4578fcea04374"
+    },
+    "planetscale": {
+      "sourceURL": "https://app.planetscale.com/settings/service-tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:ec794ffd94618e0fc647d0372545bfa4c7c93307c10ecf6a72618927ddc42087"
+    },
+    "pleo": {
+      "sourceURL": "https://developers.pleo.io/docs/current/how-tos/api-keys/how-to-generate-standalone-api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:527a89552cf7f690e11f4dbf19a411261f09eafc84e47c398475b829e9a0068b"
+    },
+    "plivo": {
+      "sourceURL": "https://console.plivo.com/dashboard/",
+      "verified": false,
+      "stepsFingerprint": "sha256:8cf44f6f046b42661e3e884e0b820c32994ce78b9628e3d9fe7dd8f3f8b63961"
+    },
+    "polar": {
+      "sourceURL": "https://polar.sh/settings",
+      "verified": false,
+      "stepsFingerprint": "sha256:62a429b0c238b390e24f64a31dbad6f1c6b43b42ecb8b7f4dfc1f2c1a547fbfc"
+    },
+    "porkbun": {
+      "sourceURL": "https://kb.porkbun.com/article/190-getting-started-with-the-porkbun-api",
+      "verified": true,
+      "stepsFingerprint": "sha256:5dc3375b76ccf9241dfe27e2030bf8a527ff376ac6a9ec7804b18e8dab29d004"
+    },
+    "posthog": {
+      "sourceURL": "https://app.posthog.com/settings/user-api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:5dec390d58df403427b55193104a9d7c4189a2f5ddf460f680b0bc0acf3db889"
+    },
+    "postman": {
+      "sourceURL": "https://learning.postman.com/docs/developer/postman-api/authentication/",
+      "verified": true,
+      "stepsFingerprint": "sha256:3489c4f8714178f78a5e86e0afd65ee3fdf679bcb4d6e3d7379b2fdb4d3defe6"
+    },
+    "printful": {
+      "sourceURL": "https://developers.printful.com/docs/",
+      "verified": true,
+      "stepsFingerprint": "sha256:735c91d4431458b9a5829f3f0df700bb5b85286bbdbb7cc7b5fe29271aad7fbf"
+    },
+    "printify": {
+      "sourceURL": "https://help.printify.com/hc/en-us/articles/4483626447249-How-can-I-generate-an-API-token",
+      "verified": true,
+      "stepsFingerprint": "sha256:06da4ab90b81310df8b23132a0ac02959d95d040d12905ee09694f0c7672f022"
+    },
+    "prodigi": {
+      "sourceURL": "https://www.prodigi.com/faq/print-api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:981ecd8b6863b0bae031c1dc2d0d308f7c4156496cdd4c5b3bc33d9a8081ba7f"
+    },
+    "pulumi": {
+      "sourceURL": "https://www.pulumi.com/docs/pulumi-cloud/access-management/access-tokens/",
+      "verified": false,
+      "stepsFingerprint": "sha256:99c8da0c02cdb4e479b0dd03d5779d98d9e89f793864af1feda6b2ad388acb28"
+    },
+    "qdrant": {
+      "sourceURL": "https://cloud.qdrant.io/access-management",
+      "verified": false,
+      "stepsFingerprint": "sha256:ca2d2c185668f57ac4e64cb148c9538b26ab341fdefde3970a05dc435f889817"
+    },
+    "qiniu": {
+      "sourceURL": "https://developer.qiniu.com/af/kb/1479/how-to-access-or-locate-the-access-key-and-secret-key",
+      "verified": true,
+      "stepsFingerprint": "sha256:2a3c7c197012d2d47acd0a8b355e1a9e35380fe2ce3fb967c71ca606334cd4e9"
+    },
+    "qovery": {
+      "sourceURL": "https://www.qovery.com/docs/configuration/organization/api-token",
+      "verified": true,
+      "stepsFingerprint": "sha256:4fcf1208f823ff7ad14233b8b8aa60f74298ecc82543b44429c09b7850c2949d"
+    },
+    "rackspace": {
+      "sourceURL": "https://docs.rackspace.com/docs/view-and-reset-your-api-key",
+      "verified": true,
+      "stepsFingerprint": "sha256:d615be971c666135bd04644d72cafcfa2fbca61e5a06acfa8f5e6e1aead67447"
+    },
+    "railway": {
+      "sourceURL": "https://railway.com/account/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:46a02f70bbcb8568d92d5a9a423e499532d37e217f2d1b355fb4684ccbd9dbf3"
+    },
+    "realtimeregister": {
+      "sourceURL": "https://realtimeregister.com/blogs/introducing-api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:69839baf574c46ddbaea1e52d3e03b0a000c1929ad268dd43f259553feb11f92"
+    },
+    "rediscloud": {
+      "sourceURL": "https://redis.io/docs/latest/operate/rc/api/get-started/manage-api-keys/",
+      "verified": true,
+      "stepsFingerprint": "sha256:5e5ae19b06b76bfbd596ebba6c9ac2665cb6658f15c62b6308753b2a18f8b4c7"
+    },
+    "remote": {
+      "sourceURL": "https://developer.remote.com/docs/authorization-for-customers",
+      "verified": true,
+      "stepsFingerprint": "sha256:722df16f728001a339cfb07241dc82777ec3eeddecd1f416f1355f0bf5e099e4"
+    },
+    "render": {
+      "sourceURL": "https://dashboard.render.com/u/settings",
+      "verified": false,
+      "stepsFingerprint": "sha256:85bb3ba092f13e5f836a7f006dacb5c5505f66b99aca51f483532001c654e8ec"
+    },
+    "resend": {
+      "sourceURL": "https://resend.com/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:2eca37f9b6ddf714e750384e8e7399f503f13b3130977d930de45317fea1a981"
+    },
+    "revenuecat": {
+      "sourceURL": "https://app.revenuecat.com/settings/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:ca8b0cefe6690d52d61a0dea550c6a85c2ecc8d94f7e2ff6a3374b81048592bd"
+    },
+    "runpod": {
+      "sourceURL": "https://www.runpod.io/console/user/settings",
+      "verified": false,
+      "stepsFingerprint": "sha256:8aa5a2264a9eb18463c01fb7c1fb83eee9cfba2da009fd3f97e0293ffadf2035"
+    },
+    "sakuracloud": {
+      "sourceURL": "https://manual.sakura.ad.jp/cloud/api/apikey.html",
+      "verified": true,
+      "stepsFingerprint": "sha256:330b8558df270326f3577a62c3f7952f6377a77438efef0819cf1da24002b1da"
+    },
+    "scaleway": {
+      "sourceURL": "https://console.scaleway.com/iam/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:ee1566a1ccd3f2c3ad81e2329a68a75c571f969c1681011302f38ebb6f4d490e"
+    },
+    "scalingo": {
+      "sourceURL": "https://doc.scalingo.com/platform/user-management/scalingo-account/navigating",
+      "verified": true,
+      "stepsFingerprint": "sha256:06c5b84e98389480048a4bfd281bb9a4b2011710e01fac305e9afee548800319"
+    },
+    "seeweb": {
+      "sourceURL": "https://docs.seeweb.it/en/hosting/cloudserver/rest-api/API-Endpoints/Account/",
+      "verified": true,
+      "stepsFingerprint": "sha256:aa434f617dcd161116e436111d2541000557ea6e867abfaa8256c42ff73b466a"
+    },
+    "sendcloud": {
+      "sourceURL": "https://sendcloud.dev/docs/getting-started/how-to-create-your-api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:4e8f787b004b20bb452a6f45e7e9492cfd0657ed217db22b254cc03b3ce19ece"
+    },
+    "sentry": {
+      "sourceURL": "https://sentry.io/settings/account/api/auth-tokens/new-token/",
+      "verified": false,
+      "stepsFingerprint": "sha256:6f8b69a6f04328253a3004be5b251b91d59ca01a2c0d9bac069441bc35f5263b"
+    },
+    "serverscom": {
+      "sourceURL": "https://www.servers.com/docs/ebm/create-a-dedicated-server-via-public-api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:846da1f23073894bed502a91a69dcbc7fb939959f0f39dfeb0ee91f791c18e47"
+    },
+    "sevalla": {
+      "sourceURL": "https://docs.sevalla.com/tools/api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:79519325d48a73114b0627aa510831439534d64d275be61b32f90f75a68d3626"
+    },
+    "sevenbridges": {
+      "sourceURL": "https://docs.sevenbridges.com/docs/get-your-authentication-token",
+      "verified": true,
+      "stepsFingerprint": "sha256:eb87d2b7fb416ed3275a65bc900a0ae9e15b87bb75b92002170daf44459e2b48"
+    },
+    "shipbob": {
+      "sourceURL": "https://developer.shipbob.com/auth",
+      "verified": true,
+      "stepsFingerprint": "sha256:ffffc7af21f95b176313f375f23d8df7f8f8ba7638d25e06c78f804864f622db"
+    },
+    "shipmondo": {
+      "sourceURL": "https://shipmondo.dev/docs/getting-started",
+      "verified": true,
+      "stepsFingerprint": "sha256:7851b1cca878078aab1ed1a6b2885e92f5103d1bac3405df6503ef5539a8cbb8"
+    },
+    "shippo": {
+      "sourceURL": "https://docs.goshippo.com/docs/guides_general/authentication/",
+      "verified": true,
+      "stepsFingerprint": "sha256:086378bb54c3027d8fb3c7c9ff64c9f38d4bc294aed7e6de54003864be7def76"
+    },
+    "shipstation": {
+      "sourceURL": "https://www.shipengine.com/docs/auth/",
+      "verified": true,
+      "stepsFingerprint": "sha256:8214b557b200e01c91a1e112e2f11360f7e38739a3c469a5f7e552e40e4f2112"
+    },
+    "shipwell": {
+      "sourceURL": "https://docs.shipwell.com/docs/get-connected/authentication/",
+      "verified": true,
+      "stepsFingerprint": "sha256:ff0a245156e6493e35946a99ffe2279ecfd3393544b3382e3a2f0c39ca6a1910"
+    },
+    "siliconflow": {
+      "sourceURL": "https://cloud.siliconflow.cn/account/ak",
+      "verified": false,
+      "stepsFingerprint": "sha256:01722046b86ff7d281da78a73b8c1d6d658f2a57e04803a7d4241740dcf71718"
+    },
+    "simply": {
+      "sourceURL": "https://www.simply.com/en/docs/api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:ae0e7328faae18c5fec5336b6f7cbe82a853a9f8ef0fcc688bdbf990c2706b56"
+    },
+    "slack": {
+      "sourceURL": "https://slack.com/help/articles/218915077-Manage-your-Slack-plan",
+      "verified": false,
+      "stepsFingerprint": "sha256:b7e8b86ce341781e9dfebb82b81c26d6fa3c2ccbb9b8c751a64609019764aea3"
+    },
+    "soniox": {
+      "sourceURL": "https://soniox.com/docs/stt/get-started",
+      "verified": true,
+      "stepsFingerprint": "sha256:9015d87834d71af2eb8eebf1400f17747e2ee26385eac2bdc771b2696c5a820b"
+    },
+    "soracom": {
+      "sourceURL": "https://developers.soracom.io/en/docs/security/authkeys",
+      "verified": true,
+      "stepsFingerprint": "sha256:e443dd245a7b3b05041a21a5c3d64812b5483d4c3ab951da925e1df8bb35c4f2"
+    },
+    "stackit": {
+      "sourceURL": "https://docs.stackit.cloud/platform/access-and-identity/service-accounts/how-tos/manage-service-accounts/",
+      "verified": true,
+      "stepsFingerprint": "sha256:d6fff97cd2bec4f3ccf82ca129328ff47e071b35d64f0e978ddc56bc45cd7415"
+    },
+    "stannp": {
+      "sourceURL": "https://go.stannp.com/blogs/stannp-api-faqs",
+      "verified": true,
+      "stepsFingerprint": "sha256:153369687858ad5662afd2700dbb6d28ffb4441de28ff5c8764365b26e84c2ea"
+    },
+    "starlink": {
+      "sourceURL": "https://starlink.readme.io/docs/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:60e4cb0a14cbbacbaaea8baf942c83b60813458180f67c8b3668c548903fa579"
+    },
+    "stepfun": {
+      "sourceURL": "https://platform.stepfun.com/console/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:f4e9c779065723afa4ceb7d4b7c6734e669a3ca29e7ad3caac9b5614fc2a5b61"
+    },
+    "stepfunai": {
+      "sourceURL": "https://platform.stepfun.ai/console/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:af6f9fcc9ca4c3f143f5d92daa095753f3e43b3680f86ffb27d4cd14e9c1f5e8"
+    },
+    "stripe": {
+      "sourceURL": "https://dashboard.stripe.com/apikeys",
+      "verified": false,
+      "stepsFingerprint": "sha256:1229c5bc58c02713e644069ca8c234142338647cac7aab9a7f2fe5970f85002c"
+    },
+    "supabase": {
+      "sourceURL": "https://supabase.com/dashboard/account/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:c0ac899a412b52b3b50e7afe1db626b752f9a13aa15c2f75a8d28912c067611a"
+    },
+    "surrealdb": {
+      "sourceURL": "https://surrealdb.com/docs/build/ai-agents/mcp",
+      "verified": true,
+      "stepsFingerprint": "sha256:aa0f2dda5d29fcad18a30e08e8cdcde57ccfbced358afb91d1aa8cd6cd8ec93b"
+    },
+    "tavily": {
+      "sourceURL": "https://docs.tavily.com/documentation/quickstart",
+      "verified": false,
+      "stepsFingerprint": "sha256:c2efdae3bb1f3c99eddb4e81edfb5907e8f1f504063cbd52cbbb7c125bf81b0e"
+    },
+    "teelaunch": {
+      "sourceURL": "https://api.teelaunch.com/documentation",
+      "verified": true,
+      "stepsFingerprint": "sha256:8acfed6d05736d02a1e825682fe0c11a4a3a155829524fa7a1a33b6682f00a81"
+    },
+    "telnyx": {
+      "sourceURL": "https://portal.telnyx.com/#/app/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:c87a18029d2a7c7c9eda332f4038b8b466cee0b6951829eebd5a8e512d135033"
+    },
+    "tencentcloud": {
+      "sourceURL": "https://cloud.tencent.com/document/product/598/37140",
+      "verified": true,
+      "stepsFingerprint": "sha256:bf9cac01dd022a112116dc7dce69dda828516828394ea282fe21e13a4a7b322f"
+    },
+    "textmagic": {
+      "sourceURL": "https://app.textmagic.com/settings/api",
+      "verified": false,
+      "stepsFingerprint": "sha256:6899354bbd96416becc9178497724e22ea7f5cb5870de15e12830a2c15e20126"
+    },
+    "thanksio": {
+      "sourceURL": "https://docs.thanks.io/authentication/bearer-token",
+      "verified": true,
+      "stepsFingerprint": "sha256:a36c2ddf2cb0653d155dc312fbaebb1c49e3c61bc09766011f8bb18e70aff813"
+    },
+    "threeplguys": {
+      "sourceURL": "https://developer.3plguys.com/docs/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:d8146fd2aced4f0902cb3d7db9d3b2d905508bbc714a5d8fa8706c8b21bb4e38"
+    },
+    "tibber": {
+      "sourceURL": "https://developer.tibber.com/docs/guides/calling-api",
+      "verified": true,
+      "stepsFingerprint": "sha256:fc38458076cd007c1be6e2eae40bae6a9b034940c0a1cfbb705697474f4ef683"
+    },
+    "tidbcloud": {
+      "sourceURL": "https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless",
+      "verified": true,
+      "stepsFingerprint": "sha256:8e2c58b0b87484e1ae99ced7b1e17414c4827506a264cf88b8354112b5a7b328"
+    },
+    "tierpoint": {
+      "sourceURL": "https://api.tierpoint.com/api/v1/usage/v3/api-docs",
+      "verified": true,
+      "stepsFingerprint": "sha256:ec8213a1ed51f268713d972f7bc368d5f4d1a125f882281315f4c6468cdf2dba"
+    },
+    "time4vps": {
+      "sourceURL": "https://billing.time4vps.com/userapi/",
+      "verified": true,
+      "stepsFingerprint": "sha256:458db529ff8c0c2a5661cb45b17b3899a095009f552a9db09c66fc6c567ac8e5"
+    },
+    "timeweb": {
+      "sourceURL": "https://timeweb.cloud/docs/account-management/token",
+      "verified": true,
+      "stepsFingerprint": "sha256:42a6d8d4f183a17e6454443d48acc640cf542439cd6e997138a58fb066fb0aed"
+    },
+    "together": {
+      "sourceURL": "https://docs.together.ai/docs/quickstart",
+      "verified": true,
+      "stepsFingerprint": "sha256:f3b81f32e5f0227573051390e5012fc74f2d099115ee0d516e9a05d07cf1e543"
+    },
+    "transip": {
+      "sourceURL": "https://www.transip.eu/knowledgebase/77-using-the-transip-rest-api",
+      "verified": true,
+      "stepsFingerprint": "sha256:bfd3f1f7c5eb486076e4edf41615422713d4bd3024a6769a21219f59c47b1e66"
+    },
+    "transloadit": {
+      "sourceURL": "https://transloadit.com/docs/api/authentication/",
+      "verified": true,
+      "stepsFingerprint": "sha256:0f4fd777637d74d0357e21503489aafdf9f4d0fbbcac2b5ca6b74be9fc39bd10"
+    },
+    "turso": {
+      "sourceURL": "https://docs.turso.tech/cli/auth/api-tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:099c472b658a53a25f93b0904e31142965b7206486da846df09804742879f60a"
+    },
+    "twilio": {
+      "sourceURL": "https://1console.twilio.com/go?to=/account/__account__/settings/us1/api-keys/list",
+      "verified": false,
+      "stepsFingerprint": "sha256:72e3fac13c81072a15d5ee807190f397080a1de06c1c51fced102dccd68ec7b5"
+    },
+    "typebot": {
+      "sourceURL": "https://docs.typebot.com/api-reference/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:27eebbf97da3d1cb62f89beed82ebc186e9fbd2765cbc9a02ad5619211291028"
+    },
+    "typesense": {
+      "sourceURL": "https://typesense.org/docs/cloud-management-api/v1/",
+      "verified": false,
+      "stepsFingerprint": "sha256:d0e61d27b4542ae9d4ed27faaf2006dec23c5f17b32ba64f2dcbfaafd09c2275"
+    },
+    "unleash": {
+      "sourceURL": "https://docs.getunleash.io/reference/api-tokens-and-client-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:942d5d66b9db96caae57d2a2a368f28ca251fb7e0d79d60b09688fa078ccc9d5"
+    },
+    "upcloud": {
+      "sourceURL": "https://upcloud.com/docs/guides/managing-api-tokens/",
+      "verified": false,
+      "stepsFingerprint": "sha256:8cb6550cfcfc7217b8cb9d7a3cb8ca0540fc087db0234cf63137c318e6849a62"
+    },
+    "upstash": {
+      "sourceURL": "https://console.upstash.com/account/api",
+      "verified": false,
+      "stepsFingerprint": "sha256:36d36a2f929b35041fd1fbf19df83b7de8b043bfc962fcbb5ce3ac08d2f01137"
+    },
+    "upsun": {
+      "sourceURL": "https://developer.upsun.com/cli/api-tokens",
+      "verified": true,
+      "stepsFingerprint": "sha256:14526fb105c181a23b642bed7eecfeb93be081744049ca97cd16d29c761ec101"
+    },
+    "utilityapi": {
+      "sourceURL": "https://utilityapi.com/docs/authentication",
+      "verified": true,
+      "stepsFingerprint": "sha256:cc76941365b30239310a5bfdc84a1edfa8466f8c2c83cf400e5dbb07240eaafa"
+    },
+    "vastai": {
+      "sourceURL": "https://cloud.vast.ai/manage-keys/",
+      "verified": false,
+      "stepsFingerprint": "sha256:21678984069e73277c891382e30d5e986344c423d384f937979ca8289ea2cbbc"
+    },
+    "vercel": {
+      "sourceURL": "https://vercel.com/account/tokens",
+      "verified": false,
+      "stepsFingerprint": "sha256:849d2b9801ab65fda056f08d71e88fd23447ecefa921f5a5b94a6c35bb02501a"
+    },
+    "volcengine": {
+      "sourceURL": "https://www.volcengine.com/docs/6420/1764624",
+      "verified": true,
+      "stepsFingerprint": "sha256:2f16b6c5366cff0a47fed120729b692ed275223965d4edac72af8c7c5a1b7d5b"
+    },
+    "voltagepark": {
+      "sourceURL": "https://support.voltagepark.com/article/api",
+      "verified": true,
+      "stepsFingerprint": "sha256:c366dbfaf66cfd021d27c14317f57979d1edc3f091940522663f76d88ff21395"
+    },
+    "voltview": {
+      "sourceURL": "https://docs.voltview.co.uk/api-reference/introduction",
+      "verified": true,
+      "stepsFingerprint": "sha256:4677b0379ecbd3ba99d109b599f780a8068610a30f39e6d735df6da1d16c3848"
+    },
+    "vonage": {
+      "sourceURL": "https://dashboard.nexmo.com/settings",
+      "verified": false,
+      "stepsFingerprint": "sha256:476405482f024c414c1fc58649927a9df6dea379118031b95036189159a6f348"
+    },
+    "vpsnet": {
+      "sourceURL": "https://control.vps.net/api/",
+      "verified": true,
+      "stepsFingerprint": "sha256:25ac449d7fffe5e3c4e1cbbed4a9f3073ab7f0ee0ce777c5462b1e72656269c2"
+    },
+    "vultr": {
+      "sourceURL": "https://my.vultr.com/settings/#settingsapi",
+      "verified": false,
+      "stepsFingerprint": "sha256:10cea1b0392adfef9e02984270df1c122f17aa44ac33b13fe1d23a11d667c273"
+    },
+    "warpstream": {
+      "sourceURL": "https://docs.warpstream.com/warpstream/reference/secrets-overview",
+      "verified": true,
+      "stepsFingerprint": "sha256:a45b832147c1a54edf76392f74f9ce90b852fb3c80a1ed9dcd4ed807dc0a803d"
+    },
+    "websupport": {
+      "sourceURL": "https://www.websupport.sk/podpora/kb/api-keys/",
+      "verified": true,
+      "stepsFingerprint": "sha256:123e6aca5560da62786e9b7907a2f9fe7d5ffe3835041fcc8f0edcc94b7fd73d"
+    },
+    "xai": {
+      "sourceURL": "https://console.x.ai/team/default/api-keys",
+      "verified": false,
+      "stepsFingerprint": "sha256:24211da18ea8d0a661009bb97f91e2c4d96ae6099b6efec987a8fd919ee7bd4b"
+    },
+    "zcomcloud": {
+      "sourceURL": "https://cloud.z.com/jp/guide/cp-create_api_user/",
+      "verified": true,
+      "stepsFingerprint": "sha256:7df62dd0f6b929d03ff899fcd6ecaa027f8d2e27deaa91b73a6b5c68e5a13de4"
+    },
+    "zilliz": {
+      "sourceURL": "https://docs.zilliz.com/docs/manage-api-keys",
+      "verified": true,
+      "stepsFingerprint": "sha256:2e677538021598042f2c54e7ba10ffda6036f88a7a449cdd0cd208850d34f938"
+    },
+    "zoom": {
+      "sourceURL": "https://developers.zoom.us/docs/internal-apps/create/",
+      "verified": true,
+      "stepsFingerprint": "sha256:abc31f176cfa403a526181235c4f2c4c7465e35b97bb54c6b7c0ab8b3f76bab9"
+    }
+  }
+}

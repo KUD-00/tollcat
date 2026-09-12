@@ -20,7 +20,7 @@ class PreferencesStore(context: Context) {
         }
 
     var appearance: String
-        get() = prefs.getString(APPEARANCE, AppearancePreference.SYSTEM) ?: AppearancePreference.SYSTEM
+        get() = prefs.getString(APPEARANCE, AppearancePreference.DARK) ?: AppearancePreference.DARK
         set(value) {
             prefs.edit().putString(APPEARANCE, AppearancePreference.normalize(value)).apply()
         }
@@ -38,7 +38,7 @@ class PreferencesStore(context: Context) {
         }
 
     var hidesCat: Boolean
-        get() = prefs.getBoolean(HIDES_CAT, false)
+        get() = prefs.getBoolean(HIDES_CAT, true)
         set(value) {
             prefs.edit().putBoolean(HIDES_CAT, value).apply()
         }

@@ -1,4 +1,4 @@
-# 设置页能到，「关闭猫猫」能拨；拨完回仪表盘数字还在。
+# 设置页能到，「打开猫猫」能拨；拨完回仪表盘数字还在。
 appId: com.zhechengqi.tollcat
 ---
 - launchApp:

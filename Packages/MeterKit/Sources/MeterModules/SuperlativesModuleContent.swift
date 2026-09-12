@@ -1,7 +1,7 @@
 import Foundation
 import MeterCore
 
-/// 「本月之最」：三句话，各指一家。
+/// 「之最」：三句话，各指一家。节标题跟着期间走。
 public struct SuperlativesModuleContent: Equatable, Sendable {
     public var items: [SuperlativeItem]
 

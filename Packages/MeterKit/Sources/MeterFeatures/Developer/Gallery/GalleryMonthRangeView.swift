@@ -86,7 +86,7 @@ struct GalleryMonthRangeView: View {
                 sample(L("单月"), window: MonthWindow(newestBack: 0, oldestBack: 0))
                 sample(L("近 3 个月"), window: MonthWindow(newestBack: 0, oldestBack: 2))
                 sample(L("跨行的一段"), window: MonthWindow(newestBack: 1, oldestBack: 6))
-                sample(L("全期间"), window: MonthWindow(newestBack: 0, oldestBack: DashboardPeriod.maxMonthsBack))
+                sample(L("有数据以来"), window: MonthWindow(newestBack: 0, oldestBack: DashboardPeriod.maxMonthsBack))
             } header: {
                 Text(L("几种区间的样子"))
             } footer: {

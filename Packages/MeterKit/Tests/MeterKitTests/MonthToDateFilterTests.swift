@@ -116,7 +116,7 @@ struct MonthToDateFilterTests {
         )
         #expect(scoped.totalUSD == Money(usd: 16))
         #expect(scoped.variableUSD == Money(usd: 16))
-        // 关掉之后合计不含它，但仪表那行还要能写出「未计入」。
+        // 关掉之后合计不含它。金额还在，仪表那行括号不出现。
         #expect(scoped.subscriptionUSD == Money(usd: 20))
         // 只是「不计入总数」不够：fact 留着的话构成条和分享卡还会画出那一块。
         #expect(!scoped.facts.contains { $0.type == FactKind.subscriptionIncluded })

@@ -23,7 +23,8 @@ enum class AppearanceMode {
         fun fromStorage(raw: String?): AppearanceMode = when (raw) {
             "light" -> Light
             "dark" -> Dark
-            else -> System
+            "system" -> System
+            else -> Dark
         }
     }
 }

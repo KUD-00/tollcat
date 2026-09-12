@@ -36,6 +36,18 @@ CHASSIS = {
 }
 
 
+def screenshot_is_blank(path: Path) -> bool:
+    """中间几乎是单色 = App 还没出来。状态栏和右下角那只猫不算内容。"""
+    image = Image.open(path)
+    width, height = image.size
+    crop = image.crop(
+        (int(width * 0.05), int(height * 0.12), int(width * 0.75), int(height * 0.88))
+    )
+    small = crop.resize((80, 50)).convert("RGB")
+    colors = small.getcolors(maxcolors=4000)
+    return (len(colors) if colors else 4000) < 24
+
+
 def export_chrome() -> None:
     """机壳本身 + 屏幕开孔的位置，给「主屏 mock-up」那一帧用。
 
@@ -93,6 +105,10 @@ def main(argv: list[str]) -> int:
             continue
         if wanted and f"{prefix}-{screen}" not in wanted:
             continue
+        if screenshot_is_blank(shot):
+            print(f"空白截图（App 还没出来）：{shot.name}", file=sys.stderr)
+            missing = 1
+            continue
         light, dark = CHASSIS[prefix]
         composite(
             light if theme == "light" else dark,
@@ -101,7 +117,7 @@ def main(argv: list[str]) -> int:
             exact=True,
         )
         made += 1
-    if made == 0:
+    if made == 0 and missing == 0:
         print("没有可嵌的截图——先跑 scripts/capture-appstore-screenshots.sh", file=sys.stderr)
         missing = 1
     return missing

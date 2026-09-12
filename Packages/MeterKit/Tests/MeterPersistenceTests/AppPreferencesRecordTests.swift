@@ -17,10 +17,10 @@ struct AppPreferencesRecordTests {
         #expect(preferences.isDemoBannerDismissed == false)
         #expect(preferences.isReminderEnabled == false)
         #expect(preferences.reminderSchedule == .default)
-        #expect(preferences.appearance == .system)
+        #expect(preferences.appearance == .dark)
         #expect(preferences.hasCompletedOnboarding == false)
         #expect(preferences.providerHistoryRange == .days30)
-        #expect(preferences.hidesCat == false)
+        #expect(preferences.hidesCat == true)
         #expect(preferences.refreshesUsageOnActivate == false)
         #expect(preferences.displayCurrency == ExchangeRates.usdCode)
         // 新用户默认只看从量；`.unfiltered` 是计算层语义，不是产品默认。
@@ -161,7 +161,7 @@ struct AppPreferencesRecordTests {
         #expect(loaded.reminderSchedule.hour == 9)
         #expect(loaded.reminderSchedule.minute == 30)
         #expect(loaded.reminderSchedule.dayOfMonth == 31)
-        #expect(loaded.appearance == .system)
+        #expect(loaded.appearance == .dark)
         #expect(loaded.hasCompletedOnboarding)
         #expect(loaded.providerHistoryRange == .days30)
     }
@@ -178,13 +178,13 @@ struct AppPreferencesRecordTests {
         #expect(loaded.refreshesUsageOnActivate)
     }
 
-    @Test("关闭猫猫开关重开还在")
+    @Test("打开猫猫开关重开还在")
     func hidesCatRoundTrips() throws {
         let container = try PersistenceContainer.makeContainer(inMemory: true)
         let context = ModelContext(container)
-        try AppPreferencesRecord.save(AppPreferences(hidesCat: true), to: context)
+        try AppPreferencesRecord.save(AppPreferences(hidesCat: false), to: context)
         let loaded = try AppPreferencesRecord.load(from: context)
-        #expect(loaded.hidesCat)
+        #expect(!loaded.hidesCat)
     }
 
     @Test("历史范围重开还在")
@@ -203,13 +203,13 @@ struct AppPreferencesRecordTests {
     func appearanceRoundTrips() throws {
         let container = try PersistenceContainer.makeContainer(inMemory: true)
         let context = ModelContext(container)
-        try AppPreferencesRecord.save(AppPreferences(appearance: .dark), to: context)
-        let loaded = try AppPreferencesRecord.load(from: ModelContext(container))
-        #expect(loaded.appearance == .dark)
-
         try AppPreferencesRecord.save(AppPreferences(appearance: .light), to: context)
         let light = try AppPreferencesRecord.load(from: ModelContext(container))
         #expect(light.appearance == .light)
+
+        try AppPreferencesRecord.save(AppPreferences(appearance: .system), to: context)
+        let system = try AppPreferencesRecord.load(from: ModelContext(container))
+        #expect(system.appearance == .system)
     }
 
     @Test("再次保存覆盖同一行，不会插入第二份")

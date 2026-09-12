@@ -45,7 +45,7 @@ object UITestId {
     const val PROVIDER_DETAIL_CONNECT = "providerDetail.connect"
     /** 设置列表 */
     const val SETTINGS_LIST = "settings.list"
-    /** 设置里的「关闭猫猫」开关 */
+    /** 设置里的「打开猫猫」开关 */
     const val SETTINGS_HIDE_CAT = "settings.hideCat"
     /** 服务列表里某一家的行，后接 provider key（services.row.cloudflare） */
     fun servicesRow(key: String): String = "services.row.$key"

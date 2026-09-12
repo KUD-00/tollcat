@@ -31,7 +31,7 @@ extension ProviderCatalog {
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 12,
-        accessStatus: .pendingVerification,
+        accessStatus: .available,
         searchKeywords: ["支付", "手续费", "payments", "收费"]
     )
 
@@ -328,7 +328,7 @@ extension ProviderCatalog {
         tierReason: "开源模型 GPU 推理云寡头之一，年预订已过十亿美元。",
         colorKey: "together",
         billingURL: URL(string: "https://api.together.ai/settings/billing")!,
-        credentialSetupURL: URL(string: "https://docs.together.ai/reference/billing-usage")!,
+        credentialSetupURL: URL(string: "https://api.together.ai/settings/projects/~current/api-keys")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 12,

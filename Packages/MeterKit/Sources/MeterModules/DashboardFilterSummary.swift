@@ -19,7 +19,7 @@ public enum DashboardFilterSummary {
     /// 名单里最多点几个名字，再多改成报个数。
     public static let maxNamedProviders = 2
 
-    /// 短标题：「本月」/「七月」/「近 3 个月」/「五月–七月」/「今年至今」/「全期间」。
+    /// 短标题：「本月」/「七月」/「近 3 个月」/「五月–七月」/「今年至今」/「有数据以来」。
     /// 给 chip、页面标题、分享卡用——那几处放不下补充说明。
     ///
     /// 收 `period` 而不是整份取景框：标题只由时间那一维决定，排除了谁不进标题
@@ -34,7 +34,7 @@ public enum DashboardFilterSummary {
         case .yearToDate:
             return String(localized: L("今年至今"))
         case .allTime:
-            return String(localized: L("全期间"))
+            return String(localized: L("有数据以来"))
         case let .months(back, _):
             if window.isSingleMonth {
                 return back == 0
@@ -70,9 +70,23 @@ public enum DashboardFilterSummary {
         return periodTitle(period: period, window: window, asOf: asOf, calendar: calendar)
     }
 
+    /// 「之最」的节标题。当月仍是「本月之最」；别的区间把期间名接上去。
+    public static func superlativesTitle(
+        period: DashboardPeriod,
+        window: MonthWindow,
+        asOf: Date,
+        calendar: Calendar
+    ) -> String {
+        if period.isCurrentMonth {
+            return String(localized: L("本月之最"))
+        }
+        let title = periodTitle(period: period, window: window, asOf: asOf, calendar: calendar)
+        return String(localized: L("\(title)之最"))
+    }
+
     /// 限定语里的时间那一段。比 `periodTitle` 多一句补充。
     ///
-    /// 「全期间」必须写出**从哪个月起**。数据只从接入那天开始，不写清楚的话，
+    /// 「有数据以来」必须写出**从哪个月起**。数据只从接入那天开始，不写清楚的话，
     /// 那个数字会被当成「我这辈子在云上花的钱」——那是这个 App 最不该造成的误解。
     private static func periodNote(
         filter: DashboardFilter,
@@ -92,8 +106,8 @@ public enum DashboardFilterSummary {
 
     /// 时间之外的排除名单：「排除 AWS」。没排过就是 nil。
     ///
-    /// 订阅口径**不在这儿**：它由大数字旁的切换和订阅行的「已计入 / 未计入」
-    /// 自己说明，写进限定语等于同一句话说两遍。
+    /// 订阅口径**不在这儿**：它由大数字旁的切换自己说明，算进时日期上面
+    /// 那行括号是金额分解，写进限定语等于同一句话说两遍。
     public static func scopeNote(
         filter: DashboardFilter,
         connections: [ProviderConnectionState]

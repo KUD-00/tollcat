@@ -170,15 +170,15 @@ public struct ShareCardView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 // 仪表大标题底下垫 xs，数字才不贴「八月」。卡上同一档。
                 .padding(.top, MeterSpacing.xs)
-            if let projection = content.projectionText {
-                Text(projection)
+            if let subscription = content.subscriptionText {
+                Text(subscription)
                     .font(MeterFont.subheadline)
                     .foregroundStyle(Self.secondaryInk)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            if let subscription = content.subscriptionText {
-                Text(subscription)
+            if let projection = content.projectionText {
+                Text(projection)
                     .font(MeterFont.subheadline)
                     .foregroundStyle(Self.secondaryInk)
                     .lineLimit(2)
@@ -192,12 +192,15 @@ public struct ShareCardView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             if let filterNote = content.filterNote {
-                Label(filterNote, systemImage: "line.3.horizontal.decrease")
-                    .font(MeterFont.footnote)
-                    .foregroundStyle(Self.brandFill)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, MeterSpacing.xxs)
+                HStack(alignment: .firstTextBaseline, spacing: MeterSpacing.xxs) {
+                    Image(systemName: "line.3.horizontal.decrease")
+                    Text(filterNote)
+                }
+                .font(MeterFont.footnote)
+                .foregroundStyle(Self.brandFill)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, MeterSpacing.xxs)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -411,7 +414,7 @@ extension ShareCardContent {
         content.segments += [
             .init(name: "其他", amountText: "$2.90", fraction: 0.06, isOther: true)
         ]
-        content.subscriptionText = "本月订阅 $19.99 · 已计入"
+        content.subscriptionText = "（订阅 $19.99）"
         content.currencyNote = "按 1 USD = 7.12 CNY 折算显示"
         content.filterNote = "七月 · 不含订阅 · 排除 AWS、Cloudflare"
         return content

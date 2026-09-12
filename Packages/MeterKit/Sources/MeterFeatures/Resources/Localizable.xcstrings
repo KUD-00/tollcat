@@ -3104,18 +3104,18 @@
         }
       }
     },
-    "仪表上不再出现猫。数字和构成还在。" : {
+    "仪表上不再出现猫。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The cat leaves the dashboard. Totals and the breakdown stay."
+            "value" : "The cat leaves the dashboard."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ホームから猫がいなくなります。数字と内訳はそのままです。"
+            "value" : "ホームから猫がいなくなります。"
           }
         }
       }
@@ -3816,7 +3816,7 @@
         }
       }
     },
-    "全期间" : {
+    "有数据以来" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4074,18 +4074,18 @@
         }
       }
     },
-    "关闭猫猫" : {
+    "打开猫猫" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hide the cat"
+            "value" : "Show the cat"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "猫をしまう"
+            "value" : "猫を出す"
           }
         }
       }

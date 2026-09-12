@@ -18,7 +18,7 @@ public enum DashboardModuleID: String, CaseIterable, Identifiable, Sendable, Has
     case heatmap
     /// 按类别构成：AI 推理 / 托管 / 数据库…… 一条构成条加图例。
     case categories
-    /// 本月之最：涨得最多、占比最大、最久没刷新。
+    /// 之最：涨得最多、占比最大、最久没刷新。节标题跟着期间走。
     case superlatives
     /// 预算线：本月花了预算的几成。
     case budget

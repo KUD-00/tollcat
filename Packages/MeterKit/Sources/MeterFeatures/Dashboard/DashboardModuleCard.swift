@@ -13,7 +13,7 @@ struct DashboardModuleCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: MeterSpacing.xs) {
-            Text(title)
+            Text(model.moduleTitle(for: id))
                 .font(MeterFont.caption)
                 .foregroundStyle(Color.meterSecondaryLabel)
             DashboardModuleFactory.view(id: id, contents: model)
@@ -29,9 +29,6 @@ struct DashboardModuleCard: View {
         // 卡里的 NavigationLink 不在 List 里：素排版，别渲成蓝字按钮。
         .buttonStyle(.plain)
     }
-
-    /// SPEC 第 05 节的模块名。合计和构成在英雄区，走不到这张卡。
-    private var title: LocalizedStringResource { id.title }
 }
 
 #Preview("Light") {

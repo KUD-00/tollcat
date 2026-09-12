@@ -11,7 +11,7 @@ extension ProviderCatalog {
         tierReason: "以太坊/多链节点与增强 API 的强挑战者，开发者 Web3 基建短名单。",
         colorKey: "alchemy",
         billingURL: URL(string: "https://dashboard.alchemy.com/")!,
-        credentialSetupURL: URL(string: "https://www.alchemy.com/docs/admin-api/usage/get-usage-summary")!,
+        credentialSetupURL: URL(string: "https://dashboard.alchemy.com/settings/security")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 1,
@@ -28,7 +28,7 @@ extension ProviderCatalog {
         tierReason: "韩国推理/GPU 服务的细分选手，体量小于 Fireworks / Together 主流短名单。",
         colorKey: "friendli",
         billingURL: URL(string: "https://friendli.ai/")!,
-        credentialSetupURL: URL(string: "https://friendli.ai/docs/openapi/administration/cost")!,
+        credentialSetupURL: URL(string: "https://friendli.ai/suite/~/setting/keys")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 12,
@@ -45,7 +45,7 @@ extension ProviderCatalog {
         tierReason: "多模态检索/抽取 API 的细分选手，体量小于主流向量与推理短名单。",
         colorKey: "mixpeek",
         billingURL: URL(string: "https://mixpeek.com/")!,
-        credentialSetupURL: URL(string: "https://docs.mixpeek.com/")!,
+        credentialSetupURL: URL(string: "https://studio.mixpeek.com")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 1,
@@ -62,12 +62,15 @@ extension ProviderCatalog {
         tierReason: "开源对话流/表单机器人的细分选手，订阅体量小于主流 bot 平台。",
         colorKey: "typebot",
         billingURL: URL(string: "https://app.typebot.io/")!,
-        credentialSetupURL: URL(string: "https://docs.typebot.com/api-reference/billing/list-invoices")!,
+        credentialSetupURL: URL(string: "https://app.typebot.io/typebots")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 24,
         accessStatus: .pendingVerification,
-        searchKeywords: ["typebot", "invoices", "stripe subtotal", "workspaceId"]
+        searchKeywords: ["typebot", "invoices", "stripe subtotal", "workspaceId"],
+        guideURLs: [
+            "findWorkspaceID": URL(string: "https://docs.typebot.com/api-reference/how-to")!,
+        ]
     )
 
     public static let botpress = ProviderDescriptor(
@@ -78,12 +81,12 @@ extension ProviderCatalog {
         tier: .two,
         tierReason: "对话机器人与 Agent 平台的强挑战者，开发者 bot 基建短名单。",
         colorKey: "botpress",
-        billingURL: URL(string: "https://botpress.com/")!,
-        credentialSetupURL: URL(string: "https://www.botpress.com/docs/api-reference/admin-api/concepts/")!,
+        billingURL: URL(string: "https://viber.botpress.cloud/billing")!,
+        credentialSetupURL: URL(string: "https://viber.botpress.cloud/account")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 1,
-        accessStatus: .pendingVerification,
+        accessStatus: .available,
         searchKeywords: ["botpress", "upcoming-invoice", "totalInCents", "workspace"]
     )
 
@@ -96,7 +99,7 @@ extension ProviderCatalog {
         tierReason: "意大利云主机/GPU 的区域选手，体量小于西欧主流 IaaS 短名单。",
         colorKey: "seeweb",
         billingURL: URL(string: "https://www.seeweb.it/")!,
-        credentialSetupURL: URL(string: "https://docs.seeweb.it/en/hosting/cloudserver/rest-api/API-Endpoints/Billing/")!,
+        credentialSetupURL: URL(string: "https://ermes.cloudcenter.seeweb.it")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 12,
@@ -113,7 +116,7 @@ extension ProviderCatalog {
         tierReason: "Serverless/Dedicated GPU 推理的细分选手，体量小于 Fireworks / Together 主流短名单。",
         colorKey: "parasail",
         billingURL: URL(string: "https://www.parasail.io/")!,
-        credentialSetupURL: URL(string: "https://docs.parasail.io/parasail-docs/api-reference/billing-api")!,
+        credentialSetupURL: URL(string: "https://www.saas.parasail.io/keys")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: true,
         historyLookbackMonths: 12,

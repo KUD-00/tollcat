@@ -33,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # 手写的 Swift 小词法器（抹注释和字符串）两个闸脚本共用一份：抹错一处，
 # 两个脚本会对同一份源码给出不同的答案，而它们本该是同一条判断。
+from _setup_guide_sources import collect_sync_errors as setup_guide_source_errors  # noqa: E402
 from _swift_scan import (  # noqa: E402
     gate_text,
     mask_comments_and_strings,
@@ -463,6 +464,15 @@ def check_persistence_contract(root: Path, errors: list[str]) -> None:
         for token in ("import SwiftUI", "import SwiftData"):
             if token in text:
                 errors.append(f"MeterProviders/{path.name} {token}")
+
+
+def check_setup_guide_sources(root: Path, errors: list[str]) -> None:
+    """教程正文在 catalog.json，出处 URL 在 docs/setup-guide-sources.json。
+
+    出处不进 App、不进 Worker。这份文件存在只为改教程时能对上「当时看的哪一页」。
+    步骤变了 fingerprint 对不上，或缺一家，都红。
+    """
+    errors.extend(setup_guide_source_errors(root))
 
 
 def check_catalog_copyables(root: Path, errors: list[str]) -> None:
@@ -2273,6 +2283,7 @@ def main() -> int:
     check_ledger_read_not_swallowed(root, errors)
     check_persistence_contract(root, errors)
     check_catalog_sync(root, errors)
+    check_setup_guide_sources(root, errors)
     check_catalog_copyables(root, errors)
     check_declined_providers(root, errors)
     check_provider_wiring(root, errors)

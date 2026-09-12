@@ -35,9 +35,50 @@ const WIDGETS = JSON.parse(readFileSync(path.join(ROOT, "shared/widgets.json"), 
 const WIDGET_FRAMES = WIDGETS.frames;
 const WIDGET_KINDS = WIDGETS.modules.filter((m) => m.sizes.length > 0).length;
 
+// 接入分层的权威在 ProviderCatalog.swift；落地页这份是它的生成物。
+// 宣传图只数「都能接」：完全支持并测过 + 理论完全支持。读数信箱和不接入不算。
+const SUPPORT_TIERS = readFileSync(path.join(ROOT, "site/src/supportTiers.ts"), "utf8");
+
+function countSupportTier(name) {
+  const match = SUPPORT_TIERS.match(new RegExp(`${name}: \\[(.*?)]`, "s"));
+  if (!match) {
+    throw new Error(`supportTiers.ts 没有 ${name} 这一档`);
+  }
+  const keys = [...match[1].matchAll(/"([^"]+)"/g)].map((hit) => hit[1]);
+  if (keys.length === 0) {
+    throw new Error(`supportTiers.ts 的 ${name} 是空的`);
+  }
+  return keys.length;
+}
+
+const FULLY_SUPPORTED =
+  countSupportTier("tested") + countSupportTier("theoretical");
+// 229 → 220+：向下取整到十位。精确个数留给支持名单页，标题层只说下限。
+const SERVICE_FLOOR = Math.floor(FULLY_SUPPORTED / 10) * 10;
+if (SERVICE_FLOOR < 10) {
+  throw new Error(`完全支持只有 ${FULLY_SUPPORTED} 家，不像能写进宣传图`);
+}
+
+function copyCount(screen) {
+  if (screen === "services") return SERVICE_FLOOR;
+  if (screen === "widgets") return WIDGET_KINDS;
+  return null;
+}
+
+function copyLines(screen, locale) {
+  const n = copyCount(screen);
+  const lines = COPY[screen][locale].map((line) =>
+    n == null ? line : line.replaceAll("{n}", String(n)),
+  );
+  if (lines.some((line) => line.includes("{n}"))) {
+    throw new Error(`${screen}/${locale} 还有没填的 {n}`);
+  }
+  return lines;
+}
+
 // 标题走 BRAND 的标题层：短促、合法、三语各自原创；行尾不带句号。
-// `{n}` 是有小组件的模块数，从 shared/widgets.json 数出来——写死一个数字，
-// 加一块模块之后这行字就成了假话，而且没人会发现。
+// `{n}` 是这一屏自己的个数：小组件那页从 shared/widgets.json 数有小组件的模块，
+// 服务那页从目录的完全支持向下取整到十位。写死一个数字，目录一长那行字就成了假话。
 const COPY = {
   dashboard: {
     zh: ["一眼看出", "这个月花了多少"],
@@ -50,9 +91,9 @@ const COPY = {
     ja: ["どこに使ったか", "内訳まで"],
   },
   services: {
-    zh: ["80 多家服务", "都能接"],
-    en: ["Works with", "80+ services"],
-    ja: ["80 を超える", "サービスに対応"],
+    zh: ["{n} 多家服务", "都能接"],
+    en: ["Works with", "{n}+ services"],
+    ja: ["{n} を超える", "サービスに対応"],
   },
   wizard: {
     zh: ["每家都有", "接入说明"],
@@ -251,8 +292,10 @@ const CANVASES = [
     width: 2752,
     height: 2064,
     scale: 0.92,
-    headBottom: 28,
-    headHeight: 340,
+    // 横构图两行标题就有约 300 高。headHeight 340 时中文只剩十几像素顶距，
+    // 字像贴在画布上沿。标题是 flex-end 贴这块的底，加高这一块等于把字往下落。
+    headBottom: 40,
+    headHeight: 460,
     frames: {
       // 第一张就把横竖两台摆出来：iPad 上这两种拿法都常见，只给一种是漏掉一半。
       dashboard: {
@@ -266,15 +309,16 @@ const CANVASES = [
       detail: {
         surface: "indigo",
         kind: "tilt",
-        devices: [{ shot: "ipad11", width: 0.810, top: 0.200, tilt: -2 }],
+        // 机身跟着标题区下移，不然微倾的上沿会顶到字。
+        devices: [{ shot: "ipad11", width: 0.810, top: 0.245, tilt: -2 }],
       },
       // 图标墙和 iPhone 那页同一堵，横过来铺满画布——4:3 反而比竖构图更适合它。
       // 横屏是分栏壳，右半边挂着选中那一家的详情（截图那趟带 -open-provider-detail=）。
       services: {
         surface: "paper",
         kind: "iconwall",
-        wall: { top: 0.190, height: 0.0465, gap: 0.0102, offsets: [-0.038, 0.026, -0.082] },
-        devices: [{ shot: "ipad11", width: 0.750, top: 0.372 }],
+        wall: { top: 0.242, height: 0.0465, gap: 0.0102, offsets: [-0.038, 0.026, -0.082] },
+        devices: [{ shot: "ipad11", width: 0.750, top: 0.424 }],
       },
       // 只有一台竖着的机身：字排到它左边，别压在头顶。
       wizard: {
@@ -385,7 +429,7 @@ ${rows}
 function html(canvas, screen, locale, theme) {
   const frame = canvas.frames[screen];
   const palette = SURFACES[frame.surface][theme];
-  const lines = COPY[screen][locale].map((line) => line.replace("{n}", String(WIDGET_KINDS)));
+  const lines = copyLines(screen, locale);
   const size = Math.round(HEADLINE_SIZE[locale] * canvas.scale);
   const noteSize = Math.round(34 * canvas.scale);
   const tracking = locale === "en" ? "-0.02em" : "0";

@@ -233,7 +233,10 @@
     <value>Automatic</value>
   </data>
   <data name="SettingsHideCat" xml:space="preserve">
-    <value>Hide the cat</value>
+    <value>Show the cat</value>
+  </data>
+  <data name="SettingsHideCatNote" xml:space="preserve">
+    <value>The cat leaves the dashboard.</value>
   </data>
   <data name="SettingsRefreshTitle" xml:space="preserve">
     <value>Refresh usage every time you open the app</value>

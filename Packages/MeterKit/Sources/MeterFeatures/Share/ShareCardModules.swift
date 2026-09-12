@@ -36,7 +36,7 @@ struct ShareCardModules: View {
     /// 高度按内容长（bento 卡是定高裁切，图上裁掉半行没人能滚动去看）。
     private func card(_ id: DashboardModuleID) -> some View {
         VStack(alignment: .leading, spacing: MeterSpacing.xs) {
-            Text(id.title)
+            Text(model.moduleTitle(for: id))
                 .font(MeterFont.caption)
                 .foregroundStyle(ShareCardPalette.secondaryInk)
             DashboardModuleFactory.view(id: id, contents: model)

@@ -26,7 +26,7 @@ public struct MonthToDate: Hashable, Sendable {
     public var filter: DashboardFilter
     /// 取景框解析出来的那段整月窗口。
     ///
-    /// `filter.period` 存的是**意图**（「全期间」「今年至今」），有多长要看数据和
+    /// `filter.period` 存的是**意图**（「有数据以来」「今年至今」），有多长要看数据和
     /// 日历才知道；标题、分享卡、限定语要的是**结果**。两者分开存，展示层才不必
     /// 各自再解析一遍——而只要有一处解析得不一样，屏幕上就会出现两个互相矛盾的期间。
     public var window: MonthWindow

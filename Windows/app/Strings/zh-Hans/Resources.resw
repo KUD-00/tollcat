@@ -229,7 +229,10 @@
     <value>跟随系统</value>
   </data>
   <data name="SettingsHideCat" xml:space="preserve">
-    <value>关闭猫猫</value>
+    <value>打开猫猫</value>
+  </data>
+  <data name="SettingsHideCatNote" xml:space="preserve">
+    <value>仪表上不再出现猫。</value>
   </data>
   <data name="SettingsRefreshTitle" xml:space="preserve">
     <value>每次进入 App 的时候自动刷新用量</value>

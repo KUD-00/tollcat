@@ -46,7 +46,7 @@ public enum UITestID {
     public static let providerDetailConnect = "providerDetail.connect"
     /// 设置列表
     public static let settingsList = "settings.list"
-    /// 设置里的「关闭猫猫」开关
+    /// 设置里的「打开猫猫」开关
     public static let settingsHideCat = "settings.hideCat"
     /// 服务列表里某一家的行，后接 provider key（services.row.cloudflare）
     public static func servicesRow(_ key: String) -> String {
