@@ -10,38 +10,68 @@
 		0175F50F0635D8752A68AB10 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D132138F6F11744F46894A2A /* Localizable.xcstrings */; };
 		0B8334835F480F02A3020B8D /* TollCatWidgetEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492DE02B0C1BA024708FF5F6 /* TollCatWidgetEntry.swift */; };
 		0C20F6F8B4BA1C6B1E9F25E9 /* MeterPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 1B4B1464D3417E65E0CE2510 /* MeterPersistence */; };
+		1A1F782EF4CA4BF5A9F705EE /* MeterProviders in Frameworks */ = {isa = PBXBuildFile; productRef = 22CDF682B7E8F0EA4B8958EB /* MeterProviders */; };
 		1A94AF93684A55265BE420A2 /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = E27CE6FE44818C8F7872FF67 /* MeterCore */; };
 		1AD02F805BCD86BFBD5AD53D /* TollCatWidgetMac.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4C9FBECC085132471A82BCB1 /* TollCatWidgetMac.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1F9F2A4AF0A52717003BBFED /* MeterFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = DD92F40892EC27F486B75806 /* MeterFeedback */; };
+		208D88B9D91DFFAEFBEF199E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D132138F6F11744F46894A2A /* Localizable.xcstrings */; };
 		247203446761661C0C007B78 /* TollCat.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 7078E26E228A0E91DD0C3FA0 /* TollCat.storekit */; };
 		355D2D2CDF1837FEFEA60241 /* MacMenuBarRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462FD8A392436892EC57741B /* MacMenuBarRoot.swift */; };
+		37A9D7C19E48D7518CAB6FCE /* AppStore-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F42573A2362519C7F989F9C5 /* AppStore-Info.plist */; };
+		38C3E5C9C63C155D8FBFE8A5 /* MeterTips in Frameworks */ = {isa = PBXBuildFile; productRef = F52A369AC441946BE807A210 /* MeterTips */; };
 		43F9C41685D6FD9D8831AA03 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87702EF6F4929F4E66E1CAEA /* AppEnvironment.swift */; };
+		48255D2647F086147DE4CA48 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F08ABA95423E4E9E0DDFAD88 /* PrivacyInfo.xcprivacy */; };
+		4C8F7A80C80F1AEE4AB22C92 /* MacUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD1D18AF9053487FB3CA755 /* MacUpdater.swift */; };
+		4D083DAF69147C5424377EF2 /* MeterPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 1638899520F0816C31B5655A /* MeterPersistence */; };
 		4E01A430EA113C0F7B5B1238 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 49823DE7B6ECBFCEE6565599 /* Sparkle */; };
 		57377418C5B377A191E9BE3D /* MeterProviders in Frameworks */ = {isa = PBXBuildFile; productRef = EC7E04FA3BF9217CF8FE2CD4 /* MeterProviders */; };
+		5801FB31C30781448A55411D /* MeterFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = BAC9B3650E0511EE251964DB /* MeterFeatures */; };
+		61650AD4A5C5D8FD0DEC80C6 /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2EAF47C775F79E0A20AC00ED /* MeterCore */; };
 		63EAF8189A08C6A99578AC88 /* StampedBillingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BAE1EF4C327314825F0CFC /* StampedBillingProvider.swift */; };
 		66FBC7393A06754722797293 /* TollCatWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D13C113E62E5308AA7BC55B /* TollCatWidgetBundle.swift */; };
+		6C49225B28C95443326D1E1C /* MeterDesign in Frameworks */ = {isa = PBXBuildFile; productRef = 2183B3940BB4DA5DBD926448 /* MeterDesign */; };
 		6D13356AE4B7FF32BBF8D957 /* TollCatMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FF362E8A017ED527CD816C /* TollCatMacApp.swift */; };
 		6E4430EB845528B3E23EA8CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AEB98DFAD17C3EDA1C893FD5 /* Assets.xcassets */; };
 		6F258F119A6AA7BADF135EDE /* TollCatWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C342295C2E419163E5D1086 /* TollCatWidgetView.swift */; };
+		721D6A6C81B960673143FB0F /* TollCat.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 7078E26E228A0E91DD0C3FA0 /* TollCat.storekit */; };
+		76F20A27212DB13266D9D59C /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87702EF6F4929F4E66E1CAEA /* AppEnvironment.swift */; };
+		7A6139127B6C7F97A068CBD8 /* MacMenuBarRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462FD8A392436892EC57741B /* MacMenuBarRoot.swift */; };
 		8209AEE673EB2FC5B4F6EB6E /* MeterFormat in Frameworks */ = {isa = PBXBuildFile; productRef = BBB124863EA5D9C22566D7DA /* MeterFormat */; };
 		96DA632921093744D9428032 /* MeterTips in Frameworks */ = {isa = PBXBuildFile; productRef = 47BFF6A5684A4B336FBB2622 /* MeterTips */; };
+		9D4EAE0A394F35148FDCFA7F /* MeterInbox in Frameworks */ = {isa = PBXBuildFile; productRef = FC794FF791AF0D5EF84BBA92 /* MeterInbox */; };
 		A50AA64AACC2DB82238F64D0 /* MeterPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = FF2F69DB1DE006B4472C46FB /* MeterPersistence */; };
 		A8E6AE49225D97C22D967E1F /* MeterModules in Frameworks */ = {isa = PBXBuildFile; productRef = 079A2720D566175D0A7BBEA1 /* MeterModules */; };
+		A8EDAE4727845022E523A291 /* PersistenceBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14C3E87EA916BF00036C466 /* PersistenceBootstrap.swift */; };
 		AC8F92E9599AF15C749FBAA5 /* MacUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD1D18AF9053487FB3CA755 /* MacUpdater.swift */; };
 		AFACCB9BC825D99BC36425FC /* PersistenceBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14C3E87EA916BF00036C466 /* PersistenceBootstrap.swift */; };
 		B3D2B42BC5151C394E7B34B8 /* MeterDesign in Frameworks */ = {isa = PBXBuildFile; productRef = 5EDF526D33F2F349DE922761 /* MeterDesign */; };
 		B441F0D0FF672704B4163222 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F94C05A247984F7CEE783DF5 /* PrivacyInfo.xcprivacy */; };
+		B5DEF5D27F0B2A0EB2B4BEF0 /* StampedBillingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BAE1EF4C327314825F0CFC /* StampedBillingProvider.swift */; };
 		B6E79B50D0B0F536EDCA095A /* MeterFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = 5D51DFEF2131936F3D7012E8 /* MeterFeedback */; };
 		B8D63113F429519980F53F9E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE53D6732E48FE558E2782 /* StoreKit.framework */; };
+		BAD9E9ACD52BBE1CA84022C4 /* TollCatWidgetMac.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4C9FBECC085132471A82BCB1 /* TollCatWidgetMac.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C79A4FB583F96920B693F502 /* MeterInbox in Frameworks */ = {isa = PBXBuildFile; productRef = C2DFAECA9C0FDA5A47F720FE /* MeterInbox */; };
 		CC09F9E24586B7A5E8B2D07E /* MeterDesign in Frameworks */ = {isa = PBXBuildFile; productRef = ABBFBF3163D1201C3DF9BA27 /* MeterDesign */; };
+		CDDC641EA99AAD7F7742D35B /* TollCatMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FF362E8A017ED527CD816C /* TollCatMacApp.swift */; };
 		D2E14DAAE8D1033B71E4EA6D /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 595971434B0EFB105FAF3B34 /* MeterCore */; };
 		D3BF9DD34D8140AD8946A16B /* MeterUsage in Frameworks */ = {isa = PBXBuildFile; productRef = E13BC0BA8EA0EC1875D87920 /* MeterUsage */; };
+		D5B592B233530CA2C6E06577 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE53D6732E48FE558E2782 /* StoreKit.framework */; };
 		D8086D721A44FE87826DE4B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F08ABA95423E4E9E0DDFAD88 /* PrivacyInfo.xcprivacy */; };
+		E09FCF7B60A6ED4C575EFB09 /* MeterUsage in Frameworks */ = {isa = PBXBuildFile; productRef = 915AD3D8471AB1D8481124DD /* MeterUsage */; };
+		E70DD4A3CB7752F510ADC926 /* Supporting-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D09251A095B8C88416F3109 /* Supporting-Info.plist */; };
+		FAD15825840448FBFDBCAE35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AEB98DFAD17C3EDA1C893FD5 /* Assets.xcassets */; };
 		FAFEAF18D9BA391C17E80AD1 /* MeterFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = 9DB31ADF992E324975902F60 /* MeterFeatures */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		515A26B1D8D1C07ABC8E1EB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A889566C5BB8FA46BBFD14D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA098CDABB4C157D5BD5C1;
+			remoteInfo = TollCatWidgetMac;
+		};
+		915F3ABBD4870A9E207AFDDA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0A889566C5BB8FA46BBFD14D /* Project object */;
 			proxyType = 1;
@@ -58,6 +88,17 @@
 			dstSubfolderSpec = 13;
 			files = (
 				1AD02F805BCD86BFBD5AD53D /* TollCatWidgetMac.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E720C5FF0053C566BD2B8C70 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BAD9E9ACD52BBE1CA84022C4 /* TollCatWidgetMac.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,14 +124,34 @@
 		A68229CD001283C42FF9968F /* TollCatWidgetMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TollCatWidgetMac.entitlements; sourceTree = "<group>"; };
 		A96CC170B385BD3B0BEFF7A0 /* TollCatMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TollCatMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEB98DFAD17C3EDA1C893FD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B2C83289DA5C7B9060C0F76F /* TollCatMacAppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TollCatMacAppStore.entitlements; sourceTree = "<group>"; };
+		C9EF5B7D817CA24E7E294342 /* TollCatMacAppStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TollCatMacAppStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D132138F6F11744F46894A2A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F08ABA95423E4E9E0DDFAD88 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F0B0BE2EE563E44C30C12D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F14C3E87EA916BF00036C466 /* PersistenceBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceBootstrap.swift; sourceTree = "<group>"; };
+		F42573A2362519C7F989F9C5 /* AppStore-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "AppStore-Info.plist"; sourceTree = "<group>"; };
 		F94C05A247984F7CEE783DF5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		00E744C039AD1D6EC462CF58 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5801FB31C30781448A55411D /* MeterFeatures in Frameworks */,
+				4D083DAF69147C5424377EF2 /* MeterPersistence in Frameworks */,
+				1A1F782EF4CA4BF5A9F705EE /* MeterProviders in Frameworks */,
+				6C49225B28C95443326D1E1C /* MeterDesign in Frameworks */,
+				61650AD4A5C5D8FD0DEC80C6 /* MeterCore in Frameworks */,
+				38C3E5C9C63C155D8FBFE8A5 /* MeterTips in Frameworks */,
+				9D4EAE0A394F35148FDCFA7F /* MeterInbox in Frameworks */,
+				1F9F2A4AF0A52717003BBFED /* MeterFeedback in Frameworks */,
+				E09FCF7B60A6ED4C575EFB09 /* MeterUsage in Frameworks */,
+				D5B592B233530CA2C6E06577 /* StoreKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DF3685EE3CD4FAAEC93C0AC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				A96CC170B385BD3B0BEFF7A0 /* TollCatMac.app */,
+				C9EF5B7D817CA24E7E294342 /* TollCatMacAppStore.app */,
 				4C9FBECC085132471A82BCB1 /* TollCatWidgetMac.appex */,
 			);
 			name = Products;
@@ -207,11 +269,13 @@
 		EBDBEE2D486479FC2AF05E8A /* Mac */ = {
 			isa = PBXGroup;
 			children = (
+				F42573A2362519C7F989F9C5 /* AppStore-Info.plist */,
 				462FD8A392436892EC57741B /* MacMenuBarRoot.swift */,
 				5FD1D18AF9053487FB3CA755 /* MacUpdater.swift */,
 				3D09251A095B8C88416F3109 /* Supporting-Info.plist */,
 				17A678E9FB4F0C1DD7D1DAD0 /* TollCatMac.entitlements */,
 				76FF362E8A017ED527CD816C /* TollCatMacApp.swift */,
+				B2C83289DA5C7B9060C0F76F /* TollCatMacAppStore.entitlements */,
 				A68229CD001283C42FF9968F /* TollCatWidgetMac.entitlements */,
 			);
 			path = Mac;
@@ -243,6 +307,36 @@
 			productName = TollCatWidgetMac;
 			productReference = 4C9FBECC085132471A82BCB1 /* TollCatWidgetMac.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		723940A664DC23A2E79F4A23 /* TollCatMacAppStore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0C3F3FD2F896554279FAC7C /* Build configuration list for PBXNativeTarget "TollCatMacAppStore" */;
+			buildPhases = (
+				AF8C16D7F00C7856481BECCD /* Sources */,
+				E22BB17AF966A3ACE82BAC35 /* Resources */,
+				00E744C039AD1D6EC462CF58 /* Frameworks */,
+				E720C5FF0053C566BD2B8C70 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				288B3FD570FBF3FB5CD708FD /* PBXTargetDependency */,
+			);
+			name = TollCatMacAppStore;
+			packageProductDependencies = (
+				BAC9B3650E0511EE251964DB /* MeterFeatures */,
+				1638899520F0816C31B5655A /* MeterPersistence */,
+				22CDF682B7E8F0EA4B8958EB /* MeterProviders */,
+				2183B3940BB4DA5DBD926448 /* MeterDesign */,
+				2EAF47C775F79E0A20AC00ED /* MeterCore */,
+				F52A369AC441946BE807A210 /* MeterTips */,
+				FC794FF791AF0D5EF84BBA92 /* MeterInbox */,
+				DD92F40892EC27F486B75806 /* MeterFeedback */,
+				915AD3D8471AB1D8481124DD /* MeterUsage */,
+			);
+			productName = TollCatMacAppStore;
+			productReference = C9EF5B7D817CA24E7E294342 /* TollCatMacAppStore.app */;
+			productType = "com.apple.product-type.application";
 		};
 		FD9AA820EB8C4038CAD3FF15 /* TollCatMac */ = {
 			isa = PBXNativeTarget;
@@ -287,6 +381,9 @@
 					43FA098CDABB4C157D5BD5C1 = {
 						ProvisioningStyle = Automatic;
 					};
+					723940A664DC23A2E79F4A23 = {
+						ProvisioningStyle = Automatic;
+					};
 					FD9AA820EB8C4038CAD3FF15 = {
 						ProvisioningStyle = Automatic;
 					};
@@ -311,6 +408,7 @@
 			projectRoot = "";
 			targets = (
 				FD9AA820EB8C4038CAD3FF15 /* TollCatMac */,
+				723940A664DC23A2E79F4A23 /* TollCatMacAppStore */,
 				43FA098CDABB4C157D5BD5C1 /* TollCatWidgetMac */,
 			);
 		};
@@ -321,10 +419,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37A9D7C19E48D7518CAB6FCE /* AppStore-Info.plist in Resources */,
 				6E4430EB845528B3E23EA8CC /* Assets.xcassets in Resources */,
 				0175F50F0635D8752A68AB10 /* Localizable.xcstrings in Resources */,
 				D8086D721A44FE87826DE4B4 /* PrivacyInfo.xcprivacy in Resources */,
 				247203446761661C0C007B78 /* TollCat.storekit in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E22BB17AF966A3ACE82BAC35 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAD15825840448FBFDBCAE35 /* Assets.xcassets in Resources */,
+				208D88B9D91DFFAEFBEF199E /* Localizable.xcstrings in Resources */,
+				48255D2647F086147DE4CA48 /* PrivacyInfo.xcprivacy in Resources */,
+				E70DD4A3CB7752F510ADC926 /* Supporting-Info.plist in Resources */,
+				721D6A6C81B960673143FB0F /* TollCat.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +463,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AF8C16D7F00C7856481BECCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76F20A27212DB13266D9D59C /* AppEnvironment.swift in Sources */,
+				7A6139127B6C7F97A068CBD8 /* MacMenuBarRoot.swift in Sources */,
+				4C8F7A80C80F1AEE4AB22C92 /* MacUpdater.swift in Sources */,
+				A8EDAE4727845022E523A291 /* PersistenceBootstrap.swift in Sources */,
+				B5DEF5D27F0B2A0EB2B4BEF0 /* StampedBillingProvider.swift in Sources */,
+				CDDC641EA99AAD7F7742D35B /* TollCatMacApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D957358852C1CC3C73A67D6E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -365,6 +489,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		288B3FD570FBF3FB5CD708FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43FA098CDABB4C157D5BD5C1 /* TollCatWidgetMac */;
+			targetProxy = 915F3ABBD4870A9E207AFDDA /* PBXContainerItemProxy */;
+		};
 		86B4C0730549A7F67F17E1E5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43FA098CDABB4C157D5BD5C1 /* TollCatWidgetMac */;
@@ -464,6 +593,54 @@
 				SDKROOT = macosx;
 			};
 			name = Release;
+		};
+		64A2C4A1DF2FFEC80470FC84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mac/TollCatMacAppStore.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mac/AppStore-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = TollCat;
+				INFOPLIST_KEY_CFBundleLocalizations = "en ja zh-Hans";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhechengqi.tollcat;
+				PRODUCT_NAME = TollCat;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		82E75B662BFD91536CB884FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mac/TollCatMacAppStore.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mac/AppStore-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = TollCat;
+				INFOPLIST_KEY_CFBundleLocalizations = "en ja zh-Hans";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhechengqi.tollcat;
+				PRODUCT_NAME = TollCat;
+				SDKROOT = macosx;
+			};
+			name = Debug;
 		};
 		A807D8151174C0ECC64290AC /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -616,6 +793,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		F0C3F3FD2F896554279FAC7C /* Build configuration list for PBXNativeTarget "TollCatMacAppStore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				82E75B662BFD91536CB884FC /* Debug */,
+				64A2C4A1DF2FFEC80470FC84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -641,9 +827,25 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterModules;
 		};
+		1638899520F0816C31B5655A /* MeterPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterPersistence;
+		};
 		1B4B1464D3417E65E0CE2510 /* MeterPersistence */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterPersistence;
+		};
+		2183B3940BB4DA5DBD926448 /* MeterDesign */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterDesign;
+		};
+		22CDF682B7E8F0EA4B8958EB /* MeterProviders */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterProviders;
+		};
+		2EAF47C775F79E0A20AC00ED /* MeterCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterCore;
 		};
 		47BFF6A5684A4B336FBB2622 /* MeterTips */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -666,6 +868,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterDesign;
 		};
+		915AD3D8471AB1D8481124DD /* MeterUsage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterUsage;
+		};
 		9DB31ADF992E324975902F60 /* MeterFeatures */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterFeatures;
@@ -674,6 +880,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterDesign;
 		};
+		BAC9B3650E0511EE251964DB /* MeterFeatures */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterFeatures;
+		};
 		BBB124863EA5D9C22566D7DA /* MeterFormat */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterFormat;
@@ -681,6 +891,10 @@
 		C2DFAECA9C0FDA5A47F720FE /* MeterInbox */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterInbox;
+		};
+		DD92F40892EC27F486B75806 /* MeterFeedback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterFeedback;
 		};
 		E13BC0BA8EA0EC1875D87920 /* MeterUsage */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -693,6 +907,14 @@
 		EC7E04FA3BF9217CF8FE2CD4 /* MeterProviders */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterProviders;
+		};
+		F52A369AC441946BE807A210 /* MeterTips */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterTips;
+		};
+		FC794FF791AF0D5EF84BBA92 /* MeterInbox */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterInbox;
 		};
 		FF2F69DB1DE006B4472C46FB /* MeterPersistence */ = {
 			isa = XCSwiftPackageProductDependency;
