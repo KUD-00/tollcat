@@ -85,10 +85,10 @@ struct DashboardFilterSurfaceTests {
         #expect(summary(DashboardFilter(period: .yearToDate)) == "今年至今")
     }
 
-    @Test("「全期间」必须写出从哪个月起——不写清楚会被当成「我这辈子花的钱」")
+    @Test("「有数据以来」必须写出从哪个月起——不写清楚会被当成「我这辈子花的钱」")
     func allTimeSaysWhereItStarts() {
         // 手上没有更早的数据时铺满能回看的 12 个月，起点落在去年。
-        #expect(summary(DashboardFilter(period: .allTime)) == "全期间（自2025年9月起）")
+        #expect(summary(DashboardFilter(period: .allTime)) == "有数据以来（自2025年9月起）")
     }
 
     @Test("标题和分享卡上单个整月写月份名，不写「本月」")
@@ -106,6 +106,80 @@ struct DashboardFilterSurfaceTests {
         #expect(heading(DashboardFilter(monthsBack: 1)) == "七月")
         // 多月区间自己带着相对性，写成月份范围反而更难读。
         #expect(heading(DashboardFilter(period: .months(back: 0, count: 3))) == "近 3 个月")
+        #expect(heading(DashboardFilter(period: .allTime)) == "有数据以来")
+    }
+
+    @Test("之最的节标题跟着取景框走，当月仍是「本月之最」")
+    func superlativesTitleFollowsThePeriod() {
+        func title(_ filter: DashboardFilter) -> String {
+            DashboardFilterSummary.superlativesTitle(
+                period: filter.period,
+                window: filter.window(now: now, calendar: calendar),
+                asOf: asOf(filter),
+                calendar: calendar
+            )
+        }
+        #expect(title(.unfiltered) == "本月之最")
+        #expect(title(DashboardFilter(monthsBack: 1)) == "七月之最")
+        #expect(title(DashboardFilter(period: .months(back: 0, count: 3))) == "近 3 个月之最")
+        #expect(title(DashboardFilter(period: .allTime)) == "有数据以来之最")
+    }
+
+    @Test("回看过去月份不写最久没刷新")
+    func pastMonthDropsStalest() {
+        let aws = AccountID.fixture(for: .aws)
+        let neon = AccountID.fixture(for: .neon)
+        let composition = CompositionModuleContent(
+            segments: [
+                CompositionSegment(
+                    accountID: aws,
+                    providerID: .aws,
+                    displayName: "AWS",
+                    colorKey: "aws",
+                    amount: Money(usd: 20),
+                    fraction: 1,
+                    percent: 100
+                )
+            ],
+            totalText: "$20.00",
+            spokenTotal: "20"
+        )
+        let connections = [
+            ProviderConnectionState(
+                accountID: aws,
+                providerID: .aws,
+                isEnabled: true,
+                lastSuccessfulRefreshAt: Date(timeIntervalSince1970: 1),
+                credentialReference: "a",
+                includeInGlobalRefresh: true
+            ),
+            ProviderConnectionState(
+                accountID: neon,
+                providerID: .neon,
+                isEnabled: true,
+                lastSuccessfulRefreshAt: nil,
+                credentialReference: "b",
+                includeInGlobalRefresh: true
+            ),
+        ]
+
+        let withStale = SuperlativesBuilder.make(
+            comparison: nil,
+            composition: composition,
+            connections: connections,
+            now: Date(),
+            showsStalest: true
+        )
+        #expect(withStale?.items.map(\.kind) == [.biggestShare, .stalest])
+
+        let without = SuperlativesBuilder.make(
+            comparison: nil,
+            composition: composition,
+            connections: connections,
+            now: Date(),
+            showsStalest: false
+        )
+        #expect(without?.items.map(\.kind) == [.biggestShare])
     }
 
     @Test("一两家点名，三家以上报数")

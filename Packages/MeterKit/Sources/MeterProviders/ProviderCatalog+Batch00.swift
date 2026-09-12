@@ -255,7 +255,7 @@ extension ProviderCatalog {
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 12,
-        accessStatus: .pendingVerification,
+        accessStatus: .available,
         searchKeywords: ["do", "droplet", "数字海洋"]
     )
 

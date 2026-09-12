@@ -8,9 +8,13 @@
 #   vX.Y.Z          一班车。release.yml 从它构建；哪些端上了这班车由下面的记账 tag 说
 #   ios-vX.Y.Z      iOS 上了这班（App Store）
 #   mac-vX.Y.Z      Mac 直发上了这班（Sparkle 清单在 Publish 时切过去）
+#   mac-appstore-vX.Y.Z  Mac 商店版上了这班（要在 dispatch 上单独勾，不随 tag 自动跟）
 #   android-vX.Y.Z  Android 上了这班
 #   windows-vX.Y.Z  Windows 上了这班
-# 四个端各自独立判断，iOS 和 Mac 不是同一班车。
+# 五条线各自独立判断，iOS 和 Mac 不是同一班车；Mac 的两个通道也不是。
+# Mac 商店版和直发版**源码路径完全一样**（同一份 project-mac.yml 的两个 target），
+# 所以「有没有可发内容」两边永远同一个答案；真正有用的读数是它比直发版落后几班——
+# 商店要过审，落后是常态，落后太多才是问题。
 # 判据：
 #   某端「有可发内容」= 自它上次记账 tag 以来，main 上有提交碰过它关心的路径
 #   iOS / Mac：有可发内容且距上次超过 MAX_DAYS 天 → 该发；没到天数 → 值得写更新日志就发
@@ -75,6 +79,8 @@ version="$(python3 -c 'import json;print(json.load(open("shared/version.json"))[
 train="$(latest_tag 'v')"
 ios="$(latest_tag 'ios-v')";         ios_ref="$(ref_of ios-v "$ios")"
 mac="$(latest_tag 'mac-v')";         mac_ref="$(ref_of mac-v "$mac")"
+# 注意 `git tag --list 'mac-v*'` 不会匹配 mac-appstore-v*，两者互不干扰。
+mas="$(latest_tag 'mac-appstore-v')"; mas_ref="$(ref_of mac-appstore-v "$mas")"
 android="$(latest_tag 'android-v')"; android_ref="$(ref_of android-v "$android")"
 windows="$(latest_tag 'windows-v')"; windows_ref="$(ref_of windows-v "$windows")"
 
@@ -89,6 +95,7 @@ apple_status() {
 }
 read -r ios_own ios_days ios_due <<<"$(apple_status "$ios_ref" "${IOS_PATHS[@]}")"
 read -r mac_own mac_days mac_due <<<"$(apple_status "$mac_ref" "${MAC_PATHS[@]}")"
+read -r mas_own mas_days mas_due <<<"$(apple_status "$mas_ref" "${MAC_PATHS[@]}")"
 
 # Android / Windows
 wave_status() {
@@ -114,6 +121,7 @@ if (( JSON )); then
   "lastTrain": "${train:-null}",
   "ios":     {"last": "${ios:-null}",     "relevantCommits": $ios_own, "daysSince": $ios_days, "due": $ios_due},
   "mac":     {"last": "${mac:-null}",     "relevantCommits": $mac_own, "daysSince": $mac_days, "due": $mac_due},
+  "macAppStore": {"last": "${mas:-null}", "relevantCommits": $mas_own, "daysSince": $mas_days, "due": $mas_due},
   "android": {"last": "${android:-null}", "trainsBehind": $android_lag, "coreCommitsSince": $android_core, "due": $android_due},
   "windows": {"last": "${windows:-null}", "trainsBehind": $windows_lag, "coreCommitsSince": $windows_core, "due": $windows_due},
   "followUp": $FOLLOW_UP
@@ -126,6 +134,7 @@ flag() { (( $1 )) && echo "← 该发了" || echo ""; }
 printf '版本号（shared/version.json）%s    最近一班车 v%s\n' "$version" "${train:-—}"
 printf 'iOS        上次 %-8s  之后 %3d 个相关提交，%4d 天  %s\n' "${ios:-—}" "$ios_own" "$ios_days" "$(flag "$ios_due")"
 printf 'Mac 直发   上次 %-8s  之后 %3d 个相关提交，%4d 天  %s\n' "${mac:-—}" "$mac_own" "$mac_days" "$(flag "$mac_due")"
+printf 'Mac 商店   上次 %-8s  之后 %3d 个相关提交，%4d 天  %s\n' "${mas:-—}" "$mas_own" "$mas_days" "$(flag "$mas_due")"
 printf 'Android    上次 %-8s  落后 %d 班，核心改了 %d 个提交  %s\n' "${android:-—}" "$android_lag" "$android_core" "$(flag "$android_due")"
 printf 'Windows    上次 %-8s  落后 %d 班，核心改了 %d 个提交  %s\n' "${windows:-—}" "$windows_lag" "$windows_core" "$(flag "$windows_due")"
 echo

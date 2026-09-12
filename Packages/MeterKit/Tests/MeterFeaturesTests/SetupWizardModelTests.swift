@@ -58,6 +58,16 @@ struct SetupWizardModelTests {
         #expect(SetupProviderFacts.kindTitle(for: ProviderCatalog.twilio) == String(localized: L("用量后付费")))
     }
 
+    @Test("DigitalOcean 已对过真账，是完全支持，用量后付费")
+    func digitaloceanIntroFacts() {
+        #expect(SetupProviderFacts.supportLevel(for: ProviderCatalog.digitalocean) == .full)
+        #expect(SetupProviderFacts.supportTitle(for: ProviderCatalog.digitalocean) == String(localized: L("完全支持")))
+        #expect(SetupProviderFacts.supportBars(for: ProviderCatalog.digitalocean) == 3)
+        #expect(SetupProviderFacts.kindTitle(for: ProviderCatalog.digitalocean) == String(localized: L("用量后付费")))
+        #expect(SetupProviderFacts.supportCaption(for: ProviderCatalog.digitalocean).isEmpty)
+        #expect(SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.digitalocean) == false)
+    }
+
     @Test("Sentry 已对过真账，是完全支持")
     func sentryIntroFacts() {
         #expect(SetupProviderFacts.supportLevel(for: ProviderCatalog.sentry) == .full)
@@ -456,6 +466,7 @@ struct SetupWizardModelTests {
         #expect(SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.aws))
         #expect(!SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.cloudflare))
         #expect(!SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.twilio))
+        #expect(!SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.digitalocean))
         #expect(!SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.clerk))
         #expect(!SetupProviderFacts.offersSetupFeedback(for: nil))
     }

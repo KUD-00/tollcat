@@ -5,4 +5,7 @@ public enum AppearancePreference: String, CaseIterable, Sendable, Codable, Equat
     case system
     case light
     case dark
+
+    /// 新装默认暗色，不是跟随系统。
+    public static let `default` = AppearancePreference.dark
 }

@@ -42,6 +42,10 @@ public struct MonthToDateModuleView: View {
         VStack(alignment: .leading, spacing: MeterSpacing.xxs) {
             amountRow
 
+            if showsCaptions, let subscriptionCaption = content.subscriptionCaption {
+                subscriptionLine(subscriptionCaption)
+            }
+
             if let captionLine {
                 Text(captionLine)
                     .font(MeterFont.subheadline)
@@ -50,10 +54,6 @@ public struct MonthToDateModuleView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     // 读的始终是完整那句：VoiceOver 没有版面预算，区间不该跟着掐掉。
                     .accessibilityLabel(content.spokenProjected ?? captionLine)
-            }
-
-            if showsCaptions, let subscriptionCaption = content.subscriptionCaption {
-                subscriptionLine(subscriptionCaption)
             }
 
             if showsCaptions, let currencyNote = content.currencyNote {
@@ -66,12 +66,16 @@ public struct MonthToDateModuleView: View {
 
             // 限定语跟着数字走，不做成会滚走的横幅。
             if showsCaptions, let filterNote = content.filterNote {
-                Label(filterNote, systemImage: "line.3.horizontal.decrease")
-                    .font(MeterFont.footnote)
-                    .foregroundStyle(Color.accentColor)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, MeterSpacing.xxs)
-                    .accessibilityLabel(L("筛选中：\(filterNote)"))
+                HStack(alignment: .firstTextBaseline, spacing: MeterSpacing.xxs) {
+                    Image(systemName: "line.3.horizontal.decrease")
+                    Text(filterNote)
+                }
+                .font(MeterFont.footnote)
+                .foregroundStyle(Color.accentColor)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, MeterSpacing.xxs)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(L("筛选中：\(filterNote)"))
             }
 
             if showsCaptions, let staleCaption = content.staleCaption {
@@ -209,8 +213,8 @@ private enum MonthToDatePreviewData {
         staleCaption: nil,
         filterNote: nil,
         currencyNote: nil,
-        subscriptionCaption: "本月订阅 $24.00 · 已计入",
-        spokenSubscription: "本月订阅 24 美元，已计入合计",
+        subscriptionCaption: "（订阅 $24.00）",
+        spokenSubscription: "订阅 24 美元",
         subscriptionAccountID: nil,
         includesSubscriptions: true,
         showsSubscriptionScope: true

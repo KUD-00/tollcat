@@ -8,10 +8,11 @@ public struct AppPreferences: Equatable, Sendable {
     public var isDemoBannerDismissed: Bool
     public var isReminderEnabled: Bool
     public var reminderSchedule: ReminderSchedule
+    /// 设置里的外观。默认暗色。
     public var appearance: AppearancePreference
     public var hasCompletedOnboarding: Bool
     public var providerHistoryRange: ProviderHistoryRange
-    /// 仪表上的猫。默认开；关掉只藏猫，数字和构成还在。
+    /// 仪表上的猫。默认关；打开才出现。
     public var hidesCat: Bool
     /// 每次进入 App（冷启动 / 从后台回前台）自动走一次全局刷新。默认关。
     public var refreshesUsageOnActivate: Bool
@@ -50,10 +51,10 @@ public struct AppPreferences: Equatable, Sendable {
         isDemoBannerDismissed: Bool = false,
         isReminderEnabled: Bool = false,
         reminderSchedule: ReminderSchedule = .default,
-        appearance: AppearancePreference = .system,
+        appearance: AppearancePreference = .default,
         hasCompletedOnboarding: Bool = false,
         providerHistoryRange: ProviderHistoryRange = .default,
-        hidesCat: Bool = false,
+        hidesCat: Bool = true,
         refreshesUsageOnActivate: Bool = false,
         // 新用户默认只看从量。`.unfiltered` 是计算层的「什么都不筛」，
         // 语义上仍含订阅；产品默认是另一件事，落在这儿。

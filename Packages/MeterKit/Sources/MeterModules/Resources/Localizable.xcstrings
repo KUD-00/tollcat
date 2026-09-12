@@ -1,6 +1,22 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
+    "%@之最" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ extremes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@のトップ"
+          }
+        }
+      }
+    },
     "%@ / %@" : {
       "localizations" : {
         "en" : {
@@ -275,6 +291,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld日"
+          }
+        }
+      }
+    },
+    "%lld 笔，这段时间合计。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld subscriptions, totaled over this period."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 件、この期間の合計。"
           }
         }
       }
@@ -637,7 +669,7 @@
         }
       }
     },
-    "全期间" : {
+    "有数据以来" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -937,6 +969,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "定額サブスクリプション"
+          }
+        }
+      }
+    },
+    "固定订阅合计 %@，%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions total %1$@, %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプション合計 %1$@、%2$@"
           }
         }
       }
@@ -1631,6 +1679,22 @@
         }
       }
     },
+    "每月 × %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monthly × %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "毎月 × %lld"
+          }
+        }
+      }
+    },
     "每月" : {
       "localizations" : {
         "en" : {
@@ -1835,6 +1899,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最も使った日：%1$@、%2$@"
+          }
+        }
+      }
+    },
+    "订阅 %@ · 已计入" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions %@ · included"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスク %@ · 計上済み"
+          }
+        }
+      }
+    },
+    "订阅 %@ · 未计入" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions %@ · not included"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスク %@ · 未計上"
+          }
+        }
+      }
+    },
+    "订阅 %@，已计入合计，可查看详情" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions %@, included in the total, view details"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスク %@、合計に含まれています、詳細を見る"
+          }
+        }
+      }
+    },
+    "订阅 %@，未计入合计" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions %@, not included in the total"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスク %@、合計に含めていません"
+          }
+        }
+      }
+    },
+    "（订阅 %@）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(Subscriptions %@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（サブスク %@）"
+          }
+        }
+      }
+    },
+    "订阅 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスク %@"
           }
         }
       }

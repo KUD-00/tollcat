@@ -8,7 +8,8 @@ public enum SuperlativesBuilder {
         comparison: ComparisonModuleContent?,
         composition: CompositionModuleContent?,
         connections: [ProviderConnectionState],
-        now: Date
+        now: Date,
+        showsStalest: Bool = true
     ) -> SuperlativesModuleContent? {
         let compared = comparison?.items ?? []
         let segments = composition?.segments ?? []
@@ -47,6 +48,9 @@ public enum SuperlativesBuilder {
                     providerID: biggest.providerID
                 ))
             case .stalest:
+                // 「最久没刷新」说的是此刻。回看七月时把它摆出来，那个「3 天前」
+                // 是今天的事，和七月之最不在同一个时态。
+                guard showsStalest else { continue }
                 guard
                     let index = SuperlativeSelection.stalest(
                         lastRefreshedAt: enabled.map(\.lastSuccessfulRefreshAt)

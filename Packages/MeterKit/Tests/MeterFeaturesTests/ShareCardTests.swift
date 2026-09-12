@@ -67,7 +67,7 @@ struct ShareCardTests {
         #expect(card.subscriptionText == nil)
     }
 
-    @Test("分享卡跟仪表走：算进订阅时主角是合计，订阅那行说「已计入」")
+    @Test("分享卡跟仪表走：算进订阅时主角是合计，日期上面写括号里的订阅")
     func subscriptionLineFollowsTheDashboard() {
         let month = MonthToDate(
             totalUSD: Money(roundedUSD: 67.20),
@@ -87,7 +87,8 @@ struct ShareCardTests {
         )
         #expect(card.totalText.contains("67.20"))
         #expect(card.subscriptionText?.contains("20") == true)
-        #expect(card.subscriptionText?.contains("已计入") == true)
+        #expect(card.subscriptionText?.contains("已计入") != true)
+        #expect(card.subscriptionText?.hasPrefix("（") == true)
         #expect(card.projectionText?.contains("114") == true)
     }
 

@@ -59,7 +59,7 @@ public struct SonioxBillingProvider: BillingProvider, Sendable {
                 let days = total?.days ?? []
                 let costs = total?.costUSD ?? []
                 for (index, dayString) in days.enumerated() {
-                    let cost = index < costs.count ? (costs[index].value ?? 0) : 0
+                    let cost = index < costs.count ? costs[index].value : 0
                     guard cost != 0 else { continue }
                     let day = BillingDateParser.parse(dayString, calendar: calendar) ?? month.start
                     daily.add(day: calendar.startOfDay(for: day), amount: Money(usd: cost))

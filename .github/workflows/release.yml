@@ -16,6 +16,10 @@ on:
         description: Put the direct-download Mac build on this train (notarize, Sparkle-sign; the feed only switches on Publish)
         type: boolean
         default: true
+      mac_appstore:
+        description: Put the Mac App Store build on this train (archive TollCatMacAppStore, upload the .pkg to App Store Connect)
+        type: boolean
+        default: false
       android:
         description: Put Android on this train (AAB attached to the Release; Play upload stays manual for now)
         type: boolean
@@ -34,6 +38,16 @@ permissions:
 # Mac's Sparkle feed does not read releases/latest; it reads the rolling
 # "mac-appcast" release, which mac-appcast.yml switches over when this Release is
 # published — so an iOS-only Release becoming latest can't break Mac users.
+#
+# There are two Mac jobs, not one, because there are two Mac products built from
+# the same sources (see project-mac.yml):
+#   mac            TollCatMac, Developer ID, notarized, Sparkle feed — the direct download
+#   mac_appstore   TollCatMacAppStore, Apple Distribution, .pkg to App Store Connect
+# Unlike the others, mac_appstore does NOT ride a tag push by default: a store
+# submission enters a review queue you cannot take back cheaply, and the store
+# build deliberately lags the direct one (its first review is a whole new
+# platform review). Tick it on a dispatch when you mean it. To make it ride
+# every tag like the rest, change its `if` to match the mac job's.
 #
 # Needs repo secrets. First ship must be checked by a human — see VERIFY.md.
 env:
@@ -401,6 +415,216 @@ jobs:
             security delete-keychain "$SIGNING_KEYCHAIN" || true
           fi
 
+  mac_appstore:
+    name: Archive Mac App Store build and upload to App Store Connect
+    # Opt-in only — see the note at the top of this file. `inputs.mac_appstore`
+    # is null on a tag push, so this never rides one.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.mac_appstore }}
+    needs: preflight
+    runs-on: macos-26
+    environment: app-store
+    env:
+      ARCHIVE_PATH: /tmp/dd-verify/TollCatMacAppStore.xcarchive
+      EXPORT_PATH: /tmp/dd-verify/export-mac-appstore
+      ARTIFACTS: ${{ github.workspace }}/artifacts-mac-appstore
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+          sw_vers
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      # Same spec as the direct build — the store shell is a second target in it,
+      # not a second project. Sparkle stays in the spec (the direct target needs
+      # it); TollCatMacAppStore just does not depend on it, and
+      # check-source-invariants fails if that ever changes.
+      - name: Generate Xcode project
+        run: xcodegen generate --spec project-mac.yml
+
+      # Two certificates, one keychain:
+      #   Apple Distribution            signs TollCat.app   (the same cert the iOS job uses)
+      #   Mac Installer Distribution    signs the .pkg      (nothing else can)
+      # Developer ID — what the `mac` job imports — is for distribution OUTSIDE
+      # the store and App Store Connect rejects it, so do not reach for that one.
+      - name: Import App Store signing certificates
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          MAC_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.MAC_INSTALLER_CERTIFICATE_BASE64 }}
+          MAC_INSTALLER_P12_PASSWORD: ${{ secrets.MAC_INSTALLER_P12_PASSWORD }}
+        run: |
+          set -euo pipefail
+          keychain="$RUNNER_TEMP/mac-appstore-signing.keychain-db"
+          password="$(openssl rand -base64 24)"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+
+          app_cert="$RUNNER_TEMP/apple_distribution.p12"
+          installer_cert="$RUNNER_TEMP/mac_installer.p12"
+          echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$app_cert"
+          echo "$MAC_INSTALLER_CERTIFICATE_BASE64" | base64 --decode > "$installer_cert"
+          security import "$app_cert" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security import "$installer_cert" -P "$MAC_INSTALLER_P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          rm -f "$app_cert" "$installer_cert"
+
+          security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain"
+          security list-keychain -d user -s "$keychain" login.keychain-db
+          echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
+          # Fail here rather than 20 minutes later inside xcodebuild, where a
+          # missing identity only says "No signing certificate found".
+          security find-identity -v -p codesigning "$keychain" | grep -F "Apple Distribution" \
+            || { echo "no Apple Distribution identity: check secret BUILD_CERTIFICATE_BASE64" >&2; exit 1; }
+          security find-identity -v "$keychain" | grep -F "3rd Party Mac Developer Installer" \
+            || { echo "no Mac Installer Distribution identity: check secret MAC_INSTALLER_CERTIFICATE_BASE64 (the cert is named '3rd Party Mac Developer Installer')" >&2; exit 1; }
+
+      - name: Write App Store Connect API key
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          key="$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          echo "$PRIVATE_KEY" | base64 --decode > "$key"
+          chmod 600 "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      # Team ID 不在仓库里（见 Config/Signing.xcconfig）。archive 前从 secret 写出
+      # 本地同名文件，Forget signing material 再删掉。
+      - name: Write signing team
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          [[ -n "$APPLE_TEAM_ID" ]] || { echo "secret APPLE_TEAM_ID is empty" >&2; exit 1; }
+          printf 'DEVELOPMENT_TEAM = %s\n' "$APPLE_TEAM_ID" > Config/Signing.local.xcconfig
+
+      # Build numbers are per-platform namespaces in App Store Connect, so this
+      # uses the same run-number formula as the iOS job without colliding with it.
+      - name: Archive
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild archive \
+            -project TollCatMac.xcodeproj \
+            -scheme TollCatMacAppStore \
+            -destination 'generic/platform=macOS' \
+            -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA" \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            -allowProvisioningUpdates \
+            CURRENT_PROJECT_VERSION="$((GITHUB_RUN_NUMBER + 100000))"
+
+      # Belt and braces for the failure that started all this: Sparkle ships four
+      # unsandboxed helper executables, and App Store Connect only tells you about
+      # them after the upload finishes. Catch it here instead. The spec gate in
+      # check-source-invariants guards the intent; this guards the actual bytes.
+      - name: Refuse to ship Sparkle
+        run: |
+          set -euo pipefail
+          app="$ARCHIVE_PATH/Products/Applications/TollCat.app"
+          [[ -d "$app" ]] || { echo "no TollCat.app in the archive" >&2; exit 1; }
+          if find "$app" -iname '*Sparkle*' -o -iname 'Autoupdate' -o -name '*.xpc' | grep -q .; then
+            echo "the archive contains Sparkle; the store build must not link it" >&2
+            find "$app" -iname '*Sparkle*' -o -iname 'Autoupdate' -o -name '*.xpc' >&2
+            exit 1
+          fi
+          # Every executable in the bundle must be sandboxed; list them so a
+          # future addition that is not shows up in the log before the upload.
+          echo "executables in the bundle:"
+          find "$app" -type f -perm +111 -exec sh -c 'file "$1" | grep -q "Mach-O.*executable" && echo "  $1"' _ {} \;
+
+      - name: Export pkg
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist scripts/ExportOptions-mac-appstore.plist \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            -allowProvisioningUpdates
+
+      - name: Collect release artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p "$ARTIFACTS"
+          pkg="$(find "$EXPORT_PATH" -maxdepth 1 -name '*.pkg' | head -n 1)"
+          [[ -n "$pkg" ]] || { echo "no .pkg in $EXPORT_PATH" >&2; exit 1; }
+          cp "$pkg" "$ARTIFACTS/TollCat-mac-appstore.pkg"
+          (cd "$ARTIFACTS" && shasum -a 256 TollCat-mac-appstore.pkg > TollCat-mac-appstore.pkg.sha256)
+          ditto -c -k --keepParent "$ARCHIVE_PATH/dSYMs" "$ARTIFACTS/TollCat-mac-appstore.dSYMs.zip"
+          app="$ARCHIVE_PATH/Products/Applications/TollCat.app"
+          {
+            echo "=== App executable ==="
+            dwarfdump --uuid "$app/Contents/MacOS/TollCat"
+            widget="$(find "$app/Contents/PlugIns" -maxdepth 1 -name '*.appex' 2>/dev/null | head -n 1 || true)"
+            if [[ -n "$widget" ]]; then
+              echo
+              echo "=== Widget executable ==="
+              dwarfdump --uuid "$widget/Contents/MacOS/$(basename "$widget" .appex)"
+            fi
+          } > "$ARTIFACTS/uuids-mac-appstore.txt"
+          printf 'commit=%s\nrun=%s\nxcode=%s\n' \
+            "$GITHUB_SHA" "$GITHUB_RUN_ID" "$(xcodebuild -version | head -n 1)" \
+            > "$ARTIFACTS/build-info-mac-appstore.txt"
+
+      - name: Upload to App Store Connect
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          # --type macos, not ios. notarytool has no part in this: the store
+          # notarizes its own copy, unlike the Developer ID build in the mac job.
+          xcrun altool --upload-app \
+            --type macos \
+            --file "$ARTIFACTS/TollCat-mac-appstore.pkg" \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$ISSUER_ID"
+
+      - name: Attest pkg and dSYM
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ github.workspace }}/artifacts-mac-appstore/TollCat-mac-appstore.pkg
+            ${{ github.workspace }}/artifacts-mac-appstore/TollCat-mac-appstore.dSYMs.zip
+
+      - name: Hand artifacts to publish job
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-appstore-release
+          path: artifacts-mac-appstore/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Forget signing material
+        if: always()
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+        run: |
+          rm -f Config/Signing.local.xcconfig
+          rm -f "$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          if [[ -n "${SIGNING_KEYCHAIN:-}" ]]; then
+            security delete-keychain "$SIGNING_KEYCHAIN" || true
+          fi
+
   windows:
     name: Windows MSIX placeholder
     needs: preflight
@@ -550,10 +774,10 @@ jobs:
 
   publish:
     name: Publish GitHub Release
-    needs: [ios, mac, windows, android]
+    needs: [ios, mac, mac_appstore, windows, android]
     # Unchecked platforms are skipped, which counts as passing; checked ones must
-    # succeed; at least one of iOS or Mac must actually have ridden.
-    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && (needs.ios.result == 'success' || needs.mac.result == 'success') }}
+    # succeed; at least one of the three Apple jobs must actually have ridden.
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && (needs.ios.result == 'success' || needs.mac.result == 'success' || needs.mac_appstore.result == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -572,6 +796,13 @@ jobs:
         with:
           name: mac-release
           path: artifacts-mac
+
+      - name: Download Mac App Store artifacts
+        if: ${{ needs.mac_appstore.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: mac-appstore-release
+          path: artifacts-mac-appstore
 
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
@@ -618,6 +849,10 @@ jobs:
               echo "**Mac**: \`TollCat-*-mac.zip\` is the Developer ID build, notarized and stapled. Installed copies update through the \`mac-appcast\` feed once this release is published; \`gh attestation verify\` works on the zip as-is."
               echo
             fi
+            if [[ -d artifacts-mac-appstore ]]; then
+              echo "**Mac App Store**: \`TollCat-mac-appstore.pkg\` is the copy uploaded to App Store Connect. It is attached for provenance only — a store .pkg cannot be installed by hand, and Apple resigns the copy it ships. Mac users who downloaded the app from here want \`TollCat-*-mac.zip\` instead."
+              echo
+            fi
             if [[ -d artifacts-android ]]; then
               echo "**Android**: \`TollCat.aab\` is signed with the upload key; upload it to the Play Console internal track by hand for now."
               echo
@@ -627,6 +862,7 @@ jobs:
             echo "\`\`\`"
             [[ -d artifacts ]] && { cat artifacts/build-info.txt; echo; cat artifacts/TollCat.ipa.sha256; echo; }
             [[ -d artifacts-mac ]] && { cat artifacts-mac/build-info-mac.txt; echo; cat artifacts-mac/*.sha256; echo; }
+            [[ -d artifacts-mac-appstore ]] && { cat artifacts-mac-appstore/build-info-mac-appstore.txt; echo; cat artifacts-mac-appstore/TollCat-mac-appstore.pkg.sha256; echo; }
             [[ -d artifacts-android ]] && { cat artifacts-android/build-info-android.txt; echo; cat artifacts-android/TollCat.aab.sha256; echo; }
             echo "\`\`\`"
           } > "$notes"
@@ -635,6 +871,9 @@ jobs:
           fi
           if [[ -d artifacts-mac ]]; then
             assets+=(artifacts-mac/TollCat-*-mac.zip artifacts-mac/TollCat-*-mac.zip.sha256 artifacts-mac/TollCat-mac.dSYMs.zip artifacts-mac/uuids-mac.txt artifacts-mac/build-info-mac.txt artifacts-mac/appcast.xml)
+          fi
+          if [[ -d artifacts-mac-appstore ]]; then
+            assets+=(artifacts-mac-appstore/TollCat-mac-appstore.pkg artifacts-mac-appstore/TollCat-mac-appstore.pkg.sha256 artifacts-mac-appstore/TollCat-mac-appstore.dSYMs.zip artifacts-mac-appstore/uuids-mac-appstore.txt artifacts-mac-appstore/build-info-mac-appstore.txt)
           fi
           if [[ -d artifacts-android ]]; then
             assets+=(artifacts-android/TollCat.aab artifacts-android/TollCat.aab.sha256 artifacts-android/build-info-android.txt)
@@ -655,10 +894,11 @@ jobs:
         env:
           IOS: ${{ needs.ios.result }}
           MAC: ${{ needs.mac.result }}
+          MAC_APPSTORE: ${{ needs.mac_appstore.result }}
           ANDROID: ${{ needs.android.result }}
         run: |
           set -euo pipefail
-          for pair in "ios:$IOS" "mac:$MAC" "android:$ANDROID"; do
+          for pair in "ios:$IOS" "mac:$MAC" "mac-appstore:$MAC_APPSTORE" "android:$ANDROID"; do
             name="${pair%%:*}"; result="${pair##*:}"
             [[ "$result" == "success" ]] || continue
             git tag "${name}-${GITHUB_REF_NAME}" "${GITHUB_SHA}"

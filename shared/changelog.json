@@ -24,5 +24,43 @@
     "  shot 只有 entries[0] 能带（包体因此恒定），而且图里不许有字——有字就要三语三份，必然和译文漂移。"
   ],
   "schemaVersion": 1,
-  "entries": []
+  "entries": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-12",
+      "platforms": [
+        "ios"
+      ],
+      "drawer": false,
+      "title": "TollCat 1.0：云账单，装进口袋",
+      "en": {
+        "title": "TollCat 1.0: your cloud bills, in your pocket"
+      },
+      "ja": {
+        "title": "TollCat 1.0：クラウドの請求を、ポケットに"
+      },
+      "hero": {
+        "kind": "cat",
+        "mood": "normal"
+      },
+      "items": [
+        {
+          "id": "firstRelease",
+          "symbol": {
+            "ios": "sparkles"
+          },
+          "title": "第一版上架了",
+          "body": "先从 iPhone 和 iPad 开始。把各家云和 AI 服务的花费加在一起，打开就能看到这个月到现在一共花了多少。",
+          "en": {
+            "title": "The first release",
+            "body": "iPhone and iPad first. TollCat adds up what you spend across your cloud and AI services, so one glance tells you how much this month has cost so far."
+          },
+          "ja": {
+            "title": "はじめてのリリース",
+            "body": "まずは iPhone と iPad から。クラウドや AI サービスの利用料をまとめて、今月ここまでいくら使ったかがひと目でわかります。"
+          }
+        }
+      ]
+    }
+  ]
 }

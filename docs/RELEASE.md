@@ -11,6 +11,7 @@
 | main 保护 | required status checks（ci.yml 全部 job）+ 线性历史 + 禁强推。不设 required reviewers，PR 可选 |
 | 发布单位 | 一个 tag `vX.Y.Z`，打在 `main` 上。release.yml 从 tag 构建**勾了的端**，产出 **draft** Release |
 | iOS 与 Mac | **不是同一班车。** 通道、审核、风险都不同；同一个 tag 上各自决定跟不跟。Sparkle 清单挂在滚动 Release `mac-appcast` 上，不挂 latest |
+| Mac 的两个通道 | **也不是同一班车。** 直发（`mac`）随 tag 自动跟；商店（`mac_appstore`）**只在 dispatch 上手动勾**——提交进审核队列收不回来，而且商店版本来就该落后直发版。两个 target 在同一份 `project-mac.yml` 里，源码一份 |
 | 人工关卡 | 只有一个：Environment 的 required reviewers。跑到要上传 App Store Connect 那步停下来等你点 |
 | iOS / Mac | 各自：有它关心的路径改过就算有可发内容；值得写更新日志就发；做好的东西不能躺超过 30 天 |
 | Android / Windows | 落后两班车（v* 比它多两个），或共用核心（MeterCore / MeterProviders / MeterFormat / Catalog / shared）改过，就搭当次 tag |
@@ -24,7 +25,7 @@
 |---|---|---|---|
 | `.github/workflows/ci.yml` | 六道静态闸、iOS 单测、Worker typecheck、Windows 单测、站点构建、Maestro UI 冒烟 | push main / PR（私有期：手动） | 无 |
 | `.github/workflows/beta.yml` | 从 main 头部归档上传 TestFlight，build 号 = run number | push main（私有期：手动） | `app-store` environment |
-| `.github/workflows/release.yml` | tag → 勾了的端：iOS 上 ASC、Mac 公证 + Sparkle、Android AAB、Windows 占位 → draft Release + 溯源证明；跟车的端打 `ios-v*` `mac-v*` `android-v*` 记账。ios / mac / windows 挂 Environment，审批在这里停 | tag `v*`（默认 iOS + Mac；私有期：在 tag 上手动 dispatch 勾端） | `app-store` `mac-direct` `windows` `google-play` |
+| `.github/workflows/release.yml` | tag → 勾了的端：iOS 上 ASC、Mac 直发公证 + Sparkle、Mac 商店 .pkg 上 ASC、Android AAB、Windows 占位 → draft Release + 溯源证明；跟车的端打 `ios-v*` `mac-v*` `mac-appstore-v*` `android-v*` 记账。各端挂 Environment，审批在这里停 | tag `v*`（默认 iOS + Mac 直发；**Mac 商店只能 dispatch 手动勾**） | `app-store` `mac-direct` `windows` `google-play` |
 | `.github/workflows/mac-appcast.yml` | Release 被 Publish 时，把它的 appcast.xml 和 zip 副本覆盖到滚动 Release `mac-appcast`。没有 Mac 资产的 Release（iOS-only）不动清单 | release published（私有期：手动填 tag） | 无 |
 | `.github/workflows/deploy-edge.yml` | D1 迁移 → 部署 toll-api；构建 → 部署 tollcat.app | push main 且 worker/ site/ 契约 目录有改动（私有期：手动） | `api` environment |
 | `.github/workflows/release-status.yml` | 跑 `release-status.sh`，有该发的端就开 issue，没有就关 | 每周一（私有期：手动） | 无 |
@@ -33,7 +34,7 @@
 | `shared/version.json` | 版本号权威 | `generate-shared.py` 铺 | — |
 | `shared/changelog.json` | 更新说明权威。铺到 App 抽屉、落地页 `/changelog`、Sparkle 更新弹窗、ASC 与 Play 的「此版本新增」、Release body | `generate-shared.py` 铺 | — |
 
-哪个端跟了哪班车，由 release.yml 的 publish 打 `ios-vX.Y.Z` / `mac-vX.Y.Z` / `android-vX.Y.Z` 记账，`release-status.sh` 靠它们各自算。iOS 和 Mac 的「有可发内容」按路径启发式判：`Mac/` 和 `*Mac*` 只算 Mac，`App/` `Widget/` `*Pad*` `*Phone*` 只算 iOS，其余 Packages 两边都算。
+哪个端跟了哪班车，由 release.yml 的 publish 打 `ios-vX.Y.Z` / `mac-vX.Y.Z` / `mac-appstore-vX.Y.Z` / `android-vX.Y.Z` 记账，`release-status.sh` 靠它们各自算。Mac 两个通道共用同一组源码路径，所以「有没有可发内容」两边永远同一个答案；商店那一行真正的读数是它比直发落后多少。iOS 和 Mac 的「有可发内容」按路径启发式判：`Mac/` 和 `*Mac*` 只算 Mac，`App/` `Widget/` `*Pad*` `*Phone*` 只算 iOS，其余 Packages 两边都算。
 Windows 还是占位包，MSIX 真出来之前不打 `windows-v*`，所以 release-status 会一直说 Windows 该发——这是对的，它确实一次都没发过。
 
 ## 按触发条件做事
@@ -78,6 +79,21 @@ git tag vX.Y.0 && git push origin vX.Y.0    # 私有期：再到 Actions → Rel
 同一个 tag 上 dispatch release.yml 时勾 `android`。跑完 Release 里多一个签好名的 `TollCat.aab`，
 手工上传 Play Console 内测轨道；内测跑一天，晋级生产并开分阶段。Windows 等 P0（Swift-on-Windows）落地。
 
+### 想把 Mac 商店版送一版
+
+商店版不随 tag 自动跟。在想送的那个 tag 上 dispatch release.yml，**只勾 `mac_appstore`**
+（其余全不勾——直发版已经在那班车上跟过了，不必重跑）。
+
+```
+Actions → Release → Run workflow → ref 选 vX.Y.Z → 只勾 mac_appstore
+```
+
+跑完 `.pkg` 已经上传到 App Store Connect，去 ASC 的 macOS 平台那条版本记录提交审核。
+Mac 和 iOS 是**两条各自独立的审核队列**，互不阻塞。
+
+节奏上让商店版落后直发版一到两班：直发版先在真人手里跑几天，商店版再跟。
+`release-status.sh` 的「Mac 商店」那一行就是看落后多少用的。
+
 ### 出了 bug
 
 ```bash
@@ -108,7 +124,7 @@ git tag vX.Y.0 && git push origin vX.Y.0    # 私有期：再到 Actions → Rel
 
    | Environment | Required reviewers | secret |
    |---|---|---|
-   | `app-store` | 你 | `APPLE_TEAM_ID`（Team ID，见 Config/Signing.xcconfig） `APP_STORE_CONNECT_KEY_ID` `ISSUER_ID` `PRIVATE_KEY`（.p8 base64） `BUILD_CERTIFICATE_BASE64`（Apple Distribution .p12 base64） `P12_PASSWORD` |
+   | `app-store` | 你 | `APPLE_TEAM_ID`（Team ID，见 Config/Signing.xcconfig） `APP_STORE_CONNECT_KEY_ID` `ISSUER_ID` `PRIVATE_KEY`（.p8 base64） `BUILD_CERTIFICATE_BASE64`（Apple Distribution .p12 base64） `P12_PASSWORD` `MAC_INSTALLER_CERTIFICATE_BASE64`（Mac Installer Distribution .p12 base64，只用来签 .pkg） `MAC_INSTALLER_P12_PASSWORD` |
    | `mac-direct` | 你 | `APPLE_TEAM_ID` `APP_STORE_CONNECT_KEY_ID` `ISSUER_ID` `PRIVATE_KEY` `DEVELOPER_ID_CERTIFICATE_BASE64` `DEVELOPER_ID_P12_PASSWORD` `SPARKLE_PRIVATE_KEY`（**永远不换**） |
    | `google-play` | 你 | `ANDROID_UPLOAD_KEYSTORE_BASE64` `ANDROID_UPLOAD_KEYSTORE_PASSWORD` `ANDROID_UPLOAD_KEY_ALIAS` |
    | `windows` | 你 | （P0 之后：MSIX 签名证书） |
@@ -123,6 +139,7 @@ git tag vX.Y.0 && git push origin vX.Y.0    # 私有期：再到 Actions → Rel
 ### 各平台后台
 
 - **App Store Connect**：API key 权限 App Manager 以上；bundle id 已建；App 记录、隐私标签、截图三语；TestFlight 内部测试组加上自己。
+- **Mac App Store（通用购买）**：ASC 上给同一条 App 记录 Add Platform → macOS，Certificates/Identifiers 里把 App ID 对 macOS 启用。这两步不做，CI 里 `-allowProvisioningUpdates` 拿不到 Mac App Store 的 profile，archive 直接失败。加平台不可逆，且从此两个平台共享价格与内购。macOS 截图是独立尺寸档（1280×800 / 1440×900 / 2560×1600 / 2880×1800），描述与关键词也要单独一份。
 - **Play Console**：建 App、上传密钥（生成 upload keystore，base64 进 secret）、内测轨道加自己、数据安全表单。首几次 AAB 手工上传，Play 上传自动化等真跑通再加。
 - **Cloudflare**：建一个 API token 只给 toll-api 和 tollcat-site 两个 Worker 加 D1；本机以后不再 `wrangler deploy`，改 dispatch deploy-edge。
 - **winget**：`Windows/winget/com.zhechengqi.tollcat.yaml` 和 `TollCat.appinstaller` 的 URL 现在指 Release latest。Windows 真发之前照 Mac 的做法改成滚动 Release `windows-appinstaller`，否则只发 iOS 的一班车会让 Windows 用户下到 404。MSIX 出来后向 winget-pkgs 提 PR。
@@ -130,6 +147,11 @@ git tag vX.Y.0 && git push origin vX.Y.0    # 私有期：再到 Actions → Rel
 ### 没验证过、第一次跑要盯着的
 
 - release.yml 的 iOS / Mac 上传（VERIFY.md 已写明）。
+- release.yml 的 `mac_appstore` job：**整个没在 CI 上跑过。** 本机用 Xcode Organizer 手动
+  archive + Distribute 走通过一次，CI 这套是照那次翻译的。第一次跑盯三处：两张证书
+  导进同一个 keychain（`Import App Store signing certificates` 那步自己会断言，缺哪张说哪张）、
+  `-allowProvisioningUpdates` 能不能拿到 Mac App Store 的 profile（拿不到说明 App ID
+  没对 macOS 启用）、`altool --upload-app --type macos` 的返回。
 - release.yml 的 Android job：ubuntu runner 上装 swiftly + Swift 6.3.3 + Android SDK bundle 再交叉编译，
   步骤照 `scripts/android-run.sh` 抄的，但没在 CI 上跑过。`swift sdk install` 的 URL 和 `swiftly init` 的参数如果变了在这里红。
 - beta.yml：和 release.yml 的 iOS job 同一套步骤，只是不导 IPA 到 Release。

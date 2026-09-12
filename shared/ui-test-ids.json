@@ -24,7 +24,7 @@
     "providerDetail.list": "服务详情页",
     "providerDetail.connect": "详情页里的「连接 X 账单」行，两端都从这里进向导",
     "settings.list": "设置列表",
-    "settings.hideCat": "设置里的「关闭猫猫」开关"
+    "settings.hideCat": "设置里的「打开猫猫」开关"
   },
   "prefixes": {
     "services.row": "服务列表里某一家的行，后接 provider key（services.row.cloudflare）",

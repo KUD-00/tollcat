@@ -299,6 +299,7 @@ App 上一次运行（跨月单独处理了，预测值不会自己往前走）�
 | 桥出口的文案 | `shared/jni-copy.json` 选键，译文取自 xcstrings | `Android/native/Sources/MeterBridge/JNICopy.swift`（三语表编进动态库） | `scripts/generate-shared.py` |
 | API 契约（字段上限、类别枚举、匿名页面名单） | `shared/api-contract.json` | `worker/src/contract.ts`、`TipFieldLimits.swift`、`FeedbackFieldLimits.swift`、`UsageAnalyticsScreen.swift`、`UsageFieldLimits.swift`、`UsageScreens.kt`、`UsageScreens.cs`、site 表单（补丁式） | 同上 |
 | 接入目录（教程、套餐、汇率） | `Packages/.../MeterPersistence/Catalog/catalog.json`（中文规范字段；`en` / `ja` 为可选 overlay，展示时解析，缺列回落中文） | worker、Android 桥、Windows 壳资源均为 symlink（`check_catalog_sync` 闸） | — |
+| 教程出处（只给人和 agent 对账，App 永不打开） | `docs/setup-guide-sources.json` | —（`check_setup_guide_sources`：有教程就必须有 `sourceURL`；改了 fields/steps 不刷新 `stepsFingerprint` 就红） | `python3 scripts/refresh-setup-guide-source.py <id>` |
 | 品牌图标（App 图标、favicon、Android launcher、BrandMark.astro） | `scripts/render-app-icon.py`（猫几何取自 `shared/cat.json`） | App/site/docs/Android 全部槽位 | `python3 scripts/render-app-icon.py` |
 | 系统权限用途说明 | `project.yml` 的 `INFOPLIST_KEY_NS*UsageDescription`（中文）+ `App/Resources/InfoPlist.xcstrings`（en / ja） | 系统弹窗 | — |
 | 落地页 SNS 图 | `.github/readme/hero-{zh,en,ja}.png` | `site/public/og-{locale}.png`（Astro 启动时拷贝） | 换 README 横幅后 `pnpm build` |
@@ -315,7 +316,7 @@ App 上一次运行（跨月单独处理了，预测值不会自己往前走）�
 
 这一份**不是生成物**，也不该是：`tierReason` 那种逐家写的话、控制台 URL 那种
 安全红线（SPEC 第 07 节），都得人写。能自动的是「漏了哪一处当场说出来」——
-下面标 ✅ 的由 `check_provider_wiring` 守着。
+下面标 ✅ 的由 `check_provider_wiring` / `check_setup_guide_sources` 守着。
 
 | 改哪 | 写什么 | 漏了会怎样 |
 |---|---|---|
@@ -324,6 +325,7 @@ App 上一次运行（跨月单独处理了，预测值不会自己往前走）�
 | `MeterProviders/ProviderAssembly.swift` | `liveRESTProviderIDs` **和** switch 分支 ✅ | 只写一半：那家永远不取数，界面上只是「暂无读数」，不报错 |
 | `MeterProviders/OutboundHosts.swift` | 每个 URL 的域名 ✅ | 出站白名单挡下来，错得像「这家接口坏了」 |
 | `Catalog/catalog.json` | 接入说明（三语） ✅ | 向导第二步一片空白 |
+| `docs/setup-guide-sources.json` | 写这篇教程时看的那一页 ✅ | 提交闸：缺出处，或改了步骤没刷新 fingerprint |
 | `shared/providers.json` | 品牌色 + 图标 path | 生成器红（`check_declined_providers` / 生成物 diff 闸） |
 | `MeterProviders/Fixtures/<id>.json` | 设计稿 / 演示读数 | 只影响演示种子和截图，**不是每家都要** |
 

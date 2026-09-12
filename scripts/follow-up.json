@@ -15,11 +15,11 @@
         "note": "仪表 JSON 补 comparisonItems、subscriptionCaption、staleCaption；构成/对比详情不再只靠合计两行。"
       },
       "dashboard": {
-        "date": "2026-09-10",
-        "decision": "reviewed",
-        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
-        "hash": "c1389243372328c920a7226c8b1dd2cb10506e6a15abc1165368daf8c4c85458",
-        "note": "口径胶囊上首屏；筛选预览/有数月份/自定义区间；大标题跟取景框；刷新失败页脚人话；演示/读失败横幅。"
+        "date": "2026-09-12",
+        "decision": "deferred",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "63b3170ec7fa2f22beecbb64ad065291de4d51fd9465e86485b8a78d6944b0ec",
+        "note": "订阅括号行只在算进时出现；多月日期不加合计。Android 仍写已计入/未计入。"
       },
       "developer": {
         "date": "2026-09-10",
@@ -29,11 +29,11 @@
         "note": "画廊补铺色/刷新旋转/圆环再转/猫工作室；实验室默认 live。"
       },
       "modules": {
-        "date": "2026-09-10",
-        "decision": "reviewed",
-        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
-        "hash": "c87073efe46f8e717bc2a3ecbc0d6c6e130842e0ca02db96e08626762b5a4a64",
-        "note": "特别关心画 spark；预算格子；热力淡底+高峰日；类别金额；对比按家行；构成圆环；订阅详情可点。"
+        "date": "2026-09-12",
+        "decision": "deferred",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "4f56fccd41cd8cc94445aae5aea1d9dcfd8baa96d0b4ad3c4b083ebf4dc90430",
+        "note": "同上，首屏订阅行与日期前缀。"
       },
       "services": {
         "date": "2026-09-10",
@@ -43,11 +43,11 @@
         "note": "结束 vs 清空；归档进历史服务；列表金额走本月含订阅不跟取景框；陈旧橙字；历史图横滑；确认抽屉用目录 summary。"
       },
       "settings": {
-        "date": "2026-09-10",
+        "date": "2026-09-12",
         "decision": "reviewed",
-        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
-        "hash": "345979caeb19f20ad67767fd094fd6c1c279d4d1d0633ddbc02f285e74866ba4",
-        "note": "导出先进码+有效期；导入剩余次数与锁定；信箱 secret 显示一次；清空垫底危险组。"
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "dfaf93470a6b8dfd6baf5533e304a21e10d10cabd7a6901c7207017ec56463e3",
+        "note": "外观默认暗色；打开猫猫默认关。"
       },
       "setup": {
         "date": "2026-09-10",
@@ -57,11 +57,11 @@
         "note": "开场补第 3 页小组件、顶栏 1/4、底栏满宽主按钮、第 1 页显示货币；凭据步 FillProgress 铺色、成功标题按 snapshot.kind、401/403/空读数回教程改权限、撞车横幅、第二份昵称、换钥不预填 secret、Keystore 写失败；supportsInbox 走 InboxHandoffStep（建箱/mint、任务书、投递 key 只显示一次）。"
       },
       "share": {
-        "date": "2026-09-10",
-        "decision": "reviewed",
-        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
-        "hash": "1aedee8724c303414e74ec0a51caf6c6888841e2c3438dfd22999f3467e6b95a",
-        "note": "分享卡补品牌猫和二维码（自写 QR，无第三方库）。"
+        "date": "2026-09-12",
+        "decision": "deferred",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "2f1bb5060d5222242a26cd8e8f0eae84fed3d5ea56ba6a9ea70c6ea1f4aec03b",
+        "note": "分享卡订阅行移到日期上面，括号口径。"
       },
       "shell": {
         "date": "2026-09-10",
@@ -71,7 +71,36 @@
         "note": "底栏「仪表盘」；亮屏 15 分钟保鲜；刚走完开场不弹更新说明；小组件点进仪表。"
       }
     },
-    "windows": {},
+    "windows": {
+      "dashboard": {
+        "date": "2026-09-12",
+        "decision": "deferred",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "63b3170ec7fa2f22beecbb64ad065291de4d51fd9465e86485b8a78d6944b0ec",
+        "note": "订阅括号行与日期前缀，Windows 尚未跟。"
+      },
+      "modules": {
+        "date": "2026-09-12",
+        "decision": "deferred",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "4f56fccd41cd8cc94445aae5aea1d9dcfd8baa96d0b4ad3c4b083ebf4dc90430",
+        "note": "同上。"
+      },
+      "settings": {
+        "date": "2026-09-12",
+        "decision": "reviewed",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "dfaf93470a6b8dfd6baf5533e304a21e10d10cabd7a6901c7207017ec56463e3",
+        "note": "外观默认暗色；打开猫猫默认关，说明去掉「数字和构成还在」。"
+      },
+      "share": {
+        "date": "2026-09-12",
+        "decision": "deferred",
+        "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
+        "hash": "2f1bb5060d5222242a26cd8e8f0eae84fed3d5ea56ba6a9ea70c6ea1f4aec03b",
+        "note": "同上。"
+      }
+    },
     "cli": {
       "bridge": {
         "date": "2026-09-09",

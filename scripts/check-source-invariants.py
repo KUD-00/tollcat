@@ -24,6 +24,7 @@
 from __future__ import annotations
 
 import json
+import plistlib
 import re
 import sys
 from pathlib import Path
@@ -32,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # 手写的 Swift 小词法器（抹注释和字符串）两个闸脚本共用一份：抹错一处，
 # 两个脚本会对同一份源码给出不同的答案，而它们本该是同一条判断。
+from _setup_guide_sources import collect_sync_errors as setup_guide_source_errors  # noqa: E402
 from _swift_scan import (  # noqa: E402
     gate_text,
     mask_comments_and_strings,
@@ -462,6 +464,15 @@ def check_persistence_contract(root: Path, errors: list[str]) -> None:
         for token in ("import SwiftUI", "import SwiftData"):
             if token in text:
                 errors.append(f"MeterProviders/{path.name} {token}")
+
+
+def check_setup_guide_sources(root: Path, errors: list[str]) -> None:
+    """教程正文在 catalog.json，出处 URL 在 docs/setup-guide-sources.json。
+
+    出处不进 App、不进 Worker。这份文件存在只为改教程时能对上「当时看的哪一页」。
+    步骤变了 fingerprint 对不上，或缺一家，都红。
+    """
+    errors.extend(setup_guide_source_errors(root))
 
 
 def check_catalog_copyables(root: Path, errors: list[str]) -> None:
@@ -1647,6 +1658,70 @@ def check_project_yml_linkage(root: Path, errors: list[str]) -> None:
     check_xcode_specs(root, errors)
 
 
+def check_mac_app_store_target(root: Path, mac_text: str, errors: list[str]) -> None:
+    """商店版那个 target 不准沾 Sparkle，Info.plist 也不准留 SU* 键。
+
+    Sparkle 框架里带四个自己的可执行文件（Autoupdate、Updater.app、Downloader.xpc、
+    Installer.xpc），它们没有 app-sandbox entitlement。MAS 要求 bundle 里每一个可
+    执行文件都带沙盒，所以只要商店版链上 Sparkle，提交就会被整包退回，报
+    「App sandbox not enabled」并逐个点名那四个文件——而这要等上传到 App Store
+    Connect 之后才会知道，本地 archive 一路绿灯。2026-09-12 就这么栽过一次。
+
+    同理，那两条 mach-lookup 临时例外是给 Sparkle 的 XPC 开的：商店版留着它们，
+    审核必问，而且不链 Sparkle 时它们本来就没有用处。
+    """
+    block = re.search(
+        r"^  TollCatMacAppStore:\n(.*?)(?=^  [A-Za-z]|^schemes:|\Z)", mac_text, re.M | re.S
+    )
+    if block is None:
+        errors.append("project-mac.yml 读不出 TollCatMacAppStore：Mac App Store 版靠它")
+        return
+    # 整行注释先去掉：这一段的注释里就写着「这里没有 mach-lookup」，
+    # 照字面扫会把说明当成违规。缩进后的 `#` 开头行才是注释，值里没有 `#`。
+    body = "\n".join(
+        line for line in block.group(1).splitlines() if not line.lstrip().startswith("#")
+    )
+    if re.search(r"^\s*- package: Sparkle\s*$", body, re.M):
+        errors.append(
+            "TollCatMacAppStore 依赖了 Sparkle。商店版不能带第三方更新器："
+            "Sparkle 的四个辅助可执行文件没有沙盒，提交会被「App sandbox not enabled」退回。"
+        )
+    if "mach-lookup" in body:
+        errors.append(
+            "TollCatMacAppStore 的 entitlements 里有 mach-lookup 临时例外。"
+            "那是给 Sparkle 的 XPC 开的，商店版不需要，留着审核必问。"
+        )
+    if "INFOPLIST_FILE: Mac/AppStore-Info.plist" not in body:
+        errors.append(
+            "TollCatMacAppStore 没用 Mac/AppStore-Info.plist。"
+            "直发版那份 Supporting-Info.plist 带 SUFeedURL / SUPublicEDKey，商店版不能带。"
+        )
+
+    direct = root / "Mac/Supporting-Info.plist"
+    store = root / "Mac/AppStore-Info.plist"
+    if not store.is_file():
+        errors.append("找不到 Mac/AppStore-Info.plist")
+        return
+    a = plistlib.loads(direct.read_bytes())
+    b = plistlib.loads(store.read_bytes())
+    leaked = sorted(k for k in b if k.startswith("SU"))
+    if leaked:
+        errors.append(f"Mac/AppStore-Info.plist 里还有 Sparkle 的键：{'、'.join(leaked)}")
+    # 两份只准差 Sparkle 那三个键；其余任何一处漂移都说明有人只改了一边。
+    only_direct = sorted(set(a) - set(b))
+    if only_direct != ["SUEnableInstallerLauncherService", "SUFeedURL", "SUPublicEDKey"]:
+        errors.append(
+            "Mac 的两份 Info.plist 差的不只是 Sparkle 那三个键："
+            f"直发版独有 {only_direct}。两份要一起改。"
+        )
+    only_store = sorted(set(b) - set(a))
+    if only_store:
+        errors.append(f"Mac/AppStore-Info.plist 多了直发版没有的键：{only_store}")
+    drifted = sorted(k for k in set(a) & set(b) if a[k] != b[k])
+    if drifted:
+        errors.append(f"Mac 的两份 Info.plist 这几个键的值不一致：{'、'.join(drifted)}")
+
+
 def check_xcode_specs(root: Path, errors: list[str]) -> None:
     """两份 spec 的分工：第三方包只准出现在 Mac 那一份。
 
@@ -1685,6 +1760,8 @@ def check_xcode_specs(root: Path, errors: list[str]) -> None:
         )
     if "include:" not in mac_text or "project-common.yml" not in mac_text:
         errors.append("project-mac.yml 要 include project-common.yml，团队 ID 和版本号只有一处")
+
+    check_mac_app_store_target(root, mac_text, errors)
 
     # 两份工程引用同一个本地包，分别打开会互相抢（后开的报 Missing package product）。
     # workspace 是唯一能让它们同时开着的方式，列漏一个就等于没有。
@@ -2206,6 +2283,7 @@ def main() -> int:
     check_ledger_read_not_swallowed(root, errors)
     check_persistence_contract(root, errors)
     check_catalog_sync(root, errors)
+    check_setup_guide_sources(root, errors)
     check_catalog_copyables(root, errors)
     check_declined_providers(root, errors)
     check_provider_wiring(root, errors)

@@ -10942,6 +10942,708 @@
           }
         }
       }
+    },
+    "Orange Developer 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange Developer console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange Developer コンソール"
+          }
+        }
+      }
+    },
+    "mittwald mStudio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald mStudio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald mStudio"
+          }
+        }
+      }
+    },
+    "Zoom App Marketplace" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom App Marketplace"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom App Marketplace"
+          }
+        }
+      }
+    },
+    "CUDO Compute 控制台与 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute console and API keys"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute コンソールと API Key"
+          }
+        }
+      }
+    },
+    "DataPacket 客户面板与 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket client panel and API keys"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket クライアントパネルと API Key"
+          }
+        }
+      }
+    },
+    "i3D.net API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net API Keys ページ"
+          }
+        }
+      }
+    },
+    "Leaseweb API Key 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leaseweb API Key docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leaseweb API Key ドキュメント"
+          }
+        }
+      }
+    },
+    "Magalu Cloud API Key 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magalu Cloud API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magalu Cloud API Key ページ"
+          }
+        }
+      }
+    },
+    "phoenixNAP BMC 凭据文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC credentials docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC 認証情報ドキュメント"
+          }
+        }
+      }
+    },
+    "Prodigi 控制台与 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prodigi dashboard and API key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prodigi ダッシュボードと API Key"
+          }
+        }
+      }
+    },
+    "Shipwell 控制台与 API Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shipwell dashboard and API token"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shipwell ダッシュボードと API Token"
+          }
+        }
+      }
+    },
+    "MySendingBox API 密钥页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MySendingBox API keys"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MySendingBox API キーページ"
+          }
+        }
+      }
+    },
+    "Openprovider 启用 API 说明" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Openprovider API access guide"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Openprovider API 有効化の案内"
+          }
+        }
+      }
+    },
+    "SurrealDB 账户门户" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SurrealDB account portal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SurrealDB アカウントポータル"
+          }
+        }
+      }
+    },
+    "Armada Delivery 商家控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Armada Delivery business app"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Armada Delivery ビジネスアプリ"
+          }
+        }
+      }
+    },
+    "Mixpeek Studio 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixpeek Studio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixpeek Studio"
+          }
+        }
+      }
+    },
+    "Parasail API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parasail API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parasail API Keys ページ"
+          }
+        }
+      }
+    },
+    "Seeweb Ermes 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seeweb Ermes control panel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seeweb Ermes コントロールパネル"
+          }
+        }
+      }
+    },
+    "ConoHa 签发 API 用户文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ConoHa API user docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ConoHa API ユーザーのドキュメント"
+          }
+        }
+      }
+    },
+    "EasyPost API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EasyPost API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EasyPost API Keys ページ"
+          }
+        }
+      }
+    },
+    "GleSYS Cloud 签发 API key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GleSYS Cloud API key issue page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GleSYS Cloud の API key 発行"
+          }
+        }
+      }
+    },
+    "Shippo API Portal 签发 token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shippo API Portal token issue page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shippo API Portal の token 発行"
+          }
+        }
+      }
+    },
+    "Dilmune Portal 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilmune Portal API Key page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilmune Portal の API Key 発行"
+          }
+        }
+      }
+    },
+    "DNSimple Access Token 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Access Token docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Access Token ドキュメント"
+          }
+        }
+      }
+    },
+    "Hubble 签发 API Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hubble API Token page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hubble の API Token 発行"
+          }
+        }
+      }
+    },
+    "IDCF Cloud 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCF Cloud API Key page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCF Cloud の API Key 発行"
+          }
+        }
+      }
+    },
+    "iwinv 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv コンソール"
+          }
+        }
+      }
+    },
+    "ShipStation API 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API key page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API の API Key 発行"
+          }
+        }
+      }
+    },
+    "ShipStation API 认证文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API auth docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API の認証ドキュメント"
+          }
+        }
+      }
+    },
+    "thanks.io 签发 Personal Access Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io Personal Access Token page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io の Personal Access Token 発行"
+          }
+        }
+      }
+    },
+    "Fiskil 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiskil console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiskil コンソール"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiskil 控制台"
+          }
+        }
+      }
+    },
+    "Nomos 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nomos dashboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nomos ダッシュボード"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nomos 控制台"
+          }
+        }
+      }
+    },
+    "Active24 API Token 管理" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active24 API token management"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active24 の API Token 管理"
+          }
+        }
+      }
+    },
+    "Gcore API tokens 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gcore API tokens docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gcore API tokens ドキュメント"
+          }
+        }
+      }
+    },
+    "IDCloudHost 控制台签发 API Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCloudHost console API token"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCloudHost コンソールの API Token 発行"
+          }
+        }
+      }
+    },
+    "Pleo 控制台签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pleo console API key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pleo コンソールの API Key 発行"
+          }
+        }
+      }
+    },
+    "Scalingo 账户设置文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scalingo account settings docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scalingo アカウント設定ドキュメント"
+          }
+        }
+      }
+    },
+    "Websupport API 密钥说明" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websupport API key guide"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websupport API キーの案内"
+          }
+        }
+      }
+    },
+    "inference.sh 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh API key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh の API Key 発行"
+          }
+        }
+      }
+    },
+    "Sendcloud API 集成页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendcloud API integrations"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendcloud API 連携ページ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendcloud API 集成页"
+          }
+        }
+      }
+    },
+    "Sevalla API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevalla API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevalla API Keys ページ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevalla API Keys 页"
+          }
+        }
+      }
+    },
+    "金山云 IAM AccessKey" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kingsoft Cloud IAM AccessKey"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kingsoft Cloud IAM AccessKey"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金山云 IAM AccessKey"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

@@ -304,7 +304,8 @@ public enum DashboardContentsBuilder {
             connections: connections,
             now: asOf,
             calendar: calendar,
-            presentation: presentation
+            presentation: presentation,
+            window: result.window
         )
         // 热力图自己翻月份，不跟 monthsBack 走；账号排除仍然生效。
         contents.heatmapContent = HeatmapBuilder.make(
@@ -321,7 +322,8 @@ public enum DashboardContentsBuilder {
             comparison: contents.comparisonContent,
             composition: contents.compositionContent,
             connections: connections,
-            now: now
+            now: now,
+            showsStalest: filter.showsPresentTenseModules
         )
         // 预算是**月度**的。拿一个月的额度去比三个月的花费，进度条必然爆表，
         // 而那不是超支，是量错了尺子。

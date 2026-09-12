@@ -58,6 +58,7 @@ internal sealed class TrayPanelWindow : Window
         stack.Children.Add(refresh);
         stack.Children.Add(open);
         stack.Children.Add(quit);
+        AppearanceTheme.ApplyTo(stack);
         Content = stack;
     }
 }

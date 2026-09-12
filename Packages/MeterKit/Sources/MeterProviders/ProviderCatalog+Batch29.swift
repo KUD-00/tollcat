@@ -11,7 +11,7 @@ extension ProviderCatalog {
         tierReason: "欧盟表单 SaaS，billing invoices USD cents 清晰但份额远小于 Typeform。",
         colorKey: "formspring",
         billingURL: URL(string: "https://formspring.io/")!,
-        credentialSetupURL: URL(string: "https://formspring.io/docs/api/reference/billing")!,
+        credentialSetupURL: URL(string: "https://formspring.io/tokens")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 24,

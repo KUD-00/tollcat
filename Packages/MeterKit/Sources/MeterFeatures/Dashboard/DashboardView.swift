@@ -348,7 +348,12 @@ public struct DashboardView: View {
                     DashboardModuleFactory.view(id: id, contents: model)
                 }
             } header: {
-                Text(section.isAttention ? L("需要注意") : (section.ids.first?.title ?? L("需要注意")))
+                Text(
+                    section.isAttention
+                        ? String(localized: L("需要注意"))
+                        : (section.ids.first.map { model.moduleTitle(for: $0) }
+                            ?? String(localized: L("需要注意")))
+                )
             } footer: {
                 if isLast, showsEnvironmentFooter {
                     environmentFooter

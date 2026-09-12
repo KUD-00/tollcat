@@ -2,7 +2,7 @@ import SwiftUI
 import MeterCore
 import MeterDesign
 
-/// 「本月之最」：三行，各指一家，点进详情。
+/// 「之最」：三行，各指一家，点进详情。节标题在外面，跟着期间走。
 public struct SuperlativesModuleView: View {
     public let content: SuperlativesModuleContent
 

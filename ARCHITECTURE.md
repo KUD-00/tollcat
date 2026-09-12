@@ -432,6 +432,7 @@ commit gate red.
 | Copy exported over the bridge | `shared/jni-copy.json` picks the keys; translations come from xcstrings | `Android/native/Sources/MeterBridge/JNICopy.swift` (the trilingual table compiled into the dynamic library) | `scripts/generate-shared.py` |
 | API contract (field limits, category enums, anonymous page allowlist) | `shared/api-contract.json` | `worker/src/contract.ts`, `TipFieldLimits.swift`, `FeedbackFieldLimits.swift`, `UsageAnalyticsScreen.swift`, `UsageFieldLimits.swift`, `UsageScreens.kt`, `UsageScreens.cs`, site forms (patch-style) | same as above |
 | Onboarding catalog (tutorials, plans, exchange rates) | `Packages/.../MeterPersistence/Catalog/catalog.json` (Chinese is the canonical field; `en` / `ja` are optional overlays, resolved at display time, falling back to Chinese) | worker, Android bridge, and Windows shell resources are all symlinks (the `check_catalog_sync` gate) | — |
+| Tutorial source citations (audit only; the app never opens these) | `docs/setup-guide-sources.json` | — (`check_setup_guide_sources`: every catalog guide with steps has a `sourceURL`; changing fields/steps without refreshing `stepsFingerprint` fails the gate) | `python3 scripts/refresh-setup-guide-source.py <id>` |
 | Brand icon (app icon, favicon, Android launcher, BrandMark.astro) | `scripts/render-app-icon.py` (cat geometry from `shared/cat.json`) | Every slot across App/site/docs/Android | `python3 scripts/render-app-icon.py` |
 | System permission usage strings | `INFOPLIST_KEY_NS*UsageDescription` in `project.yml` (Chinese) + `App/Resources/InfoPlist.xcstrings` (en / ja) | System permission dialogs | — |
 | Landing-page SNS images | `.github/readme/hero-{zh,en,ja}.png` | `site/public/og-{locale}.png` (copied at Astro startup) | after swapping a README hero, `pnpm build` |
@@ -449,7 +450,7 @@ commit gate red.
 This list is **not generated**, and shouldn't be: per-provider prose like `tierReason`
 and console URLs (a SPEC §07 security line) have to be written by hand. What *can* be
 automated is telling you which spot you forgot — the ✅ rows are enforced by
-`check_provider_wiring`.
+`check_provider_wiring` / `check_setup_guide_sources`.
 
 | File | What goes in | What forgetting it looks like |
 |---|---|---|
@@ -458,6 +459,7 @@ automated is telling you which spot you forgot — the ✅ rows are enforced by
 | `MeterProviders/ProviderAssembly.swift` | `liveRESTProviderIDs` **and** the switch case ✅ | half of it: that provider never fetches — the row just says "no readings", silently |
 | `MeterProviders/OutboundHosts.swift` | every URL's host ✅ | the outbound allowlist blocks it, and the error reads like "their API is down" |
 | `Catalog/catalog.json` | the setup guide, all three languages ✅ | step two of the wizard is blank |
+| `docs/setup-guide-sources.json` | the page the tutorial was written from ✅ | commit gate: missing source, or steps changed without refreshing the fingerprint |
 | `shared/providers.json` | brand colours + icon path | generator gate goes red |
 | `MeterProviders/Fixtures/<id>.json` | design / demo readings | affects only the demo seed and screenshots — **not required for every provider** |
 

@@ -15,7 +15,7 @@ struct DashboardSidebarCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: MeterSpacing.xs) {
-            Text(id.title)
+            Text(model.moduleTitle(for: id))
                 .font(MeterFont.caption)
                 .foregroundStyle(Color.meterSecondaryLabel)
             DashboardModuleFactory.view(id: id, contents: model)

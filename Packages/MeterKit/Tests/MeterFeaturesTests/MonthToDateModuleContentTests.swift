@@ -52,7 +52,7 @@ struct MonthToDateModuleContentTests {
         #expect(content.estimateCaption == nil)
     }
 
-    @Test("算进订阅时大数字是合计，订阅那行说「已计入」，预计月底同口径")
+    @Test("算进订阅时大数字是合计，日期上面写括号里的订阅，预计月底同口径")
     func heroFollowsScopeAndSubscriptionLineSaysIncluded() {
         let content = MonthToDateModuleContent.make(
             from: MonthToDate(
@@ -75,7 +75,8 @@ struct MonthToDateModuleContentTests {
         #expect(content.amountText == "$67.20")
         // 订阅在大数字里了，不能再有「+」——那会被读成「另加」。
         #expect(content.subscriptionCaption?.contains("+") != true)
-        #expect(content.subscriptionCaption?.contains("已计入") == true)
+        #expect(content.subscriptionCaption?.contains("已计入") != true)
+        #expect(content.subscriptionCaption?.hasPrefix("（") == true)
         #expect(content.subscriptionCaption?.contains("20") == true)
         #expect(content.subscriptionAccountID == AccountID.fixture(for: .openai))
         #expect(content.projectedCaption?.contains("107.70") == true)
@@ -83,8 +84,8 @@ struct MonthToDateModuleContentTests {
         #expect(content.showsSubscriptionScope)
     }
 
-    @Test("筛掉订阅时那一行改成未计入，金额还在")
-    func excludedSubscriptionStaysVisible() {
+    @Test("筛掉订阅时那一行不出现，切换还在")
+    func excludedSubscriptionLineDisappears() {
         let content = MonthToDateModuleContent.make(
             from: MonthToDate(
                 totalUSD: Money(roundedUSD: 47.20),
@@ -105,8 +106,7 @@ struct MonthToDateModuleContentTests {
         )
 
         #expect(content.amountText == "$47.20")
-        #expect(content.subscriptionCaption?.contains("未计入") == true)
-        #expect(content.subscriptionCaption?.contains("20") == true)
+        #expect(content.subscriptionCaption == nil)
         #expect(!content.includesSubscriptions)
         // 关着也要能切回来：有订阅就摆切换。
         #expect(content.showsSubscriptionScope)
@@ -185,5 +185,30 @@ struct MonthToDateModuleContentTests {
         let period = try #require(content.periodCaption)
         #expect(period.contains("·"))
         #expect(content.fullProjectedCaption == period)
+    }
+
+    @Test("多月区间的日期前面不加「合计」")
+    func multiMonthPeriodHasNoTotalPrefix() throws {
+        let content = MonthToDateModuleContent.make(
+            from: MonthToDate(
+                totalUSD: Money(roundedUSD: 47.20),
+                projectedMonthEndUSD: Money(roundedUSD: 47.20),
+                confidence: .exact,
+                estimatedAccounts: [],
+                facts: [],
+                filter: DashboardFilter(period: .months(back: 0, count: 3)),
+                window: MonthWindow(newestBack: 0, oldestBack: 2),
+                variableUSD: Money(roundedUSD: 47.20),
+                projectedVariableUSD: Money(roundedUSD: 47.20)
+            ),
+            estimatedNames: [],
+            staleCaption: nil,
+            now: MeterClock.design.now,
+            calendar: MeterClock.design.calendar
+        )
+
+        let period = try #require(content.periodCaption)
+        #expect(!period.hasPrefix("合计"))
+        #expect(!period.contains("合计 ·"))
     }
 }

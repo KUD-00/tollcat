@@ -6,7 +6,7 @@ private struct MoneyPresentationKey: EnvironmentKey {
 }
 
 public extension EnvironmentValues {
-    public var moneyPresentation: MoneyPresentation {
+    var moneyPresentation: MoneyPresentation {
         get { self[MoneyPresentationKey.self] }
         set { self[MoneyPresentationKey.self] = newValue }
     }

@@ -15,10 +15,10 @@ public final class AppPreferencesRecord {
     public var reminderMinute: Int = 0
     public var reminderWeekday: Int = 2
     public var reminderDayOfMonth: Int = 1
-    public var appearanceRaw: String = AppearancePreference.system.rawValue
+    public var appearanceRaw: String = AppearancePreference.default.rawValue
     public var hasCompletedOnboarding: Bool = false
     public var providerHistoryRangeRaw: String = ProviderHistoryRange.default.rawValue
-    public var hidesCat: Bool = false
+    public var hidesCat: Bool = true
     /// 默认关——保持「手动刷新」的默认。
     public var refreshesUsageOnActivate: Bool = false
     public var displayCurrencyRaw: String = ExchangeRates.usdCode
@@ -153,7 +153,7 @@ public final class AppPreferencesRecord {
                 weekday: reminderWeekday,
                 dayOfMonth: reminderDayOfMonth
             ),
-            appearance: AppearancePreference(rawValue: appearanceRaw) ?? .system,
+            appearance: AppearancePreference(rawValue: appearanceRaw) ?? .default,
             hasCompletedOnboarding: hasCompletedOnboarding,
             providerHistoryRange: ProviderHistoryRange(rawValue: providerHistoryRangeRaw) ?? .default,
             hidesCat: hidesCat,

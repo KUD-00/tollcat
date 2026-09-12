@@ -15,9 +15,12 @@
 # 的 PRODUCT_BUNDLE_IDENTIFIER 必须和 iOS 那份一模一样（通用购买的硬条件），
 # widget 的也一样。改这里之前先想清楚这件事。
 #
-# 真要上 Mac App Store：商店版不能带 Sparkle（更新由系统管，带第三方更新器会被拒），
-# 那时在这份 spec 里另开一个不依赖 Sparkle 的 target。界面不用改——「检查更新…」
-# 靠注入的 `AppUpdateChecker`，不挂它入口自动消失（见 AboutView / TollCatCommands）。
+# 这份 spec 里有两个 Mac 壳，同一份源码、同一个 bundle id，走两条发布线：
+#   TollCatMac          直发版，链 Sparkle，Developer ID 签名 + 公证（release.yml 的 mac job）
+#   TollCatMacAppStore  商店版，不链 Sparkle，Apple Distribution 签名（mac-appstore job）
+# 商店不许带第三方更新器，细节见 TollCatMacAppStore 那一段的注释。
+# 界面不用改——「检查更新…」靠注入的 `AppUpdateChecker`，不挂它入口自动消失
+# （见 AboutView / TollCatCommands）。
 
 name: TollCatMac
 
@@ -96,6 +99,69 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         INFOPLIST_FILE: Mac/Supporting-Info.plist
 
+  # ─────────────────────────────────────────────────────────────
+  # Mac App Store 版。和 TollCatMac 同一份源码、同一个 bundle id，只差三处：
+  # 不链 Sparkle、entitlements 没有那两条 mach-lookup 例外、Info.plist 没有 SU* 键。
+  #
+  # 为什么必须另开一个 target 而不是复用 TollCatMac：Sparkle 框架里带四个自己的
+  # 可执行文件（Autoupdate、Updater.app、Downloader.xpc、Installer.xpc），它们没有
+  # app-sandbox entitlement。MAS 要求 bundle 里**每一个**可执行文件都带沙盒，所以
+  # 拿 TollCatMac 归的档提交会被整包退回：
+  #   "App sandbox not enabled. The following executables must include the
+  #    com.apple.security.app-sandbox entitlement..."（2026-09-12 实测）
+  # 这不是补 entitlement 能修的——商店本来就不许带第三方更新器。
+  #
+  # 界面一行都不用改：MacUpdater.swift 的 `#if canImport(Sparkle)` 在这里为假，
+  # checker 退成 nil，「检查更新…」入口自己消失（见 AboutView / TollCatCommands）。
+  TollCatMacAppStore:
+    type: application
+    platform: macOS
+    sources:
+      - path: Mac
+      - path: App/AppEnvironment.swift
+      - path: App/PersistenceBootstrap.swift
+      - path: App/StampedBillingProvider.swift
+      - path: TollCat.storekit
+        buildPhase: resources
+        type: file
+      - path: App/Resources/Assets.xcassets
+      - path: App/Resources/Localizable.xcstrings
+      - path: App/Resources/PrivacyInfo.xcprivacy
+    entitlements:
+      path: Mac/TollCatMacAppStore.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.files.user-selected.read-write: true
+        com.apple.security.application-groups:
+          - $(TeamIdentifierPrefix)com.zhechengqi.tollcat
+        # 和直发版同一个 group / access group：容器路径一样，用户从直发版换装
+        # 商店版，数据和钥匙串里的凭据都还在。
+        keychain-access-groups:
+          - $(AppIdentifierPrefix)com.zhechengqi.tollcat
+        # 这里**没有** com.apple.security.temporary-exception.mach-lookup.global-name。
+        # 那两条是给 Sparkle 的 XPC 服务开的，商店版不链 Sparkle 就不需要；
+        # temporary-exception 这一类 entitlement 在 MAS 审核里必被问，留着是自曝。
+    dependencies:
+      - package: MeterKit
+        products: [MeterFeatures, MeterPersistence, MeterProviders, MeterDesign, MeterCore, MeterTips, MeterInbox, MeterFeedback, MeterUsage]
+      - target: TollCatWidgetMac
+      - sdk: StoreKit.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat
+        PRODUCT_NAME: TollCat
+        GENERATE_INFOPLIST_FILE: YES
+        COMBINE_HIDPI_IMAGES: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_CFBundleDisplayName: TollCat
+        INFOPLIST_KEY_CFBundleLocalizations: "en ja zh-Hans"
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.developer-tools
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        INFOPLIST_FILE: Mac/AppStore-Info.plist
+
   TollCatWidgetMac:
     type: app-extension
     platform: macOS
@@ -139,6 +205,15 @@ schemes:
     build:
       targets:
         TollCatMac: all
+        TollCatWidgetMac: all
+    run:
+      config: Debug
+      storeKitConfiguration: TollCat.storekit
+
+  TollCatMacAppStore:
+    build:
+      targets:
+        TollCatMacAppStore: all
         TollCatWidgetMac: all
     run:
       config: Debug

@@ -28,12 +28,15 @@ extension ProviderCatalog {
         tierReason: "GMO 国际云/VPS 品牌，日本与亚太主机市场的挑战者。",
         colorKey: "zcomcloud",
         billingURL: URL(string: "https://cloud.z.com/")!,
-        credentialSetupURL: URL(string: "https://cloud.z.com/th/en/cloud/docs/account-billing-invoices-list.html")!,
+        credentialSetupURL: URL(string: "https://cloud.z.com/jp/guide/cp-create_api_user/")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 12,
         accessStatus: .pendingVerification,
-        searchKeywords: ["z.com", "zcom", "gmo", "billing-invoices", "bill_plas_tax", "tyo1"]
+        searchKeywords: ["z.com", "zcom", "gmo", "billing-invoices", "bill_plas_tax", "tyo1"],
+        guideURLs: [
+            "findTenant": URL(string: "https://cloud.z.com/jp/guide/cp-get_api_info/")!,
+        ]
     )
 
     public static let idcf = ProviderDescriptor(
@@ -45,7 +48,7 @@ extension ProviderCatalog {
         tierReason: "日本主权云/IDC 的区域选手，面向国内企业，远小于 Hyperscaler。",
         colorKey: "idcf",
         billingURL: URL(string: "https://www.idcf.jp/")!,
-        credentialSetupURL: URL(string: "https://www.idcf.jp/help/cloud/docs/")!,
+        credentialSetupURL: URL(string: "https://console.idcfcloud.com/user/apikey")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 12,
@@ -62,7 +65,7 @@ extension ProviderCatalog {
         tierReason: "欧洲域名注册/AutoDNS 细分里的德国选手。",
         colorKey: "internetx",
         billingURL: URL(string: "https://www.internetx.com/")!,
-        credentialSetupURL: URL(string: "https://help.internetx.com/display/APIXMLEN/Invoice+list")!,
+        credentialSetupURL: URL(string: "https://help.internetx.com/display/APIXMLEN/Authentication")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 12,

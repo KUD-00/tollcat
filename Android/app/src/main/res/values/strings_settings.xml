@@ -21,8 +21,8 @@
     <string name="settings_currency_label">%1$s (%2$s)</string>
     <string name="settings_refresh_title">每次进入 App 的时候自动刷新用量</string>
     <string name="settings_refresh_note">花钱才能刷新的服务不会跟着刷。</string>
-    <string name="settings_hide_cat">关闭猫猫</string>
-    <string name="settings_hide_cat_note">仪表上不再出现猫。数字和构成还在。</string>
+    <string name="settings_hide_cat">打开猫猫</string>
+    <string name="settings_hide_cat_note">仪表上不再出现猫。</string>
     <string name="settings_refresh_hint">打开后，冷启动和从后台回到前台会各走一次全局刷新，规则和点仪表刷新按钮相同。花钱才能刷新的服务仍然不进。</string>
     <string name="settings_usage_guides">使用指南</string>
     <string name="settings_usage_guides_hint">四种钱，以及用的时候容易看错的点</string>

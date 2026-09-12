@@ -12,7 +12,7 @@ import MeterDesign
 ///
 /// 三种问法在这里是三种东西，不该混在一排里：
 /// - **哪个月**——本月、八月、七月……（第一行）
-/// - **多长一段**——近 3 个月、今年至今、全期间（第二行）
+/// - **多长一段**——近 3 个月、今年至今、有数据以来（第二行）
 /// - **哪一段**——五月到七月（折叠起来的自定义）
 ///
 /// 前两行语义不重叠，所以选中态永远只落在其中一行，不会出现「本月」和
@@ -113,7 +113,7 @@ struct DashboardFilterSheet: View {
         }
     }
 
-    /// 跨月。近 N 个月 / 今年至今 / 全期间。
+    /// 跨月。近 N 个月 / 今年至今 / 有数据以来。
     private var spanRow: some View {
         MeterSelectionChipRow {
             ForEach(model.spanOptions) { option in

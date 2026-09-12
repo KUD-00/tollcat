@@ -185,7 +185,7 @@ public struct LedgerCache: Sendable {
                 ("上月", DashboardFilter(monthsBack: 1)),
                 ("近 3 个月", DashboardFilter(period: .months(back: 0, count: 3))),
                 ("今年至今", DashboardFilter(period: .yearToDate)),
-                ("全期间", DashboardFilter(period: .allTime)),
+                ("有数据以来", DashboardFilter(period: .allTime)),
                 ("仅按量", DashboardFilter(includesSubscriptions: false)),
                 ("排一家", DashboardFilter(excludedAccounts: excludedAccounts)),
             ]

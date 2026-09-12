@@ -23,8 +23,8 @@
     <string name="settings_currency_label">%1$s (%2$s)</string>
     <string name="settings_refresh_title">Refresh usage every time you open the app</string>
     <string name="settings_refresh_note">Services that cost money to refresh are not included.</string>
-    <string name="settings_hide_cat">Hide the cat</string>
-    <string name="settings_hide_cat_note">The cat leaves the dashboard. Totals and the breakdown stay.</string>
+    <string name="settings_hide_cat">Show the cat</string>
+    <string name="settings_hide_cat_note">The cat leaves the dashboard.</string>
     <string name="settings_refresh_hint">When this is on, a cold start and returning from the background each run a global refresh, same rules as the dashboard refresh button. Services that cost money to refresh stay out.</string>
     <string name="settings_usage_guides">Usage Guide</string>
     <string name="settings_usage_guides_hint">The four kinds of money, and easy-to-misread details</string>

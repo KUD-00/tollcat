@@ -84,7 +84,7 @@ struct ProviderCatalogTests {
             .i3dnet, .datapacket, .cudocompute, .shipwell, .ocamba,
             .inferencesh, .voltview,
             .clevercloud, .utilityapi, .dnsimple, .latitudesh,
-            .realtimeregister, .pdfshift, .alchemy, .friendli, .mixpeek, .typebot, .botpress, .vpsnet, .seeweb, .parasail,
+            .realtimeregister, .pdfshift, .alchemy, .friendli, .mixpeek, .typebot, .vpsnet, .seeweb, .parasail,
             .bring, .armada, .mollie,
             .openprovider, .stackit, .conoha,
             .zcomcloud, .idcf, .internetx, .melbicom,
@@ -99,5 +99,22 @@ struct ProviderCatalogTests {
             #expect(ProviderCatalog.descriptor(id: id)?.isOffered == true)
             #expect(ProviderCatalog.descriptor(id: id)?.accessStatus == .pendingVerification)
         }
+    }
+
+    @Test("Stripe / Botpress / Neo4j Aura 已对过真账")
+    func stripeBotpressNeo4jAreAvailable() {
+        for id: ProviderID in [.stripe, .botpress, .neo4j] {
+            #expect(ProviderAssembly.liveRESTProviderIDs.contains(id))
+            #expect(ProviderCatalog.descriptor(id: id)?.isOffered == true)
+            #expect(ProviderCatalog.descriptor(id: id)?.accessStatus == .available)
+        }
+    }
+
+    @Test("DigitalOcean 已对过真账，仍是用量后付费")
+    func digitaloceanIsAvailableUsage() {
+        #expect(ProviderAssembly.liveRESTProviderIDs.contains(.digitalocean))
+        #expect(ProviderCatalog.digitalocean.isOffered)
+        #expect(ProviderCatalog.digitalocean.accessStatus == .available)
+        #expect(ProviderCatalog.digitalocean.kind == .usage)
     }
 }

@@ -32,7 +32,7 @@ public final class AppShellPreferences {
     public private(set) var seenUsageGuideIDs: Set<String>
     /// 更新说明抽屉「看到哪一版」。空串 = 还没记过（首装）。只前进。
     public private(set) var lastSeenWhatsNewVersion: String
-    /// 设置「关闭猫猫」或启动参数 `-hide-cat`。只藏猫，数字还在。
+    /// 设置「打开猫猫」关着，或启动参数 `-hide-cat`。只藏猫。
     public private(set) var hidesCat: Bool
     /// Mac 菜单栏露什么。默认只露猫；金额点开才看得到。iPhone / iPad 不读它。
     public private(set) var menuBarStyle: MenuBarStyle

@@ -16,10 +16,10 @@ struct ListRowNote: View {
 
 #Preview("Light") {
     MeterGroupedList {
-        Toggle(isOn: .constant(true)) {
+        Toggle(isOn: .constant(false)) {
             VStack(alignment: .leading, spacing: MeterSpacing.xxs) {
-                Text(L("关闭猫猫"))
-                ListRowNote(text: L("仪表上不再出现猫。数字和构成还在。"))
+                Text(L("打开猫猫"))
+                ListRowNote(text: L("仪表上不再出现猫。"))
             }
         }
     }
@@ -28,10 +28,10 @@ struct ListRowNote: View {
 
 #Preview("Dark") {
     MeterGroupedList {
-        Toggle(isOn: .constant(true)) {
+        Toggle(isOn: .constant(false)) {
             VStack(alignment: .leading, spacing: MeterSpacing.xxs) {
-                Text(L("关闭猫猫"))
-                ListRowNote(text: L("仪表上不再出现猫。数字和构成还在。"))
+                Text(L("打开猫猫"))
+                ListRowNote(text: L("仪表上不再出现猫。"))
             }
         }
     }

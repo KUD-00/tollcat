@@ -73,7 +73,7 @@ public final class DashboardModel {
         monthToDate == nil
     }
 
-    /// 取景框解析出来的整月窗口。「全期间」有多长要看手上最老的那笔数据。
+    /// 取景框解析出来的整月窗口。「有数据以来」有多长要看手上最老的那笔数据。
     ///
     /// 算好的那一份挂在 `monthToDate.window` 上；这里是给**还没算**的地方用的
     /// （页面标题、工具栏无障碍值、筛选面板的草稿预览）。两条路解析出的是同一个
@@ -81,6 +81,19 @@ public final class DashboardModel {
     /// 这一处实现。
     var filterWindow: MonthWindow {
         window(for: filter)
+    }
+
+    /// 仪表节头 / 宽壳卡小标题。绝大多数等于模块名；「之最」跟着取景框改。
+    func moduleTitle(for id: DashboardModuleID) -> String {
+        if id == .superlatives {
+            return DashboardFilterSummary.superlativesTitle(
+                period: filter.period,
+                window: filterWindow,
+                asOf: filter.anchor(now: clock.now, calendar: clock.calendar),
+                calendar: clock.calendar
+            )
+        }
+        return String(localized: id.title)
     }
 
     func window(for filter: DashboardFilter) -> MonthWindow {

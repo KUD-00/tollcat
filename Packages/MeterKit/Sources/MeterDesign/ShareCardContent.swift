@@ -15,7 +15,7 @@ public struct ShareCardContent: Hashable, Sendable {
     public var totalText: String
     /// 「预计月底 $94 · 8/1–8/17」。没有就不画这一行。
     public var projectionText: String?
-    /// 「本月订阅 $4 · 已计入」。没有就不画。跟仪表同一口径，不另开开关。
+    /// 「（订阅 $4）」。只在算进订阅时出现。跟仪表同一口径，不另开开关。
     public var subscriptionText: String?
     /// 「按人民币显示」。美元不写。
     public var currencyNote: String?

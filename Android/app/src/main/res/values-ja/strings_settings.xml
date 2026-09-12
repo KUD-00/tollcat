@@ -23,8 +23,8 @@
     <string name="settings_currency_label">%1$s (%2$s)</string>
     <string name="settings_refresh_title">アプリを開くたびに使用量を更新</string>
     <string name="settings_refresh_note">更新に料金がかかるサービスは対象外です。</string>
-    <string name="settings_hide_cat">猫をしまう</string>
-    <string name="settings_hide_cat_note">ホームから猫がいなくなります。数字と内訳はそのままです。</string>
+    <string name="settings_hide_cat">猫を出す</string>
+    <string name="settings_hide_cat_note">ホームから猫がいなくなります。</string>
     <string name="settings_refresh_hint">オンにすると、コールドスタートとバックグラウンドからの復帰で全体更新が一度ずつ走ります。ルールはダッシュボードの更新ボタンと同じです。更新に料金がかかるサービスは対象外です。</string>
     <string name="settings_usage_guides">活用ガイド</string>
     <string name="settings_usage_guides_hint">四つのお金の種類と、見間違えやすい点</string>

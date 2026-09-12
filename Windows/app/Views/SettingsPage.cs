@@ -21,13 +21,14 @@ internal sealed class SettingsPage : Page
         stack.Children.Add(CurrencyPicker(session));
         stack.Children.Add(AppearancePicker(session));
 
-        var hideCat = new ToggleSwitch { Header = Copy.Get("SettingsHideCat"), IsOn = session.Preferences.HidesCat };
-        hideCat.Toggled += (_, _) =>
+        var showCat = new ToggleSwitch { Header = Copy.Get("SettingsHideCat"), IsOn = !session.Preferences.HidesCat };
+        showCat.Toggled += (_, _) =>
         {
-            session.Preferences.HidesCat = hideCat.IsOn;
+            session.Preferences.HidesCat = !showCat.IsOn;
             session.Recompute();
         };
-        stack.Children.Add(hideCat);
+        stack.Children.Add(showCat);
+        stack.Children.Add(Note(Copy.Get("SettingsHideCatNote")));
 
         var refresh = new ToggleSwitch
         {
@@ -71,6 +72,7 @@ internal sealed class SettingsPage : Page
             if (await dialog.ShowAsync() == ContentDialogResult.Primary)
             {
                 session.ClearAll();
+                AppearanceTheme.ApplyTo(App.Main?.Content as FrameworkElement);
                 Rebuild();
             }
         };
@@ -117,6 +119,7 @@ internal sealed class SettingsPage : Page
             if (box.SelectedItem is ComboBoxItem item && item.Tag is string key)
             {
                 session.Preferences.Appearance = key;
+                AppearanceTheme.ApplyTo(App.Main?.Content as FrameworkElement);
             }
         };
         return box;

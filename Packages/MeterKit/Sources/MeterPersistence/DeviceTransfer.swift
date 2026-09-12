@@ -372,7 +372,7 @@ public enum DeviceTransfer: Sendable {
             isDemoBannerDismissed: false,
             isReminderEnabled: payload.preferences.isReminderEnabled,
             reminderSchedule: payload.preferences.reminderSchedule,
-            appearance: AppearancePreference(rawValue: payload.preferences.appearanceRaw) ?? .system,
+            appearance: AppearancePreference(rawValue: payload.preferences.appearanceRaw) ?? .default,
             hasCompletedOnboarding: payload.preferences.hasCompletedOnboarding,
             providerHistoryRange: ProviderHistoryRange(
                 rawValue: payload.preferences.providerHistoryRangeRaw

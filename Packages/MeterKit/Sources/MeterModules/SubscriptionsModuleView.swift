@@ -52,7 +52,7 @@ public struct SubscriptionsModuleView: View {
         VStack(alignment: .leading, spacing: MeterSpacing.sm) {
             DashboardCardHeadline(
                 value: content.monthlyTotalText,
-                caption: String(localized: L("每月")),
+                caption: content.headlineCaption,
                 captionPlacement: .trailing,
                 animationValue: content.monthlyTotalValue
             )
@@ -78,7 +78,11 @@ public struct SubscriptionsModuleView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .animation(DashboardMotion.number, value: content.animationSignature)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(L("固定订阅折算每月 \(content.spokenTotal)，\(content.countCaption)"))
+        .accessibilityLabel(
+            content.isMonthlyRunRate
+                ? L("固定订阅折算每月 \(content.spokenTotal)，\(content.countCaption)")
+                : L("固定订阅合计 \(content.spokenTotal)，\(content.countCaption)")
+        )
     }
 }
 
@@ -100,6 +104,8 @@ public enum SubscriptionsPreviewData {
         monthlyTotalText: "$24.00",
         monthlyTotalValue: 24,
         spokenTotal: "24 美元",
+        headlineCaption: "每月",
+        isMonthlyRunRate: true,
         countCaption: "2 笔，折算每月。年付按 12 摊。",
         nextChargeCaption: "下一笔：GitHub Team，9月12日",
         items: [

@@ -8,6 +8,6 @@ object AppearancePreference {
     val all = listOf(LIGHT, DARK, SYSTEM)
 
     fun normalize(raw: String?): String {
-        return all.firstOrNull { it == raw } ?: SYSTEM
+        return all.firstOrNull { it == raw } ?: DARK
     }
 }

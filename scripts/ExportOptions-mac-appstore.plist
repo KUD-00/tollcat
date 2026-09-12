@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Mac App Store 版：Apple Distribution 签 .app、Mac Installer Distribution 签 .pkg，
+	     产物直接交给 altool 上传。不公证——商店走 Apple 自己那套。
+	     直发版的导出选项在 ExportOptions-mac.plist（method: developer-id，之后要公证 + 签 Sparkle）；
+	     iOS 的在 ExportOptions.plist。三份不要混。 -->
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>destination</key>
+	<string>export</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>uploadSymbols</key>
+	<true/>
+	<!-- 版本号由 shared/version.json 铺进工程，build 号在 archive 那步用 run number 覆盖。
+	     让 Xcode 自己改这两个数会绕开那条单源。 -->
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+	<key>stripSwiftSymbols</key>
+	<true/>
+</dict>
+</plist>

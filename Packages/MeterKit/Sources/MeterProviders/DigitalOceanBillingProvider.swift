@@ -5,6 +5,11 @@ import MeterCore
 ///
 /// 文档：`GET /v2/customers/my/balance`
 /// 认证：PAT，scope `billing:read`。`month_to_date_usage` 就是本周期已花。
+///
+/// 同一份响应里的 `account_balance` / `month_to_date_balance` 是上期结余加减本月
+/// 用量后的应付或授信，不是预充值钱包。默认月末出票后付；有 credit 也只是抵扣，
+/// 花费仍看 `month_to_date_usage`。改成 `.prepaid` 会让后付费账号把本月用量折成 $0；
+/// 两个字段都填，折算会双计。
 public struct DigitalOceanBillingProvider: BillingProvider, Sendable {
     public static var descriptor: ProviderDescriptor { ProviderCatalog.digitalocean }
 

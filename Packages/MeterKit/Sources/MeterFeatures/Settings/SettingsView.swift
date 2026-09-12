@@ -250,14 +250,14 @@ public struct SettingsView: View {
             .accessibilityLabel(L("每次进入 App 的时候自动刷新用量"))
             .accessibilityHint(L("花钱才能刷新的服务不会跟着刷。"))
 
-            Toggle(isOn: hidesCatBinding) {
+            Toggle(isOn: showsCatBinding) {
                 VStack(alignment: .leading, spacing: MeterSpacing.xxs) {
-                    Text(L("关闭猫猫"))
-                    ListRowNote(text: L("仪表上不再出现猫。数字和构成还在。"))
+                    Text(L("打开猫猫"))
+                    ListRowNote(text: L("仪表上不再出现猫。"))
                 }
             }
-            .accessibilityLabel(L("关闭猫猫"))
-            .accessibilityHint(L("仪表上不再出现猫。数字和构成还在。"))
+            .accessibilityLabel(L("打开猫猫"))
+            .accessibilityHint(L("仪表上不再出现猫。"))
             .accessibilityIdentifier(UITestID.settingsHideCat)
 
             #if os(macOS)
@@ -329,10 +329,10 @@ public struct SettingsView: View {
         )
     }
 
-    private var hidesCatBinding: Binding<Bool> {
+    private var showsCatBinding: Binding<Bool> {
         Binding(
-            get: { model.hidesCat },
-            set: { model.setHidesCat($0) }
+            get: { !model.hidesCat },
+            set: { model.setHidesCat(!$0) }
         )
     }
 

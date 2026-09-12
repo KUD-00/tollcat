@@ -151,7 +151,7 @@ final class DashboardFilterModel {
         options.append(
             SpanOption(
                 period: .allTime,
-                title: String(localized: L("全期间")),
+                title: String(localized: L("有数据以来")),
                 id: "all"
             )
         )

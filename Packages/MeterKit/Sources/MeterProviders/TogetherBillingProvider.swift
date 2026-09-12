@@ -49,7 +49,7 @@ public struct TogetherBillingProvider: BillingProvider, Sendable {
         } else {
             key = try RequiredCredential.value(.apiToken, in: credential, providerID: .together)
         }
-        var headers = [
+        let headers = [
             "Authorization": "Bearer \(key)",
             "Accept": "application/json",
         ]

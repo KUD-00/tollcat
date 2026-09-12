@@ -19,6 +19,25 @@ struct DigitalOceanBillingProviderTests {
         #expect(client.leakedSecrets([secret]).isEmpty)
     }
 
+    @Test("用量为 0 仍是用量读数，不把结余当预充值")
+    func zeroUsageIsUsageNotPrepaid() async throws {
+        let client = LiveProviderHarness.stub([
+            (
+                DigitalOceanBillingProvider.balanceURL,
+                LiveProviderHarness.json([
+                    "account_balance": "0.00",
+                    "generated_at": "2026-09-12T00:00:00Z",
+                    "month_to_date_balance": "0.00",
+                    "month_to_date_usage": "0.00",
+                ])
+            ),
+        ])
+        let snapshot = try await provider(client).fetch(credential: credential)
+        #expect(snapshot.kind == .usage)
+        #expect(snapshot.currentSpendUSD == .zero)
+        #expect(snapshot.balanceUSD == nil)
+    }
+
     @Test("缺用量字段是畸形响应")
     func missingUsage() async {
         let client = LiveProviderHarness.stub([

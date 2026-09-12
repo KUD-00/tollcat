@@ -46,9 +46,8 @@ extension MonthToDateModuleContent {
             projectedCaption: filter.allowsProjection
                 ? String(localized: L("预计月底 \(projected.formatted(using: presentation))"))
                 : nil,
-            // 统计区间那半句。三种说法对应三种时态：当月能外推（区间自己说话），
-            // 过去某个整月已经结束，多月区间是一段的合计——没有「月底」可言，
-            // 也不该借用「整月」这个词。
+            // 统计区间那半句。当月能外推、多月区间：日期自己说话，前面不加「合计」。
+            // 过去某个整月已经结束，才用「整月」把时态说清楚。
             periodCaption: Self.periodCaption(
                 allowsProjection: filter.allowsProjection,
                 monthCount: months,
@@ -83,11 +82,9 @@ extension MonthToDateModuleContent {
         period: String
     ) -> String {
         // 前面已经有「预计月底 …」了，这里再写一遍前缀是重复。
-        if allowsProjection {
+        // 多月的日期自己就是一段，再加「合计」是废话。
+        if allowsProjection || monthCount > 1 {
             return period
-        }
-        if monthCount > 1 {
-            return String(localized: L("合计 · \(period)"))
         }
         return String(localized: L("整月 · \(period)"))
     }
@@ -98,21 +95,16 @@ extension MonthToDateModuleContent {
         accountIDs: [AccountID],
         presentation: MoneyPresentation
     ) -> (caption: String, spoken: String, accountID: AccountID?)? {
-        guard amount > .zero else { return nil }
+        // 关掉订阅时这行不出现：口径切换已经说明「按量」，再写「未计入」是同一句话两遍。
+        // 算进时也不写「已计入」——括号里的金额就是分解，不是限定语。
+        guard included, amount > .zero else { return nil }
         let formatted = amount.formatted(using: presentation)
         let spokenAmount = SpokenMoney.label(for: amount, presentation: presentation)
         let accountID = accountIDs.count == 1 ? accountIDs[0] : nil
-        if included {
-            // 订阅已经在大数字里，不能再写 `+`——那会被读成「另加」。
-            return (
-                String(localized: L("本月订阅 \(formatted) · 已计入")),
-                String(localized: L("本月订阅 \(spokenAmount)，已计入合计，可查看详情")),
-                accountID
-            )
-        }
+        // 订阅已经在大数字里，不能再写 `+`——那会被读成「另加」。
         return (
-            String(localized: L("本月订阅 \(formatted) · 未计入")),
-            String(localized: L("本月订阅 \(spokenAmount)，未计入合计")),
+            String(localized: L("（订阅 \(formatted)）")),
+            String(localized: L("订阅 \(spokenAmount)")),
             accountID
         )
     }

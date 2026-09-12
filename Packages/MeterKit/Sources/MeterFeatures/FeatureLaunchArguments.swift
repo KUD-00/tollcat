@@ -223,7 +223,7 @@ public enum FeatureLaunchArguments {
         value(after: "-cat-mood=")
     }
 
-    /// 截图用：仪表不画猫。设置里的「关闭猫猫」是同一件事。
+    /// 截图用：仪表不画猫。和设置里「打开猫猫」关着是同一件事。
     static var hidesCat: Bool {
         arguments.contains("-hide-cat")
     }

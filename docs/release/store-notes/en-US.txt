@@ -1,0 +1,4 @@
+TollCat 1.0: your cloud bills, in your pocket
+
+· The first release
+  iPhone and iPad first. TollCat adds up what you spend across your cloud and AI services, so one glance tells you how much this month has cost so far.

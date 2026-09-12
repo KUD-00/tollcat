@@ -75,7 +75,7 @@ public struct DashboardFilter: Hashable, Sendable {
     }
 
     /// 「筛选中」只看时间和排除名单。订阅口径**不算筛选**：它是首屏大数字旁
-    /// 那颗一等公民切换，自己带着说明（订阅行的「已计入 / 未计入」），
+    /// 那颗一等公民切换，自己带着说明（算进时日期上面「（订阅 $X）」），
     /// 不该点亮工具栏的筛选图标、也不进限定语。
     public var isActive: Bool { !period.isCurrentMonth || !excludedAccounts.isEmpty }
 

@@ -28,7 +28,7 @@ extension ProviderCatalog {
         tierReason: "挪威域名注册的区域选手。",
         colorKey: "domeneshop",
         billingURL: URL(string: "https://www.domeneshop.no/")!,
-        credentialSetupURL: URL(string: "https://api.domeneshop.no/docs/")!,
+        credentialSetupURL: URL(string: "https://www.domeneshop.no/admin?view=api")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 36,

@@ -389,8 +389,8 @@ struct SubscriptionEndTests {
 
     // MARK: - 仪表盘「固定订阅」模块
 
-    /// 这张卡回答的是「我现在每月固定要出多少钱」。把退掉的算进来，
-    /// 它的合计会比首屏那行「本月订阅」多出一截——两个数字在同一屏上打架。
+    /// 单月这张卡回答的是「那个月每月固定要出多少钱」。把退掉的算进来，
+    /// 它的合计会比首屏那行订阅多出一截——两个数字在同一屏上打架。
     @Test("固定订阅模块不列退掉的那几笔")
     func subscriptionsModuleExcludesEnded() {
         let live = monthly(start: date(2026, 1, 1), end: nil)
@@ -437,18 +437,71 @@ struct SubscriptionEndTests {
         #expect(subscriptionsModule([ended], now: date(2026, 3, 1, 12)) == nil)
     }
 
+    @Test("多月区间列出窗口里扣过的每一笔，含已经退掉的")
+    func subscriptionsModulePeriodTotalsIncludeEndedInWindow() {
+        let live = monthly(start: date(2026, 1, 1), end: nil)
+        let ended = MonthlySubscription(
+            name: "Midjourney",
+            amount: Money(usd: 30),
+            period: .monthly,
+            anchorDate: date(2026, 1, 1),
+            endDate: date(2026, 5, 1)
+        )
+        let content = subscriptionsModule(
+            [live, ended],
+            now: date(2026, 9, 9, 12),
+            window: MonthWindow(newestBack: 0, oldestBack: 8)
+        )
+        #expect(Set(content?.items.map(\.name) ?? []) == ["ChatGPT Plus", "Midjourney"])
+        // ChatGPT：1–9 月九笔；$20 × 9。Midjourney：1–5 月五笔；$30 × 5。
+        #expect(content?.monthlyTotalValue == 330)
+        #expect(content?.isMonthlyRunRate == false)
+        #expect(content?.headlineCaption == "合计")
+    }
+
+    @Test("多月区间的行金额是这段实扣，不是一张月费")
+    func subscriptionsModulePeriodRowIsActualCharges() {
+        let sub = monthly(start: date(2026, 7, 1), end: nil)
+        let content = subscriptionsModule(
+            [sub],
+            now: date(2026, 9, 9, 12),
+            window: MonthWindow(newestBack: 0, oldestBack: 2)
+        )
+        #expect(content?.monthlyTotalValue == 60)
+        #expect(content?.items.first?.amountValue == 60)
+        #expect(content?.items.first?.periodCaption == "每月 × 3")
+    }
+
+    @Test("多月区间里没扣过的年付不出现")
+    func subscriptionsModulePeriodDropsAnnualThatDidNotCharge() {
+        let annual = MonthlySubscription(
+            name: "Copilot",
+            amount: Money(usd: 120),
+            period: .annual,
+            anchorDate: date(2026, 3, 1)
+        )
+        let content = subscriptionsModule(
+            [annual],
+            now: date(2026, 9, 9, 12),
+            window: MonthWindow(newestBack: 0, oldestBack: 2)
+        )
+        #expect(content == nil)
+    }
+
     // MARK: - Helpers
 
     private func subscriptionsModule(
         _ subscriptions: [MonthlySubscription],
-        now: Date
+        now: Date,
+        window: MonthWindow = .currentMonth
     ) -> SubscriptionsModuleContent? {
         SubscriptionsModuleBuilder.make(
             subscriptions: subscriptions,
             connections: [],
             now: now,
             calendar: calendar,
-            presentation: .usd
+            presentation: .usd,
+            window: window
         )
     }
 

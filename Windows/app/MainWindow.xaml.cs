@@ -14,6 +14,7 @@ public sealed partial class MainWindow : Window
         NavServices.Content = Copy.Get("TabServices");
         NavSettings.Content = Copy.Get("TabSettings");
         Nav.SelectedItem = NavDashboard;
+        AppearanceTheme.ApplyTo(Nav);
         ContentFrame.Content = new DashboardPage();
         Session.Current.Changed += () => DispatcherQueue.TryEnqueue(UpdateTitle);
         UpdateTitle();

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>com.zhechengqi.tollcat.deeplink</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tollcat</string>
+			</array>
+		</dict>
+	</array>
+	<!-- MeterPersistence 拼 Mac App Group id 用（$(TeamIdentifierPrefix)com.zhechengqi.tollcat）。
+	     没有这个 key 前缀是空串，group id 对不上 entitlement，容器拿不到，整库退内存。 -->
+	<key>AppIdentifierPrefix</key>
+	<string>$(AppIdentifierPrefix)</string>
+	<!-- 这一份是 Mac App Store 版的 Info.plist，和 Mac/Supporting-Info.plist 逐键相同，
+	     只差 Sparkle 那三个键（SUFeedURL / SUPublicEDKey / SUEnableInstallerLauncherService）——
+	     商店版不带更新器，留着那几个键等于在 bundle 里公开声明自己会自更新。
+	     两份要一起改：check-source-invariants.py 的 check_mac_app_store_target 按键比对，
+	     漏改一边就红。 -->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>TollCat transfer</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.zhechengqi.tollcat.transfer</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TollCat transfer</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.zhechengqi.tollcat.transfer</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tollcat</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

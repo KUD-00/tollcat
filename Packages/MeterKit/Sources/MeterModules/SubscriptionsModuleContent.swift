@@ -1,11 +1,15 @@
 import Foundation
 import MeterCore
 
-/// 「固定订阅」：折算每月多少，几笔，下一笔什么时候扣。
+/// 「固定订阅」：单月是折算每月；多月是这段时间实扣。
 public struct SubscriptionsModuleContent: Equatable, Sendable {
     public var monthlyTotalText: String
     public var monthlyTotalValue: Double
     public var spokenTotal: String
+    /// 贴在数字后面的量词：单月「每月」，多月「合计」。
+    public var headlineCaption: String
+    /// 单月走折算每月（年付按 12 摊）；多月走窗口内实扣。
+    public var isMonthlyRunRate: Bool
     public var countCaption: String
     public var nextChargeCaption: String?
     public var items: [SubscriptionRowItem]
@@ -14,6 +18,8 @@ public struct SubscriptionsModuleContent: Equatable, Sendable {
         monthlyTotalText: String,
         monthlyTotalValue: Double,
         spokenTotal: String,
+        headlineCaption: String,
+        isMonthlyRunRate: Bool,
         countCaption: String,
         nextChargeCaption: String? = nil,
         items: [SubscriptionRowItem]
@@ -21,6 +27,8 @@ public struct SubscriptionsModuleContent: Equatable, Sendable {
         self.monthlyTotalText = monthlyTotalText
         self.monthlyTotalValue = monthlyTotalValue
         self.spokenTotal = spokenTotal
+        self.headlineCaption = headlineCaption
+        self.isMonthlyRunRate = isMonthlyRunRate
         self.countCaption = countCaption
         self.nextChargeCaption = nextChargeCaption
         self.items = items
