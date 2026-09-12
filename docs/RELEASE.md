@@ -59,7 +59,8 @@ python3 scripts/generate-shared.py          # 版本号 + 更新说明一起铺�
 xcodegen generate                           # project.yml 变了，pbxproj 要重生成（CI 会核对）
 bash scripts/capture-appstore-screenshots.sh   # 截图 + 小组件那几格
 python3 scripts/render-appstore-devices.py    # 嵌进 Apple 官方 Product Bezel
-node scripts/render-appstore-marketing.mjs    # 加标题出宣传图（docs/appstore/README.md）
+node scripts/render-appstore-marketing.mjs    # 加标题出宣传图（用法见脚本文件头）
+python3 scripts/check-app-store-invariants.py  # 宣传图的尺寸 / 成套 / alpha 只有本机守得到
 git commit -am "X.Y.0：<一句话>" && git push
 git tag vX.Y.0 && git push origin vX.Y.0    # 私有期：再到 Actions → Release → Run workflow，ref 选这个 tag，勾要上车的端
 ```

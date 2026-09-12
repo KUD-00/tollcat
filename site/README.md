@@ -53,7 +53,7 @@ pnpm preview:cf
 机壳里的画面：
 
 - iPhone：`src/assets/screenshots/iphone-{dashboard|wizard|services}-{zh|en|ja}-{light|dark}.png`。18 张屏幕。机身是官方 iPhone 17 Pro Product Bezel（浅色 Silver / 深色 Deep Blue），`PhoneFrame` 叠在画面上，锁屏动画仍在开孔里。
-- 平台页：iPad 11" 横屏、Mac 主窗口、Mac 菜单栏面板；Android 仪表在 JNI 对得上、模拟器没 ANR 时才写入。`bash scripts/capture-site-platform-screenshots.sh`（iPad 默认同 `docs/appstore/screenshots`；Mac / Android 现截。Android 先 `scripts/android-run.sh`）。脚本末尾会跑 `scripts/composite-site-device-frames.py`：导出 iPhone 17 Pro 机壳叠层，并把 iPad / Mac 嵌进官方 Product Bezel（iPad Pro 11" / MacBook Pro 14"）。机壳清单、开孔和合成都在 `scripts/apple_bezels.py`——**商店宣传图用的是同一份**，两处不许各写一遍。开孔是量出来的（屏幕那块透明，从图边泛洪一遍剩下的就是它），量到的结果缓存在 `.cache/apple-bezels/holes.json`。原版 bezel 也缓存在那儿，不进 git；落地页用的是 `iphone-17-pro-*`、`ipad-bezel-*`、`macbook-window-*`。
+- 平台页：iPad 11" 横屏、Mac 主窗口、Mac 菜单栏面板；Android 仪表在 JNI 对得上、模拟器没 ANR 时才写入。`bash scripts/capture-site-platform-screenshots.sh`（iPad 默认同本机的 `docs/appstore/screenshots`，那批原图不进仓库，重截见 `scripts/capture-appstore-screenshots.sh`；Mac / Android 现截。Android 先 `scripts/android-run.sh`）。脚本末尾会跑 `scripts/composite-site-device-frames.py`：导出 iPhone 17 Pro 机壳叠层，并把 iPad / Mac 嵌进官方 Product Bezel（iPad Pro 11" / MacBook Pro 14"）。机壳清单、开孔和合成都在 `scripts/apple_bezels.py`——**商店宣传图用的是同一份**，两处不许各写一遍。开孔是量出来的（屏幕那块透明，从图边泛洪一遍剩下的就是它），量到的结果缓存在 `.cache/apple-bezels/holes.json`。原版 bezel 也缓存在那儿，不进 git；落地页用的是 `iphone-17-pro-*`、`ipad-bezel-*`、`macbook-window-*`。
 
 语言跟页面走，亮暗跟页头主题走（和厂标 marquee 同一套 `<picture data-theme-src>`）。
 

@@ -11,7 +11,7 @@ are wrong」。所以这一步单独存在：从 `iphone69-tip-*` 裁一块、�
 
     python3 scripts/render-iap-review-screenshot.py
 
-产物在 docs/appstore/iap-review/。三个内购传同一张。
+产物在 docs/appstore/iap-review/（不进仓库，见 .gitignore 末尾）。三个内购传同一张。
 """
 
 from __future__ import annotations

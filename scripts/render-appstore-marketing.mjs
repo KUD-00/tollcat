@@ -9,7 +9,8 @@
 // paper 与 indigo 两种底面，light / dark 两套主题（各用对应外观的截图）。
 //
 // 输入 .tmp-task-marketing/devices/ + docs/appstore/screenshots/（小组件那几格），
-// 输出 docs/appstore/marketing/。
+// 输出 docs/appstore/marketing/。输入和输出都**不进仓库**（见 .gitignore 末尾）：
+// 商店素材只在本机，CI 上没有这些目录。
 // 用法：node scripts/render-appstore-marketing.mjs           # 全量 84 张
 //       ONLY=ipad13-* node scripts/render-appstore-marketing.mjs          # 只出 iPad 那一档
 //       ONLY=ipad13-widgets-zh-light node ...                             # 只出一张

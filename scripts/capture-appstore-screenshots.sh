@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # App Store 提交用素材：iPhone 6.9"（1320×2868）、iPad 11" 横屏（2420×1668）与竖屏（1668×2420），
 # 外加主屏小组件那几格（渲成 PNG，不是截图——主屏上的 widget 截不到）。
-# 3 语 × 2 外观。产物进 docs/appstore/screenshots/。
+# 3 语 × 2 外观。产物进 docs/appstore/screenshots/——那个目录**不进仓库**
+# （见 .gitignore 末尾）：原图只在本机，重来一趟就是重跑这个脚本。
 # App Store Connect 传 6.9" 档后 6.5" 不再必填。iPad 那一档 ASC 叫「13-inch display」
 # （2752×2064），那是**画布**尺寸——画布里摆的是 11" 机身，构图见 render-appstore-marketing.mjs。
 # 必须签名构建（不要 CODE_SIGNING_ALLOWED=NO），否则演示种子因 Keychain -34018 静默失败。

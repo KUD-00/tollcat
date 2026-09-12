@@ -2838,7 +2838,7 @@ def changelog_current_outputs_paths() -> list[Path]:
     """只描述「当前版本」的那几份文案。entries 空时它们不该存在。"""
     paths = [ROOT / "docs/release/notes.md"]
     for locale in ("zh-Hans", "en-US", "ja"):
-        paths.append(ROOT / f"docs/appstore/metadata/{locale}/release_notes.txt")
+        paths.append(ROOT / f"docs/release/store-notes/{locale}.txt")
     for locale in ("zh-CN", "en-US", "ja-JP"):
         paths.append(ROOT / f"Android/app/distribution/whatsnew/whatsnew-{locale}")
     for lang in CHANGELOG_LANGS:
@@ -3338,8 +3338,11 @@ def outputs() -> dict[Path, str]:
             ("en", "en-US", "en-US"),
             ("ja", "ja", "ja-JP"),
         ):
-            result[ROOT / f"docs/appstore/metadata/{asc_locale}/release_notes.txt"] = (
-                render_store_notes(current, lang)
+            # ASC 的「此版本新增内容」。和三语商店文案（描述 / 关键词）不同，这份
+            # 是更新说明，落地页 /changelog 上本来就是公开的，所以留在仓库里让
+            # --check 守得住；docs/appstore/ 那一整套素材和文案不进 git。
+            result[ROOT / f"docs/release/store-notes/{asc_locale}.txt"] = render_store_notes(
+                current, lang
             )
             result[ROOT / f"Android/app/distribution/whatsnew/whatsnew-{play_locale}"] = (
                 render_play_whatsnew(current, lang)

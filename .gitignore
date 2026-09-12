@@ -70,3 +70,10 @@ Config/Signing.local.xcconfig
 
 # 第三方 skill 的本地拷贝，不入库；.claude/skills/ 下自己写的可以提交
 .claude/skills/impeccable/
+
+# 商店素材与发布文案不进公开仓库：宣传图、原始截图、内购审核图、三语商店文案、
+# 发布日的各站文案。都在本机生成与保管，流水线见 scripts/capture-appstore-screenshots.sh
+# 和 scripts/render-appstore-marketing.mjs 的文件头。
+# 这两处曾经追踪过，占了历史一半的体积（227 MB / 420 MB），2026-09-12 从历史里抹掉。
+docs/appstore/
+docs/launch/

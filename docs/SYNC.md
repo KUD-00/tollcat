@@ -265,7 +265,7 @@ tollsync1.<slot-id>.<access-key>.<passcode>
 
 ### 对外文案要改的地方
 
-`README.md` / `README.zh.md` / `README.ja.md` 第一段、`site/` 落地页第一条、`site/src/pages/llms.txt.ts`、`docs/launch/*`（Show HN / PH / V2EX / Zenn / X）、`AboutView` 那段、`UsageGuide` 和 `OnboardingPage` 的 Keychain 那几句。
+`README.md` / `README.zh.md` / `README.ja.md` 第一段、`site/` 落地页第一条、`site/src/pages/llms.txt.ts`、本机 `docs/launch/*`（Show HN / PH / V2EX / Zenn / X，不进仓库）、`AboutView` 那段、`UsageGuide` 和 `OnboardingPage` 的 Keychain 那几句。
 
 **改法是加一句，不是删一句**：凭据那句话（不出设备、不进 iCloud、不进备份）完全不变，那才是核心承诺；账单那句从"不上传"变成"默认不上传；你自己打开云同步的话，服务器上那份是我们解不开的密文"。按 `BRAND.md` 的验收：正文要自然、答案先行、不许出现"军用级加密"这类黑话。
 

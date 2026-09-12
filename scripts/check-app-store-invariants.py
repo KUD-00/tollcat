@@ -458,10 +458,13 @@ def check_marketing_screenshots(root: Path, errors: list[str]) -> None:
     ASC 直接拒收，带 alpha 的 PNG 同理。成套是另一回事——渲图脚本中途死掉时
     产物目录里会留下上一轮的旧图，缺的那几张不会有人发现，直到某一种语言的
     商店页少了一屏。
+
+    宣传图本身不进仓库（见 .gitignore 末尾那段），所以 CI 的检出里没有这个目录，
+    这一条只在本机跑得到——渲完图、贴进 ASC 之前跑一次闸，是这批图唯一的检查点。
+    目录不在就直接跳过：报错的话 CI 上这一条会恒红，而 CI 无论如何也看不到图。
     """
     directory = root / "docs/appstore/marketing"
     if not directory.is_dir():
-        errors.append("缺少 docs/appstore/marketing（跑 scripts/render-appstore-marketing.mjs）")
         return
     groups: dict[tuple[str, str], set[tuple[str, str]]] = {}
     for path in sorted(directory.glob("*.png")):

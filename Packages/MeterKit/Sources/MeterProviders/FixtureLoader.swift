@@ -11,7 +11,7 @@ import MeterCore
 ///
 /// 为什么要有这东西：**商店截图按语言上传，而中国大陆不许在元数据里出现
 /// OpenAI / ChatGPT**（App Review Guideline 5，深度合成需持牌，见
-/// `docs/appstore/review-reply-china-dst.md`）。zh-Hans 那一套图因此要一份不含
+/// 本机 `docs/appstore/review-reply-china-dst.md`，不进仓库）。zh-Hans 那一套图因此要一份不含
 /// 这些名字的演示数据，en-US / ja 两套照旧。两套图共用一次构建，靠启动参数分流，
 /// 不靠「跑之前先手改 fixture」——那种步骤迟早把合规改动静默冲掉。
 public enum FixtureOverlay: String, Sendable, CaseIterable {
