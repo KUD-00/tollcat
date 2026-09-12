@@ -200,6 +200,9 @@ jobs:
       MAESTRO_CLI_NO_ANALYTICS: "1"
       # Pinned: the same release scripts/maestro-smoke.sh uses locally.
       MAESTRO_VERSION: 2.10.0
+      # Shared macOS runners can take well over Maestro's default 15 s to build
+      # and boot the XCUITest driver; seen as "iOS driver not ready in time".
+      MAESTRO_DRIVER_STARTUP_TIMEOUT: "180000"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
