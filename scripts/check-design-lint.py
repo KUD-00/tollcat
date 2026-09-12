@@ -194,6 +194,13 @@ INPUT_CONTROL_RE = re.compile(r"\b(?:TextField|SecureField|TextEditor)\s*\(")
 UITEXTFIELD_RE = re.compile(r"\bUITextField\s*\(")
 TEXT_CANCEL_BUTTON_RE = re.compile(r'Button\(\s*L\(\s*"取消"\s*\)\s*\)')
 
+# 输入框住在别的屏幕里的「节」：完成栏由承载它的屏幕挂，这里再挂一份键盘上会出现两个
+# 「完成」。名单里的文件必须只以子视图形式出现在已挂 meterKeyboardDismiss 的屏幕中。
+# `KeyboardDismissGuardrailTests.hostedByScreen` 同一份名单，改了两边一起改。
+KEYBOARD_DISMISS_HOSTED_BY_SCREEN = {
+    "SetupFeedbackSection.swift",  # 住在 SetupCredentialsStepView / GalleryVerifyConnectionView 里
+}
+
 
 def check_keyboard_dismiss(root: Path, errors: list[str]) -> None:
     """有软件键盘的屏幕必须能关掉键盘。
@@ -229,7 +236,8 @@ def check_keyboard_dismiss(root: Path, errors: list[str]) -> None:
             masked = mask_comments_and_strings(original)
             relative = rel(root, path)
             match = INPUT_CONTROL_RE.search(masked)
-            if match is not None and "meterKeyboardDismiss" not in masked:
+            hosted = path.name in KEYBOARD_DISMISS_HOSTED_BY_SCREEN
+            if match is not None and "meterKeyboardDismiss" not in masked and not hosted:
                 line = masked.count("\n", 0, match.start()) + 1
                 errors.append(
                     f"{relative}:{line} TextField/SecureField/TextEditor 必须配合 "

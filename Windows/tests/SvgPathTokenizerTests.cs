@@ -31,10 +31,11 @@ public class SvgPathTokenizerTests
     public void ParsesRealAwsPrefix()
     {
         // ProviderGlyphArtwork 里 AWS path 的真实开头，曾把 65 字符吞成一个数。
+        // c 后面是 18 个数：三段三次曲线，加上 M 共四条命令。
         var commands = SvgPathTokenizer.Parse(
             "M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183");
-        Assert.Equal(3, commands.Count);
-        Assert.All(commands.GetRange(1, 2), c => Assert.Equal(SvgPathVerb.Cubic, c.Verb));
+        Assert.Equal(4, commands.Count);
+        Assert.All(commands.GetRange(1, 3), c => Assert.Equal(SvgPathVerb.Cubic, c.Verb));
     }
 
     [Fact]
