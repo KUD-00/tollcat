@@ -1,0 +1,93 @@
+import Foundation
+import Testing
+import MeterCore
+@testable import MeterProviders
+
+struct TransIPBillingProviderTests {
+    private let calendar = LiveProviderHarness.calendar
+    private let now = LiveProviderHarness.now
+    private let secret = "transip-jwt-MUST-NOT-LEAK"
+
+    @Test("本月含税分金额按 currency 合计")
+    func sumsInclVatCents() async throws {
+        let url = TransIPBillingProvider.invoicesURL
+        let client = LiveProviderHarness.stub([
+            (
+                url,
+                LiveProviderHarness.json([
+                    "invoices": [
+                        [
+                            "invoiceNumber": "F0000.2608.0000.0001",
+                            "creationDate": "2026-08-10",
+                            "invoiceStatus": "paid",
+                            "currency": "EUR",
+                            "totalAmount": 1000,
+                            "totalAmountInclVat": 1210,
+                        ],
+                        [
+                            "invoiceNumber": "F0000.2608.0000.0002",
+                            "creationDate": "2026-08-15",
+                            "invoiceStatus": "waitsforpayment",
+                            "currency": "EUR",
+                            "totalAmount": 500,
+                            "totalAmountInclVat": 605,
+                        ],
+                        [
+                            "invoiceNumber": "F0000.2607.0000.0009",
+                            "creationDate": "2026-07-01",
+                            "invoiceStatus": "paid",
+                            "currency": "EUR",
+                            "totalAmount": 9999,
+                            "totalAmountInclVat": 12000,
+                        ],
+                        [
+                            "invoiceNumber": "F0000.2608.0000.0003",
+                            "creationDate": "2026-08-20",
+                            "invoiceStatus": "paid",
+                            "currency": "EUR",
+                            "totalAmount": 0,
+                            "totalAmountInclVat": 0,
+                        ],
+                    ]
+                ] as [String: Any])
+            ),
+        ])
+        let snapshot = try await provider(client).fetch(credential: credential)
+        #expect(snapshot.kind == .usage)
+        #expect(snapshot.currentSpendUSD == Money(usd: Decimal(string: "18.15")!))
+        #expect(client.leakedSecrets([secret]).isEmpty)
+        LiveProviderHarness.expectHostsDeclared(client)
+        let request = try #require(client.requests.first)
+        #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer \(secret)")
+    }
+
+    @Test("401 / 403")
+    func statusMapping() async {
+        let url = TransIPBillingProvider.invoicesURL
+        await expectStatus(401, code: .unauthorized, key: .invalidCredentials, url: url)
+        await expectStatus(403, code: .forbidden, key: .insufficientPermissions, url: url)
+    }
+
+    private func expectStatus(
+        _ status: Int,
+        code: ProviderError.Code,
+        key: RemediationKey,
+        url: URL
+    ) async {
+        await LiveProviderHarness.expectStatus(status, code: code, key: key) { status in
+            try await provider(
+                LiveProviderHarness.stub([
+                    (url, LiveProviderHarness.emptyJSON(status: status)),
+                ])
+            ).fetch(credential: credential)
+        }
+    }
+
+    private var credential: Credential {
+        Credential(providerID: .transip, fields: [.personalAccessToken: secret])
+    }
+
+    private func provider(_ client: any HTTPClient) -> TransIPBillingProvider {
+        TransIPBillingProvider(httpClient: client, now: { now }, calendar: calendar, rateSource: LiveProviderHarness.passthroughRates)
+    }
+}

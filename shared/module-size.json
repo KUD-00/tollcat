@@ -1,0 +1,93 @@
+{
+  "$comment": [
+    "仪表盘模块的尺寸档，唯一权威。改这里后跑 python3 scripts/generate-shared.py。",
+    "",
+    "同一批模块视图要在很多壳里出现：iPhone 列表行、宽壳 bento 卡、iPad/Mac 侧栏卡、",
+    "分享卡、iOS / macOS widget。版式差异只由三根正交的轴决定：",
+    "  · 宽度档（widths）——横向排布：图和列表并排还是上下叠、分不分两列。",
+    "  · 高度档（heights）——纵向预算：起头那个大数字要不要、图表多大、列表列几行。",
+    "  · 容器档（ModuleContainer，手写）——chrome 与交互：chevron 谁画、行高谁补、能不能点。",
+    "",
+    "高度必须单独成轴，是 widget 逼出来的：systemMedium 和 systemLarge 内容宽一样（约 300），",
+    "高度差 2.5 倍。宽度轴分不开它俩，容器档两个又都是 snapshot。",
+    "",
+    "阈值量的是「模块实际拿到的内容尺寸」：容器自己的内边距先扣掉，再把档位声明进环境。",
+    "模块一律不许自己量——量自身尺寸再回填是反馈环，会转死主线程。",
+    "容器全都已经知道自己多大（bento 算得出卡宽、widget 有 widgetFamily、侧栏是定宽），",
+    "所以这条限制不花任何代价。",
+    "",
+    "档位是提示不是义务：模块只实现自己需要的几档，其余向下就近回退。别为了填满档位硬造版式。",
+    "",
+    "目前只生成 Swift。Android 的 Compose 侧还没接这几根轴，接的时候从这份文件生成 Kotlin，",
+    "不要在那边另抄一套数。"
+  ],
+  "widths": [
+    {
+      "name": "compact",
+      "minWidth": 0,
+      "note": "挤。一个数加一行小字就满了；图和列表并排会两边都不够看，改上下叠。",
+      "surfaces": [
+        "iOS / macOS widget systemSmall（约 146 内容宽）",
+        "bento 卡被挤到 0.75 格（约 155）"
+      ]
+    },
+    {
+      "name": "regular",
+      "minWidth": 200,
+      "note": "基准档。今天绝大多数壳都落在这里，所有模块都必须在这一档下好看。",
+      "surfaces": [
+        "iPhone 列表行（约 345）",
+        "bento 卡一格（约 218）",
+        "widget systemMedium / systemLarge（约 340）",
+        "分享卡的模块卡",
+        "iPad / Mac 侧栏底部那张卡（钉模块时列拉到上限，约 224 内容宽）"
+      ]
+    },
+    {
+      "name": "wide",
+      "minWidth": 380,
+      "note": "宽到列表可以分两列、图可以和列表真正并排。宽窗口下的 bento 卡走这一档。",
+      "surfaces": [
+        "Mac 宽窗口的 bento 卡（三列封顶后每列约 460）",
+        "iPad 横屏分栏里的 bento 卡"
+      ]
+    },
+    {
+      "name": "expanded",
+      "minWidth": 560,
+      "note": "很宽。今天只有大显示器上的 bento 卡够得着；没有专门版式的模块按 wide 画。",
+      "surfaces": [
+        "外接大屏上的 Mac 窗口（每列约 628 起）"
+      ]
+    }
+  ],
+  "heights": [
+    {
+      "name": "tight",
+      "minHeight": 0,
+      "note": "只够一个数加一两行。列表类模块最多列两行，图表要压到最小可读。",
+      "surfaces": [
+        "iOS / macOS widget systemSmall（约 126 内容高）",
+        "widget systemMedium（同样约 126，宽的是它，高不是）"
+      ]
+    },
+    {
+      "name": "regular",
+      "minHeight": 180,
+      "note": "基准档：起头一个大数字 + 三四行，或者一张小图配图例。宽壳 bento 卡就是按这一档设计的。",
+      "surfaces": [
+        "宽壳 bento 卡（定高 240）",
+        "iPad / Mac 侧栏卡（封顶 260）",
+        "分享卡的模块卡（照着 bento 卡那张脸）"
+      ]
+    },
+    {
+      "name": "tall",
+      "minHeight": 320,
+      "note": "装得下长列表或者放大的图。",
+      "surfaces": [
+        "widget systemLarge（约 322 内容高）"
+      ]
+    }
+  ]
+}

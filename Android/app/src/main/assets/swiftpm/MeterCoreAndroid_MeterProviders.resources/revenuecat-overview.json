@@ -1,0 +1,32 @@
+{
+  "object": "overview_metrics",
+  "metrics": [
+    {
+      "object": "overview_metric",
+      "id": "active_trials",
+      "name": "Active Trials",
+      "description": "Active free trials",
+      "unit": "#",
+      "period": "P0D",
+      "value": 12
+    },
+    {
+      "object": "overview_metric",
+      "id": "mrr",
+      "name": "MRR",
+      "description": "Monthly Recurring Revenue",
+      "unit": "$",
+      "period": "P0D",
+      "value": 4210.5
+    },
+    {
+      "object": "overview_metric",
+      "id": "revenue",
+      "name": "Revenue",
+      "description": "Gross revenue tracked in the last 28 days",
+      "unit": "$",
+      "period": "P28D",
+      "value": 9200.0
+    }
+  ]
+}

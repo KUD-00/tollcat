@@ -1,0 +1,22 @@
+{
+  "name": "tollcat-ops",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "tollcat-ops": "./src/cli.tsx"
+  },
+  "scripts": {
+    "start": "bun src/cli.tsx",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ink": "^7.1.1",
+    "react": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "bun-types": "^1.4.0",
+    "typescript": "^7.0.2"
+  }
+}

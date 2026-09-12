@@ -1,0 +1,81 @@
+# HTML 的 no-transform 挡住 Cloudflare Web Analytics 插 beacon。不要写在 /* 上，会跟 /_astro 的 immutable 拼成一条 Cache-Control。
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; connect-src 'self' https://api.tollcat.app; frame-ancestors 'none'; base-uri 'self'; form-action 'none'
+
+/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/ja/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/zh-hans/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/privacy/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/support/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/providers/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/changelog/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/privacy/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/support/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/providers/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/changelog/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/ja/privacy/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/ja/support/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/ja/providers/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/ja/changelog/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/zh-hans/privacy/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/zh-hans/support/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/zh-hans/providers/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/zh-hans/changelog/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/zh-hans/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/en/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/ja/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=86400
+
+/*.png
+  Cache-Control: public, max-age=86400

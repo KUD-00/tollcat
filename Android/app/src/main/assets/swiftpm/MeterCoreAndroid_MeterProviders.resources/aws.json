@@ -1,0 +1,22 @@
+{
+  "providerID": "aws",
+  "kind": "usage",
+  "connected": true,
+  "currentSpendUSD": 21.4,
+  "periodStartDayOfMonth": 1,
+  "daily": [
+    { "fromDay": 1, "toDay": 8, "usd": 0.5 },
+    { "fromDay": 9, "toDay": 15, "usd": 2.2 },
+    { "fromDay": 16, "toDay": 16, "usd": 2.0 }
+  ],
+  "previousMonth": {
+    "currentSpendUSD": 13.2,
+    "periodStartDayOfMonth": 1
+  },
+  "olderMonths": [
+    { "monthsBack": 2, "currentSpendUSD": 11.5, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 3, "currentSpendUSD": 10.2, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 4, "currentSpendUSD": 9.0, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 5, "currentSpendUSD": 7.8, "periodStartDayOfMonth": 1 }
+  ]
+}

@@ -1,0 +1,41 @@
+# 种子之后：服务列表有行，点 Cloudflare 进详情，返回还在列表。
+appId: com.zhechengqi.tollcat
+---
+- launchApp:
+    clearState: true
+    arguments:
+      -seed-demo: true
+      -skip-onboarding: true
+      -clock-preset=design: true
+      seed_demo: true
+      skip_onboarding: true
+      clock_preset: design
+# 首次冷启动（Android 要解压 Swift 资源包）十几秒，默认等待不够。
+- extendedWaitUntil:
+    visible:
+      id: tab.services
+    timeout: 60000
+- tapOn:
+    id: tab.services
+- assertVisible:
+    id: services.row.cloudflare
+- assertVisible:
+    id: services.add
+- tapOn:
+    id: services.row.cloudflare
+- assertVisible:
+    id: providerDetail.list
+# Maestro 的 back 只是 Android 的系统返回键；iOS 要点导航栏的返回钮。
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          id: BackButton
+- assertVisible:
+    id: services.row.cloudflare

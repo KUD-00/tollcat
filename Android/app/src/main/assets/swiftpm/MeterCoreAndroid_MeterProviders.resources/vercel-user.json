@@ -1,0 +1,9 @@
+{
+  "_comment": "照 Vercel GET /v2/user 文档。Team 范围 token 真账号会带 limited: true，仍有 defaultTeamId。Hobby 的 charges 是 404 costs_not_found。来源：https://vercel.com/docs/rest-api/user/get-the-user",
+  "user": {
+    "id": "AEIIDYVk59zbFF2Sxfyxxmua",
+    "username": "jdoe",
+    "name": "Jane Doe",
+    "defaultTeamId": "team_example"
+  }
+}

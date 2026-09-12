@@ -1,0 +1,30 @@
+[
+  {
+    "metadata": {
+      "invoiceId": "GY00101408",
+      "contractId": "31805900",
+      "postingPeriod": "2026-08",
+      "startDate": "2026-08-01",
+      "endDate": "2026-08-31",
+      "finallyPosted": false
+    },
+    "total": {
+      "quantity": "10.76",
+      "unit": "EUR"
+    }
+  },
+  {
+    "metadata": {
+      "invoiceId": "GY00101409",
+      "contractId": "31805901",
+      "postingPeriod": "2026-08",
+      "startDate": "2026-08-01",
+      "endDate": "2026-08-31",
+      "finallyPosted": false
+    },
+    "total": {
+      "quantity": "2.24",
+      "unit": "EUR"
+    }
+  }
+]

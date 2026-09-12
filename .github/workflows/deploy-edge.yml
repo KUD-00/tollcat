@@ -1,0 +1,107 @@
+name: Deploy edge (toll-api, tollcat.app)
+
+# The API and the landing page don't follow the app's tags: merge to main,
+# deploy. Both currently deploy via local wrangler; this workflow moves that to
+# CI and ties D1 migrations to the Worker deploy as one step — if the migration
+# fails, nothing deploys.
+#
+# The repo is still private — manual dispatch only until it goes public.
+# After going public, restore:
+#   push:
+#     branches: [main]
+#     paths:
+#       - "worker/**"
+#       - "site/**"
+#       - "shared/api-contract.json"
+#       - "Packages/MeterKit/Sources/MeterPersistence/Catalog/catalog.json"
+on:
+  workflow_dispatch:
+    inputs:
+      api:
+        description: Deploy toll-api (includes D1 migrations)
+        type: boolean
+        default: true
+      site:
+        description: Deploy tollcat.app
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-edge
+  cancel-in-progress: false
+
+jobs:
+  api:
+    name: toll-api
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.api }}
+    runs-on: ubuntu-latest
+    # Merge means deploy: this environment has no required reviewers; it only holds the token.
+    environment: api
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck and test
+        run: |
+          npm run typecheck
+          npm test
+
+      # Migrations only move forward. Migrate before deploying: if the migration
+      # fails this step goes red and the Worker keeps its previous version.
+      - name: Apply D1 migrations
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler d1 migrations apply tollcat --remote
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy
+
+  site:
+    name: tollcat.app
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.site }}
+    runs-on: ubuntu-latest
+    environment: api
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm wrangler deploy

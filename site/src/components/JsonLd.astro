@@ -1,0 +1,240 @@
+---
+import {
+  changelog,
+  changelogAnchor,
+  latestChangelog,
+} from '../changelog';
+import { absoluteUrl, ogImageUrl, siteConfig, type Locale } from '../config';
+import { faqVisible, t } from '../i18n';
+import { itemsForTier, supportTierOrder } from '../supportList';
+
+type Kind = 'home' | 'privacy' | 'support' | 'providers' | 'sponsors' | 'changelog';
+type Props = { locale: Locale; kind?: Kind };
+const { locale, kind = 'home' } = Astro.props;
+const copy = t(locale);
+const latest = latestChangelog();
+const inLanguage = siteConfig.localeBcp47[locale];
+const path = kind === 'home' ? '' : kind;
+const pageUrl = absoluteUrl(locale, path);
+const orgId = `${siteConfig.url}/#org`;
+const siteId = `${siteConfig.url}/#site`;
+const appId = `${siteConfig.url}/#app`;
+const logoUrl = `${siteConfig.url}/apple-touch-icon.png`;
+const imageUrl = ogImageUrl(locale);
+const sameAs = [siteConfig.githubUrl, siteConfig.appStoreUrl].filter((item): item is string => Boolean(item));
+
+const org = {
+  '@type': 'Organization',
+  '@id': orgId,
+  name: siteConfig.name,
+  url: siteConfig.url,
+  description: copy.meta.description,
+  logo: {
+    '@type': 'ImageObject',
+    url: logoUrl,
+    width: 180,
+    height: 180,
+  },
+  ...(sameAs.length ? { sameAs } : {}),
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': siteId,
+  url: siteConfig.url,
+  name: siteConfig.name,
+  inLanguage: ['zh-Hans', 'en', 'ja'],
+  publisher: { '@id': orgId },
+};
+
+const app = {
+  '@type': 'SoftwareApplication',
+  '@id': appId,
+  name: siteConfig.name,
+  url: absoluteUrl(locale),
+  applicationCategory: 'FinanceApplication',
+  applicationSubCategory: 'Personal Finance',
+  operatingSystem: 'iOS 26',
+  description: copy.meta.description,
+  inLanguage,
+  image: imageUrl,
+  author: { '@id': orgId },
+  publisher: { '@id': orgId },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    availability: siteConfig.appStoreUrl
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/PreOrder',
+  },
+  featureList: copy.facts.items,
+  isAccessibleForFree: true,
+  license: 'https://opensource.org/licenses/MIT',
+  softwareHelp: absoluteUrl(locale, 'support'),
+  ...(sameAs.length ? { sameAs } : {}),
+  ...(siteConfig.appStoreUrl ? { downloadUrl: siteConfig.appStoreUrl, installUrl: siteConfig.appStoreUrl } : {}),
+  ...(latest ? { softwareVersion: latest.version } : {}),
+};
+
+const graph: Record<string, unknown>[] = [org, website, app];
+
+if (kind === 'home') {
+  graph.push({
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: copy.meta.title,
+    description: copy.meta.description,
+    inLanguage,
+    isPartOf: { '@id': siteId },
+    about: { '@id': appId },
+    publisher: { '@id': orgId },
+    primaryImageOfPage: imageUrl,
+  });
+  graph.push({
+    '@type': 'FAQPage',
+    '@id': `${pageUrl}#faq`,
+    url: `${pageUrl}#faq`,
+    inLanguage,
+    isPartOf: { '@id': `${pageUrl}#page` },
+    mainEntity: copy.faq.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faqVisible(item),
+      },
+    })),
+  });
+}
+
+if (kind === 'privacy') {
+  graph.push({
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: copy.privacyPage.title,
+    description: copy.privacyPage.description,
+    inLanguage,
+    isPartOf: { '@id': siteId },
+    about: { '@id': appId },
+    publisher: { '@id': orgId },
+  });
+  graph.push({
+    '@type': 'PrivacyPolicy',
+    '@id': `${pageUrl}#privacy`,
+    url: pageUrl,
+    name: copy.privacyPage.title,
+    description: copy.privacyPage.description,
+    inLanguage,
+    publisher: { '@id': orgId },
+    about: { '@id': appId },
+  });
+}
+
+if (kind === 'support') {
+  graph.push({
+    '@type': 'ContactPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: copy.supportPage.title,
+    description: copy.supportPage.description,
+    inLanguage,
+    isPartOf: { '@id': siteId },
+    about: { '@id': appId },
+    publisher: { '@id': orgId },
+  });
+}
+
+if (kind === 'sponsors') {
+  const page = copy.sponsorsPage;
+  graph.push({
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: page.title,
+    description: page.description,
+    inLanguage,
+    isPartOf: { '@id': siteId },
+    about: { '@id': appId },
+    publisher: { '@id': orgId },
+  });
+}
+
+if (kind === 'changelog') {
+  const page = copy.changelogPage;
+  graph.push({
+    '@type': 'CollectionPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: page.title,
+    description: page.description,
+    inLanguage,
+    isPartOf: { '@id': siteId },
+    about: { '@id': appId },
+    publisher: { '@id': orgId },
+  });
+  if (changelog.length) {
+    graph.push({
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#versions`,
+      name: page.title,
+      description: page.description,
+      inLanguage,
+      isPartOf: { '@id': `${pageUrl}#page` },
+      numberOfItems: changelog.length,
+      itemListElement: changelog.map((entry, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: entry.version,
+        url: `${pageUrl}#${changelogAnchor(entry.version)}`,
+        description: [
+          entry.copy[locale].title,
+          ...entry.copy[locale].items.map((item) => `${item.title}：${item.body}`),
+        ].join(' '),
+      })),
+    });
+  }
+}
+
+if (kind === 'providers') {
+  const page = copy.supportListPage;
+  graph.push({
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: page.title,
+    description: page.description,
+    inLanguage,
+    isPartOf: { '@id': siteId },
+    about: { '@id': appId },
+    publisher: { '@id': orgId },
+  });
+  for (const tier of supportTierOrder) {
+    const items = itemsForTier(tier);
+    graph.push({
+      '@type': 'ItemList',
+      '@id': `${pageUrl}#${tier}`,
+      name: page.sections[tier].title,
+      description: page.sections[tier].lede,
+      inLanguage,
+      isPartOf: { '@id': `${pageUrl}#page` },
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        description: `${page.detail.kinds[item.entry.kind]} · ${page.market[item.entry.marketTier].label}`,
+      })),
+    });
+  }
+}
+
+const payload = {
+  '@context': 'https://schema.org',
+  '@graph': graph,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(payload)} />

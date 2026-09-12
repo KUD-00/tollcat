@@ -1,0 +1,160 @@
+---
+import type { Locale } from '../config';
+import { t } from '../i18n';
+import type { SupportItem } from '../supportList';
+import ProviderGlyph from './ProviderGlyph.astro';
+import SupportSectionIcon from './SupportSectionIcon.astro';
+
+type Props = { locale: Locale; item: SupportItem };
+const { locale, item } = Astro.props;
+const copy = t(locale).supportListPage;
+const d = copy.detail;
+const { entry, tier, mark, name } = item;
+const market = copy.market[entry.marketTier];
+// declineReason / marketTierReason 的源头在 ProviderCatalog.swift，没有译文，只在中文页出现。
+const zhOnly = locale === 'zh';
+const marketLine = zhOnly ? entry.marketTierReason : market.lede;
+const flags: { icon: 'day' | 'history' | 'pay'; label: string }[] = [];
+if (entry.supportsDailyGranularity) flags.push({ icon: 'day', label: d.chipDaily });
+if (entry.historyLookbackMonths > 0) {
+  flags.push({
+    icon: 'history',
+    label: d.chipHistory.replace('{n}', String(entry.historyLookbackMonths)),
+  });
+}
+if (entry.costsMoneyToRefresh) flags.push({ icon: 'pay', label: d.chipRefresh });
+const notes = [
+  ...(entry.verifyHint ? [entry.verifyHint[locale]] : []),
+  ...entry.notices.map((note) => note[locale]),
+];
+const showSteps = entry.steps.length > 0;
+const periodLabel = (period: string) =>
+  period === 'annual' ? d.perYear : period === 'monthly' ? d.perMonth : ` / ${period}`;
+const actions = [
+  entry.billingURL ? { href: entry.billingURL, label: d.billing } : null,
+  entry.credentialSetupURL ? { href: entry.credentialSetupURL, label: d.setup } : null,
+  ...entry.guideURLs.map((doc) => ({ href: doc.url, label: d.docs })),
+].filter((item): item is { href: string; label: string } => item !== null);
+---
+
+<article
+  class="support-detail"
+  id={entry.key}
+  data-detail={entry.key}
+  data-name={name}
+  hidden
+>
+  <div class="support-bento">
+    <header class="support-tile-hero">
+      <ProviderGlyph mark={mark} class="support-detail-glyph" />
+      <div class="support-detail-who">
+        <h3 class="support-detail-name">{name}</h3>
+        <p class="support-detail-status">{`${d.kinds[entry.kind]} · ${d.status[tier]} · ${market.label}`}</p>
+      </div>
+      {entry.summary && <p class="support-detail-lede">{entry.summary[locale]}</p>}
+      {marketLine && <p class="support-detail-market">{marketLine}</p>}
+      {zhOnly && entry.declineReason && (
+        <p class="support-detail-lede">{entry.declineReason}</p>
+      )}
+      {flags.length > 0 && (
+        <ul class="support-flags">
+          {flags.map((flag) => (
+            <li>
+              <SupportSectionIcon name={flag.icon} />
+              <span>{flag.label}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {!showSteps &&
+        notes.map((note) => (
+          <p class="support-detail-note">{note}</p>
+        ))}
+    </header>
+
+    {entry.fields.length > 0 && (
+      <section class="support-tile">
+        <h4>
+          <SupportSectionIcon name="key" />
+          {d.credentials}
+        </h4>
+        <ul class="support-fields">
+          {entry.fields.map((field) => (
+            <li>
+              <div class="support-field-row">
+                <span class="support-field-label">{field.label[locale]}</span>
+                {field.isSecret && <span class="support-field-mark">{d.secret}</span>}
+              </div>
+              {field.hint && <p class="support-field-hint">{field.hint[locale]}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {showSteps && (
+      <section class="support-tile">
+        <h4>
+          <SupportSectionIcon name="list" />
+          {d.steps}
+        </h4>
+        {entry.steps.length === 1 ? (
+          <p class="support-step-one">{entry.steps[0][locale]}</p>
+        ) : (
+          <ol class="support-steps">
+            {entry.steps.map((step) => (
+              <li>{step[locale]}</li>
+            ))}
+          </ol>
+        )}
+        {notes.map((note) => (
+          <p class="support-detail-note">{note}</p>
+        ))}
+      </section>
+    )}
+
+    {entry.plans.length > 0 && (
+      <section class="support-tile support-tile-wide">
+        <h4>
+          <SupportSectionIcon name="tag" />
+          {d.plans}
+        </h4>
+        <ul class="support-plans">
+          {entry.plans.map((plan) => (
+            <li>
+              <span>{plan.name[locale]}</span>
+              <span class="support-plan-amount">
+                ${plan.amountUSD}
+                {periodLabel(plan.period)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {actions.map((action) => (
+      <a class="support-tile support-tile-go" href={action.href} rel="noopener noreferrer">
+        <SupportSectionIcon name="out" />
+        <span>{action.label}</span>
+      </a>
+    ))}
+
+    {entry.troubleshooting.length > 0 && (
+      <details class="support-tile support-fail support-tile-wide">
+        <summary>
+          <SupportSectionIcon name="alert" />
+          {d.troubleshooting}
+        </summary>
+        <ul class="support-issues">
+          {entry.troubleshooting.map((issue) => (
+            <li>
+              <p>{issue.explanation[locale]}</p>
+              {issue.nextStep[locale] && <p>{issue.nextStep[locale]}</p>}
+            </li>
+          ))}
+        </ul>
+      </details>
+    )}
+  </div>
+</article>

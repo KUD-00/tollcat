@@ -1,0 +1,21 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import SupportStack from '../components/SupportStack.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { type Locale } from '../config';
+import { t } from '../i18n';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale).supportListPage;
+---
+
+<BaseLayout locale={locale} title={`${copy.title} — TollCat`} description={copy.description} path="providers">
+  <JsonLd slot="head" locale={locale} kind="providers" />
+  <main id="main" class="legal support-page">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <SupportStack locale={locale} host="page" />
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,21 @@
+# 演示种子写进空库之后，仪表盘要有那个大数字。
+# iOS 走 argv（-seed-demo），Android 走 intent extra（seed_demo）；两套键都传，各端只认自己的。
+# clock-preset=design 把日期钉在设计稿那天，月份标题和折算才不跟着墙钟漂。
+appId: com.zhechengqi.tollcat
+---
+- launchApp:
+    clearState: true
+    arguments:
+      -seed-demo: true
+      -skip-onboarding: true
+      -clock-preset=design: true
+      seed_demo: true
+      skip_onboarding: true
+      clock_preset: design
+# 首次冷启动（Android 要解压 Swift 资源包）十几秒，默认等待不够。
+- extendedWaitUntil:
+    visible:
+      id: dashboard.total
+    timeout: 60000
+- assertVisible:
+    id: tab.services

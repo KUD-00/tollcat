@@ -1,0 +1,46 @@
+---
+import { locales, siblingPath, siteConfig, type Locale } from '../config';
+import { t } from '../i18n';
+
+type Props = { locale: Locale; path?: string };
+const { locale, path = Astro.url.pathname } = Astro.props;
+const copy = t(locale);
+---
+
+<div class="lang-switch">
+  <button
+    class="lang-trigger"
+    type="button"
+    popovertarget="lang-popover"
+    aria-haspopup="listbox"
+    aria-label={`${copy.langName[locale]}, ${copy.a11y.langMenu}`}
+  >
+    {copy.langName[locale]}
+    <svg class="lang-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+      <path d="M2.4 4.2 6 7.8l3.6-3.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </button>
+  <div id="lang-popover" class="lang-popover" popover="auto" role="listbox" aria-label={copy.a11y.lang}>
+    {
+      locales.map((item) =>
+        item === locale ? (
+          <span class="lang-option" role="option" aria-selected="true" aria-current="page">
+            {copy.langName[item]}
+          </span>
+        ) : (
+          <a
+            class="lang-option"
+            role="option"
+            aria-selected="false"
+            href={siblingPath(locale, item, path)}
+            hreflang={siteConfig.localeBcp47[item]}
+            lang={siteConfig.localeBcp47[item]}
+            data-locale={item}
+          >
+            {copy.langName[item]}
+          </a>
+        ),
+      )
+    }
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<resources>
+    <!-- 和 iOS AppIcon 同一块靛蓝底。 -->
+    <color name="ic_launcher_background">#5856D6</color>
+</resources>

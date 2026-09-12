@@ -1,0 +1,13 @@
+---
+import { type Locale } from '../config';
+import SupportStack from './SupportStack.astro';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+---
+
+<dialog class="support-dialog" aria-labelledby="support-list-title">
+  <div class="support-sheet">
+    <SupportStack locale={locale} host="dialog" headingLevel={3} />
+  </div>
+</dialog>

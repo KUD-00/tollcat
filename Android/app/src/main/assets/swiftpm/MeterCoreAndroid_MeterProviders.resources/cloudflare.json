@@ -1,0 +1,91 @@
+{
+  "providerID": "cloudflare",
+  "kind": "usage",
+  "connected": true,
+  "currentSpendUSD": 11.05,
+  "periodStartDayOfMonth": 1,
+  "daily": [
+    {
+      "fromDay": 1,
+      "toDay": 15,
+      "usd": 0.69
+    },
+    {
+      "fromDay": 16,
+      "toDay": 16,
+      "usd": 0.7
+    }
+  ],
+  "previousMonth": {
+    "currentSpendUSD": 8.5,
+    "periodStartDayOfMonth": 1
+  },
+  "olderMonths": [
+    { "monthsBack": 2, "currentSpendUSD": 7.8, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 3, "currentSpendUSD": 7.1, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 4, "currentSpendUSD": 6.4, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 5, "currentSpendUSD": 5.6, "periodStartDayOfMonth": 1 }
+  ],
+  "lines": [
+    {
+      "category": "Workers",
+      "label": "Workers Standard",
+      "usd": 4.62,
+      "listUSD": 4.62,
+      "quantity": 18420000,
+      "unit": "Count"
+    },
+    {
+      "category": "R2",
+      "label": "R2 Storage",
+      "usd": 3.18,
+      "listUSD": 3.18,
+      "quantity": 42.5,
+      "unit": "GB-months"
+    },
+    {
+      "category": "Durable Objects",
+      "label": "Durable Objects Compute Requests",
+      "usd": 1.74,
+      "listUSD": 2.1,
+      "quantity": 2410000,
+      "unit": "Count",
+      "allowanceNote": "First 1M is included"
+    },
+    {
+      "category": "D1",
+      "label": "D1 - Storage GB-mo",
+      "usd": 0.86,
+      "listUSD": 0.86,
+      "quantity": 9.4,
+      "unit": "GB-months"
+    },
+    {
+      "category": "Containers",
+      "label": "Container vCPU",
+      "usd": 0.65,
+      "listUSD": 1.07,
+      "quantity": 26840,
+      "unit": "vCPU-seconds",
+      "allowanceNote": "First 375 vCPU-minutes included"
+    },
+    {
+      "category": "Workers KV",
+      "label": "KV List Operations",
+      "usd": 0.0,
+      "listUSD": 0.34,
+      "quantity": 940000,
+      "unit": "Count",
+      "allowanceNote": "First 1M is included"
+    },
+    {
+      "category": "Browser Rendering",
+      "label": "Browser Run - Browser Hours",
+      "usd": 0.0,
+      "listUSD": 0.18,
+      "quantity": 6.2,
+      "unit": "Hours",
+      "allowanceNote": "First 10 hours included"
+    }
+  ]
+}

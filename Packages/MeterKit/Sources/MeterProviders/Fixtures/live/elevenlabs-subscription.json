@@ -1,0 +1,11 @@
+{
+  "tier": "starter",
+  "character_count": 2500,
+  "character_limit": 10000,
+  "currency": "usd",
+  "current_overage": {
+    "amount": "0",
+    "currency": "usd"
+  },
+  "status": "active"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "/subscriptions/fixture/providers/Microsoft.CostManagement/Query/fixture",
+  "name": "fixture",
+  "type": "microsoft.costmanagement/Query",
+  "properties": {
+    "columns": [
+      {
+        "name": "Cost",
+        "type": "Number"
+      },
+      {
+        "name": "UsageDate",
+        "type": "Number"
+      },
+      {
+        "name": "Currency",
+        "type": "String"
+      }
+    ],
+    "rows": [
+      [
+        3.25,
+        20260801,
+        "USD"
+      ],
+      [
+        4.1,
+        20260802,
+        "USD"
+      ],
+      [
+        1.15,
+        20260815,
+        "USD"
+      ]
+    ]
+  }
+}

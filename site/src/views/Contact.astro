@@ -1,0 +1,59 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig, type Locale } from '../config';
+import { t } from '../i18n';
+import contactFormUrl from '../scripts/contact-form.js?url';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale).supportPage;
+const endpoint = `${siteConfig.apiUrl}/v1/feedback`;
+---
+
+<BaseLayout locale={locale} title={`${copy.title} — TollCat`} description={copy.description} path="support">
+  <JsonLd slot="head" locale={locale} kind="support" />
+  <main id="main" class="legal contact">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lede">{copy.lede}</p>
+      <form
+        class="contact-form"
+        data-contact
+        data-endpoint={endpoint}
+        novalidate
+      >
+        <label>
+          <span>{copy.form.category}</span>
+          <select name="category">
+            {
+              copy.form.categories.map((item) => (
+                <option value={item.value}>{item.label}</option>
+              ))
+            }
+          </select>
+        </label>
+        <label>
+          <span>{copy.form.message}</span>
+          <textarea name="message" required maxlength="2000" rows="8"></textarea>
+        </label>
+        <label>
+          <span>{copy.form.contact}</span>
+          <input name="contact" type="text" maxlength="120" autocomplete="email" />
+          <span class="contact-hint">{copy.form.contactHint}</span>
+        </label>
+        <button class="btn" type="submit" data-sending={copy.form.sending}>{copy.form.submit}</button>
+        <p
+          class="contact-status"
+          data-contact-status
+          data-sent={copy.form.sent}
+          data-rate-limited={copy.form.rateLimited}
+          data-failed={copy.form.failed}
+          aria-live="polite"
+        ></p>
+      </form>
+    </div>
+  </main>
+</BaseLayout>
+
+<script is:inline type="module" src={contactFormUrl}></script>

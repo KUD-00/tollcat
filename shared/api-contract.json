@@ -1,0 +1,50 @@
+{
+  "$comment": "api.tollcat.app 的共享契约面：字段上限与类别枚举。三个消费端（worker TS / Swift 客户端 / site 表单脚本）都由 scripts/generate-shared.py 铺出，改这里后重跑生成器。rate limit 是 worker 的运营决定，不进契约。",
+  "tip": {
+    "nameMax": 40,
+    "messageMax": 500
+  },
+  "feedback": {
+    "messageMax": 2000,
+    "contactMax": 120,
+    "providersMax": 400,
+    "exchangeMax": 1200,
+    "versionMax": 40,
+    "localeMax": 40,
+    "deviceMax": 40,
+    "categories": ["bug", "idea", "provider", "other"]
+  },
+  "usage": {
+    "$comment": "匿名页面计数。不带账号、设备标识、账单、凭据。未知 screen 服务端丢弃，不 400。",
+    "versionMax": 40,
+    "screensMax": 32,
+    "countMax": 1000,
+    "platforms": ["ios", "android", "macos", "windows"],
+    "screens": [
+      "onboarding",
+      "dashboard",
+      "dashboard_composition",
+      "dashboard_comparison",
+      "dashboard_account",
+      "services",
+      "services_add",
+      "services_detail",
+      "services_setup",
+      "services_subscription",
+      "settings",
+      "settings_usage_guides",
+      "settings_usage_guide",
+      "settings_appearance",
+      "settings_currency",
+      "settings_refresh",
+      "settings_reminders",
+      "settings_inbox",
+      "settings_import_export",
+      "settings_feedback",
+      "settings_about",
+      "settings_whats_new",
+      "settings_tip",
+      "share"
+    ]
+  }
+}

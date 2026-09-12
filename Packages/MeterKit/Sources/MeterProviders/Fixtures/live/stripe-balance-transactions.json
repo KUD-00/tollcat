@@ -1,0 +1,33 @@
+{
+  "object": "list",
+  "has_more": false,
+  "data": [
+    {
+      "id": "txn_1MeterUsdFeeA",
+      "object": "balance_transaction",
+      "amount": 2000,
+      "fee": 88,
+      "currency": "usd",
+      "created": 1785542400,
+      "type": "charge"
+    },
+    {
+      "id": "txn_1MeterUsdFeeB",
+      "object": "balance_transaction",
+      "amount": 5000,
+      "fee": 175,
+      "currency": "usd",
+      "created": 1785888000,
+      "type": "charge"
+    },
+    {
+      "id": "txn_1MeterPayout",
+      "object": "balance_transaction",
+      "amount": -1800,
+      "fee": 0,
+      "currency": "usd",
+      "created": 1785974400,
+      "type": "payout"
+    }
+  ]
+}

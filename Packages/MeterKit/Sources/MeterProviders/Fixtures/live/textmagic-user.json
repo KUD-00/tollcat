@@ -1,0 +1,9 @@
+{
+  "id": 305,
+  "username": "charles.conway",
+  "balance": 80.00,
+  "currency": {
+    "id": "GBP",
+    "htmlSymbol": "&pound;"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": 1111198068,
+      "dimensionId": "hl",
+      "dimensionName": "Logs",
+      "amountDue": 100.5
+    },
+    {
+      "id": 2222297587,
+      "dimensionId": "hm",
+      "dimensionName": "Metrics",
+      "amountDue": 10
+    }
+  ]
+}

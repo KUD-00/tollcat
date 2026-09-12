@@ -1,0 +1,34 @@
+{
+  "pending_charges": [
+    {
+      "description": "Cloud Compute 1024 MB",
+      "product": "Cloud Compute",
+      "start_date": "2026-08-01T00:00:00+00:00",
+      "end_date": "2026-08-16T00:00:00+00:00",
+      "units": 360,
+      "unit_type": "hours",
+      "unit_price": 0.009,
+      "total": 10.6
+    },
+    {
+      "description": "Block Storage 100 GB",
+      "product": "Block Storage",
+      "start_date": "2026-08-05T00:00:00+00:00",
+      "end_date": "2026-08-16T00:00:00+00:00",
+      "units": 264,
+      "unit_type": "hours",
+      "unit_price": 0.0136,
+      "total": 6.0
+    },
+    {
+      "description": "Bandwidth overage",
+      "product": "Bandwidth",
+      "start_date": "2026-08-12T00:00:00+00:00",
+      "end_date": "2026-08-16T00:00:00+00:00",
+      "units": 200,
+      "unit_type": "GB",
+      "unit_price": 0.01,
+      "total": 2.0
+    }
+  ]
+}

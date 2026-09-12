@@ -1,0 +1,48 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { type Locale } from '../config';
+import type { LegalSection } from '../i18n';
+
+type Section = LegalSection;
+type Props = {
+  locale: Locale;
+  path: string;
+  title: string;
+  description: string;
+  updated?: string;
+  sections: Section[];
+};
+const { locale, path, title, description, updated, sections } = Astro.props;
+---
+
+<BaseLayout locale={locale} title={`${title} — TollCat`} description={description} path={path}>
+  <JsonLd slot="head" locale={locale} kind="privacy" />
+  <main id="main" class="legal">
+    <div class="wrap">
+      <h1>{title}</h1>
+      {updated && <p class="updated">{updated}</p>}
+      {
+        sections.map((section) => (
+          <section>
+            <h2>{section.h}</h2>
+            {section.p.map((block) =>
+              typeof block === 'string' ? (
+                <p>{block}</p>
+              ) : (
+                <dl class="legal-terms">
+                  {block.list.map((item) => (
+                    <div>
+                      <dt>{item.term}</dt>
+                      <dd>{item.text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ),
+            )}
+          </section>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,5 @@
+{
+  "providerID": "stripe",
+  "kind": "usage",
+  "connected": false
+}

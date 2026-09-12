@@ -1,0 +1,19 @@
+{
+  "type": "list",
+  "current_page": 1,
+  "per_page": 25,
+  "next_page": null,
+  "next_page_url": null,
+  "prev_page": null,
+  "prev_page_url": null,
+  "data": [
+    {
+      "id": "inv_current",
+      "total": "18.40",
+      "billing_period_start": "2026-08-01",
+      "billing_period_end": "2026-08-31",
+      "paid": false,
+      "overdue": false
+    }
+  ]
+}

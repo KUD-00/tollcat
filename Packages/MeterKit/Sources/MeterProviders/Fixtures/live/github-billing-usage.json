@@ -1,0 +1,29 @@
+{
+  "_comment": "照 GitHub GET /users/{username}/settings/billing/usage 文档造的，字段形状已对着真账号响应核过（2026-08）：每条都带 repositoryName / quantity / grossAmount / discountAmount / netAmount。来源：https://docs.github.com/en/rest/billing/usage。Actions 是从量，Copilot unitType=month 是月费。",
+  "usageItems": [
+    {
+      "date": "2026-08-01",
+      "product": "actions",
+      "sku": "Actions Linux",
+      "quantity": 10,
+      "unitType": "minutes",
+      "pricePerUnit": 0.008,
+      "grossAmount": 0.08,
+      "discountAmount": 0,
+      "netAmount": 0.08,
+      "repositoryName": "RelayOS"
+    },
+    {
+      "date": "2026-08-03",
+      "product": "copilot",
+      "sku": "Copilot Business",
+      "quantity": 1,
+      "unitType": "month",
+      "pricePerUnit": 4,
+      "grossAmount": 4,
+      "discountAmount": 0,
+      "netAmount": "4.00",
+      "repositoryName": "RelayOS"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "id": "ord_1",
+  "receipts": [
+    {"transactionType": "purchase", "totalInclVat": "12.50", "currency": "USD"},
+    {"transactionType": "refund", "totalInclVat": "2.00", "currency": "USD"}
+  ]
+}

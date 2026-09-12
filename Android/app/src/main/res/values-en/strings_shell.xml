@@ -1,0 +1,17 @@
+<!-- GENERATED — 由 scripts/generate-android-strings.py 生成，不要手改。
+     和 iOS 同文的句子：改对应模块的 Localizable.xcstrings；
+     Android 独有的句子：改 Android/app/strings-android-only.json。 -->
+<resources>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_add_first">Add First Service</string>
+    <string name="onboarding_page_number_title">How much this month</string>
+    <string name="onboarding_page_number_body">Bills from your cloud and AI services, in one number. Open the app and see what you’ve spent this month.</string>
+    <string name="onboarding_page_credentials_title">Credentials stay on this device</string>
+    <string name="onboarding_page_credentials_body">API keys live in this device’s Keystore. They don’t leave with cloud backup. Move to a new phone with Import &amp; Export in Settings.</string>
+    <string name="onboarding_page_widget_title">See it without opening the app</string>
+    <string name="onboarding_page_widget_body">No amounts in notifications, and no amount alerts. Put the widget on the home screen — that’s this month’s number.</string>
+    <string name="onboarding_page_add_title">Add your first service</string>
+    <string name="onboarding_page_add_body">Add it to the list first — you don’t need an API key yet. ChatGPT Pro alone is enough to add.</string>
+    <string name="onboarding_progress">%1$d / %2$d</string>
+</resources>

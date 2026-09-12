@@ -1,0 +1,44 @@
+# 两份 XcodeGen spec 共用的那一半。`project.yml`（iOS）和 `project-mac.yml`（Mac）
+# 都 include 它，所以团队 ID、Swift 版本、版本号只有一处。
+#
+# 为什么是两份工程而不是一份：见 `project.yml` 顶上那段。
+#
+# 这里不放 `name`，也不放 `deploymentTarget`：前者决定生成物叫什么，
+# 后者两端不是一个数，都留在各自的 spec 里。
+#
+
+options:
+  bundleIdPrefix: com.zhechengqi
+  createIntermediateGroups: true
+  developmentLanguage: zh-Hans
+  knownRegions:
+    - en
+    - ja
+    - zh-Hans
+    - Base
+  groupSortPosition: top
+  # xcscheme 在 <工程>.xcodeproj/xcshareddata/xcschemes/，
+  # 默认 ../../ 只回到 .xcodeproj 里，到不了仓库根上的 TollCat.storekit。
+  schemePathPrefix: "../../../"
+
+fileGroups:
+  - TollCat.storekit
+
+packages:
+  # 全部业务逻辑。本地包，两端同一份源码。
+  MeterKit:
+    path: Packages/MeterKit
+
+# Team ID 不写在这里：走 Config/Signing.xcconfig → 本机 / CI 各自的 Signing.local.xcconfig。
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
+
+settings:
+  base:
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "6.0"
+    # 用户可见版本号。单源是 shared/version.json，由 scripts/generate-shared.py 铺到这里。
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "3"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES

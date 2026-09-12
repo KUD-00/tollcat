@@ -1,0 +1,34 @@
+{
+  "_comment": "照 OpenAI GET /v1/organization/costs 文档和 cookbook 示例造的，还没拿真账号核对过。来源：https://developers.openai.com/cookbook/examples/completions_usage_api",
+  "object": "page",
+  "has_more": false,
+  "next_page": null,
+  "data": [
+    {
+      "object": "bucket",
+      "start_time": 1785542400,
+      "end_time": 1785628800,
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": { "value": 3.12, "currency": "usd" },
+          "line_item": null,
+          "project_id": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785628800,
+      "end_time": 1785715200,
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": { "value": "4.50", "currency": "usd" },
+          "line_item": null,
+          "project_id": null
+        }
+      ]
+    }
+  ]
+}

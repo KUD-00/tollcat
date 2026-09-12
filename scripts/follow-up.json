@@ -1,0 +1,266 @@
+{
+  "excludes": [
+    "*Mac*",
+    "*MenuBar*",
+    "*Pad*",
+    "*Widget*"
+  ],
+  "stamps": {
+    "android": {
+      "bridge": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "0375bc5b458f66cccb75b2b194ae64c00b58281759610c313bbfff2790eea7de",
+        "note": "仪表 JSON 补 comparisonItems、subscriptionCaption、staleCaption；构成/对比详情不再只靠合计两行。"
+      },
+      "dashboard": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "c1389243372328c920a7226c8b1dd2cb10506e6a15abc1165368daf8c4c85458",
+        "note": "口径胶囊上首屏；筛选预览/有数月份/自定义区间；大标题跟取景框；刷新失败页脚人话；演示/读失败横幅。"
+      },
+      "developer": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "571c153fa9b05de11da03909ffc9b35a4e40f3ca552589641e4b49d9ec0eabb8",
+        "note": "画廊补铺色/刷新旋转/圆环再转/猫工作室；实验室默认 live。"
+      },
+      "modules": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "c87073efe46f8e717bc2a3ecbc0d6c6e130842e0ca02db96e08626762b5a4a64",
+        "note": "特别关心画 spark；预算格子；热力淡底+高峰日；类别金额；对比按家行；构成圆环；订阅详情可点。"
+      },
+      "services": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "1827e00084a8cc2acfb8d8f10838ade8e92e3272e8656a6c10dec54a5b90f1f5",
+        "note": "结束 vs 清空；归档进历史服务；列表金额走本月含订阅不跟取景框；陈旧橙字；历史图横滑；确认抽屉用目录 summary。"
+      },
+      "settings": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "345979caeb19f20ad67767fd094fd6c1c279d4d1d0633ddbc02f285e74866ba4",
+        "note": "导出先进码+有效期；导入剩余次数与锁定；信箱 secret 显示一次；清空垫底危险组。"
+      },
+      "setup": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "531ab9a98a5893b3cf96432c098f4e9e03c4356ec507e348375dc115723515f9",
+        "note": "开场补第 3 页小组件、顶栏 1/4、底栏满宽主按钮、第 1 页显示货币；凭据步 FillProgress 铺色、成功标题按 snapshot.kind、401/403/空读数回教程改权限、撞车横幅、第二份昵称、换钥不预填 secret、Keystore 写失败；supportsInbox 走 InboxHandoffStep（建箱/mint、任务书、投递 key 只显示一次）。"
+      },
+      "share": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "1aedee8724c303414e74ec0a51caf6c6888841e2c3438dfd22999f3467e6b95a",
+        "note": "分享卡补品牌猫和二维码（自写 QR，无第三方库）。"
+      },
+      "shell": {
+        "date": "2026-09-10",
+        "decision": "reviewed",
+        "gitRev": "2900247d67521cd55980132021554110cf89ac12",
+        "hash": "1ab73a69c835e75c1b010f0fd19c9e9b8d0a28ab02500c785d860084a7ea7422",
+        "note": "底栏「仪表盘」；亮屏 15 分钟保鲜；刚走完开场不弹更新说明；小组件点进仪表。"
+      }
+    },
+    "windows": {},
+    "cli": {
+      "bridge": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI/ 尚未落地。目录出现的那次改动必须给 bridge 盖 reviewed。"
+      },
+      "dashboard": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "developer": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "modules": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "services": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "settings": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "setup": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "share": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      },
+      "shell": {
+        "date": "2026-09-09",
+        "decision": "n/a",
+        "hash": "",
+        "note": "CLI 无 GUI。"
+      }
+    }
+  },
+  "watches": [
+    {
+      "apple": "Android/native/Sources/MeterBridge",
+      "depth": "files",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/CatalogModels.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/MeterCoreNative.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/TollCatSession.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/dashboard/DashboardFilterState.kt"
+        ],
+        "windows": [
+          "Windows/app/Models/CatalogModels.cs",
+          "Windows/app/Native/",
+          "Windows/app/Services/Session.cs"
+        ]
+      },
+      "id": "bridge"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Dashboard",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/dashboard/",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/DashboardScreen.kt"
+        ],
+        "windows": [
+          "Windows/app/Views/DashboardPage.cs"
+        ]
+      },
+      "id": "dashboard"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Developer",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/developer/"
+        ],
+        "windows": []
+      },
+      "id": "developer"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterModules",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/dashboard/",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/DashboardScreen.kt"
+        ],
+        "windows": [
+          "Windows/app/Views/DashboardPage.cs"
+        ]
+      },
+      "id": "modules"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Services",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/services/",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/ServicesScreen.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/ProviderDetailScreen.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/AddProviderScreen.kt"
+        ],
+        "windows": [
+          "Windows/app/Views/ServicesPage.cs",
+          "Windows/app/Views/ProviderDetailPage.cs",
+          "Windows/app/Views/AddProviderPage.cs"
+        ]
+      },
+      "id": "services"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Settings",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/settings/",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/SettingsScreen.kt"
+        ],
+        "windows": [
+          "Windows/app/Views/SettingsPage.cs"
+        ]
+      },
+      "id": "settings"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Setup",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/setup/",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/OnboardingScreen.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/SetupCredentialsScreen.kt"
+        ],
+        "windows": [
+          "Windows/app/Views/SetupWizardPage.cs"
+        ]
+      },
+      "id": "setup"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Share",
+      "depth": "tree",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/share/",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/DashboardScreen.kt"
+        ],
+        "windows": []
+      },
+      "id": "share"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures",
+      "depth": "files",
+      "hints": {
+        "android": [
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/TollCatApp.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/MainActivity.kt",
+          "Android/app/src/main/kotlin/com/zhechengqi/tollcat/TollCatSession.kt"
+        ],
+        "windows": [
+          "Windows/app/MainWindow.xaml.cs",
+          "Windows/app/App.xaml.cs"
+        ]
+      },
+      "id": "shell"
+    }
+  ]
+}

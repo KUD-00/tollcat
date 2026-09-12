@@ -1,0 +1,28 @@
+{
+  "dedicated_usage": {
+    "subtotal": 10.0,
+    "credits_used": 2.0,
+    "total": 12.0,
+    "minutes": 120,
+    "breakdown": [
+      {
+        "daily": [
+          { "date": "2026-08-01", "subtotal": 4.0 },
+          { "date": "2026-08-10", "subtotal": 6.0 }
+        ]
+      }
+    ]
+  },
+  "model_apis_usage": {
+    "subtotal": 3.5,
+    "credits_used": 0,
+    "total": 3.5,
+    "breakdown": [
+      {
+        "daily": [
+          { "date": "2026-08-10", "subtotal": 3.5 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApiResponse Status="OK">
+  <CommandResponse>
+    <UserGetBalancesResult AvailableBalance="33.25" Currency="USD" AccountBalance="33.25" />
+  </CommandResponse>
+</ApiResponse>

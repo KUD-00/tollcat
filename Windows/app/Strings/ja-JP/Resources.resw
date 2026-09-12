@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- GENERATED — 由 scripts/generate-windows-strings.py 生成，不要手改。
+       和 iOS 同文的句子：改对应模块的 Localizable.xcstrings；
+       Windows 独有的句子：改 Windows/app/strings-windows-only.json。 -->
+
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>TollCat</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>クラウドと AI の請求を、ひとつの暦月にまとめます。</value>
+  </data>
+  <data name="TabDashboard" xml:space="preserve">
+    <value>ホーム</value>
+  </data>
+  <data name="TabServices" xml:space="preserve">
+    <value>サービス</value>
+  </data>
+  <data name="TabSettings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="HeroLabel" xml:space="preserve">
+    <value>今月の合計</value>
+  </data>
+  <data name="ProjectedCaption" xml:space="preserve">
+    <value>月末見込み {0}</value>
+  </data>
+  <data name="SubscriptionCaption" xml:space="preserve">
+    <value>サブスク +{0}</value>
+  </data>
+  <data name="ModuleComposition" xml:space="preserve">
+    <value>内訳</value>
+  </data>
+  <data name="ModuleUpcoming" xml:space="preserve">
+    <value>まもなく引き落とし</value>
+  </data>
+  <data name="ModuleQuota" xml:space="preserve">
+    <value>無料枠</value>
+  </data>
+  <data name="ModuleComparison" xml:space="preserve">
+    <value>先月同期比</value>
+  </data>
+  <data name="ModuleAnomaly" xml:space="preserve">
+    <value>異常</value>
+  </data>
+  <data name="ModuleBalance" xml:space="preserve">
+    <value>残高が残り少ない</value>
+  </data>
+  <data name="ModuleTrend" xml:space="preserve">
+    <value>ここ数か月</value>
+  </data>
+  <data name="DashboardEmptyTitle" xml:space="preserve">
+    <value>請求はまだない</value>
+  </data>
+  <data name="DashboardEmptyBody" xml:space="preserve">
+    <value>最初のクラウドサービスを接続すると、今月の支出がここに表示される。</value>
+  </data>
+  <data name="DashboardEmptyAction" xml:space="preserve">
+    <value>最初のサービスを追加</value>
+  </data>
+  <data name="DashboardLoading" xml:space="preserve">
+    <value>取得中…</value>
+  </data>
+  <data name="ServicesEmptyTitle" xml:space="preserve">
+    <value>サービス未接続</value>
+  </data>
+  <data name="ServicesEmptyBody" xml:space="preserve">
+    <value>使っているクラウドを追加してください。合計はダッシュボードに表示され、認証情報はこの端末から出ません。</value>
+  </data>
+  <data name="ActionAddService" xml:space="preserve">
+    <value>サービスを追加</value>
+  </data>
+  <data name="MoreServices" xml:space="preserve">
+    <value>その他のサービス</value>
+  </data>
+  <data name="SearchProviders" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="ActionRefresh" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="ActionCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="ActionTestConnection" xml:space="preserve">
+    <value>接続をテスト</value>
+  </data>
+  <data name="ActionSaveCredentials" xml:space="preserve">
+    <value>Windows の認証情報ストアに保存</value>
+  </data>
+  <data name="ActionConnectUsage" xml:space="preserve">
+    <value>{0}の請求に接続</value>
+  </data>
+  <data name="ActionManageCredentials" xml:space="preserve">
+    <value>認証情報を管理</value>
+  </data>
+  <data name="ActionClearProvider" xml:space="preserve">
+    <value>この端末の{0}関連の請求データを消去</value>
+  </data>
+  <data name="DetailUsageEmpty" xml:space="preserve">
+    <value>従量の接続がまだありません。請求を接続すると今月の支出が出ます。</value>
+  </data>
+  <data name="DetailInboxHint" xml:space="preserve">
+    <value>このサービスに公開の請求 API はありません。手入力か検針ポストで入れてください。</value>
+  </data>
+  <data name="SetupTitle" xml:space="preserve">
+    <value>{0} に接続</value>
+  </data>
+  <data name="SetupIntro" xml:space="preserve">
+    <value>認証情報を貼り付けます。テストが通ったらこの PC の認証情報ストアにだけ残します。</value>
+  </data>
+  <data name="SetupSuccess" xml:space="preserve">
+    <value>{0} を読み取りました</value>
+  </data>
+  <data name="SetupKeystoreNote" xml:space="preserve">
+    <value>認証情報はこの PC の認証情報ストアにだけ残り、クラウド同期しません。</value>
+  </data>
+  <data name="SetupFeedbackSuccessLede" xml:space="preserve">
+    <value>まだ実請求との突合はしていません。数字が合っていれば、知らせてください。</value>
+  </data>
+  <data name="SetupFeedbackFailureLede" xml:space="preserve">
+    <value>手順どおりにやってもダメだったら、何が起きたか教えてください。</value>
+  </data>
+  <data name="SetupFeedbackPrivacy" xml:space="preserve">
+    <value>送られるのはサービス名、バージョン、OS、機種、言語です。金額もキーも含みません。</value>
+  </data>
+  <data name="SetupFeedbackDraftOk" xml:space="preserve">
+    <value>{0} の接続に成功しました。数字は管理画面と一致しています。</value>
+  </data>
+  <data name="SetupFeedbackDraftFail" xml:space="preserve">
+    <value>{0} の接続テストに失敗しました（{1}）。</value>
+  </data>
+  <data name="SetupFeedbackDraftNetwork" xml:space="preserve">
+    <value>{0} の接続テストに失敗しました。ネットワークを利用できません。</value>
+  </data>
+  <data name="SetupFeedbackDraftEmpty" xml:space="preserve">
+    <value>{0} にはつながりましたが、金額は返りませんでした。</value>
+  </data>
+  <data name="SetupFeedbackDraftUnknown" xml:space="preserve">
+    <value>{0} のテストを完了できませんでした。</value>
+  </data>
+  <data name="SettingsFeedbackContactHint" xml:space="preserve">
+    <value>メールアドレスなど連絡先</value>
+  </data>
+  <data name="ServicesSetupHaveCredentials" xml:space="preserve">
+    <value>認証情報を用意できた。次へ</value>
+  </data>
+  <data name="ServicesSetupGuideMissing" xml:space="preserve">
+    <value>接続手順はまだない</value>
+  </data>
+  <data name="ServicesSetupGuideMissingBody" xml:space="preserve">
+    <value>ステップごとの説明は準備中です。先に公式サイトで読み取り専用の認証情報を作れます。必要な項目は以下です。</value>
+  </data>
+  <data name="ServicesSetupOpenConsole" xml:space="preserve">
+    <value>認証情報を作るページを開く</value>
+  </data>
+  <data name="ServicesNoAmount" xml:space="preserve">
+    <value>データなし</value>
+  </data>
+  <data name="ServicesNoReading" xml:space="preserve">
+    <value>履歴はまだない</value>
+  </data>
+  <data name="ServicesQuotaUsed" xml:space="preserve">
+    <value>{0}%使用</value>
+  </data>
+  <data name="ServicesAccountN" xml:space="preserve">
+    <value>アカウント {0}</value>
+  </data>
+  <data name="ServicesHistory" xml:space="preserve">
+    <value>読み取り明細</value>
+  </data>
+  <data name="ServicesHistoryRange" xml:space="preserve">
+    <value>履歴の範囲</value>
+  </data>
+  <data name="ServicesHistory7" xml:space="preserve">
+    <value>7日</value>
+  </data>
+  <data name="ServicesHistory30" xml:space="preserve">
+    <value>30日</value>
+  </data>
+  <data name="ServicesHistory12" xml:space="preserve">
+    <value>12か月</value>
+  </data>
+  <data name="ServicesRemoveTitle" xml:space="preserve">
+    <value>この端末の{0}関連の請求データを消去しますか？</value>
+  </data>
+  <data name="ServicesRemoveBody" xml:space="preserve">
+    <value>用量の認証情報とこのサービスに紐づく定期課金を削除します。読み取り履歴は端末に残り、合計からは外れます。</value>
+  </data>
+  <data name="ServicesRemoveConfirm" xml:space="preserve">
+    <value>消去</value>
+  </data>
+  <data name="KindUsageTitle" xml:space="preserve">
+    <value>従量課金</value>
+  </data>
+  <data name="KindUsageBody" xml:space="preserve">
+    <value>これまでの使用額を暦月ごとに合算します。日次データがあれば日次で加算します。</value>
+  </data>
+  <data name="KindPrepaidTitle" xml:space="preserve">
+    <value>プリペイド残高</value>
+  </data>
+  <data name="KindPrepaidBody" xml:space="preserve">
+    <value>今月の消費 = 月初残高 − 現在残高。月初スナップショットがない最初の月は不完全です。</value>
+  </data>
+  <data name="KindSubscriptionTitle" xml:space="preserve">
+    <value>定額サブスクリプション</value>
+  </data>
+  <data name="KindSubscriptionBody" xml:space="preserve">
+    <value>請求日が今月内なら全額を計上し、日割りはしません。</value>
+  </data>
+  <data name="KindFreetierTitle" xml:space="preserve">
+    <value>無料枠内</value>
+  </data>
+  <data name="KindFreetierBody" xml:space="preserve">
+    <value>合計には 0 として記録し、枠の消費は別に確認します。</value>
+  </data>
+  <data name="SettingsGeneral" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="SettingsCurrency" xml:space="preserve">
+    <value>表示通貨</value>
+  </data>
+  <data name="SettingsAppearance" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="SettingsAppearanceLight" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="SettingsAppearanceDark" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="SettingsAppearanceSystem" xml:space="preserve">
+    <value>システム</value>
+  </data>
+  <data name="SettingsHideCat" xml:space="preserve">
+    <value>猫をしまう</value>
+  </data>
+  <data name="SettingsRefreshTitle" xml:space="preserve">
+    <value>アプリを開くたびに使用量を更新</value>
+  </data>
+  <data name="SettingsRefreshNote" xml:space="preserve">
+    <value>更新に料金がかかるサービスは対象外です。</value>
+  </data>
+  <data name="SettingsStartup" xml:space="preserve">
+    <value>サインイン時に起動</value>
+  </data>
+  <data name="SettingsStartupNote" xml:space="preserve">
+    <value>起動するかどうかは Windows の設定が正です。ここは要求するだけ。オフにするには「設定 → アプリ → スタートアップ」。</value>
+  </data>
+  <data name="SettingsGuide" xml:space="preserve">
+    <value>4 種類のお金</value>
+  </data>
+  <data name="SettingsFeedback" xml:space="preserve">
+    <value>フィードバック</value>
+  </data>
+  <data name="SettingsFeedbackHint" xml:space="preserve">
+    <value>フィードバックを送る</value>
+  </data>
+  <data name="SettingsFeedbackSend" xml:space="preserve">
+    <value>送信</value>
+  </data>
+  <data name="SettingsFeedbackSent" xml:space="preserve">
+    <value>受け取りました。ありがとう。</value>
+  </data>
+  <data name="SettingsFeedbackRateLimited" xml:space="preserve">
+    <value>少し間隔が短いようです。10 分後にもう一度お試しください。</value>
+  </data>
+  <data name="SettingsFeedbackFailed" xml:space="preserve">
+    <value>送信できませんでした。入力内容は残っています。接続を確認してもう一度お試しください。</value>
+  </data>
+  <data name="SettingsFeedbackCategory" xml:space="preserve">
+    <value>種類</value>
+  </data>
+  <data name="SettingsFeedbackMessageLabel" xml:space="preserve">
+    <value>フィードバック内容</value>
+  </data>
+  <data name="SettingsFeedbackMessageHint" xml:space="preserve">
+    <value>なんでも書いてください</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="SettingsAboutBody" xml:space="preserve">
+    <value>TollCat は各社の請求を同じ暦月にまとめます。帳簿はドル。換算は同じ Swift MeterCore。シェルは WinUI 3 です。</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>バージョン {0}</value>
+  </data>
+  <data name="SettingsClear" xml:space="preserve">
+    <value>この端末のデータを消去</value>
+  </data>
+  <data name="SettingsClearTitle" xml:space="preserve">
+    <value>この端末のデータを消去しますか？</value>
+  </data>
+  <data name="SettingsClearBody" xml:space="preserve">
+    <value>メンバーシップ、スナップショット、認証情報がこの端末から削除され、元に戻せません。</value>
+  </data>
+  <data name="SettingsClearConfirm" xml:space="preserve">
+    <value>消去</value>
+  </data>
+  <data name="TrayOpenMain" xml:space="preserve">
+    <value>メインウィンドウを開く</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="ToastBalanceTitle" xml:space="preserve">
+    <value>残高が底をつきそうです</value>
+  </data>
+  <data name="ToastAnomalyTitle" xml:space="preserve">
+    <value>確認が必要な項目があります</value>
+  </data>
+</root>

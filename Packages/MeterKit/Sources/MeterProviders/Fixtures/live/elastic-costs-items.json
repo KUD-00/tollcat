@@ -1,0 +1,13 @@
+{
+  "products": [
+    {
+      "type": "ess",
+      "total_ecu": 12
+    },
+    {
+      "type": "security",
+      "total_ecu": 3
+    }
+  ],
+  "total_ecu": 15
+}

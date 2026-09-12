@@ -1,0 +1,36 @@
+{
+  "_comment": [
+    "UI 冒烟测试（maestro/）用的稳定锚点。iOS 是 accessibilityIdentifier，Android 是 testTag（testTagsAsResourceId 后即 resource-id）。",
+    "id 不随语言变，所以 Maestro 流程能三语共用、iOS / Android 共用同一份 YAML。",
+    "改这里之后跑 python3 scripts/generate-shared.py；maestro/**/*.yaml 里引用的 id 必须在这张表里（生成器会核对）。",
+    "只放冒烟流程要点到 / 要断言的东西。不要为了「以后可能用」加一堆。"
+  ],
+  "ids": {
+    "tab.dashboard": "底部 tab：仪表盘",
+    "tab.services": "底部 tab：服务",
+    "tab.settings": "底部 tab：设置",
+    "onboarding.skip": "开场引导右上角「跳过」",
+    "onboarding.next": "开场引导主按钮（继续 / 添加第一个服务）",
+    "dashboard.empty": "仪表盘空态整块",
+    "dashboard.total": "本月合计那一个大数字",
+    "services.empty": "服务空态整块",
+    "services.empty.add": "服务空态「添加服务」",
+    "services.add": "服务列表里的「添加服务」行 / FAB",
+    "addProvider.list": "添加服务的目录列表",
+    "addProvider.confirm": "添加确认面板的主按钮",
+    "setup.guide": "接入向导：连接参考步",
+    "setup.next": "接入向导主按钮（下一步 / 我拿到凭据了）",
+    "setup.credentials": "接入向导：填凭据步",
+    "providerDetail.list": "服务详情页",
+    "providerDetail.connect": "详情页里的「连接 X 账单」行，两端都从这里进向导",
+    "settings.list": "设置列表",
+    "settings.hideCat": "设置里的「关闭猫猫」开关"
+  },
+  "prefixes": {
+    "services.row": "服务列表里某一家的行，后接 provider key（services.row.cloudflare）",
+    "addProvider.row": "添加目录里某一家的行，后接 provider key（addProvider.row.cloudflare）"
+  },
+  "system": {
+    "BackButton": "iOS 导航栏系统返回钮，UIKit 自带的 identifier，不是我们打的；Maestro 的 back 只管 Android"
+  }
+}

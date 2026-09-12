@@ -1,0 +1,5 @@
+<resources>
+    <!-- 纯 Compose 应用，这层只管首帧窗口底色。必须分日夜两份，
+         否则深色模式冷启动会先闪一屏白再进 Compose。 -->
+    <style name="Theme.TollCat" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

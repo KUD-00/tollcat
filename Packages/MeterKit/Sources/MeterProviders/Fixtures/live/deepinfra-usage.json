@@ -1,0 +1,10 @@
+{
+  "months": [
+    {
+      "period": "2026.08",
+      "total_cost": 1234,
+      "invoice_id": "NOT_FINAL"
+    }
+  ],
+  "initial_month": "2026.01"
+}

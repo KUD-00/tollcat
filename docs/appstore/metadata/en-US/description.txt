@@ -1,0 +1,14 @@
+How many cloud services are you paying for? Cloudflare, AWS, Vercel… each one has its own dashboard and its own bill. To find out what this month actually costs, you have to log into every one of them.
+
+TollCat turns that into a glance: open the app and there's one number — what all your services have cost so far this month. Tap in for the details: usage, subscriptions, and whether you're ahead of last month. And if you'd rather not open the app at all, a widget shows the same number.
+
+HOW IT CONNECTS
+TollCat works with Cloudflare, AWS, Vercel, Stripe, GitHub, and 80+ other cloud and AI services. Each one comes with a step-by-step guide to creating a read-only API key; paste it in and you're done. For services without a billing API, there's a reading inbox: forward the invoice email and the number comes in anyway.
+
+YOUR CREDENTIALS STAY ON THIS DEVICE
+API keys live only in the iPhone's Keychain — never iCloud, never a backup. Your phone talks directly to each vendor's official API, with no server in between. Nobody can see your bills. Including us.
+
+FREE
+TollCat is free — no account, no ads, no subscription. Runs on iPhone and iPad. If it ever saves you from a scary bill, there's a tip jar in Settings — it treats the kitty.
+
+The numbers in the screenshots are demo data, not live bills.

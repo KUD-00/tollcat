@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "requestId": "d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6",
+  "result": [
+    {
+      "id": "015d5fc2-490f-4dcd-958d-567b556e008e",
+      "name": "Acme"
+    }
+  ]
+}

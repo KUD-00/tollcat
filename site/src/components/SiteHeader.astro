@@ -1,0 +1,44 @@
+---
+import BrandMark from './BrandMark.astro';
+import GitHubMark from './GitHubMark.astro';
+import LangSwitch from './LangSwitch.astro';
+import ThemeSwitch from './ThemeSwitch.astro';
+import { localePath, siteConfig, type Locale } from '../config';
+import { t } from '../i18n';
+
+type Props = { locale: Locale; path?: string };
+const { locale, path = Astro.url.pathname } = Astro.props;
+const copy = t(locale);
+---
+
+<a class="skip" href="#main">{copy.a11y.skip}</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href={localePath(locale)} translate="no">
+      <BrandMark />
+      TollCat
+    </a>
+    <nav aria-label={copy.a11y.nav}>
+      <ul class="nav-links">
+        <li><a href={`${localePath(locale)}#faq`}>{copy.nav.faq}</a></li>
+        <li><a href={localePath(locale, 'support')}>{copy.nav.support}</a></li>
+      </ul>
+    </nav>
+    <div class="header-tools">
+      {
+        siteConfig.githubUrl && (
+          <a
+            class="github-link"
+            href={siteConfig.githubUrl}
+            rel="noopener noreferrer"
+            aria-label={copy.a11y.github}
+          >
+            <GitHubMark />
+          </a>
+        )
+      }
+      <ThemeSwitch locale={locale} />
+      <LangSwitch locale={locale} path={path} />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,46 @@
+{
+  "providerID": "github",
+  "kind": "subscription",
+  "connected": true,
+  "committedMonthlyUSD": 4,
+  "chargeDayOfMonth": 3,
+  "periodStartDayOfMonth": 1,
+  "lines": [
+    {
+      "category": "actions",
+      "label": "Actions Linux",
+      "scope": "RelayOS",
+      "usd": 0.0,
+      "listUSD": 10.0,
+      "quantity": 1667,
+      "unit": "Minutes"
+    },
+    {
+      "category": "actions",
+      "label": "Actions Linux",
+      "scope": "gotanken",
+      "usd": 0.0,
+      "listUSD": 0.19,
+      "quantity": 31,
+      "unit": "Minutes"
+    },
+    {
+      "category": "actions",
+      "label": "Actions storage",
+      "scope": "RelayOS",
+      "usd": 0.0,
+      "listUSD": 0.01,
+      "quantity": 7.48,
+      "unit": "GigabyteHours"
+    },
+    {
+      "category": "packages",
+      "label": "Packages storage",
+      "scope": "RelayOS",
+      "usd": 0.0,
+      "listUSD": 0.04,
+      "quantity": 1.2,
+      "unit": "GigabyteHours"
+    }
+  ]
+}

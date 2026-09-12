@@ -1,0 +1,10 @@
+{
+  "id": "user_060ab38db3c04ffaa60f262e5781a9be",
+  "object": "User",
+  "parent_id": null,
+  "name": "EasyPost Docs",
+  "balance": "42.50000",
+  "price_per_shipment": "0.00000",
+  "email": "dev+easypost-docs@easypost.com",
+  "children": []
+}

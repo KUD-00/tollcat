@@ -1,0 +1,9 @@
+{
+  "id": "bill-2026-08",
+  "org_id": "org-demo",
+  "period": "2026-08",
+  "currency": "USD",
+  "total": "12.4",
+  "total_compute_cost": "9.1",
+  "total_storage_cost": "3.3"
+}

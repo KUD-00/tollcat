@@ -1,0 +1,302 @@
+name: CI
+
+# The repo is still private and macOS runners bill by the minute, so nothing
+# triggers automatically until it goes public — manual dispatch only. After
+# going public, restore:
+#   push:
+#     branches: [main]
+#   pull_request:
+on:
+  workflow_dispatch:
+
+# No secrets. A fork must be able to run this job as-is.
+permissions:
+  contents: read
+
+# Consecutive pushes to the same branch only run the newest one; don't burn
+# macOS runner minutes on commits that are already stale.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: Static gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install site deps
+        run: pnpm install --frozen-lockfile
+        working-directory: site
+
+      - name: Check i18n coverage
+        run: python3 scripts/check-i18n-coverage.py
+
+      - name: Check App Store invariants
+        run: python3 scripts/check-app-store-invariants.py
+
+      - name: Check source invariants
+        run: python3 scripts/check-source-invariants.py
+
+      # 版式规范那六条单独一个脚本（见它的文件头）。两个都得跑。
+      - name: Check design lint
+        run: python3 scripts/check-design-lint.py
+
+      - name: Check outbound hosts
+        run: bash scripts/check-outbound-hosts.sh
+
+      - name: Check copy terms
+        run: python3 scripts/check-copy-terms.py
+
+      # 同 mac-appcast.yml：${{ }} 一律不进 run: 正文。这两个值本身不可能带
+      # shell 元字符（事件名与 SHA），收紧是为了让「run: 里不出现 ${{ }}」成为
+      # 一条能机械检查的规矩，而不是每处再判断一次风险。
+      - name: Check copy freshness
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            python3 scripts/check-copy-freshness.py --against "$BASE_SHA"
+          else
+            python3 scripts/check-copy-freshness.py --against HEAD~1
+          fi
+
+      - name: Check Windows strings
+        run: python3 scripts/generate-windows-strings.py --check
+
+      - name: Check follow-up map
+        run: python3 scripts/check-follow-up.py check
+
+      # Android 的 .so 只在 release.yml 手动勾 android 时才编，于是桥里一个
+      # 少写的 import 能一路躺到打 tag 那天（2026-09-09 就发生过一次）。
+      # 完整交叉编译要 Swift Android SDK + NDK，太重；但桥的 Swift 在 host 上
+      # 就能编——编译错误九成在这一层，这一步几十秒就能挡住。
+      - name: Build the Android bridge (host)
+        run: |
+          swift build --package-path Android/native --target MeterBridge \
+            -Xswiftc -target -Xswiftc arm64-apple-macosx26.0
+
+  secrets:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      # 扫的是整条历史，不只是这次的 diff：一个被后来提交删掉的密钥照样在
+      # 仓库里，公开后谁都能 checkout 到它。fetch-depth: 0 就是为了这个。
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 不用 gitleaks-action：它对组织仓库要 license key，也会让 fork 跑不起来。
+      # 直接下钉住版本的发行包并核对 sha256，和本地 nix 装的同一个版本。
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          set -euo pipefail
+          url="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -fsSL --retry 3 -o /tmp/gitleaks.tar.gz "$url"
+          echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          install -m 0755 /tmp/gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      # 误报放行在 .gitleaks.toml，按值或语法形态写，不按行号指纹。
+      # 报告里的值一律脱敏，日志本身不能变成第二个泄露点。
+      - name: Scan full history
+        run: gitleaks git --config .gitleaks.toml --redact --no-banner --verbose .
+
+      # 提交元数据两条规矩：身份只允许 GitHub noreply（作者不让任何真实邮箱进历史），
+      # 消息只许英文（commit log 是所有人都读的那一面）。本机有同样的钩子，这里给
+      # 别的机器和 fork PR 兜底。
+      - name: Check commit identities
+        run: |
+          set -euo pipefail
+          bad="$(git log --all --format='%h %ae %ce' | awk '$2 !~ /@users\.noreply\.github\.com$/ || $3 !~ /@users\.noreply\.github\.com$/' || true)"
+          if [[ -n "$bad" ]]; then
+            echo "commits with a non-noreply author/committer:" >&2
+            echo "$bad" >&2
+            exit 1
+          fi
+
+      - name: Check commit messages are English
+        run: bash scripts/git-hooks/commit-msg-gate.sh --history
+
+  test:
+    name: Test
+    runs-on: macos-26
+    env:
+      DERIVED_DATA: /tmp/dd-verify
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+          sw_vers
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      # Two specs: project.yml is iOS, project-mac.yml is the Mac direct-download
+      # shell (it owns the only third-party package, Sparkle). Both are generated
+      # here so the sync check below covers both committed projects.
+      - name: Generate Xcode projects
+        run: |
+          xcodegen generate
+          xcodegen generate --spec project-mac.yml
+
+      # The committed pbxproj is an artifact. If a spec changed without
+      # regenerating, fail here — not when the next person to clone trips over it.
+      - name: Check committed projects are in sync
+        run: git diff --exit-code TollCat.xcodeproj TollCatMac.xcodeproj
+
+      - name: Test
+        run: |
+          set -euo pipefail
+          dest='platform=iOS Simulator,name=iPhone 17 Pro'
+          if ! xcrun simctl list devices available | grep -F 'iPhone 17 Pro' >/dev/null; then
+            name="$(xcrun simctl list devices available | awk '/iPhone/{sub(/^[[:space:]]+/, ""); sub(/ \(.*/, ""); print; exit}')"
+            dest="platform=iOS Simulator,name=${name}"
+          fi
+          echo "destination=${dest}"
+          xcodebuild test \
+            -project TollCat.xcodeproj \
+            -scheme TollCat \
+            -destination "${dest}" \
+            -derivedDataPath "${DERIVED_DATA}" \
+            CODE_SIGNING_ALLOWED=NO
+
+  ui-smoke:
+    name: UI smoke (Maestro, iOS Simulator)
+    runs-on: macos-26
+    env:
+      DERIVED: /tmp/dd-maestro
+      MAESTRO_CLI_NO_ANALYTICS: "1"
+      # Pinned: the same release scripts/maestro-smoke.sh uses locally.
+      MAESTRO_VERSION: 2.10.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Install Maestro
+        run: |
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          "$HOME/.maestro/bin/maestro" --version
+
+      # ADHOC_SIGN: the runner has no developer account. Falling back to
+      # CODE_SIGNING_ALLOWED=NO is not an option — a fully unsigned bundle gets
+      # Keychain -34018, the demo seed fails silently, and the flow goes red at
+      # the "big number" step looking like broken UI.
+      - name: Build, install, run flows
+        run: |
+          ADHOC_SIGN=1 MAESTRO_OUTPUT="$RUNNER_TEMP/maestro-report.xml" \
+            bash scripts/maestro-smoke.sh ios
+
+      - name: Upload Maestro artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-ios
+          path: |
+            ~/.maestro/tests
+            ${{ runner.temp }}/maestro-report.xml
+          if-no-files-found: ignore
+
+  worker:
+    name: Worker typecheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci
+
+      # `typecheck` runs `wrangler types` first (generated locally, no account needed), then tsc.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test HTTP guards
+        run: npm test
+
+  windows:
+    name: Windows unit tests
+    runs-on: windows-latest
+    steps:
+      # Windows/ reuses the main repo's source via git symlinks; without
+      # core.symlinks the checkout yields plain files whose content is the path.
+      # Today's unit tests don't touch the symlinks — this is for whoever
+      # extends the tests next.
+      - name: Enable symlinks in git
+        run: git config --global core.symlinks true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Test ledger / path / cat motion
+        run: dotnet test Windows/tests/TollCat.Tests.csproj --nologo
+
+  site:
+    name: Site build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build

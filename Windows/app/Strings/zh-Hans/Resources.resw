@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>路费猫</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>把各家云和 AI 的账单折到同一个日历月。</value>
+  </data>
+  <data name="TabDashboard" xml:space="preserve">
+    <value>仪表</value>
+  </data>
+  <data name="TabServices" xml:space="preserve">
+    <value>服务</value>
+  </data>
+  <data name="TabSettings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="HeroLabel" xml:space="preserve">
+    <value>本月合计</value>
+  </data>
+  <data name="ProjectedCaption" xml:space="preserve">
+    <value>预计月底 {0}</value>
+  </data>
+  <data name="SubscriptionCaption" xml:space="preserve">
+    <value>本月订阅 +{0}</value>
+  </data>
+  <data name="ModuleComposition" xml:space="preserve">
+    <value>构成</value>
+  </data>
+  <data name="ModuleUpcoming" xml:space="preserve">
+    <value>即将扣款</value>
+  </data>
+  <data name="ModuleQuota" xml:space="preserve">
+    <value>免费额度</value>
+  </data>
+  <data name="ModuleComparison" xml:space="preserve">
+    <value>较上月同期</value>
+  </data>
+  <data name="ModuleAnomaly" xml:space="preserve">
+    <value>异常</value>
+  </data>
+  <data name="ModuleBalance" xml:space="preserve">
+    <value>余额告急</value>
+  </data>
+  <data name="ModuleTrend" xml:space="preserve">
+    <value>近几个月</value>
+  </data>
+  <data name="DashboardEmptyTitle" xml:space="preserve">
+    <value>还没有账单</value>
+  </data>
+  <data name="DashboardEmptyBody" xml:space="preserve">
+    <value>接入第一家云服务之后，本月已经花了多少会显示在这里。</value>
+  </data>
+  <data name="DashboardEmptyAction" xml:space="preserve">
+    <value>添加第一个服务</value>
+  </data>
+  <data name="DashboardLoading" xml:space="preserve">
+    <value>正在取账单…</value>
+  </data>
+  <data name="ServicesEmptyTitle" xml:space="preserve">
+    <value>还没有接入服务</value>
+  </data>
+  <data name="ServicesEmptyBody" xml:space="preserve">
+    <value>把用着的云加进来。账单数字出现在仪表，凭据只留在这台设备。</value>
+  </data>
+  <data name="ActionAddService" xml:space="preserve">
+    <value>添加服务</value>
+  </data>
+  <data name="MoreServices" xml:space="preserve">
+    <value>更多服务</value>
+  </data>
+  <data name="SearchProviders" xml:space="preserve">
+    <value>搜索服务</value>
+  </data>
+  <data name="ActionRefresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="ActionCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ActionTestConnection" xml:space="preserve">
+    <value>测试连接</value>
+  </data>
+  <data name="ActionSaveCredentials" xml:space="preserve">
+    <value>保存到凭据管理器</value>
+  </data>
+  <data name="ActionConnectUsage" xml:space="preserve">
+    <value>连接{0}账单</value>
+  </data>
+  <data name="ActionManageCredentials" xml:space="preserve">
+    <value>管理凭据</value>
+  </data>
+  <data name="ActionClearProvider" xml:space="preserve">
+    <value>清空本机{0}相关账单数据</value>
+  </data>
+  <data name="DetailUsageEmpty" xml:space="preserve">
+    <value>还没有用量身份。连接账单之后，这里会显示本月花费。</value>
+  </data>
+  <data name="DetailInboxHint" xml:space="preserve">
+    <value>这家没有公开账单接口，用量需要手填或走读数信箱。</value>
+  </data>
+  <data name="SetupTitle" xml:space="preserve">
+    <value>连接{0}</value>
+  </data>
+  <data name="SetupIntro" xml:space="preserve">
+    <value>把凭据粘贴进来。测通之后再保存到本机凭据管理器，不会离开这台设备。</value>
+  </data>
+  <data name="SetupSuccess" xml:space="preserve">
+    <value>读到 {0}</value>
+  </data>
+  <data name="SetupKeystoreNote" xml:space="preserve">
+    <value>凭据保存在 Windows 凭据管理器，只在这台设备上能解开，不进云同步。</value>
+  </data>
+  <data name="SetupFeedbackSuccessLede" xml:space="preserve">
+    <value>这家还没拿真实账单对过。数字对的话，告诉我一声。</value>
+  </data>
+  <data name="SetupFeedbackFailureLede" xml:space="preserve">
+    <value>按说明做了还是不行的话，告诉我发生了什么。</value>
+  </data>
+  <data name="SetupFeedbackPrivacy" xml:space="preserve">
+    <value>发出去的是服务名、版本、系统、机型、语言。没有账单金额，没有密钥。</value>
+  </data>
+  <data name="SetupFeedbackDraftOk" xml:space="preserve">
+    <value>{0} 测通了，数字和后台对得上。</value>
+  </data>
+  <data name="SetupFeedbackDraftFail" xml:space="preserve">
+    <value>{0} 测试连接失败，{1}。</value>
+  </data>
+  <data name="SetupFeedbackDraftNetwork" xml:space="preserve">
+    <value>{0} 测试连接失败，网络不可用。</value>
+  </data>
+  <data name="SetupFeedbackDraftEmpty" xml:space="preserve">
+    <value>{0} 连上了，但没有读到金额。</value>
+  </data>
+  <data name="SetupFeedbackDraftUnknown" xml:space="preserve">
+    <value>{0} 没能完成测试。</value>
+  </data>
+  <data name="SettingsFeedbackContactHint" xml:space="preserve">
+    <value>邮箱或任意联系方式</value>
+  </data>
+  <data name="ServicesSetupHaveCredentials" xml:space="preserve">
+    <value>我拿到凭据了，下一步</value>
+  </data>
+  <data name="ServicesSetupGuideMissing" xml:space="preserve">
+    <value>接入说明还没写好</value>
+  </data>
+  <data name="ServicesSetupGuideMissingBody" xml:space="preserve">
+    <value>这家的分步说明还在准备。可以先去官网创建只读凭据。下面列出需要的字段。</value>
+  </data>
+  <data name="ServicesSetupOpenConsole" xml:space="preserve">
+    <value>打开创建凭据的页面</value>
+  </data>
+  <data name="ServicesNoAmount" xml:space="preserve">
+    <value>暂无读数</value>
+  </data>
+  <data name="ServicesNoReading" xml:space="preserve">
+    <value>还没有读数</value>
+  </data>
+  <data name="ServicesQuotaUsed" xml:space="preserve">
+    <value>用了 {0}%</value>
+  </data>
+  <data name="ServicesAccountN" xml:space="preserve">
+    <value>账号 {0}</value>
+  </data>
+  <data name="ServicesHistory" xml:space="preserve">
+    <value>读数明细</value>
+  </data>
+  <data name="ServicesHistoryRange" xml:space="preserve">
+    <value>历史范围</value>
+  </data>
+  <data name="ServicesHistory7" xml:space="preserve">
+    <value>7 天</value>
+  </data>
+  <data name="ServicesHistory30" xml:space="preserve">
+    <value>30 天</value>
+  </data>
+  <data name="ServicesHistory12" xml:space="preserve">
+    <value>12 个月</value>
+  </data>
+  <data name="ServicesRemoveTitle" xml:space="preserve">
+    <value>清空本机{0}相关账单数据？</value>
+  </data>
+  <data name="ServicesRemoveBody" xml:space="preserve">
+    <value>会删掉用量凭据和挂在这家上的订阅。历史读数留在本机，不再计入总额。</value>
+  </data>
+  <data name="ServicesRemoveConfirm" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="KindUsageTitle" xml:space="preserve">
+    <value>用量后付费</value>
+  </data>
+  <data name="KindUsageBody" xml:space="preserve">
+    <value>已经花了多少，按日历月加总。能拿到按天的数就按天加。</value>
+  </data>
+  <data name="KindPrepaidTitle" xml:space="preserve">
+    <value>预充值余额</value>
+  </data>
+  <data name="KindPrepaidBody" xml:space="preserve">
+    <value>本月消耗 = 月初余额 − 当前余额。第一月没有月初快照时，数字是不全的。</value>
+  </data>
+  <data name="KindSubscriptionTitle" xml:space="preserve">
+    <value>固定订阅</value>
+  </data>
+  <data name="KindSubscriptionBody" xml:space="preserve">
+    <value>扣款日落在本月内就计全额，不按天摊。</value>
+  </data>
+  <data name="KindFreetierTitle" xml:space="preserve">
+    <value>免费额度内</value>
+  </data>
+  <data name="KindFreetierBody" xml:space="preserve">
+    <value>合计记 0，单独看额度用了多少。</value>
+  </data>
+  <data name="SettingsGeneral" xml:space="preserve">
+    <value>通用</value>
+  </data>
+  <data name="SettingsCurrency" xml:space="preserve">
+    <value>显示货币</value>
+  </data>
+  <data name="SettingsAppearance" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="SettingsAppearanceLight" xml:space="preserve">
+    <value>亮色</value>
+  </data>
+  <data name="SettingsAppearanceDark" xml:space="preserve">
+    <value>暗色</value>
+  </data>
+  <data name="SettingsAppearanceSystem" xml:space="preserve">
+    <value>跟随系统</value>
+  </data>
+  <data name="SettingsHideCat" xml:space="preserve">
+    <value>关闭猫猫</value>
+  </data>
+  <data name="SettingsRefreshTitle" xml:space="preserve">
+    <value>每次进入 App 的时候自动刷新用量</value>
+  </data>
+  <data name="SettingsRefreshNote" xml:space="preserve">
+    <value>花钱才能刷新的服务不会跟着刷。</value>
+  </data>
+  <data name="SettingsStartup" xml:space="preserve">
+    <value>开机启动</value>
+  </data>
+  <data name="SettingsStartupNote" xml:space="preserve">
+    <value>是否开机启动以系统设置为准。这里只是请求，关掉请去 Windows 设置 → 应用 → 启动。</value>
+  </data>
+  <data name="SettingsGuide" xml:space="preserve">
+    <value>四种钱</value>
+  </data>
+  <data name="SettingsFeedback" xml:space="preserve">
+    <value>反馈</value>
+  </data>
+  <data name="SettingsFeedbackHint" xml:space="preserve">
+    <value>提一条反馈</value>
+  </data>
+  <data name="SettingsFeedbackSend" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="SettingsFeedbackSent" xml:space="preserve">
+    <value>收到了，谢谢。</value>
+  </data>
+  <data name="SettingsFeedbackRateLimited" xml:space="preserve">
+    <value>刚才提得有点密，过十分钟再来。</value>
+  </data>
+  <data name="SettingsFeedbackFailed" xml:space="preserve">
+    <value>没发出去。内容还在，检查一下网络再试。</value>
+  </data>
+  <data name="SettingsFeedbackCategory" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="SettingsFeedbackMessageLabel" xml:space="preserve">
+    <value>反馈内容</value>
+  </data>
+  <data name="SettingsFeedbackMessageHint" xml:space="preserve">
+    <value>说什么都行</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="SettingsAboutBody" xml:space="preserve">
+    <value>TollCat 把各家账单折到同一个日历月。账本按美元记，折算是同一份 Swift MeterCore，界面是 WinUI 3。</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>版本 {0}</value>
+  </data>
+  <data name="SettingsClear" xml:space="preserve">
+    <value>清空本机数据</value>
+  </data>
+  <data name="SettingsClearTitle" xml:space="preserve">
+    <value>清空本机数据？</value>
+  </data>
+  <data name="SettingsClearBody" xml:space="preserve">
+    <value>成员关系、快照和凭据都会从这台设备删掉，不能撤销。</value>
+  </data>
+  <data name="SettingsClearConfirm" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="TrayOpenMain" xml:space="preserve">
+    <value>打开主窗口</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="ToastBalanceTitle" xml:space="preserve">
+    <value>有余额快见底了</value>
+  </data>
+  <data name="ToastAnomalyTitle" xml:space="preserve">
+    <value>有一项需要留意</value>
+  </data>
+</root>

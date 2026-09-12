@@ -1,0 +1,4 @@
+{
+  "uptime": { "monitors": { "usage": 12, "limit": 50 } },
+  "account_credit": { "balance": 12.5 }
+}

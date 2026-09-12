@@ -1,0 +1,21 @@
+{
+  "consumptions": [
+    {
+      "value": {
+        "currency_code": "USD",
+        "units": "12",
+        "nanos": 500000000
+      },
+      "product_name": "Instance"
+    },
+    {
+      "value": {
+        "currency_code": "USD",
+        "units": "3",
+        "nanos": 0
+      },
+      "product_name": "Object Storage"
+    }
+  ],
+  "total_count": 2
+}

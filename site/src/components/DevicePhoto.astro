@@ -1,0 +1,16 @@
+---
+import PhoneShot from './PhoneShot.astro';
+import type { PhoneShotPair } from '../screenshots';
+
+type Props = {
+  class?: string;
+  pair: PhoneShotPair;
+  widths: number[];
+  sizes: string;
+};
+const { class: className, pair, widths, sizes } = Astro.props;
+---
+
+<figure class:list={['device-photo', className]}>
+  <PhoneShot light={pair.light} dark={pair.dark} alt="" widths={widths} sizes={sizes} quality={85} />
+</figure>

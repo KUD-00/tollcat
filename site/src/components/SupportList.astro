@@ -1,0 +1,99 @@
+---
+import { localePath, type Locale } from '../config';
+import { t } from '../i18n';
+import supportListUrl from '../scripts/support-list.js?url';
+import { itemsForTier, supportDetailHref, supportTierOrder } from '../supportList';
+import ProviderGlyph from './ProviderGlyph.astro';
+
+type Props = { locale: Locale; headingLevel?: 2 | 3 };
+const { locale, headingLevel = 2 } = Astro.props;
+const copy = t(locale).supportListPage;
+const countMark = (n: number) => (locale === 'en' ? ` (${n})` : `（${n}）`);
+const marketHay = (tier: 1 | 2 | 3 | 4) => {
+  const market = copy.market[tier];
+  return `${market.label} ${market.lede}`;
+};
+---
+
+<div class="support-list" data-support-list>
+  <label class="support-search">
+    <span class="sr-only">{copy.search}</span>
+    <span class="support-search-field">
+      <svg class="support-search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle
+          cx="10.5"
+          cy="10.5"
+          r="7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"></circle>
+        <path
+          d="M16 16l6.2 6.2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"></path>
+      </svg>
+      <input
+        type="search"
+        data-support-filter
+        placeholder={copy.search}
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        enterkeyhint="search"
+      />
+    </span>
+  </label>
+  <p class="support-empty" data-support-empty hidden>{copy.empty}</p>
+  {
+    supportTierOrder.map((tier) => {
+      const items = itemsForTier(tier);
+      const section = copy.sections[tier];
+      return (
+        <section class="support-section" data-support-section>
+          {headingLevel === 3 ? (
+            <h3>{`${section.title}${countMark(items.length)}`}</h3>
+          ) : (
+            <h2>{`${section.title}${countMark(items.length)}`}</h2>
+          )}
+          <p>{section.lede}</p>
+          <ul class="support-names">
+            {items.map((item) => (
+              <li
+                data-support-name={item.key}
+                data-support-hay={`${item.key} ${item.name} ${item.entry.searchKeywords.join(' ')} ${marketHay(item.entry.marketTier)}`}
+              >
+                <a
+                  class="support-item"
+                  href={supportDetailHref(locale, item.key)}
+                  data-support-open={item.key}
+                >
+                  <ProviderGlyph mark={item.mark} class="support-glyph" decorative />
+                  <span class="support-item-copy">
+                    <span class="support-name">{item.name}</span>
+                    <span class="support-market">{copy.market[item.entry.marketTier].label}</span>
+                  </span>
+                  <svg class="support-item-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path
+                      d="M9.2 5.2 15.8 12l-6.6 6.8"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+  <p class="support-footnote">
+    {copy.footnote}{' '}
+    <a href={localePath(locale, 'support')}>{copy.footnoteLink}</a>
+  </p>
+</div>
+<script is:inline type="module" src={supportListUrl}></script>

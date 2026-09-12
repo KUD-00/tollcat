@@ -1,0 +1,149 @@
+# XcodeGen 工程定义（iOS / iPadOS）。TollCat.xcodeproj 是它的生成物,不要手工编辑后者。
+#   nix shell nixpkgs#xcodegen -c xcodegen generate
+#
+# Mac 壳在另一份 spec 里（`project-mac.yml` → TollCatMac.xcodeproj）。分成两份工程
+# 不是为了整齐，是因为 SPM 的包解析是**工程级**的：Sparkle 只链进 Mac 壳，但只要它
+# 写在这一份里，`xcodebuild -scheme TollCat` 也会先去 fetch / checkout 它一遍
+# ——离线或受限网络下 iOS 构建会卡在跟 iOS 毫无关系的第三方包上。
+# 两端本来也不共享签名、沙盒和 App Group 前缀，拆开正好让这件事落在结构上。
+#
+# 共用的选项和 base settings 在 `project-common.yml`。
+#
+# 两份工程引用同一个本地包（`Packages/MeterKit`）。Xcode 里**分别**打开两个
+# .xcodeproj 会互相抢这个包，后开的那个报 `Missing package product 'MeterFeatures'`。
+# 要同时看两端就打开 `TollCat.xcworkspace`（本地包在 workspace 里只被加载一次）。
+# 命令行不受影响：`-project` 各自独立，CI 也一直是 `-project`。
+
+name: TollCat
+
+include:
+  - project-common.yml
+
+options:
+  deploymentTarget:
+    iOS: "26.0"
+
+targets:
+
+  # ─────────────────────────────────────────────────────────────
+  # App 壳。只做入口和依赖组装,业务逻辑一律在 MeterKit 里。
+  TollCat:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: TollCat.storekit
+        buildPhase: resources
+        type: file
+    entitlements:
+      path: App/TollCat.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.zhechengqi.tollcat
+    dependencies:
+      - package: MeterKit
+        products: [MeterFeatures, MeterPersistence, MeterProviders, MeterDesign, MeterCore, MeterTips, MeterInbox, MeterFeedback, MeterUsage]
+      - target: TollCatWidget
+      - sdk: StoreKit.framework
+      # 不要给 App target 链 StoreKitTest.framework:那个框架在真机上不存在,
+      # dyld 一启动就找不到,直接 __abort_with_payload → SIGABRT。
+      # 模拟器 runtime 里有它,所以这个错误在模拟器上原理上不可能出现 ——
+      # 只有真机会崩。本地测内购靠 scheme 上挂的 TollCat.storekit,不需要链这个框架。
+      # 它只属于测试 target(见下面 MeterKitTests)。
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat
+        GENERATE_INFOPLIST_FILE: YES
+        # 只用系统加密（HTTPS / Keychain / CryptoKit / CommonCrypto），没有自研算法。
+        # 写进 Info.plist 后 App Store Connect 不再每次上传问出口合规。
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_CFBundleDisplayName: TollCat
+        INFOPLIST_KEY_CFBundleLocalizations: "en ja zh-Hans"
+        INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        # iPad 壳（NavigationSplitView 一族）只在横屏激活，别再用竖屏锁把它锁成死代码。
+        INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+        # 只为「把分享卡存到相册」。申请的是 addOnly，这个 App 没有任何理由读相册。
+        # 中文源串写在这里（开发语言 zh-Hans）。en / ja 在 App/Resources/InfoPlist.xcstrings。
+        INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: 把这个月的账单卡片存成图片。只写入，不会读你的相册。
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        INFOPLIST_FILE: App/Supporting-Info.plist
+
+  # ─────────────────────────────────────────────────────────────
+  # Widget 壳。刻意不依赖 MeterProviders —— 规格第 09 节要求 Widget
+  # 不能自己调 API,这里用链接关系把它变成编译期约束。
+  TollCatWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+    entitlements:
+      path: Widget/TollCatWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.zhechengqi.tollcat
+    dependencies:
+      - package: MeterKit
+        products: [MeterDesign, MeterFormat, MeterModules, MeterPersistence, MeterCore]
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: TollCat
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # 少了这一列，扩展进程只认开发语言 zh-Hans。Bundle 里的字照样按
+        # AppleLanguages 选到英文，但 `Locale.current` 被钉在中文——
+        # DateIntervalFormatter 于是在英文系统上把统计区间印成「9月1日至6日」。
+        # App target 走 INFOPLIST_KEY_CFBundleLocalizations，扩展这份得自己列。
+        CFBundleLocalizations: [zh-Hans, en, ja]
+        # MeterPersistence 拼 Mac App Group id 用；iOS 上这个 key 没人读，无害。
+        AppIdentifierPrefix: $(AppIdentifierPrefix)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat.widget
+        SKIP_INSTALL: YES
+
+  # ─────────────────────────────────────────────────────────────
+  # 单元测试。测试源文件放在 MeterKit 包的 Tests/ 目录下,由这个
+  # target 编译并在模拟器上跑 —— 这样 MeterKit 可以保持 iOS-only。
+  # Mac 工程里没有测试 target：同一份 Tests/ 跑一遍就够，跑的是纯逻辑。
+  MeterKitTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Packages/MeterKit/Tests
+      - path: TollCat.storekit
+        buildPhase: resources
+        type: file
+    dependencies:
+      - target: TollCat
+      - package: MeterKit
+        products: [MeterCore, MeterProviders, MeterPersistence, MeterDesign, MeterModules, MeterFeatures, MeterTips, MeterInbox, MeterFeedback, MeterUsage]
+      - sdk: StoreKit.framework
+      - sdk: StoreKitTest.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  TollCat:
+    build:
+      targets:
+        TollCat: all
+        TollCatWidget: all
+        MeterKitTests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: TollCat.storekit
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - MeterKitTests

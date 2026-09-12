@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_skip">跳过</string>
+    <string name="onboarding_continue">继续</string>
+    <string name="onboarding_add_first">添加第一个服务</string>
+    <string name="onboarding_page_number_title">这个月花了多少</string>
+    <string name="onboarding_page_number_body">各家云和 AI 的账单收成一个数字。打开就能看见这个月已经花了多少。</string>
+    <string name="onboarding_page_credentials_title">凭据不出这台设备</string>
+    <string name="onboarding_page_credentials_body">API 密钥只进本机 Keystore，不跟云备份走。换手机用设置里的导入与导出。</string>
+    <string name="onboarding_page_widget_title">不必打开也能看见</string>
+    <string name="onboarding_page_widget_body">通知里不放金额，也没有金额告警。把小组件放到主屏，划过去就是这个月的数字。</string>
+    <string name="onboarding_page_add_title">加上第一家服务</string>
+    <string name="onboarding_page_add_body">先加进列表就行，不必现在就有 API 密钥。只订了 ChatGPT Pro 也可以先加进来。</string>
+    <string name="onboarding_progress">%1$d / %2$d</string>
+</resources>

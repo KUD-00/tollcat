@@ -1,0 +1,349 @@
+---
+import { getImage } from 'astro:assets';
+import BrandMark from '../components/BrandMark.astro';
+import CredentialLockScreen from '../components/CredentialLockScreen.astro';
+import CredentialsDialog from '../components/CredentialsDialog.astro';
+import JsonLd from '../components/JsonLd.astro';
+import PhoneFrame from '../components/PhoneFrame.astro';
+import PhoneShot from '../components/PhoneShot.astro';
+import PlatformDialog from '../components/PlatformDialog.astro';
+import PlatformGlyph from '../components/PlatformGlyph.astro';
+import PlatformsCluster from '../components/PlatformsCluster.astro';
+import ProviderMarquee from '../components/ProviderMarquee.astro';
+import SupportListDialog from '../components/SupportListDialog.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath, siteConfig, type Locale } from '../config';
+import { t } from '../i18n';
+import { ipadShots, macShots, phoneShots } from '../screenshots';
+import { supportListHref } from '../supportList';
+import storyPhoneUrl from '../scripts/story-phone.js?url';
+import heroRotateUrl from '../scripts/hero-rotate.js?url';
+import dialogSheetUrl from '../scripts/dialog-sheet.js?url';
+import platformDialogUrl from '../scripts/platform-dialog.js?url';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale);
+const store = siteConfig.appStoreUrl;
+const privacyHref = localePath(locale, 'privacy');
+const phoneSizes = '(min-width: 960px) 28rem, 15.5rem';
+const phoneWidths = [256, 512, 768, 1024];
+const pack = phoneShots(locale);
+const ipad = ipadShots(locale);
+const mac = macShots(locale);
+const githubHref = siteConfig.githubUrl ?? '#platforms';
+const shots = [
+  { ...pack.dashboard, alt: copy.gallery.dashboard },
+  { ...pack.wizard, alt: copy.gallery.wizard },
+  { ...pack.services, alt: copy.gallery.services },
+];
+const lcpOpts = { format: 'webp' as const, width: 512, widths: phoneWidths, quality: 80 };
+const lcpLight = await getImage({ src: pack.dashboard.light, ...lcpOpts });
+const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
+---
+
+<BaseLayout
+  locale={locale}
+  title={copy.meta.title}
+  description={copy.meta.description}
+  ogTitle={copy.meta.ogTitle}
+  ogDescription={copy.meta.ogDescription}
+  home
+>
+  <JsonLd slot="head" locale={locale} kind="home" />
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={lcpLight.src}
+    imagesrcset={lcpLight.srcSet.attribute}
+    imagesizes={phoneSizes}
+    media="(prefers-color-scheme: light)"
+    fetchpriority="high"
+  />
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={lcpDark.src}
+    imagesrcset={lcpDark.srcSet.attribute}
+    imagesizes={phoneSizes}
+    media="(prefers-color-scheme: dark)"
+    fetchpriority="high"
+  />
+  <main id="main">
+    <div class="story wrap" data-story data-active="0">
+      <div class="story-scenes">
+        <section class="pane pane-scene" data-scene="0">
+          <div class="pane-copy">
+            <BrandMark class="hero-mark" />
+            <h1 data-h1-rotate={JSON.stringify([copy.hero.h1, ...copy.hero.h1Alts])}>
+              {copy.hero.h1.map((line) => (
+                <span class="h1-line">
+                  <span class="h1-line-text">{line}</span>
+                </span>
+              ))}
+            </h1>
+            <p class="lede">{copy.hero.lede}</p>
+            <div class="hero-actions">
+              {
+                store ? (
+                  <a class="btn" href={store} translate="no">
+                    {copy.hero.ctaStore}
+                  </a>
+                ) : (
+                  <span class="btn" aria-disabled="true">
+                    {copy.hero.ctaSoon}
+                  </span>
+                )
+              }
+            </div>
+          </div>
+          <PhoneFrame class="scene-phone">
+            <PhoneShot
+              light={shots[0].light}
+              dark={shots[0].dark}
+              alt={shots[0].alt}
+              widths={phoneWidths}
+              sizes={phoneSizes}
+              loading="eager"
+              priority
+            />
+          </PhoneFrame>
+        </section>
+
+        <section class="pane pane-scene" id="setup" data-scene="1">
+          <div class="pane-copy">
+            <h2>
+              {copy.setup.title.map((line, i) => (
+                <>
+                  {i > 0 && <br />}
+                  {line}
+                </>
+              ))}
+            </h2>
+            <p class="lede">{copy.setup.lede}</p>
+          </div>
+          <PhoneFrame class="scene-phone">
+            <PhoneShot
+              light={shots[1].light}
+              dark={shots[1].dark}
+              alt={shots[1].alt}
+              widths={phoneWidths}
+              sizes={phoneSizes}
+            />
+          </PhoneFrame>
+        </section>
+
+        <section class="pane pane-scene pane-providers" id="providers" data-scene="2">
+          <div class="pane-copy">
+            <h2>
+              {copy.providers.title.map((line, i) => (
+                <>
+                  {i > 0 && <br />}
+                  {line}
+                </>
+              ))}
+            </h2>
+            <p class="lede">{copy.providers.note}</p>
+            <p class="providers-more">
+              <a href={supportListHref(locale)} data-dialog="support-list" aria-haspopup="dialog">
+                {copy.providers.listLink}
+              </a>
+            </p>
+          </div>
+          <ProviderMarquee label={copy.a11y.providers} />
+          <PhoneFrame class="scene-phone">
+            <PhoneShot
+              light={shots[2].light}
+              dark={shots[2].dark}
+              alt={shots[2].alt}
+              widths={phoneWidths}
+              sizes={phoneSizes}
+            />
+          </PhoneFrame>
+        </section>
+
+        <section class="pane pane-scene" id="credentials" data-scene="3">
+          <div class="pane-copy">
+            <h2>
+              {
+                copy.credentials.title.map((line, i) => (
+                  <>
+                    {i > 0 && <br />}
+                    {line}
+                    {i === copy.credentials.title.length - 1 && (
+                      <a
+                        class="claim-star"
+                        href={privacyHref}
+                        data-dialog="credentials"
+                        aria-haspopup="dialog"
+                        aria-label={copy.credentials.starLabel}
+                      >
+                        *
+                      </a>
+                    )}
+                  </>
+                ))
+              }
+            </h2>
+            <p class="lede">
+              {copy.credentials.lede}{' '}
+              <a href={privacyHref} data-dialog="credentials" aria-haspopup="dialog">
+                {copy.credentials.link}
+              </a>
+            </p>
+          </div>
+          <PhoneFrame class="scene-phone">
+            <CredentialLockScreen label={copy.credentials.phoneLabel} />
+          </PhoneFrame>
+        </section>
+
+        <section class="pane pane-scene pane-platforms" id="platforms" data-scene="4">
+          <div class="pane-copy">
+            <h2>
+              {
+                copy.platforms.title.map((line, i) => (
+                  <>
+                    {i > 0 && <br />}
+                    {line}
+                  </>
+                ))
+              }
+            </h2>
+            <div class="hero-actions platform-actions">
+              <a class="btn" href="#platforms" data-dialog="platform" data-platform="ipad" aria-haspopup="dialog">
+                <PlatformGlyph name="apple" />
+                {copy.platforms.ipad}
+              </a>
+              <a
+                class="btn"
+                href={githubHref}
+                data-dialog="platform"
+                data-platform="mac"
+                aria-haspopup="dialog"
+                rel={githubHref.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <PlatformGlyph name="apple" />
+                {copy.platforms.mac}
+              </a>
+              <a
+                class="btn"
+                href={githubHref}
+                data-dialog="platform"
+                data-platform="android"
+                aria-haspopup="dialog"
+                rel={githubHref.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <PlatformGlyph name="android" />
+                {copy.platforms.android}
+              </a>
+              <a
+                class="btn"
+                href={githubHref}
+                data-dialog="platform"
+                data-platform="windows"
+                aria-haspopup="dialog"
+                rel={githubHref.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <PlatformGlyph name="windows" />
+                {copy.platforms.windows}
+              </a>
+            </div>
+          </div>
+          <div class="scene-cluster">
+            <PlatformsCluster
+              label={copy.platforms.clusterLabel}
+              ipad={ipad.dashboard}
+              mac={mac.window}
+              ipadAlt={copy.platforms.ipad}
+              macAlt={copy.platforms.mac}
+            />
+          </div>
+        </section>
+      </div>
+
+      <div class="story-stage">
+        <div class="phone-3d">
+          <PhoneFrame class="story-phone">
+            <div class="screen-stack">
+              {
+                shots.map((shot, index) => (
+                  <div class="screen" data-i={String(index)} aria-hidden={index === 0 ? undefined : 'true'}>
+                    <PhoneShot
+                      light={shot.light}
+                      dark={shot.dark}
+                      alt={shot.alt}
+                      widths={phoneWidths}
+                      sizes={phoneSizes}
+                    />
+                  </div>
+                ))
+              }
+              <div class="screen" data-i="3" data-lock-screen aria-hidden="true">
+                <CredentialLockScreen label={copy.credentials.phoneLabel} />
+              </div>
+            </div>
+          </PhoneFrame>
+        </div>
+        <div class="story-platforms" aria-hidden="true">
+          <PlatformsCluster
+            label={copy.platforms.clusterLabel}
+            ipad={ipad.dashboard}
+            mac={mac.window}
+            ipadAlt={copy.platforms.ipad}
+            macAlt={copy.platforms.mac}
+          />
+        </div>
+      </div>
+    </div>
+
+    <section class="pane wrap pane-faq" id="faq">
+      <h2>{copy.faq.title}</h2>
+      <div class="faq-list">
+        {
+          copy.faq.items.map((item) => (
+            <details>
+              <summary>{item.q}</summary>
+              <p>
+                {item.a}
+                {
+                  item.href && (
+                    <>
+                      {' '}
+                      <a
+                        href={item.href}
+                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      >
+                        {item.link ?? item.href}
+                      </a>
+                    </>
+                  )
+                }
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <SupportListDialog locale={locale} />
+  <CredentialsDialog locale={locale} />
+  <PlatformDialog
+    locale={locale}
+    platform="ipad"
+    shots={{ dashboard: ipad.dashboard, portrait: ipad.portrait }}
+  />
+  <PlatformDialog
+    locale={locale}
+    platform="mac"
+    shots={{ window: mac.window, menubar: mac.menubar }}
+  />
+  <PlatformDialog locale={locale} platform="android" shots={{}} />
+  <PlatformDialog locale={locale} platform="windows" shots={{}} />
+</BaseLayout>
+
+<script is:inline type="module" src={storyPhoneUrl}></script>
+<script is:inline type="module" src={heroRotateUrl}></script>
+<script is:inline type="module" src={platformDialogUrl}></script>
+<script is:inline type="module" src={dialogSheetUrl}></script>

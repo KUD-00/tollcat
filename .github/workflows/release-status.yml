@@ -1,0 +1,60 @@
+name: Release status
+
+# The release cadence is event-driven, and this workflow is the reminder: run
+# scripts/release-status.sh weekly, open (or update) an issue when a platform is
+# due, do nothing otherwise. Zero secrets.
+#
+# The repo is still private — manual dispatch only until it goes public.
+# After going public, restore:
+#   schedule:
+#     - cron: "0 1 * * 1"   # Mondays 10:00 JST
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  status:
+    name: What is due
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute
+        id: status
+        run: |
+          set -euo pipefail
+          bash scripts/release-status.sh | tee "$RUNNER_TEMP/status.txt"
+          bash scripts/release-status.sh --json > "$RUNNER_TEMP/status.json"
+          due="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(int(any(d[k]["due"] for k in ("apple","android","windows"))))' "$RUNNER_TEMP/status.json")"
+          echo "due=$due" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update issue
+        if: steps.status.outputs.due == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="Time to ship (release-status)"
+          body="$(printf '```\n%s\n```\n\nPlaybook: docs/RELEASE.md. This issue is maintained by release-status.yml and closes itself once the release ships.' "$(cat "$RUNNER_TEMP/status.txt")")"
+          existing="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')"
+          if [[ -n "$existing" ]]; then
+            gh issue edit "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "$body" --label release
+          fi
+
+      - name: Close stale issue
+        if: steps.status.outputs.due == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="Time to ship (release-status)"
+          gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" --json number --jq '.[].number' \
+            | xargs -r -I{} gh issue close {} --repo "$GITHUB_REPOSITORY" --comment "release-status: nothing is due anymore."

@@ -1,0 +1,142 @@
+{
+  "$comment": [
+    "哪些仪表盘模块有 iOS / macOS 小组件，各自提供哪几种尺寸。唯一权威。",
+    "改这里后跑 python3 scripts/generate-shared.py。",
+    "",
+    "一块模块一个 widget kind，图库里就是一行——用户搜「热力图」能直接找到它，",
+    "不用先加一个再进编辑去换。代价是换模块要删了重加，值得。",
+    "",
+    "**每块模块都必须在这份表里列出来**，没有小组件的写 `\"sizes\": []`。",
+    "生成器会核对这里的 id 和 `DashboardModuleID` 的 case 完全一致——",
+    "加一块模块而不表态，闸就红。这条比「默认没有」重要：默认没有的话，",
+    "新模块会安静地缺席主屏，没人会发现。",
+    "",
+    "尺寸的判据是**装不装得下**，不是重不重要：2×2 的格子（systemSmall，",
+    "内容约 126×126）放不下的版式就不提供那一档。给一个装不下的尺寸，",
+    "用户拿到的是一块被裁掉半行的东西，比没有更糟。",
+    "同理，一块模块在 4×4 里只是把内容抻长的话，也不给那一档。",
+    "",
+    "showsTitle：widget 里要不要在左上角写模块名。自己带标题或者一眼就认得出的",
+    "（圆环、格子图）不写——那行字只是把内容往下挤。缺省 true。"
+  ],
+  "$framesComment": [
+    "一格小组件在主屏上占多大（pt），以及内容边距。**手机和 iPad 不是同一组数**：",
+    "phone 是 6.9\" iPhone，pad 是 11\" iPad Pro。注意 iPad 的 large 是正方的",
+    "（342×342），不像手机上那样高出一倍——所以同一块模块在两边会落到不同的高度档，",
+    "这正是要分开列的原因。",
+    "",
+    "唯一权威：Swift 侧生成 `ModuleWidgetSize.frameSize(_:)` / `.contentSize(_:)`，",
+    "商店宣传图的主屏 mock-up（scripts/render-appstore-marketing.mjs）直接读这份 JSON。",
+    "两边各写一遍的话，图上那一格和用户装到主屏上的那一格会各走各的尺寸。",
+    "",
+    "contentMargin 是 WidgetKit 默认给的内容边距：渲图时只渲内容那块，",
+    "边距和底材由 mock-up 那一层画（图上那层材质是壁纸上的毛玻璃，App 里画不出来）。",
+    "cornerRadius 是主屏上那一格的圆角，用来画 mock-up 的底材。"
+  ],
+  "frames": {
+    "phone": {
+      "small": [170, 170],
+      "medium": [364, 170],
+      "large": [364, 382]
+    },
+    "pad": {
+      "small": [155, 155],
+      "medium": [342, 155],
+      "large": [342, 342]
+    },
+    "contentMargin": 16,
+    "cornerRadius": 24
+  },
+  "modules": [
+    {
+      "id": "monthToDate",
+      "sizes": [
+        "small",
+        "medium"
+      ],
+      "note": "一个大数字加预计月底。2×2 正好。4×4 只是把同样三行抻长，不给。",
+      "showsTitle": true
+    },
+    {
+      "id": "composition",
+      "sizes": [
+        "medium"
+      ],
+      "note": "圆环加图例。2×2 两边都不够看；4×4 只是把圆环放大，不给。自己就是一张图，不写标题。",
+      "showsTitle": false
+    },
+    {
+      "id": "anomaly",
+      "sizes": [],
+      "note": "行数由数据定，多的时候会被裁。等它按高度收了行数再上主屏。",
+      "showsTitle": false
+    },
+    {
+      "id": "balanceAlert",
+      "sizes": [],
+      "note": "同上：行数不封顶。",
+      "showsTitle": false
+    },
+    {
+      "id": "upcomingCharges",
+      "sizes": [],
+      "note": "同上：行数不封顶。（这块目前整个下架，见 DashboardModuleThresholds.showsUpcomingCharges。）",
+      "showsTitle": false
+    },
+    {
+      "id": "freeQuota",
+      "sizes": [],
+      "note": "同上：行数不封顶。",
+      "showsTitle": false
+    },
+    {
+      "id": "services",
+      "sizes": [
+        "medium",
+        "large"
+      ],
+      "note": "一行一家，带日线。2×2 收掉图标和走势只剩名字加金额，不值一格。large 能列 8 行，是它最好的样子。",
+      "showsTitle": true
+    },
+    {
+      "id": "subscriptions",
+      "sizes": [
+        "medium",
+        "large"
+      ],
+      "note": "一个折算每月的大数字加几笔。2×2 装不下大数字加行。",
+      "showsTitle": true
+    },
+    {
+      "id": "heatmap",
+      "sizes": [
+        "small"
+      ],
+      "note": "一个月的格子图。2×2 里只摆图和月份小字，正好——这块要的就是「一眼扫过」。再大只是把格子放大，没有多说一件事，所以只给这一档。图自带月份，不写标题。",
+      "showsTitle": false
+    },
+    {
+      "id": "categories",
+      "sizes": [
+        "large"
+      ],
+      "note": "圆环加类别图例。类别名比厂商名长，4×2 的图例排不开，只给 4×4。",
+      "showsTitle": true
+    },
+    {
+      "id": "superlatives",
+      "sizes": [],
+      "note": "三行各指一家，2×2 挤，medium 上又太单薄。先不上。",
+      "showsTitle": false
+    },
+    {
+      "id": "budget",
+      "sizes": [
+        "small",
+        "medium"
+      ],
+      "note": "一个百分比加两排小方块。2×2 正好。4×4 只是把同样三样东西抻长，没有多说一件事，不给。",
+      "showsTitle": true
+    }
+  ]
+}

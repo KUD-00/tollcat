@@ -1,0 +1,22 @@
+{
+  "status": 200,
+  "requestId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "result": {
+    "grandTotalCHC": 8.5,
+    "costs": [
+      {
+        "date": "2026-08-01",
+        "metrics": {
+          "computeCHC": 5.0,
+          "storageCHC": 1.0
+        }
+      },
+      {
+        "date": "2026-08-15",
+        "metrics": {
+          "computeCHC": 2.5
+        }
+      }
+    ]
+  }
+}

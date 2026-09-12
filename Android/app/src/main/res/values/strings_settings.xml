@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_appearance">外观</string>
+    <string name="settings_appearance_light">亮色</string>
+    <string name="settings_appearance_dark">暗色</string>
+    <string name="settings_appearance_system">跟随系统</string>
+    <string name="settings_appearance_hint">亮色和暗色会立刻作用在这台设备上。跟随系统时，外观跟着系统深色设置走。</string>
+    <string name="settings_currency_usd">美元</string>
+    <string name="settings_currency_cny">人民币</string>
+    <string name="settings_currency_eur">欧元</string>
+    <string name="settings_currency_gbp">英镑</string>
+    <string name="settings_currency_jpy">日元</string>
+    <string name="settings_currency_aud">澳元</string>
+    <string name="settings_currency_cad">加元</string>
+    <string name="settings_currency_sgd">新加坡元</string>
+    <string name="settings_currency_inr">卢比</string>
+    <string name="settings_currency_brl">雷亚尔</string>
+    <string name="settings_currency_krw">韩元</string>
+    <string name="settings_currency_twd">新台币</string>
+    <string name="settings_currency_hkd">港币</string>
+    <string name="settings_currency_label">%1$s (%2$s)</string>
+    <string name="settings_refresh_title">每次进入 App 的时候自动刷新用量</string>
+    <string name="settings_refresh_note">花钱才能刷新的服务不会跟着刷。</string>
+    <string name="settings_hide_cat">关闭猫猫</string>
+    <string name="settings_hide_cat_note">仪表上不再出现猫。数字和构成还在。</string>
+    <string name="settings_refresh_hint">打开后，冷启动和从后台回到前台会各走一次全局刷新，规则和点仪表刷新按钮相同。花钱才能刷新的服务仍然不进。</string>
+    <string name="settings_usage_guides">使用指南</string>
+    <string name="settings_usage_guides_hint">四种钱，以及用的时候容易看错的点</string>
+    <string name="settings_whats_new">更新说明</string>
+    <string name="settings_whats_new_hint">打开每一版的更新说明</string>
+    <string name="settings_tip">请猫猫吃点东西</string>
+    <string name="settings_tip_hint">这是打赏，不解锁任何功能。</string>
+    <string name="settings_tip_open_hint">打开打赏页</string>
+    <string name="settings_tip_candy">糖果</string>
+    <string name="settings_tip_coffee">咖啡</string>
+    <string name="settings_tip_pizza">披萨</string>
+    <string name="settings_tip_send">写好了</string>
+    <string name="settings_tip_retry">再试一次</string>
+    <string name="settings_tip_name_label">名字（可不填）</string>
+    <string name="settings_tip_message_label">一句话（可不填）</string>
+    <string name="settings_tip_composer_footer">名字和留言都可以空着。退出这页就当没留。</string>
+    <string name="settings_tip_will_retry">留言稍后会重发。</string>
+    <string name="settings_tip_unsent">留言稍后会重发</string>
+    <string name="settings_tip_history">记录</string>
+    <string name="settings_tip_history_empty">还没有记录</string>
+    <string name="settings_tip_cat_celebrating">猫猫收到了吃的，很高兴</string>
+    <string name="settings_tip_cat_waiting">猫猫在等吃的</string>
+    <string name="settings_tip_buy_hint">购买这一档</string>
+    <string name="settings_tip_cancelled">已取消。</string>
+    <string name="settings_tip_pending">这笔购买正在等待批准。</string>
+    <string name="settings_tip_failed">购买没能完成，请再试一次。</string>
+    <string name="settings_tip_thanks_small">谢谢！！</string>
+    <string name="settings_tip_thanks_medium">太谢谢了！！</string>
+    <string name="settings_tip_thanks_large">谢谢谢谢谢谢！！！</string>
+    <string name="settings_tip_thanks_repeat">又是你！！太谢谢了！！</string>
+    <string name="settings_tip_note_small">一颗糖，猫猫叼着就走了。</string>
+    <string name="settings_tip_note_medium">一杯咖啡。今晚这只猫精神得很。</string>
+    <string name="settings_tip_note_large">一整块披萨。猫猫已经在打包了。</string>
+    <string name="settings_tip_note_unknown">猫猫收下了。</string>
+    <string name="settings_tip_store_unavailable">暂时无法连接 Google Play</string>
+    <string name="settings_tip_store_unavailable_body">过一会儿再打开这页。价格由 Google Play 按地区显示。</string>
+    <string name="settings_tip_loading">正在从 Google Play 读取价格。</string>
+    <string name="settings_tip_store_unavailable_footer">暂时连不上 Google Play，价格出不来。</string>
+    <string name="settings_tip_purchasing">正在向 Google Play 确认。</string>
+    <string name="whats_new_more">更多更新</string>
+    <string name="whats_new_empty">发了就会按版本记在这里。</string>
+    <string name="whats_new_open_hint">打开这一版的更新说明</string>
+    <string name="action_got_it">知道了</string>
+    <string name="settings_money_kinds">四种钱</string>
+    <string name="settings_money_usage_title">用量后付费</string>
+    <string name="settings_money_usage_body">已经花了多少，按日历月加总。能拿到按天的数就按天加。</string>
+    <string name="settings_money_prepaid_title">预充值余额</string>
+    <string name="settings_money_prepaid_body">本月消耗 = 月初余额 − 当前余额。第一月没有月初快照时，数字是不全的。</string>
+    <string name="settings_money_subscription_title">固定订阅</string>
+    <string name="settings_money_subscription_body">扣款日落在本月内就计全额，不按天摊。</string>
+    <string name="settings_money_freetier_title">免费额度内</string>
+    <string name="settings_money_freetier_body">合计记 0，单独看额度用了多少。</string>
+    <string name="settings_guide_hero_title">这个数字不含月费</string>
+    <string name="settings_guide_hero_body">仪表上最大的那个数，是用量、预充值消耗和超额。GitHub Copilot 这类月费单独一行，也不进构成图。整笔账单要把两行一起看。</string>
+    <string name="settings_guide_aws_title">AWS 刷新要花钱</string>
+    <string name="settings_guide_aws_body">Cost Explorer 每问一次大约 $0.01。所以 AWS 默认不跟着全局刷新，也不会在进入 App 时自动刷。要最新数字，去这家服务里自己点，按钮上会写价钱。</string>
+    <string name="settings_guide_keys_title">换手机，钥匙不会跟着走</string>
+    <string name="settings_guide_keys_body">密钥只进这台设备的 Keystore，不进云备份。换手机用设置里的导入与导出。</string>
+    <string name="settings_guide_inbox_title">没有接口的可以投进信箱</string>
+    <string name="settings_guide_inbox_body">有的服务没有公开账单接口。你可以建一个读数信箱，按格式自己投递，数字仍然进仪表。</string>
+    <string name="settings_guide_widget_title">锁屏上也能看到这个月</string>
+    <string name="settings_guide_widget_body">没有金额告警。把小组件放到主屏或锁屏，划过去就能看见数字。提醒只叫你回来刷新，通知里不会写金额。</string>
+    <string name="settings_guide_open_hint">打开这篇使用指南</string>
+    <string name="settings_reminder">提醒</string>
+    <string name="settings_reminder_note">让猫猫到点提醒你回来刷新</string>
+    <string name="settings_reminder_frequency">频率</string>
+    <string name="settings_reminder_detail">频率与时刻</string>
+    <string name="settings_reminder_time">时刻</string>
+    <string name="settings_reminder_weekday">星期</string>
+    <string name="settings_reminder_day">每月几号</string>
+    <string name="settings_reminder_day_value">%1$d 日</string>
+    <string name="settings_reminder_daily">每天</string>
+    <string name="settings_reminder_weekly">每周</string>
+    <string name="settings_reminder_biweekly">每两周</string>
+    <string name="settings_reminder_monthly">每月</string>
+    <string name="settings_reminder_android_note">提醒偏好会记在这台设备上。Android 不会申请精确闹钟权限，通知里也不放金额。</string>
+    <string name="settings_reminder_time_set">设定</string>
+    <string name="settings_reminder_opt_in_title">让猫猫到点叫你回来</string>
+    <string name="settings_reminder_opt_in_body">到点会提醒你打开 App，看看这个月花了多少。通知里不会出现金额。</string>
+    <string name="settings_reminder_opt_in_allow">打开通知</string>
+    <string name="settings_reminder_notice_title">该看一眼了</string>
+    <string name="settings_reminder_notice_body">打开 App，看看这个月花了多少。</string>
+    <string name="settings_reminder_notice_today">上次刷新就在今天。</string>
+    <string name="settings_reminder_notice_yesterday">上次刷新 1 天前。</string>
+    <string name="settings_reminder_notice_days">上次刷新 %1$d 天前。</string>
+    <string name="settings_reminder_denied">通知权限被关掉了，提醒不会响。</string>
+    <string name="settings_reminder_open_system">去系统设置开启</string>
+    <string name="settings_reminder_open_system_hint">打开系统设置，打开 TollCat 的通知</string>
+    <string name="settings_reminder_preview_a11y">通知预览：%1$s。%2$s</string>
+    <string name="settings_inbox">读数信箱</string>
+    <string name="settings_inbox_hint">管理你自己投递读数用的信箱和投递 key</string>
+    <string name="settings_inbox_empty_title">还没有信箱</string>
+    <string name="settings_inbox_empty_body">接入 Render、Expo 或 Clerk 这类没有公开账单接口的服务时，会自动为你建一个。</string>
+    <string name="settings_inbox_create">建信箱</string>
+    <string name="settings_inbox_manual_action">去服务里手填用量</string>
+    <string name="settings_inbox_fresh">新的投递 key</string>
+    <string name="settings_inbox_fresh_hint">只显示这一次。旧的投递 key 还能继续用，等你把脚本改完再来吊销它。</string>
+    <string name="settings_inbox_saved">我存好了</string>
+    <string name="settings_inbox_keys">投递 key</string>
+    <string name="settings_inbox_keys_empty">还没有投递 key</string>
+    <string name="settings_inbox_keys_hint">一个脚本一把。某一把泄露了只吊销它，其它脚本不受影响。</string>
+    <string name="settings_inbox_untitled">未命名</string>
+    <string name="settings_inbox_never_used">还没投递过</string>
+    <string name="settings_inbox_mint">签一把新的</string>
+    <string name="settings_inbox_new_script">新脚本</string>
+    <string name="settings_inbox_id_label">信箱</string>
+    <string name="settings_inbox_copy_read">复制</string>
+    <string name="settings_inbox_privacy">信箱里只有金额，没有你任何服务的账号或密钥。</string>
+    <string name="settings_inbox_delete">删除信箱</string>
+    <string name="settings_inbox_delete_title">删除读数信箱？</string>
+    <string name="settings_inbox_delete_body">服务器上的读数会一起删掉。已经存到本机的历史留着。</string>
+    <string name="settings_inbox_revoke">吊销</string>
+    <string name="settings_inbox_revoke_title">吊销这把投递 key？</string>
+    <string name="settings_inbox_revoke_body">用这把投递 key 的脚本会立刻失效，其它的不受影响。</string>
+    <string name="settings_inbox_rate_limited">操作太频繁了，等一会儿再试。</string>
+    <string name="settings_inbox_gone">这个信箱在服务器上已经不存在了。删掉它，接入时会重新建一个。</string>
+    <string name="settings_inbox_unreachable">连不上服务器。已经接入的其它服务不受影响。</string>
+    <string name="settings_transfer">导入与导出</string>
+    <string name="settings_transfer_hint">把接入转到另一台设备，或从加密文件恢复</string>
+    <string name="settings_transfer_export">导出</string>
+    <string name="settings_transfer_import">导入</string>
+    <string name="settings_transfer_export_body">这个文件是加密的。把它隔空投送、存到文件或用邮件发到新设备都可以——安全性靠文件本身，不靠通道。</string>
+    <string name="settings_transfer_import_body">导入会替换这台设备上已有的接入、凭据和手动订阅。历史读数不会跟着过来，导入后会重新刷新。</string>
+    <string name="settings_transfer_code">一次性码</string>
+    <string name="settings_transfer_code_hint">一次性码只在这里显示。离开这一页就没了，也不会复制到剪贴板。</string>
+    <string name="settings_transfer_share">分享文件</string>
+    <string name="settings_transfer_pick">选择文件</string>
+    <string name="settings_transfer_imported">导入成功，正在刷新账单</string>
+    <string name="settings_transfer_invalid_file">这个文件打不开</string>
+    <string name="settings_transfer_bad_code">一次性码格式不对</string>
+    <string name="settings_transfer_expired">这个文件已经过期，请在旧设备上重新导出</string>
+    <string name="settings_transfer_failed">没能完成导入，请再试一次</string>
+    <string name="settings_transfer_old_schema">这个迁移包是旧版。导出设备升级 TollCat 后再导出。</string>
+    <string name="settings_transfer_lifetime">有效期</string>
+    <string name="settings_transfer_hours">%1$d 小时</string>
+    <string name="settings_transfer_deadline">请在 %1$s 之前导入。过期只缩小误发的窗口，挡不住已经拿到文件的人离线试码。</string>
+    <string name="settings_transfer_remaining">码不对，还可以试 %1$d 次</string>
+    <string name="settings_transfer_locked">试得太密了，等 %1$d 秒再试。</string>
+    <string name="settings_whats_new_empty_title">还没有正式版</string>
+    <string name="settings_whats_new_empty_body">发了就会按版本记在这里。</string>
+    <string name="settings_danger">清除数据</string>
+    <string name="settings_feedback">反馈</string>
+    <string name="settings_feedback_hint">提一条反馈</string>
+    <string name="settings_feedback_send">发送</string>
+    <string name="settings_feedback_sent">收到了，谢谢。</string>
+    <string name="settings_feedback_rate_limited">刚才提得有点密，过十分钟再来。</string>
+    <string name="settings_feedback_failed">没发出去。内容还在，检查一下网络再试。</string>
+    <string name="settings_feedback_category">类型</string>
+    <string name="settings_feedback_message_label">反馈内容</string>
+    <string name="settings_feedback_message_hint">说什么都行</string>
+    <string name="settings_feedback_remaining">还能写 %1$d 字</string>
+    <string name="settings_feedback_contact_header">联系方式（可留空）</string>
+    <string name="settings_feedback_contact_hint">邮箱或任意联系方式</string>
+    <string name="settings_feedback_env_header">会一起发过去</string>
+    <string name="settings_feedback_env_version">版本</string>
+    <string name="settings_feedback_env_os">系统</string>
+    <string name="settings_feedback_env_device">机型</string>
+    <string name="settings_feedback_env_locale">语言</string>
+    <string name="settings_feedback_include_providers">附带已接入的服务名单</string>
+    <string name="settings_feedback_providers_attached">会带上：%1$s</string>
+    <string name="settings_feedback_providers_hint">只有服务名，没有金额也没有凭据。</string>
+    <string name="settings_feedback_env_footer">没有账单金额，没有 API 密钥，没有设备标识。这一节列出的就是全部。</string>
+    <string name="settings_feedback_cat_bug">哪里坏了</string>
+    <string name="settings_feedback_cat_idea">想要什么</string>
+    <string name="settings_feedback_cat_provider">想接哪家服务</string>
+    <string name="settings_feedback_cat_other">其他</string>
+    <string name="settings_about_version">版本</string>
+    <string name="settings_about_license">开源许可</string>
+    <string name="settings_about_license_value" translatable="false">MIT</string>
+    <string name="settings_about_source">源代码</string>
+    <string name="settings_about_privacy">隐私政策</string>
+    <string name="settings_about_support">支持</string>
+    <string name="settings_about_footer">服务图标来自 Simple Icons，以 CC0 1.0 公共领域许可使用。\n\n凭据和账单只存在这台设备上，不会上传。</string>
+    <string name="settings_outbound_header">出站域名</string>
+    <string name="settings_outbound_footer">App 只会向这些域名发起请求。账单凭据和账单数据留在这台设备上。打赏留言、反馈和匿名页面计数发到清单里的 api.tollcat.app。</string>
+    <string name="settings_other">其他</string>
+    <string name="settings_on">开</string>
+    <string name="settings_off">关</string>
+    <string name="settings_list_separator">、</string>
+
+    <string-array name="settings_outbound_hosts" translatable="false">
+        <item>api.cloudflare.com</item>
+        <item>dash.cloudflare.com</item>
+        <item>developers.cloudflare.com</item>
+        <item>console.neon.tech</item>
+        <item>ce.us-east-1.amazonaws.com</item>
+        <item>console.aws.amazon.com</item>
+        <item>api.openai.com</item>
+        <item>platform.openai.com</item>
+        <item>api.anthropic.com</item>
+        <item>console.anthropic.com</item>
+        <item>api.vercel.com</item>
+        <item>vercel.com</item>
+        <item>api.github.com</item>
+        <item>github.com</item>
+        <item>fly.io</item>
+        <item>openrouter.ai</item>
+        <item>api.deepseek.com</item>
+        <item>platform.deepseek.com</item>
+        <item>api.moonshot.cn</item>
+        <item>platform.kimi.com</item>
+        <item>api.moonshot.ai</item>
+        <item>platform.moonshot.ai</item>
+        <item>management-api.x.ai</item>
+        <item>console.x.ai</item>
+        <item>cursor.com</item>
+        <item>api.digitalocean.com</item>
+        <item>cloud.digitalocean.com</item>
+        <item>api.twilio.com</item>
+        <item>console.twilio.com</item>
+        <item>api.planetscale.com</item>
+        <item>app.planetscale.com</item>
+        <item>api.upstash.com</item>
+        <item>console.upstash.com</item>
+        <item>api.elevenlabs.io</item>
+        <item>elevenlabs.io</item>
+        <item>backboard.railway.com</item>
+        <item>railway.com</item>
+        <item>api.stripe.com</item>
+        <item>dashboard.stripe.com</item>
+        <item>api.resend.com</item>
+        <item>resend.com</item>
+        <item>us.posthog.com</item>
+        <item>eu.posthog.com</item>
+        <item>app.posthog.com</item>
+        <item>dashboard.clerk.com</item>
+        <item>sentry.io</item>
+        <item>api.vultr.com</item>
+        <item>my.vultr.com</item>
+        <item>api.fastly.com</item>
+        <item>manage.fastly.com</item>
+        <item>admin-api.exa.ai</item>
+        <item>dashboard.exa.ai</item>
+        <item>cloud.mongodb.com</item>
+        <item>login.microsoftonline.com</item>
+        <item>management.azure.com</item>
+        <item>portal.azure.com</item>
+        <item>api.polar.sh</item>
+        <item>polar.sh</item>
+        <item>api.heroku.com</item>
+        <item>dashboard.heroku.com</item>
+        <item>api.revenuecat.com</item>
+        <item>app.revenuecat.com</item>
+        <item>gitlab.com</item>
+        <item>api.cloud.qdrant.io</item>
+        <item>cloud.qdrant.io</item>
+        <item>dashboard.render.com</item>
+        <item>expo.dev</item>
+        <item>api.mistral.ai</item>
+        <item>admin.mistral.ai</item>
+        <item>backoffice.mistral.ai</item>
+        <item>api.fireworks.ai</item>
+        <item>app.fireworks.ai</item>
+        <item>api.fal.ai</item>
+        <item>fal.ai</item>
+        <item>huggingface.co</item>
+        <item>api.turso.tech</item>
+        <item>app.turso.tech</item>
+        <item>docs.turso.tech</item>
+        <item>api.baseten.co</item>
+        <item>app.baseten.co</item>
+        <item>docs.baseten.co</item>
+        <item>api.clickhouse.cloud</item>
+        <item>console.clickhouse.cloud</item>
+        <item>clickhouse.com</item>
+        <item>api.linode.com</item>
+        <item>cloud.linode.com</item>
+        <item>api.runpod.io</item>
+        <item>www.runpod.io</item>
+        <item>api.deepgram.com</item>
+        <item>console.deepgram.com</item>
+        <item>developers.deepgram.com</item>
+        <item>api.scaleway.com</item>
+        <item>console.scaleway.com</item>
+        <item>api.bunny.net</item>
+        <item>dash.bunny.net</item>
+        <item>docs.bunny.net</item>
+        <item>grafana.com</item>
+        <item>cloud.elastic.co</item>
+        <item>www.elastic.co</item>
+        <item>api.datadoghq.com</item>
+        <item>api.datadoghq.eu</item>
+        <item>api.us3.datadoghq.com</item>
+        <item>api.us5.datadoghq.com</item>
+        <item>api.ap1.datadoghq.com</item>
+        <item>api.ap2.datadoghq.com</item>
+        <item>api.uk1.datadoghq.com</item>
+        <item>app.datadoghq.com</item>
+        <item>api.novita.ai</item>
+        <item>novita.ai</item>
+        <item>api.apify.com</item>
+        <item>console.apify.com</item>
+        <item>api.tavily.com</item>
+        <item>app.tavily.com</item>
+        <item>docs.tavily.com</item>
+        <item>api.deepinfra.com</item>
+        <item>deepinfra.com</item>
+        <item>docs.deepinfra.com</item>
+        <item>console.vast.ai</item>
+        <item>cloud.vast.ai</item>
+        <item>api.firecrawl.dev</item>
+        <item>www.firecrawl.dev</item>
+        <item>cockroachlabs.cloud</item>
+        <item>www.cockroachlabs.com</item>
+        <item>cloud.typesense.org</item>
+        <item>typesense.org</item>
+        <item>tollcat.app</item>
+        <item>api.tollcat.app</item>
+    </string-array>
+    <string-array name="settings_outbound_purposes">
+        <item>Cloudflare 账单 API</item>
+        <item>Cloudflare 控制台与账单页</item>
+        <item>Cloudflare 查找 Account ID 文档</item>
+        <item>Neon 控制台与账单 API</item>
+        <item>AWS Cost Explorer API</item>
+        <item>AWS 控制台与账单页</item>
+        <item>OpenAI 账单 API</item>
+        <item>OpenAI 控制台与账单页</item>
+        <item>Anthropic 账单 API</item>
+        <item>Anthropic 控制台与账单页</item>
+        <item>Vercel 账单 API</item>
+        <item>Vercel 控制台与账单页</item>
+        <item>GitHub 账单 API</item>
+        <item>GitHub 控制台与账单页</item>
+        <item>Fly.io 控制台与账单页</item>
+        <item>OpenRouter 控制台与账单 API</item>
+        <item>DeepSeek 账单 API</item>
+        <item>DeepSeek 控制台与账单页</item>
+        <item>Moonshot (China) 账单 API</item>
+        <item>Moonshot (China) 控制台与账单页</item>
+        <item>Moonshot (Overseas) 账单 API</item>
+        <item>Moonshot (Overseas) 控制台与账单页</item>
+        <item>xAI 账单 API</item>
+        <item>xAI 控制台与账单页</item>
+        <item>Cursor 控制台与账单页</item>
+        <item>DigitalOcean 账单 API</item>
+        <item>DigitalOcean 控制台与账单页</item>
+        <item>Twilio 账单 API</item>
+        <item>Twilio 控制台与账单页</item>
+        <item>PlanetScale 账单 API</item>
+        <item>PlanetScale 控制台与账单页</item>
+        <item>Upstash 账单 API</item>
+        <item>Upstash 控制台与账单页</item>
+        <item>ElevenLabs 账单 API</item>
+        <item>ElevenLabs 控制台与账单页</item>
+        <item>Railway 账单 API</item>
+        <item>Railway 控制台与账单页</item>
+        <item>Stripe 账单 API</item>
+        <item>Stripe 控制台与账单页</item>
+        <item>Resend 账单 API</item>
+        <item>Resend 控制台与账单页</item>
+        <item>PostHog 账单 API</item>
+        <item>PostHog 欧盟账单 API</item>
+        <item>PostHog 控制台与账单页</item>
+        <item>Clerk 控制台与账单页</item>
+        <item>Sentry 用量 API、控制台与账单页</item>
+        <item>Vultr 账单 API</item>
+        <item>Vultr 控制台与账单页</item>
+        <item>Fastly 账单 API</item>
+        <item>Fastly 控制台与账单页</item>
+        <item>Exa 账单 API</item>
+        <item>Exa 控制台与账单页</item>
+        <item>MongoDB Atlas 账单 API、控制台与账单页</item>
+        <item>Azure 服务主体换取访问令牌</item>
+        <item>Azure 成本管理 API</item>
+        <item>Azure 控制台与账单页</item>
+        <item>Polar 账单 API</item>
+        <item>Polar 控制台与账单页</item>
+        <item>Heroku 账单 API</item>
+        <item>Heroku 控制台与账单页</item>
+        <item>RevenueCat 指标 API</item>
+        <item>RevenueCat 控制台与账单页</item>
+        <item>GitLab 控制台与用量配额页</item>
+        <item>GitLab Customers Portal 账单页</item>
+        <item>Qdrant Cloud 账单 API</item>
+        <item>Qdrant Cloud 控制台与账单页</item>
+        <item>Render 控制台与账单页</item>
+        <item>Expo 控制台与账单页</item>
+        <item>Mistral 账单 API</item>
+        <item>Mistral 控制台与账单页</item>
+        <item>Mistral Admin API 密钥页</item>
+        <item>Fireworks 账单 API</item>
+        <item>Fireworks 控制台与账单页</item>
+        <item>fal.ai 账单 API</item>
+        <item>fal.ai 控制台与账单页</item>
+        <item>Hugging Face 账单 API、控制台与账单页</item>
+        <item>Turso 账单 API</item>
+        <item>Turso 控制台与账单页</item>
+        <item>Turso API Token 文档</item>
+        <item>Baseten 账单 API</item>
+        <item>Baseten 控制台与账单页</item>
+        <item>Baseten API Key 文档</item>
+        <item>ClickHouse Cloud 账单 API</item>
+        <item>ClickHouse Cloud 控制台与账单页</item>
+        <item>ClickHouse Cloud API 密钥文档</item>
+        <item>Linode 账单 API</item>
+        <item>Linode 控制台与账单页</item>
+        <item>RunPod 账单 API</item>
+        <item>RunPod 控制台与账单页</item>
+        <item>Deepgram 账单 API</item>
+        <item>Deepgram 控制台与账单页</item>
+        <item>Deepgram API Key 文档</item>
+        <item>Scaleway 账单 API</item>
+        <item>Scaleway 控制台与账单页</item>
+        <item>bunny.net 账单 API</item>
+        <item>bunny.net 控制台与账单页</item>
+        <item>bunny.net API Key 文档</item>
+        <item>Grafana Cloud 账单 API、控制台与文档</item>
+        <item>Elastic Cloud 账单 API、控制台与账单页</item>
+        <item>Elastic Cloud API 密钥文档</item>
+        <item>Datadog 账单 API（US1）</item>
+        <item>Datadog 账单 API（EU）</item>
+        <item>Datadog 账单 API（US3）</item>
+        <item>Datadog 账单 API（US5）</item>
+        <item>Datadog 账单 API（AP1）</item>
+        <item>Datadog 账单 API（AP2）</item>
+        <item>Datadog 账单 API（UK1）</item>
+        <item>Datadog 控制台与账单页</item>
+        <item>Novita 账单 API</item>
+        <item>Novita 控制台与账单页</item>
+        <item>Apify 账单 API</item>
+        <item>Apify 控制台与账单页</item>
+        <item>Tavily 用量 API</item>
+        <item>Tavily 控制台与账单页</item>
+        <item>Tavily API Key 文档</item>
+        <item>DeepInfra 账单 API</item>
+        <item>DeepInfra 控制台与账单页</item>
+        <item>DeepInfra API Key 文档</item>
+        <item>Vast.ai 账单 API</item>
+        <item>Vast.ai 控制台与账单页</item>
+        <item>Firecrawl 用量 API</item>
+        <item>Firecrawl 控制台与账单页</item>
+        <item>CockroachDB Cloud 账单 API、控制台与账单页</item>
+        <item>CockroachDB Cloud API 密钥文档</item>
+        <item>Typesense Cloud 账单 API、控制台与账单页</item>
+        <item>Typesense Cloud API 密钥文档</item>
+        <item>分享卡片上二维码指向的地址</item>
+        <item>打赏留言、读数信箱、反馈、匿名页面计数与接入目录（不含任何 provider 凭据）</item>
+    </string-array>
+    <string name="settings_color_source">配色</string>
+    <string name="settings_color_dynamic">跟随壁纸</string>
+    <string name="settings_color_brand">TollCat 蓝</string>
+</resources>

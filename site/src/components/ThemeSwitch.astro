@@ -1,0 +1,49 @@
+---
+import ThemeGlyph from './ThemeGlyph.astro';
+import { t } from '../i18n';
+import type { Locale } from '../config';
+
+type Pref = 'system' | 'light' | 'dark';
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale);
+const options: Pref[] = ['system', 'light', 'dark'];
+---
+
+<div
+  class="theme-switch"
+  data-theme-switch
+  data-label-system={copy.theme.system}
+  data-label-light={copy.theme.light}
+  data-label-dark={copy.theme.dark}
+  data-menu-label={copy.a11y.themeMenu}
+>
+  <button
+    class="theme-trigger"
+    type="button"
+    data-theme-trigger
+    popovertarget="theme-popover"
+    aria-haspopup="listbox"
+    aria-label={`${copy.theme.system}, ${copy.a11y.themeMenu}`}
+  >
+    <ThemeGlyph kind="system" />
+    <ThemeGlyph kind="light" />
+    <ThemeGlyph kind="dark" />
+  </button>
+  <div id="theme-popover" class="theme-popover" popover="auto" role="listbox" aria-label={copy.a11y.theme}>
+    {
+      options.map((pref) => (
+        <button
+          class:list={['theme-option', pref === 'system' && 'is-selected']}
+          type="button"
+          role="option"
+          data-theme-option={pref}
+          aria-selected={pref === 'system' ? 'true' : 'false'}
+        >
+          <ThemeGlyph kind={pref} />
+          {copy.theme[pref]}
+        </button>
+      ))
+    }
+  </div>
+</div>

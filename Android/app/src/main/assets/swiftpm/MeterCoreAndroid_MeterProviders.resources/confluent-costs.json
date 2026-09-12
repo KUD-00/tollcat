@@ -1,0 +1,29 @@
+{
+  "api_version": "v1",
+  "kind": "CostList",
+  "metadata": {
+    "total_size": 2
+  },
+  "data": [
+    {
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-02",
+      "granularity": "DAILY",
+      "product": "KAFKA",
+      "line_type": "KAFKA_NUM_CKUS",
+      "original_amount": 10.0,
+      "discount_amount": 2.0,
+      "amount": 8.0
+    },
+    {
+      "start_date": "2026-08-02",
+      "end_date": "2026-08-03",
+      "granularity": "DAILY",
+      "product": "KAFKA",
+      "line_type": "KAFKA_STORAGE",
+      "original_amount": 5.5,
+      "discount_amount": 0.5,
+      "amount": 5.0
+    }
+  ]
+}

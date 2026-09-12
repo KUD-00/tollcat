@@ -1,0 +1,23 @@
+# 全新安装：开场引导 → 跳过 → 仪表盘空态 → 服务空态 → 添加目录。
+# 两端同一个 appId、同一套 id；不带任何启动参数，就是用户第一次打开的样子。
+appId: com.zhechengqi.tollcat
+---
+- launchApp:
+    clearState: true
+# 首次冷启动（Android 要解压 Swift 资源包）十几秒，默认等待不够。
+- extendedWaitUntil:
+    visible:
+      id: onboarding.next
+    timeout: 60000
+- tapOn:
+    id: onboarding.skip
+- assertVisible:
+    id: dashboard.empty
+- tapOn:
+    id: tab.services
+- assertVisible:
+    id: services.empty
+- tapOn:
+    id: services.empty.add
+- assertVisible:
+    id: addProvider.list

@@ -1,0 +1,30 @@
+{
+  "usage": {
+    "Inference": [
+      {
+        "entityId": "aaaaaaaaaaaaaaaaaaaaaaaa",
+        "label": "llama",
+        "product": "inference",
+        "quantity": 1,
+        "productPrettyName": "Inference",
+        "unitLabel": "tokens",
+        "totalCostMicroUSD": 8500000,
+        "unitCostMicroUSD": 1,
+        "active": true
+      }
+    ],
+    "Spaces": [
+      {
+        "entityId": "bbbbbbbbbbbbbbbbbbbbbbbb",
+        "label": "demo",
+        "product": "spaces",
+        "quantity": 1,
+        "productPrettyName": "Spaces",
+        "unitLabel": "hours",
+        "totalCostMicroUSD": 1500000,
+        "unitCostMicroUSD": 1,
+        "active": true
+      }
+    ]
+  }
+}

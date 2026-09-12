@@ -1,0 +1,26 @@
+---
+import type { ProviderMark } from '../providers';
+
+type Props = { mark: ProviderMark; class?: string; decorative?: boolean };
+const { mark, class: className, decorative = false } = Astro.props;
+const fill = mark.fill ?? 0.68;
+const pad = `${((1 - fill) / 2) * 100}%`;
+const letter = mark.key.charAt(0).toUpperCase();
+---
+
+<span
+  class:list={['pglyph', className]}
+  style={`--pg-light:${mark.light};--pg-dark:${mark.dark};--pg-pad:${pad}`}
+  title={decorative ? undefined : mark.name}
+  aria-hidden={decorative ? 'true' : undefined}
+>
+  {
+    mark.path ? (
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d={mark.path} fill="currentColor" fill-rule={mark.evenOdd ? 'evenodd' : 'nonzero'}></path>
+      </svg>
+    ) : (
+      <span class="pglyph-letter">{letter}</span>
+    )
+  }
+</span>

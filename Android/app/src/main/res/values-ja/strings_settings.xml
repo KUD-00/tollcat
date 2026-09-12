@@ -1,0 +1,339 @@
+<!-- GENERATED — 由 scripts/generate-android-strings.py 生成，不要手改。
+     和 iOS 同文的句子：改对应模块的 Localizable.xcstrings；
+     Android 独有的句子：改 Android/app/strings-android-only.json。 -->
+<resources>
+    <string name="settings_appearance">外観</string>
+    <string name="settings_appearance_light">ライト</string>
+    <string name="settings_appearance_dark">ダーク</string>
+    <string name="settings_appearance_system">システム</string>
+    <string name="settings_appearance_hint">ライトとダークはこの端末ですぐに反映されます。システムに従うと、端末のダーク設定に合わせます。</string>
+    <string name="settings_currency_usd">米ドル</string>
+    <string name="settings_currency_cny">人民元</string>
+    <string name="settings_currency_eur">ユーロ</string>
+    <string name="settings_currency_gbp">ポンド</string>
+    <string name="settings_currency_jpy">円</string>
+    <string name="settings_currency_aud">豪ドル</string>
+    <string name="settings_currency_cad">カナダドル</string>
+    <string name="settings_currency_sgd">シンガポールドル</string>
+    <string name="settings_currency_inr">インドルピー</string>
+    <string name="settings_currency_brl">レアル</string>
+    <string name="settings_currency_krw">ウォン</string>
+    <string name="settings_currency_twd">新台湾ドル</string>
+    <string name="settings_currency_hkd">香港ドル</string>
+    <string name="settings_currency_label">%1$s (%2$s)</string>
+    <string name="settings_refresh_title">アプリを開くたびに使用量を更新</string>
+    <string name="settings_refresh_note">更新に料金がかかるサービスは対象外です。</string>
+    <string name="settings_hide_cat">猫をしまう</string>
+    <string name="settings_hide_cat_note">ホームから猫がいなくなります。数字と内訳はそのままです。</string>
+    <string name="settings_refresh_hint">オンにすると、コールドスタートとバックグラウンドからの復帰で全体更新が一度ずつ走ります。ルールはダッシュボードの更新ボタンと同じです。更新に料金がかかるサービスは対象外です。</string>
+    <string name="settings_usage_guides">活用ガイド</string>
+    <string name="settings_usage_guides_hint">四つのお金の種類と、見間違えやすい点</string>
+    <string name="settings_whats_new">新機能</string>
+    <string name="settings_whats_new_hint">各バージョンのリリースノートを開く</string>
+    <string name="settings_tip">猫におやつをあげる</string>
+    <string name="settings_tip_hint">チップです。機能は解除されません。</string>
+    <string name="settings_tip_open_hint">チップのページを開く</string>
+    <string name="settings_tip_candy">キャンディ</string>
+    <string name="settings_tip_coffee">コーヒー</string>
+    <string name="settings_tip_pizza">ピザ</string>
+    <string name="settings_tip_send">送信</string>
+    <string name="settings_tip_retry">再試行</string>
+    <string name="settings_tip_name_label">名前（任意）</string>
+    <string name="settings_tip_message_label">一言（任意）</string>
+    <string name="settings_tip_composer_footer">名前も一言も空欄で構いません。このページを閉じると残しません。</string>
+    <string name="settings_tip_will_retry">メッセージは後で再送する。</string>
+    <string name="settings_tip_unsent">メッセージは後で再送</string>
+    <string name="settings_tip_history">履歴</string>
+    <string name="settings_tip_history_empty">記録はまだない</string>
+    <string name="settings_tip_cat_celebrating">猫がおやつをもらって喜んでいる</string>
+    <string name="settings_tip_cat_waiting">猫がおやつを待っている</string>
+    <string name="settings_tip_buy_hint">この金額を購入</string>
+    <string name="settings_tip_cancelled">キャンセルしました。</string>
+    <string name="settings_tip_pending">この購入は承認待ちです。</string>
+    <string name="settings_tip_failed">購入を完了できませんでした。もう一度お試しください。</string>
+    <string name="settings_tip_thanks_small">ありがとうございます！！</string>
+    <string name="settings_tip_thanks_medium">本当にありがとうございます！！</string>
+    <string name="settings_tip_thanks_large">本当に、本当にありがとうございます！！！</string>
+    <string name="settings_tip_thanks_repeat">また来てくれたんですね！！ありがとうございます！！</string>
+    <string name="settings_tip_note_small">キャンディを一つ、猫がくわえて行きました。</string>
+    <string name="settings_tip_note_medium">コーヒーを一杯。今夜の猫は元気いっぱいです。</string>
+    <string name="settings_tip_note_large">ピザまるごと一枚。猫はもう持ち帰る気です。</string>
+    <string name="settings_tip_note_unknown">猫が受け取りました。</string>
+    <string name="settings_tip_store_unavailable">Google Playに接続できない</string>
+    <string name="settings_tip_store_unavailable_body">しばらくしてから、このページを開き直してください。価格は Google Play が地域に合わせて表示します。</string>
+    <string name="settings_tip_loading">Google Playから価格を読み込み中。</string>
+    <string name="settings_tip_store_unavailable_footer">Google Play につながらないため、価格を表示できません。</string>
+    <string name="settings_tip_purchasing">Google Play に確認中。</string>
+    <string name="whats_new_more">そのほかの更新</string>
+    <string name="whats_new_empty">リリースするとバージョンごとにここに記録されます。</string>
+    <string name="whats_new_open_hint">このバージョンの更新内容を開く</string>
+    <string name="action_got_it">了解</string>
+    <string name="settings_money_kinds">四つのお金</string>
+    <string name="settings_money_usage_title">従量課金</string>
+    <string name="settings_money_usage_body">すでに使った分をカレンダー月で合計します。日次が取れるときは日ごとに足します。</string>
+    <string name="settings_money_prepaid_title">プリペイド残高</string>
+    <string name="settings_money_prepaid_body">今月の消費 = 月初残高 − 現在残高。初月は月初スナップショットがないと数字は不完全です。</string>
+    <string name="settings_money_subscription_title">定額サブスクリプション</string>
+    <string name="settings_money_subscription_body">引き落とし日が今月なら全額を計上し、日割りしません。</string>
+    <string name="settings_money_freetier_title">無料枠内</string>
+    <string name="settings_money_freetier_body">合計は 0 で記録し、枠の使用量は別に見ます。</string>
+    <string name="settings_guide_hero_title">大きな数字に月額は入っていません</string>
+    <string name="settings_guide_hero_body">ダッシュボードの大きな数字は、従量、プリペイドの消費、超過分です。GitHub Copilot のような月額は別の行にあり、内訳にも入りません。請求の全体は両方の行を見てください。</string>
+    <string name="settings_guide_aws_title">AWS の更新には料金がかかります</string>
+    <string name="settings_guide_aws_body">Cost Explorer は 1 回あたり約 $0.01 です。そのため AWS は全体の更新にも、起動時の自動更新にも入りません。最新の数字が必要なら、そのサービスで自分で更新してください。ボタンに料金が表示されます。</string>
+    <string name="settings_guide_keys_title">鍵は新しい端末にはついていきません</string>
+    <string name="settings_guide_keys_body">キーはこの端末の Keystore にだけ入り、クラウドバックアップには入りません。機種変更は設定の「読み込みと書き出し」を使います。</string>
+    <string name="settings_guide_inbox_title">API がないサービスは検針ポストに送れます</string>
+    <string name="settings_guide_inbox_body">公開の請求 API がないサービスもあります。検針ポストを作って自分で投函すれば、数字はダッシュボードに入ります。</string>
+    <string name="settings_guide_widget_title">ロック画面でも今月を見られます</string>
+    <string name="settings_guide_widget_body">金額のプッシュ通知はありません。ホーム画面かロック画面にウィジェットを置けば、ちらっと見たときに数字があります。リマインダーは戻って更新するよう促すだけで、通知に金額は書きません。</string>
+    <string name="settings_guide_open_hint">この活用ガイドを開く</string>
+    <string name="settings_reminder">リマインダー</string>
+    <string name="settings_reminder_note">猫がいつアプリを開いて使用量を更新するよう知らせるかを設定します</string>
+    <string name="settings_reminder_frequency">頻度</string>
+    <string name="settings_reminder_detail">頻度と時刻</string>
+    <string name="settings_reminder_time">時刻</string>
+    <string name="settings_reminder_weekday">曜日</string>
+    <string name="settings_reminder_day">毎月何日</string>
+    <string name="settings_reminder_day_value">%1$d日</string>
+    <string name="settings_reminder_daily">毎日</string>
+    <string name="settings_reminder_weekly">毎週</string>
+    <string name="settings_reminder_biweekly">隔週</string>
+    <string name="settings_reminder_monthly">毎月</string>
+    <string name="settings_reminder_android_note">この設定はこの端末に保存されます。Android は正確なアラーム権限を要求せず、通知に金額は含めません。</string>
+    <string name="settings_reminder_time_set">設定</string>
+    <string name="settings_reminder_opt_in_title">時間になったら猫が呼びにきます</string>
+    <string name="settings_reminder_opt_in_body">時間になったらアプリを開いて、今月いくら使ったか確認するよう知らせます。通知に金額は出ません。</string>
+    <string name="settings_reminder_opt_in_allow">通知をオンにする</string>
+    <string name="settings_reminder_notice_title">ちょっと見て</string>
+    <string name="settings_reminder_notice_body">Appを開いて、今月いくら使ったか見て。</string>
+    <string name="settings_reminder_notice_today">前回の更新は今日。</string>
+    <string name="settings_reminder_notice_yesterday">前回の更新は 1日前。</string>
+    <string name="settings_reminder_notice_days">前回の更新は %1$d日前。</string>
+    <string name="settings_reminder_denied">通知がオフのため、リマインダーは鳴りません。</string>
+    <string name="settings_reminder_open_system">システム設定でオンにする</string>
+    <string name="settings_reminder_open_system_hint">システム設定を開き、TollCatの通知をオンにする</string>
+    <string name="settings_reminder_preview_a11y">通知のプレビュー：%1$s。%2$s</string>
+    <string name="settings_inbox">検針ポスト</string>
+    <string name="settings_inbox_hint">自分で読み取り値を送信するための検針ポストと投函キーを管理します</string>
+    <string name="settings_inbox_empty_title">検針ポストはまだありません</string>
+    <string name="settings_inbox_empty_body">Render・Expo・Clerk のような公開請求 API を持たないサービスを接続するときに自動で作成されます。</string>
+    <string name="settings_inbox_create">検針ポストを作る</string>
+    <string name="settings_inbox_manual_action">サービスで使用量を手入力</string>
+    <string name="settings_inbox_fresh">新しい投函キー</string>
+    <string name="settings_inbox_fresh_hint">表示はこの一度きりです。古いキーはまだ使えるので、スクリプトを更新してから失効させてください。</string>
+    <string name="settings_inbox_saved">保存しました</string>
+    <string name="settings_inbox_keys">投函キー</string>
+    <string name="settings_inbox_keys_empty">投函キーはまだありません</string>
+    <string name="settings_inbox_keys_hint">スクリプトごとに 1 本。1 本が漏れてもそれだけを失効させれば、他のスクリプトは影響を受けません。</string>
+    <string name="settings_inbox_untitled">名称未設定</string>
+    <string name="settings_inbox_never_used">未使用</string>
+    <string name="settings_inbox_mint">新しいキーを発行</string>
+    <string name="settings_inbox_new_script">新しいスクリプト</string>
+    <string name="settings_inbox_id_label">検針ポスト</string>
+    <string name="settings_inbox_copy_read">コピー</string>
+    <string name="settings_inbox_privacy">検針ポストに入るのは金額だけです。サービスのアカウントや鍵は一切含まれません。</string>
+    <string name="settings_inbox_delete">検針ポストを削除</string>
+    <string name="settings_inbox_delete_title">検針ポストを削除しますか？</string>
+    <string name="settings_inbox_delete_body">サーバー上の読み取り値も削除されます。この端末に保存済みの履歴は残ります。</string>
+    <string name="settings_inbox_revoke">失効</string>
+    <string name="settings_inbox_revoke_title">この投函キーを失効しますか？</string>
+    <string name="settings_inbox_revoke_body">このキーを使っているスクリプトはすぐに使えなくなります。他のキーには影響しません。</string>
+    <string name="settings_inbox_rate_limited">操作が頻繁すぎます。少し待ってから再試行してください。</string>
+    <string name="settings_inbox_gone">この検針ポストはサーバー上に存在しません。削除すると、次回サービス接続時に新しく作成されます。</string>
+    <string name="settings_inbox_unreachable">サーバーに接続できません。接続済みの他のサービスには影響しません。</string>
+    <string name="settings_transfer">読み込みと書き出し</string>
+    <string name="settings_transfer_hint">接続を別のデバイスに移すか、暗号化ファイルから復元します</string>
+    <string name="settings_transfer_export">書き出し</string>
+    <string name="settings_transfer_import">読み込む</string>
+    <string name="settings_transfer_export_body">このファイルは暗号化されています。AirDrop、ファイル、メールのどれでも送れます。安全性は経路ではなくファイル自身にあります。</string>
+    <string name="settings_transfer_import_body">読み込むと、このデバイスの接続、認証情報、手入力のサブスクが置き換わります。履歴は含まれません。読み込み後に再取得します。</string>
+    <string name="settings_transfer_code">ワンタイムコード</string>
+    <string name="settings_transfer_code_hint">ワンタイムコードはここだけに表示されます。このページを離れると消え、クリップボードにもコピーされません。</string>
+    <string name="settings_transfer_share">ファイルを共有</string>
+    <string name="settings_transfer_pick">ファイルを選択</string>
+    <string name="settings_transfer_imported">読み込みました。請求を更新しています…</string>
+    <string name="settings_transfer_invalid_file">このファイルは開けません</string>
+    <string name="settings_transfer_bad_code">コードの形式が正しくありません</string>
+    <string name="settings_transfer_expired">このファイルは期限切れです。古いデバイスで書き出してください。</string>
+    <string name="settings_transfer_failed">読み込めませんでした。もう一度試してください。</string>
+    <string name="settings_transfer_old_schema">この移行パッケージは旧バージョンです。書き出し側のデバイスで TollCat を更新してから、もう一度書き出してください。</string>
+    <string name="settings_transfer_lifetime">有効期限</string>
+    <string name="settings_transfer_hours">%1$d 時間</string>
+    <string name="settings_transfer_deadline">%1$s までに読み込んでください。期限は誤送信の窓を狭めるだけです。ファイルを持っている人がオフラインで試すことは止められません。</string>
+    <string name="settings_transfer_remaining">コードが違います。残り %1$d 回</string>
+    <string name="settings_transfer_locked">試行が多すぎます。%1$d秒待ってください。</string>
+    <string name="settings_whats_new_empty_title">まだ正式リリースはありません</string>
+    <string name="settings_whats_new_empty_body">リリースするとバージョンごとにここに記録されます。</string>
+    <string name="settings_danger">データを消す</string>
+    <string name="settings_feedback">フィードバック</string>
+    <string name="settings_feedback_hint">フィードバックを送る</string>
+    <string name="settings_feedback_send">送信</string>
+    <string name="settings_feedback_sent">受け取りました。ありがとう。</string>
+    <string name="settings_feedback_rate_limited">少し間隔が短いようです。10 分後にもう一度お試しください。</string>
+    <string name="settings_feedback_failed">送信できませんでした。入力内容は残っています。接続を確認してもう一度お試しください。</string>
+    <string name="settings_feedback_category">種類</string>
+    <string name="settings_feedback_message_label">フィードバック内容</string>
+    <string name="settings_feedback_message_hint">なんでも書いてください</string>
+    <string name="settings_feedback_remaining">残り %1$d 文字</string>
+    <string name="settings_feedback_contact_header">連絡先（任意）</string>
+    <string name="settings_feedback_contact_hint">メールアドレスなど連絡先</string>
+    <string name="settings_feedback_env_header">一緒に送られるもの</string>
+    <string name="settings_feedback_env_version">バージョン</string>
+    <string name="settings_feedback_env_os">OS</string>
+    <string name="settings_feedback_env_device">機種</string>
+    <string name="settings_feedback_env_locale">言語</string>
+    <string name="settings_feedback_include_providers">接続済みサービスの一覧を添付</string>
+    <string name="settings_feedback_providers_attached">送信対象：%1$s</string>
+    <string name="settings_feedback_providers_hint">サービス名だけです。金額も認証情報も含みません。</string>
+    <string name="settings_feedback_env_footer">金額も API キーも端末の識別子も含みません。このセクションに並んでいるものがすべてです。</string>
+    <string name="settings_feedback_cat_bug">不具合の報告</string>
+    <string name="settings_feedback_cat_idea">ほしい機能</string>
+    <string name="settings_feedback_cat_provider">対応してほしいサービス</string>
+    <string name="settings_feedback_cat_other">その他</string>
+    <string name="settings_about_version">バージョン</string>
+    <string name="settings_about_license">ライセンス</string>
+    <string name="settings_about_source">ソースコード</string>
+    <string name="settings_about_privacy">プライバシーポリシー</string>
+    <string name="settings_about_support">サポート</string>
+    <string name="settings_about_footer">サービスアイコンは Simple Icons、CC0 1.0 パブリックドメイン。\n\n認証情報と請求はこのデバイスにだけあり、アップロードしません。</string>
+    <string name="settings_outbound_header">送信先ホスト</string>
+    <string name="settings_outbound_footer">App が通信するのはこれらのホストだけです。認証情報と請求データはこのデバイスに残ります。チップのメッセージ、フィードバック、匿名の画面カウントはこの一覧の api.tollcat.app に送られます。</string>
+    <string name="settings_other">その他</string>
+    <string name="settings_on">オン</string>
+    <string name="settings_off">オフ</string>
+    <string name="settings_list_separator">、</string>
+    <string-array name="settings_outbound_purposes">
+        <item>Cloudflare 請求 API</item>
+        <item>Cloudflare ダッシュボード / 請求ページ</item>
+        <item>Cloudflare の Account ID の探し方ドキュメント</item>
+        <item>Neon コンソール / 請求 API</item>
+        <item>AWS Cost Explorer API</item>
+        <item>AWS コンソール / 請求ページ</item>
+        <item>OpenAI 請求 API</item>
+        <item>OpenAI コンソール / 請求ページ</item>
+        <item>Anthropic 請求 API</item>
+        <item>Anthropic コンソール / 請求ページ</item>
+        <item>Vercel 請求 API</item>
+        <item>Vercel ダッシュボード / 請求ページ</item>
+        <item>GitHub 請求 API</item>
+        <item>GitHub 設定 / 請求ページ</item>
+        <item>Fly.io ダッシュボード / 請求ページ</item>
+        <item>OpenRouter コンソール / 請求 API</item>
+        <item>DeepSeek 請求 API</item>
+        <item>DeepSeek コンソール / 請求ページ</item>
+        <item>Moonshot (China) 請求 API</item>
+        <item>Moonshot (China) コンソール / 請求ページ</item>
+        <item>Moonshot (Overseas) 請求 API</item>
+        <item>Moonshot (Overseas) コンソール / 請求ページ</item>
+        <item>xAI 請求 API</item>
+        <item>xAI コンソール / 請求ページ</item>
+        <item>Cursor ダッシュボード / 請求ページ</item>
+        <item>DigitalOcean 請求 API</item>
+        <item>DigitalOcean コンソール / 請求ページ</item>
+        <item>Twilio 請求 API</item>
+        <item>Twilio コンソール / 請求ページ</item>
+        <item>PlanetScale 請求 API</item>
+        <item>PlanetScale コンソール / 請求ページ</item>
+        <item>Upstash 請求 API</item>
+        <item>Upstash コンソール / 請求ページ</item>
+        <item>ElevenLabs 請求 API</item>
+        <item>ElevenLabs コンソール / 請求ページ</item>
+        <item>Railway 請求 API</item>
+        <item>Railway コンソール / 請求ページ</item>
+        <item>Stripe 請求 API</item>
+        <item>Stripe ダッシュボード / 請求ページ</item>
+        <item>Resend 請求 API</item>
+        <item>Resend ダッシュボード / 請求ページ</item>
+        <item>PostHog 請求 API</item>
+        <item>PostHog EU 請求 API</item>
+        <item>PostHog ダッシュボード / 請求ページ</item>
+        <item>Clerk ダッシュボード / 請求ページ</item>
+        <item>Sentry 使用量 API・コンソール / 請求ページ</item>
+        <item>Vultr 請求 API</item>
+        <item>Vultr コンソール / 請求ページ</item>
+        <item>Fastly 請求 API</item>
+        <item>Fastly コンソール / 請求ページ</item>
+        <item>Exa 請求 API</item>
+        <item>Exa コンソール / 請求ページ</item>
+        <item>MongoDB Atlas 請求 API・コンソール / 請求ページ</item>
+        <item>Azure サービスプリンシパルのトークン取得</item>
+        <item>Azure コスト管理 API</item>
+        <item>Azure コンソール / 請求ページ</item>
+        <item>Polar 請求 API</item>
+        <item>Polar コンソール / 請求ページ</item>
+        <item>Heroku 請求 API</item>
+        <item>Heroku コンソール / 請求ページ</item>
+        <item>RevenueCat メトリクス API</item>
+        <item>RevenueCat コンソール / 請求ページ</item>
+        <item>GitLab コンソールと用量クォータページ</item>
+        <item>GitLab Customers Portal の請求ページ</item>
+        <item>Qdrant Cloud 請求 API</item>
+        <item>Qdrant Cloud コンソール / 請求ページ</item>
+        <item>Render コンソール / 請求ページ</item>
+        <item>Expo コンソール / 請求ページ</item>
+        <item>Mistral 請求 API</item>
+        <item>Mistral コンソール / 請求ページ</item>
+        <item>Mistral Admin API キーのページ</item>
+        <item>Fireworks 請求 API</item>
+        <item>Fireworks コンソール / 請求ページ</item>
+        <item>fal.ai 請求 API</item>
+        <item>fal.ai コンソール / 請求ページ</item>
+        <item>Hugging Face 請求 API / コンソール / 請求ページ</item>
+        <item>Turso 請求 API</item>
+        <item>Turso コンソール / 請求ページ</item>
+        <item>Turso API トークンのドキュメント</item>
+        <item>Baseten 請求 API</item>
+        <item>Baseten コンソール / 請求ページ</item>
+        <item>Baseten API キーのドキュメント</item>
+        <item>ClickHouse Cloud 請求 API</item>
+        <item>ClickHouse Cloud コンソール / 請求ページ</item>
+        <item>ClickHouse Cloud API キーのドキュメント</item>
+        <item>Linode 請求 API</item>
+        <item>Linode コンソール / 請求ページ</item>
+        <item>RunPod 請求 API</item>
+        <item>RunPod コンソール / 請求ページ</item>
+        <item>Deepgram 請求 API</item>
+        <item>Deepgram コンソール / 請求ページ</item>
+        <item>Deepgram API キーのドキュメント</item>
+        <item>Scaleway 請求 API</item>
+        <item>Scaleway コンソール / 請求ページ</item>
+        <item>bunny.net 請求 API</item>
+        <item>bunny.net コンソール / 請求ページ</item>
+        <item>bunny.net API キーのドキュメント</item>
+        <item>Grafana Cloud 請求 API / コンソール / ドキュメント</item>
+        <item>Elastic Cloud 請求 API / コンソール / 請求ページ</item>
+        <item>Elastic Cloud API キーのドキュメント</item>
+        <item>Datadog 請求 API（US1）</item>
+        <item>Datadog 請求 API（EU）</item>
+        <item>Datadog 請求 API（US3）</item>
+        <item>Datadog 請求 API（US5）</item>
+        <item>Datadog 請求 API（AP1）</item>
+        <item>Datadog 請求 API（AP2）</item>
+        <item>Datadog 請求 API（UK1）</item>
+        <item>Datadog コンソール / 請求ページ</item>
+        <item>Novita 請求 API</item>
+        <item>Novita コンソール / 請求ページ</item>
+        <item>Apify 請求 API</item>
+        <item>Apify コンソール / 請求ページ</item>
+        <item>Tavily 使用量 API</item>
+        <item>Tavily コンソール / 請求ページ</item>
+        <item>Tavily API キーのドキュメント</item>
+        <item>DeepInfra 請求 API</item>
+        <item>DeepInfra コンソール / 請求ページ</item>
+        <item>DeepInfra API キーのドキュメント</item>
+        <item>Vast.ai 請求 API</item>
+        <item>Vast.ai コンソール / 請求ページ</item>
+        <item>Firecrawl 使用量 API</item>
+        <item>Firecrawl コンソール / 請求ページ</item>
+        <item>CockroachDB Cloud 請求 API / コンソール / 請求ページ</item>
+        <item>CockroachDB Cloud API キーのドキュメント</item>
+        <item>Typesense Cloud 請求 API / コンソール / 請求ページ</item>
+        <item>Typesense Cloud API キーのドキュメント</item>
+        <item>共有カードの QR コードのリンク先</item>
+        <item>投げ銭メッセージ・検針ポスト・フィードバック・匿名の画面カウント・接続カタログ（プロバイダーの認証情報は一切含まない）</item>
+    </string-array>
+    <string name="settings_color_source">カラー</string>
+    <string name="settings_color_dynamic">壁紙に合わせる</string>
+    <string name="settings_color_brand">TollCat ブルー</string>
+</resources>
