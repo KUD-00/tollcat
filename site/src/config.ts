@@ -13,14 +13,14 @@ export const localePrefixPattern = Object.values(localePrefixes).join('|');
 export const siteConfig = {
   name: 'TollCat',
   url: 'https://tollcat.app',
-  /** App Store 上架后填入。空则主按钮显示「即将上架」，不是假链接。 */
-  appStoreUrl: null as string | null,
-  /** 源码仓库。现在还是 private，页头仍然放链接。 */
+  /** App Store 链接。不带国家段，Apple 按访客地区跳转。空则主按钮显示「即将上架」，不是假链接。 */
+  appStoreUrl: 'https://apps.apple.com/app/tollcat/id6805479811' as string | null,
+  /** 源码仓库，public。 */
   githubUrl: 'https://github.com/KUD-00/tollcat',
   /** 反馈、目录、信箱。站点表单和 App 打同一个 origin。 */
   apiUrl: 'https://api.tollcat.app',
-  /** iTunes 数字 ID。有了之后可开 Smart App Banner。 */
-  appId: null as string | null,
+  /** iTunes 数字 ID，给 Smart App Banner 和 JSON-LD 用。 */
+  appId: '6805479811' as string | null,
   localeBcp47: {
     zh: 'zh-Hans',
     en: 'en',
