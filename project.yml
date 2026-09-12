@@ -145,5 +145,10 @@ schemes:
     test:
       config: Debug
       gatherCoverageData: true
+      # 测试断言的是简体中文文案（L("…") 的源串），测试宿主必须跑在 zh-Hans。
+      # 不钉的话 CI 模拟器是英文，DashboardFilterSurfaceTests 等几十条会拿到
+      # "July · Excl. AWS" 之类的英文串而红。
+      language: zh-Hans
+      region: CN
       targets:
         - MeterKitTests
