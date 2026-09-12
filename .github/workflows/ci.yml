@@ -142,6 +142,10 @@ jobs:
     env:
       DERIVED_DATA: /tmp/dd-verify
       RESULT_BUNDLE: /tmp/dd-verify/TollCat.xcresult
+      # xcodebuild only forwards TEST_RUNNER_* variables (prefix stripped) into the
+      # test process, so the runner's own CI=true never reaches the tests.
+      # StoreKitConfigurationTests reads CI to skip SKTestSession on GitHub.
+      TEST_RUNNER_CI: "1"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -202,8 +206,10 @@ jobs:
             -resultBundlePath "${RESULT_BUNDLE}" \
             DEVELOPMENT_TEAM= CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER=
 
+      # cancelled() covers the timeout-minutes case; a hang is exactly when the
+      # bundle is worth having.
       - name: Upload test results
-        if: failure()
+        if: failure() || cancelled()
         uses: actions/upload-artifact@v4
         with:
           name: xcresult-ios

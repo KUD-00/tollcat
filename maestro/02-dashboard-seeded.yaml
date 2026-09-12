@@ -17,5 +17,9 @@ appId: com.zhechengqi.tollcat
     visible:
       id: dashboard.total
     timeout: 60000
-- assertVisible:
-    id: tab.services
+# 标签栏比首屏数字晚一拍进 accessibility 树（CI 上抓到过 156 个节点里没有一个 tab.*），
+# 立即断言会抖，等一下。
+- extendedWaitUntil:
+    visible:
+      id: tab.services
+    timeout: 15000

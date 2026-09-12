@@ -7,7 +7,16 @@ import Testing
 
 @MainActor
 struct StoreKitConfigurationTests {
-    @Test("本地 StoreKit 配置能列出三档并走完一次消耗型购买")
+    /// GitHub 的 macOS runner 上 `SKTestSession` 起不来（写配置文件就报
+    /// `SKInternalErrorDomain Code=3`），之后 `purchase()` 永远等不到交易回调，
+    /// 整个 Test job 挂到超时——2026-09-12 连续两轮 45–85 分钟就是它。
+    /// 所以 CI 上不跑；本机照常跑。再加两分钟时限，万一别处也等死能当失败而不是挂起。
+    @Test(
+        "本地 StoreKit 配置能列出三档并走完一次消耗型购买",
+        .enabled(if: ProcessInfo.processInfo.environment["CI"] == nil,
+                 "SKTestSession 在 GitHub runner 上初始化失败并让购买无限等待"),
+        .timeLimit(.minutes(2))
+    )
     func localStorekitServesProductsAndPurchase() async throws {
         #expect(
             FileManager.default.fileExists(atPath: storekitURL.path),
