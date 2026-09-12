@@ -1,0 +1,13 @@
+{
+  "http_code": 200,
+  "response_code": "SUCCESS",
+  "data": {
+    "balance": "10.00",
+    "_currency": {
+      "currency_name_long": "Australian Dollars",
+      "currency_name_short": "AUD",
+      "currency_prefix_d": "$",
+      "currency_prefix_c": "c"
+    }
+  }
+}

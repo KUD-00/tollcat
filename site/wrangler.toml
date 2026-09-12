@@ -1,0 +1,15 @@
+# 落地页。apex / www 挂在这一份静态站，不要挂到 worker/ 的 toll-api 上。
+# api.tollcat.app 仍是 toll-api。
+name = "tollcat-site"
+compatibility_date = "2026-08-26"
+
+# custom_domain 让 Cloudflare 自己建 DNS 和证书，前提是 zone 在同一个账号。
+# 必须写在 [assets] 前面，否则 TOML 会把它收进 assets。
+routes = [
+  { pattern = "tollcat.app", custom_domain = true },
+  { pattern = "www.tollcat.app", custom_domain = true },
+]
+
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"

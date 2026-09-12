@@ -1,0 +1,6 @@
+{
+  "_comment": "照 GitHub GET /user 文档造的，还没拿真账号核对过。",
+  "login": "octocat",
+  "id": 1,
+  "type": "User"
+}

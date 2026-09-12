@@ -1,0 +1,21 @@
+<Window
+    x:Class="TollCat.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+    <NavigationView
+        x:Name="Nav"
+        PaneDisplayMode="Left"
+        IsSettingsVisible="False"
+        OpenPaneLength="240"
+        SelectionChanged="OnNav">
+        <NavigationView.MenuItems>
+            <NavigationViewItem x:Name="NavDashboard" Tag="dashboard" Icon="Home" />
+            <NavigationViewItem x:Name="NavServices" Tag="services" Icon="Shop" />
+            <NavigationViewItem x:Name="NavSettings" Tag="settings" Icon="Setting" />
+        </NavigationView.MenuItems>
+        <Frame x:Name="ContentFrame" />
+    </NavigationView>
+</Window>

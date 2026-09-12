@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>TollCat.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\app\Data\LedgerModels.cs" Link="LedgerModels.cs" />
+    <Compile Include="..\app\Data\JsonLedgerStore.cs" Link="JsonLedgerStore.cs" />
+    <Compile Include="..\app\Rendering\SvgPathTokenizer.cs" Link="SvgPathTokenizer.cs" />
+    <Compile Include="..\app\Rendering\CatMotion.cs" Link="CatMotion.cs" />
+  </ItemGroup>
+</Project>

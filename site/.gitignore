@@ -1,0 +1,11 @@
+node_modules/
+dist/
+public/og-zh.png
+public/og-en.png
+public/og-ja.png
+.astro/
+.wrangler/
+.DS_Store
+package-lock.json
+yarn.lock
+npm-shrinkwrap.json

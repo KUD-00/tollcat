@@ -1,0 +1,88 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { absoluteMarkdownUrl, absoluteUrl, locales, ogImageSize, ogImageUrl, siteConfig, type Locale } from '../config';
+import localeBootUrl from '../scripts/locale-boot.js?url';
+import themeBootUrl from '../scripts/theme-boot.js?url';
+import themeUrl from '../scripts/theme.js?url';
+import '../styles/global.css';
+
+type Props = {
+  locale: Locale;
+  title: string;
+  description: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  path?: string;
+  home?: boolean;
+  /** 404 没有对应 Markdown，不挂 alternate。 */
+  markdown?: boolean;
+};
+const { locale, title, description, ogTitle, ogDescription, path = '', home = false, markdown = true } = Astro.props;
+const canonical = absoluteUrl(locale, path);
+const ogImage = ogImageUrl(locale);
+const lang = siteConfig.localeBcp47[locale];
+const pagePath = Astro.url.pathname;
+const markdownHref = absoluteMarkdownUrl(locale, path);
+---
+
+<!doctype html>
+<html lang={lang} dir="ltr" class:list={[home && 'snap-root']}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" data-theme-color="light" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" data-theme-color="dark" content="#0C0C0E" media="(prefers-color-scheme: dark)" />
+    <script is:inline src={localeBootUrl}></script>
+    <script is:inline src={themeBootUrl}></script>
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="canonical" href={canonical} />
+    {
+      locales
+        .filter((item) => item !== locale)
+        .map((item) => <meta property="og:locale:alternate" content={siteConfig.ogLocale[item]} />)
+    }
+    {
+      locales.map((item) => (
+        <link
+          rel="alternate"
+          hreflang={siteConfig.localeBcp47[item]}
+          href={absoluteUrl(item, path)}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={absoluteUrl('zh', path)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:locale" content={siteConfig.ogLocale[locale]} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ogTitle ?? title} />
+    <meta property="og:description" content={ogDescription ?? description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content={String(ogImageSize.width)} />
+    <meta property="og:image:height" content={String(ogImageSize.height)} />
+    <meta property="og:image:alt" content={ogTitle ?? title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle ?? title} />
+    <meta name="twitter:description" content={ogDescription ?? description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {markdown && <link rel="alternate" type="text/markdown" href={markdownHref} />}
+    {markdown && <link rel="describedby" href={`${siteConfig.url}/llms.txt`} />}
+    {siteConfig.appId && <meta name="apple-itunes-app" content={`app-id=${siteConfig.appId}`} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <SiteHeader locale={locale} path={pagePath} />
+    <slot />
+    <SiteFooter locale={locale} />
+    <script is:inline type="module" src={themeUrl}></script>
+  </body>
+</html>

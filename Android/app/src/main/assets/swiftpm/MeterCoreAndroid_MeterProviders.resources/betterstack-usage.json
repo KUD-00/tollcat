@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "from": "2026-08-01",
+    "to": "2026-08-16"
+  },
+  "data": [
+    {
+      "id": "logs",
+      "type": "usage_product",
+      "attributes": {
+        "name": "Logs",
+        "cost": 10.5,
+        "default_dimension": "volume"
+      }
+    },
+    {
+      "id": "monitors",
+      "type": "usage_product",
+      "attributes": {
+        "name": "Monitors",
+        "cost": 2.5,
+        "default_dimension": "Monitors"
+      }
+    }
+  ]
+}

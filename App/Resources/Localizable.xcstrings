@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "TollCat" : {
+      "comment" : "App 显示名，主 bundle 需要至少一条才能带上 en/ja.lproj，SPM catalog 才会跟 AppleLanguages 走。",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TollCat"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TollCat"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

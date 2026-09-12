@@ -1,0 +1,35 @@
+---
+import BrandMark from './BrandMark.astro';
+import { localePath, type Locale } from '../config';
+import { t } from '../i18n';
+import { supportListHref } from '../supportList';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale);
+---
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <div>
+      <BrandMark class="foot-mark" />
+      <strong class="foot-brand" translate="no">TollCat</strong>
+      <p>{copy.footer.blurb}</p>
+    </div>
+    <div>
+      <ul>
+        <li><a href={localePath(locale, 'privacy')}>{copy.footer.privacy}</a></li>
+        <li><a href={localePath(locale, 'changelog')}>{copy.footer.changelog}</a></li>
+        <li><a href={localePath(locale, 'support')}>{copy.footer.support}</a></li>
+        <li>
+          <a href={supportListHref(locale)} data-dialog="support-list" aria-haspopup="dialog">
+            {copy.footer.providers}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-copy">
+    <p>{copy.footer.copyright}</p>
+  </div>
+</footer>

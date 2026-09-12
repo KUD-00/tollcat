@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "id": "inv_draft",
+      "number": "",
+      "totalAmount": "1985000",
+      "createdAt": "2026-08-01T00:00:00Z",
+      "status": "INVOICE_STATUS_DRAFT"
+    },
+    {
+      "id": "inv_paid",
+      "number": "QC-2026-07",
+      "totalAmount": "3120000",
+      "createdAt": "2026-07-01T00:00:00Z",
+      "status": "INVOICE_STATUS_PAID"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "providerID": "vercel",
+  "kind": "freeTier",
+  "connected": true,
+  "freeQuotaUsedRatio": 0.84,
+  "periodStartDayOfMonth": 1,
+  "lines": [
+    {
+      "category": "Fluid Compute",
+      "label": "Fluid Compute",
+      "scope": "relayos",
+      "usd": 0.0,
+      "listUSD": 6.4,
+      "quantity": 312,
+      "unit": "GB-hours"
+    },
+    {
+      "category": "Fast Data Transfer",
+      "label": "Fast Data Transfer",
+      "scope": "relayos",
+      "usd": 0.0,
+      "listUSD": 2.1,
+      "quantity": 21,
+      "unit": "GB"
+    },
+    {
+      "category": "Fast Data Transfer",
+      "label": "Fast Data Transfer",
+      "scope": "marketing",
+      "usd": 0.0,
+      "listUSD": 0.85,
+      "quantity": 8.5,
+      "unit": "GB"
+    },
+    {
+      "category": "Edge Requests",
+      "label": "Edge Requests",
+      "scope": "relayos",
+      "usd": 0.0,
+      "listUSD": 0.3,
+      "quantity": 1200000,
+      "unit": "Count"
+    }
+  ]
+}

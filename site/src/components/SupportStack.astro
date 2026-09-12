@@ -1,0 +1,71 @@
+---
+import { type Locale } from '../config';
+import { t } from '../i18n';
+import { allSupportItems } from '../supportList';
+import SupportDetail from './SupportDetail.astro';
+import SupportList from './SupportList.astro';
+
+type Props = { locale: Locale; host: 'dialog' | 'page'; headingLevel?: 2 | 3 };
+const { locale, host, headingLevel = 2 } = Astro.props;
+const copy = t(locale).supportListPage;
+const items = allSupportItems();
+---
+
+<div class="support-stack" data-support-stack data-host={host}>
+  {host === 'page' && <button type="button" class="support-sheet-backdrop" data-support-back tabindex="-1" aria-label={copy.back}></button>}
+  <div class="support-pane support-pane-list" data-pane="list">
+    {
+      host === 'dialog' && (
+        <header class="support-sheet-bar">
+          <h2 id="support-list-title">{copy.title}</h2>
+          <button type="button" class="support-close" data-support-close aria-label={copy.close}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M6.2 6.2 17.8 17.8M17.8 6.2 6.2 17.8"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"></path>
+            </svg>
+          </button>
+        </header>
+      )
+    }
+    <div class="support-sheet-body">
+      <SupportList locale={locale} headingLevel={headingLevel} />
+    </div>
+  </div>
+  <div class="support-pane support-pane-detail" data-pane="detail">
+    <header class="support-sheet-bar">
+      <button type="button" class="support-back" data-support-back aria-label={copy.back}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            d="M14.8 5.2 8.2 12l6.6 6.8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <h2 data-detail-title></h2>
+      {
+        host === 'dialog' && (
+          <button type="button" class="support-close" data-support-close aria-label={copy.close}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M6.2 6.2 17.8 17.8M17.8 6.2 6.2 17.8"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"></path>
+            </svg>
+          </button>
+        )
+      }
+    </header>
+    <div class="support-sheet-body support-detail-body">
+      {items.map((item) => <SupportDetail locale={locale} item={item} />)}
+    </div>
+  </div>
+</div>

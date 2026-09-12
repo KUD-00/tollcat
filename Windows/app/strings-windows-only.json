@@ -1,0 +1,157 @@
+{
+  "MoreServices": {
+    "en": "More Services",
+    "ja": "その他のサービス",
+    "zh": "更多服务"
+  },
+  "ActionSaveCredentials": {
+    "en": "Save to Credential Manager",
+    "ja": "Windows の認証情報ストアに保存",
+    "zh": "保存到凭据管理器"
+  },
+  "AppDescription": {
+    "en": "One calendar month of cloud and AI bills.",
+    "ja": "クラウドと AI の請求を、ひとつの暦月にまとめます。",
+    "zh": "把各家云和 AI 的账单折到同一个日历月。"
+  },
+  "AppDisplayName": {
+    "en": "TollCat",
+    "ja": "TollCat",
+    "zh": "路费猫"
+  },
+  "DashboardLoading": {
+    "en": "Fetching bills…",
+    "ja": "取得中…",
+    "zh": "正在取账单…"
+  },
+  "DetailInboxHint": {
+    "en": "This vendor has no public billing API. Enter usage by hand or via the inbox.",
+    "ja": "このサービスに公開の請求 API はありません。手入力か検針ポストで入れてください。",
+    "zh": "这家没有公开账单接口，用量需要手填或走读数信箱。"
+  },
+  "DetailUsageEmpty": {
+    "en": "No usage identity yet. Connect billing to see this month’s spend.",
+    "ja": "従量の接続がまだありません。請求を接続すると今月の支出が出ます。",
+    "zh": "还没有用量身份。连接账单之后，这里会显示本月花费。"
+  },
+  "KindFreetierBody": {
+    "en": "Counts as 0 in the total; track quota usage separately.",
+    "ja": "合計には 0 として記録し、枠の消費は別に確認します。",
+    "zh": "合计记 0，单独看额度用了多少。"
+  },
+  "KindPrepaidBody": {
+    "en": "This month’s burn = balance at month start − current balance. The first month is partial without a start-of-month snapshot.",
+    "ja": "今月の消費 = 月初残高 − 現在残高。月初スナップショットがない最初の月は不完全です。",
+    "zh": "本月消耗 = 月初余额 − 当前余额。第一月没有月初快照时，数字是不全的。"
+  },
+  "KindSubscriptionBody": {
+    "en": "Charged in full when the billing day falls in this month; never prorated.",
+    "ja": "請求日が今月内なら全額を計上し、日割りはしません。",
+    "zh": "扣款日落在本月内就计全额，不按天摊。"
+  },
+  "KindUsageBody": {
+    "en": "What you’ve spent so far, summed per calendar month. Daily granularity when the vendor offers it.",
+    "ja": "これまでの使用額を暦月ごとに合算します。日次データがあれば日次で加算します。",
+    "zh": "已经花了多少，按日历月加总。能拿到按天的数就按天加。"
+  },
+  "ServicesAccountN": {
+    "en": "Account {0}",
+    "ja": "アカウント {0}",
+    "zh": "账号 {0}"
+  },
+  "ServicesEmptyBody": {
+    "en": "Add the clouds you use. Totals show on the dashboard; credentials stay on this device.",
+    "ja": "使っているクラウドを追加してください。合計はダッシュボードに表示され、認証情報はこの端末から出ません。",
+    "zh": "把用着的云加进来。账单数字出现在仪表，凭据只留在这台设备。"
+  },
+  "ServicesQuotaUsed": {
+    "en": "{0}% used",
+    "ja": "{0}%使用",
+    "zh": "用了 {0}%"
+  },
+  "ServicesSetupGuideMissingBody": {
+    "en": "The step-by-step guide is still being written. You can create a read-only credential on the vendor site first. Required fields are listed below.",
+    "ja": "ステップごとの説明は準備中です。先に公式サイトで読み取り専用の認証情報を作れます。必要な項目は以下です。",
+    "zh": "这家的分步说明还在准备。可以先去官网创建只读凭据。下面列出需要的字段。"
+  },
+  "ServicesSetupOpenConsole": {
+    "en": "Open the page that creates credentials",
+    "ja": "認証情報を作るページを開く",
+    "zh": "打开创建凭据的页面"
+  },
+  "SettingsAboutBody": {
+    "en": "TollCat folds every bill into the same calendar month. The ledger is USD. Conversion is the same Swift MeterCore. The shell is WinUI 3.",
+    "ja": "TollCat は各社の請求を同じ暦月にまとめます。帳簿はドル。換算は同じ Swift MeterCore。シェルは WinUI 3 です。",
+    "zh": "TollCat 把各家账单折到同一个日历月。账本按美元记，折算是同一份 Swift MeterCore，界面是 WinUI 3。"
+  },
+  "SettingsClear": {
+    "en": "Clear local data",
+    "ja": "この端末のデータを消去",
+    "zh": "清空本机数据"
+  },
+  "SettingsClearBody": {
+    "en": "Memberships, snapshots, and credentials will be deleted from this device. This cannot be undone.",
+    "ja": "メンバーシップ、スナップショット、認証情報がこの端末から削除され、元に戻せません。",
+    "zh": "成员关系、快照和凭据都会从这台设备删掉，不能撤销。"
+  },
+  "SettingsClearTitle": {
+    "en": "Clear local data?",
+    "ja": "この端末のデータを消去しますか？",
+    "zh": "清空本机数据？"
+  },
+  "SettingsGuide": {
+    "en": "The four kinds of money",
+    "ja": "4 種類のお金",
+    "zh": "四种钱"
+  },
+  "SettingsStartup": {
+    "en": "Start at sign-in",
+    "ja": "サインイン時に起動",
+    "zh": "开机启动"
+  },
+  "SettingsStartupNote": {
+    "en": "Windows Settings is the source of truth. This switch only requests the startup task. To turn it off, use Settings → Apps → Startup.",
+    "ja": "起動するかどうかは Windows の設定が正です。ここは要求するだけ。オフにするには「設定 → アプリ → スタートアップ」。",
+    "zh": "是否开机启动以系统设置为准。这里只是请求，关掉请去 Windows 设置 → 应用 → 启动。"
+  },
+  "SettingsVersion": {
+    "en": "Version {0}",
+    "ja": "バージョン {0}",
+    "zh": "版本 {0}"
+  },
+  "SetupIntro": {
+    "en": "Paste the credentials. After a successful test they stay in Credential Manager on this PC.",
+    "ja": "認証情報を貼り付けます。テストが通ったらこの PC の認証情報ストアにだけ残します。",
+    "zh": "把凭据粘贴进来。测通之后再保存到本机凭据管理器，不会离开这台设备。"
+  },
+  "SetupKeystoreNote": {
+    "en": "Credentials stay in Windows Credential Manager on this PC. They do not roam.",
+    "ja": "認証情報はこの PC の認証情報ストアにだけ残り、クラウド同期しません。",
+    "zh": "凭据保存在 Windows 凭据管理器，只在这台设备上能解开，不进云同步。"
+  },
+  "SetupSuccess": {
+    "en": "Read {0}",
+    "ja": "{0} を読み取りました",
+    "zh": "读到 {0}"
+  },
+  "ToastAnomalyTitle": {
+    "en": "Something needs a look",
+    "ja": "確認が必要な項目があります",
+    "zh": "有一项需要留意"
+  },
+  "ToastBalanceTitle": {
+    "en": "A balance is running low",
+    "ja": "残高が底をつきそうです",
+    "zh": "有余额快见底了"
+  },
+  "TrayOpenMain": {
+    "en": "Open main window",
+    "ja": "メインウィンドウを開く",
+    "zh": "打开主窗口"
+  },
+  "TrayQuit": {
+    "en": "Quit",
+    "ja": "終了",
+    "zh": "退出"
+  }
+}

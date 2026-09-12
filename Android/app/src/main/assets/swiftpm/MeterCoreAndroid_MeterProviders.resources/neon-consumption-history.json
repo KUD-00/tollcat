@@ -1,0 +1,42 @@
+{
+  "_comment": "照 Neon consumption_history/v2/projects 文档示例造的，还没拿真账号核对过。来源：https://neon.com/docs/guides/consumption-metrics 。金额要按 Usage and cost calculations 页的公式从用量算出来。",
+  "projects": [
+    {
+      "project_id": "delicate-dawn-54854667",
+      "periods": [
+        {
+          "period_id": "90c7f107-3fe7-4652-b1da-c61f71043128",
+          "period_plan": "launch",
+          "period_start": "2026-08-01T00:00:00Z",
+          "consumption": [
+            {
+              "timeframe_start": "2026-08-01T00:00:00Z",
+              "timeframe_end": "2026-08-02T00:00:00Z",
+              "metrics": [
+                { "metric_name": "compute_unit_seconds", "value": 84 },
+                { "metric_name": "root_branch_bytes_month", "value": 758513664 },
+                { "metric_name": "instant_restore_bytes_month", "value": 98344 },
+                { "metric_name": "snapshot_storage_bytes_month", "value": 0 },
+                { "metric_name": "public_network_transfer_bytes", "value": 1414 }
+              ]
+            },
+            {
+              "timeframe_start": "2026-08-02T00:00:00Z",
+              "timeframe_end": "2026-08-03T00:00:00Z",
+              "metrics": [
+                { "metric_name": "compute_unit_seconds", "value": "236" },
+                { "metric_name": "root_branch_bytes_month", "value": 758611968 },
+                { "metric_name": "instant_restore_bytes_month", "value": 983488 },
+                { "metric_name": "snapshot_storage_bytes_month", "value": 0 },
+                { "metric_name": "public_network_transfer_bytes", "value": 2184 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "cursor": null
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "_comment": "带 from/to 的历史周期没有样例数据时用。当前周期走 cloudflare-billable-usage.json。",
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": []
+}

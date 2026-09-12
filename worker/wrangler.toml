@@ -1,0 +1,28 @@
+name = "toll-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-16"
+
+# 自有域名，不用 *.workers.dev。
+#
+# 不只是好看：workers.dev 在 Public Suffix List 上，国内网络和一些企业网关
+# 经常整段不通，而这个 App 的用户里有相当一部分在国内。换自有域名之后，
+# 换 Cloudflare 账号也不会让已装机的 App 失联。
+#
+# custom_domain = true 让 Cloudflare 自己建 DNS 记录和证书，
+# 前提是 tollcat.app 这个 zone 在同一个账号下。
+# .app 是 HSTS 预加载域，浏览器和系统都不允许降级到 http。
+#
+# 顶级域 tollcat.app 留给落地页和 App Store 的支持链接，不要挂在这个 Worker 上。
+routes = [
+  { pattern = "api.tollcat.app", custom_domain = true }
+]
+
+# 一个 Worker 承担所有服务端 endpoint，不要按功能拆成多个部署。
+# 路由见 src/index.ts 顶部那张表。
+#
+# 不要在这里写任何密钥。database_id 是 D1 的公开标识，不是 secret。
+[[d1_databases]]
+binding = "DB"
+database_name = "tollcat"
+database_id = "76e7deb0-890c-4249-952b-5d3a66cf2997"
+migrations_dir = "migrations"

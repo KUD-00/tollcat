@@ -1,0 +1,14 @@
+{
+  "currency": "USD",
+  "currency_symbol": "$",
+  "start_date": "2026-08-01T00:00:00Z",
+  "end_date": "2026-08-31T23:59:59Z",
+  "chat": { "cost": 4.20 },
+  "completion": { "cost": 8.10 },
+  "ocr": { "cost": 1.00 },
+  "audio": { "cost": 0 },
+  "connectors": { "cost": 0 },
+  "libraries_api": { "cost": 0.50 },
+  "fine_tuning": { "cost": 0 },
+  "vibe_usage": { "cost": 2.20 }
+}

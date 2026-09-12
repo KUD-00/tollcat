@@ -1,0 +1,45 @@
+# gitleaks 配置：默认规则集 + 本仓库的已知误报。
+#
+# 本地跑（和 CI 同一条命令）：
+#   gitleaks git --config .gitleaks.toml --redact .
+# 只扫暂存区：
+#   gitleaks git --config .gitleaks.toml --redact --pre-commit --staged .
+#
+# 放行条目一律按「值本身」或「明确的语法形态」写正则，不用 .gitleaksignore
+# 的 commit:file:rule:line 指纹——行号一动指纹就失效，误报会在下一次改动里复活。
+# 新增放行前先确认那不是真凭据：这里的每一条都要能在注释里说清「为什么不是」。
+
+title = "TollCat"
+
+[extend]
+useDefault = true
+
+# 过去的代码审计工具把每个文件的内容哈希写进 .atlas/*.json，40 位十六进制被当成
+# generic-api-key（旁边有 CloudflareBillingCycle.swift 字样的还被认成 cloudflare-api-key）。
+# 目录早已删除，只在历史扫描里出现。
+[[allowlists]]
+description = "atlas 审计产物里的文件内容哈希"
+paths = ['''^\.atlas/''']
+
+# provider 里的 API 域名常量：apiHost = "api.example.com"。域名不是凭据。
+[[allowlists]]
+description = "provider 的 apiHost 域名常量"
+regexTarget = "line"
+regexes = ['''^\s*(?:(?:public|package|internal|fileprivate|private)\s+)?(?:static\s+)?(?:let|var)\s+apiHost\s*=\s*"[a-z0-9-]+(?:\.[a-z0-9-]+)+"\s*$''']
+
+# 测试与桩里的固定假值。按完整值放行，改一个字符就会重新报。
+[[allowlists]]
+description = "测试 fixture 与 stub 传输层里的假凭据"
+regexTarget = "secret"
+regexes = [
+  # 金山云官方签名文档（2021-08-12 的 DEMO）里公开的示例 AccessKey / SecretKey，
+  # KingsoftCloudBillingProviderTests 用它核对 HMAC-SHA256 实现和官方一致。
+  '''^AKLTXQVF0pOmS6aahIrD5r0B3Q$''',
+  '''^OMovU5PTLh6y9E9Ioe3K411jt99VqyQSBXgAcDYlo49R3lvUIzb6e/efZCFDmtFlzw==$''',
+  # DeviceTransferTests：故意植入的探针值，测试断言它不会出现在导出文件里。
+  '''^sk-test-LEAK-PROBE-[0-9a-f]+$''',
+  # StubInboxTransport：离线桩返回的信箱 / 读钥 / 写钥。
+  '''^tolli_STUB_[A-Z_]+_[0-9a-f]+$''',
+  '''^tollr_STUB_[A-Z_]+$''',
+  '''^mb_stub_[0-9a-f]+$''',
+]

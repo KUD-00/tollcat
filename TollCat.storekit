@@ -1,0 +1,93 @@
+{
+  "identifier" : "A7C3E91B",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "1B8E4C70",
+      "localizations" : [
+        {
+          "description" : "一颗糖果",
+          "displayName" : "糖果",
+          "locale" : "zh_CN"
+        },
+        {
+          "description" : "A piece of candy",
+          "displayName" : "Candy",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "キャンディひとつ",
+          "displayName" : "キャンディ",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "com.zhechengqi.tollcat.tip.small",
+      "referenceName" : "Tip Small",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "2C9F5D81",
+      "localizations" : [
+        {
+          "description" : "一杯咖啡",
+          "displayName" : "咖啡",
+          "locale" : "zh_CN"
+        },
+        {
+          "description" : "A cup of coffee",
+          "displayName" : "Coffee",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "コーヒー一杯",
+          "displayName" : "コーヒー",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "com.zhechengqi.tollcat.tip.medium",
+      "referenceName" : "Tip Medium",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "3DA06E92",
+      "localizations" : [
+        {
+          "description" : "一块披萨",
+          "displayName" : "披萨",
+          "locale" : "zh_CN"
+        },
+        {
+          "description" : "A slice of pizza",
+          "displayName" : "Pizza",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "ピザ一切れ",
+          "displayName" : "ピザ",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "com.zhechengqi.tollcat.tip.large",
+      "referenceName" : "Tip Large",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

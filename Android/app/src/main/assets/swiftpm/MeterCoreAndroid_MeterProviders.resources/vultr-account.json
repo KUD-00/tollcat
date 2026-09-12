@@ -1,0 +1,14 @@
+{
+  "account": {
+    "name": "Meter Fixture",
+    "email": "fixture@example.invalid",
+    "balance": 12.4,
+    "pending_charges": 18.6,
+    "last_payment_date": "2026-07-01T00:00:00+00:00",
+    "last_payment_amount": 25.0,
+    "acls": [
+      "manage_users",
+      "billing"
+    ]
+  }
+}

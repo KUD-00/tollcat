@@ -1,0 +1,46 @@
+---
+import { marqueeMarks } from '../providers';
+import { marqueeRowCount, marqueeRowMarks, marqueeRowSize } from '../marqueeSvg';
+
+type Props = { label: string };
+const { label } = Astro.props;
+const rows = Array.from({ length: marqueeRowCount }, (_, row) => {
+  const size = marqueeRowSize(marqueeRowMarks(row).length);
+  return { row, ...size };
+});
+---
+
+<div class="provider-marquee">
+  <ul class="sr-only">
+    {marqueeMarks.map((item) => <li>{item.name}</li>)}
+  </ul>
+  <div class="marquee" aria-hidden="true">
+    {
+      rows.map(({ row, width, height }) => (
+        <div class:list={['marquee-row', row === 1 && 'reverse']} style={`--dur:${42 + row * 10}s`}>
+          <div class="marquee-track">
+            {[0, 1].map((copy) => (
+              <picture>
+                <source
+                  srcset={`/marquee-dark-${row}.svg`}
+                  media="(prefers-color-scheme: dark)"
+                  data-theme-src="dark"
+                />
+                <img
+                  class="marquee-shot"
+                  src={`/marquee-light-${row}.svg`}
+                  alt=""
+                  width={width}
+                  height={height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <p class="sr-only">{label}</p>
+</div>

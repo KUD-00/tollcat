@@ -1,0 +1,25 @@
+{
+  "id": "key_fixture",
+  "api_key_id": "550e8400-e29b-41d4-a716-446655440000",
+  "api_key_name": "Meter Fixture Key",
+  "team_id": "660e8400-e29b-41d4-a716-446655440000",
+  "period": {
+    "start": "2026-08-01T00:00:00Z",
+    "end": "2026-08-31T23:59:59Z"
+  },
+  "total_cost_usd": 8.25,
+  "cost_breakdown": [
+    {
+      "price_id": "price_neural_search",
+      "price_name": "Neural Search",
+      "quantity": 1500,
+      "amount_usd": 6.0
+    },
+    {
+      "price_id": "price_content_retrieval",
+      "price_name": "Content Retrieval",
+      "quantity": 450,
+      "amount_usd": 2.25
+    }
+  ]
+}

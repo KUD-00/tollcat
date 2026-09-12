@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "id": "inv_fixture_202608",
+      "orgId": "5f7a1c2b3d4e5f6a7b8c9d0e",
+      "statusName": "PENDING",
+      "startDate": "2026-08-01T00:00:00Z",
+      "endDate": "2026-09-01T00:00:00Z",
+      "amountBilledCents": 4713,
+      "amountPaidCents": 0,
+      "lineItems": [
+        {
+          "sku": "CLUSTER_TIER_M10",
+          "startDate": "2026-08-01T00:00:00Z",
+          "endDate": "2026-08-16T00:00:00Z",
+          "quantity": 360,
+          "totalPriceCents": 3200
+        },
+        {
+          "sku": "DATA_TRANSFER_SAME_REGION",
+          "startDate": "2026-08-09T00:00:00Z",
+          "endDate": "2026-08-16T00:00:00Z",
+          "quantity": 12,
+          "totalPriceCents": 1200
+        },
+        {
+          "sku": "BACKUP_SNAPSHOT_STORAGE",
+          "startDate": "2026-08-14T00:00:00Z",
+          "endDate": "2026-08-16T00:00:00Z",
+          "quantity": 3,
+          "totalPriceCents": 300
+        }
+      ]
+    }
+  ],
+  "totalCount": 1
+}

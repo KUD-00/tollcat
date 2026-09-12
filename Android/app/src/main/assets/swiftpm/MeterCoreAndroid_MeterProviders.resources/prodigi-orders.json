@@ -1,0 +1,9 @@
+{
+  "orders": [{
+    "id": "ord_p1",
+    "charges": [
+      {"id": "c1", "type": "shipping", "totalCost": {"amount": "10.00", "currency": "USD"}},
+      {"id": "c2", "type": "Refund", "totalCost": {"amount": "-1.50", "currency": "USD"}}
+    ]
+  }]
+}

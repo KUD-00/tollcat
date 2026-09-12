@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>com.zhechengqi.tollcat.deeplink</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tollcat</string>
+			</array>
+		</dict>
+	</array>
+	<!-- MeterPersistence 拼 Mac App Group id 用（$(TeamIdentifierPrefix)com.zhechengqi.tollcat）。
+	     没有这个 key 前缀是空串，group id 对不上 entitlement，容器拿不到，整库退内存。 -->
+	<key>AppIdentifierPrefix</key>
+	<string>$(AppIdentifierPrefix)</string>
+	<!-- Sparkle（Mac 直发版自动更新）。清单**不读 releases/latest**：它钉在 tag 固定叫
+	     mac-appcast 的那份滚动 Release 上，由 .github/workflows/mac-appcast.yml 在每次
+	     Mac 版 Publish 之后覆盖上去。这样一份只带 iOS 的发版成了 latest 也换不掉 Mac 的
+	     更新源。换托管只改这一行。
+	     公钥对应的私钥由 scripts/package-mac-release.sh 在 CI 里用来签安装包，不在仓库里。
+	     App 在沙盒里，装更新要靠 Sparkle 的安装服务，所以 InstallerLauncherService 必开。
+	     没开 SUEnableAutomaticChecks：由 Sparkle 自己在第二次启动时问用户要不要自动检查。 -->
+	<key>SUFeedURL</key>
+	<string>https://github.com/KUD-00/tollcat/releases/download/mac-appcast/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>avmqcbpQpzIswGFx4jsIb4DHB2wv61zRygeOlzZ5FJU=</string>
+	<key>SUEnableInstallerLauncherService</key>
+	<true/>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>TollCat transfer</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.zhechengqi.tollcat.transfer</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>TollCat transfer</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.zhechengqi.tollcat.transfer</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>tollcat</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

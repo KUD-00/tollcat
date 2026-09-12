@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.9.0.schema.json
+# P0 通过、MSIX 上架 GitHub Releases 之后再向 winget-pkgs 提 PR。
+PackageIdentifier: com.zhechengqi.tollcat
+PackageVersion: 1.0.0
+DefaultLocale: zh-CN
+ManifestType: version
+ManifestVersion: 1.9.0
+---
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
+PackageIdentifier: com.zhechengqi.tollcat
+PackageVersion: 1.0.0
+Platform:
+  - Windows.Desktop
+MinimumOSVersion: 10.0.22621.0
+InstallerType: msix
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/KUD-00/tollcat/releases/latest/download/TollCat.msix
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+    SignatureSha256: 0000000000000000000000000000000000000000000000000000000000000000
+    PackageFamilyName: com.zhechengqi.tollcat_1e1e1e1e1e1e1
+PackageDependencies:
+  - PackageIdentifier: Microsoft.WindowsAppRuntime.1.8
+    # 实际依赖随 WASDK 2.4 的 framework package 名更新。
+ManifestType: installer
+ManifestVersion: 1.9.0
+---
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
+PackageIdentifier: com.zhechengqi.tollcat
+PackageVersion: 1.0.0
+PackageLocale: zh-CN
+Publisher: ZHE CHENG QI
+PublisherUrl: https://tollcat.app
+PackageName: 路费猫
+License: MIT
+ShortDescription: 把各家云和 AI 的账单折到同一个日历月。
+Description: 打开就能看见这个月已经花了多少。凭据只留在这台电脑的凭据管理器里。
+ManifestType: defaultLocale
+ManifestVersion: 1.9.0

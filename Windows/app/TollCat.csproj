@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.22621.0</TargetPlatformMinVersion>
+    <RootNamespace>TollCat</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsPackageType>MSIX</WindowsPackageType>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <DefaultLanguage>zh-Hans</DefaultLanguage>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x64|arm64</AppxBundlePlatforms>
+    <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <Version>1.0.0</Version>
+    <Authors>ZHE CHENG QI</Authors>
+    <Product>TollCat</Product>
+    <AssemblyTitle>路费猫</AssemblyTitle>
+    <Description>把各家云和 AI 的账单折到同一个日历月。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+    <Content Include="Assets\swiftpm\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="strings-windows-only.json" />
+  </ItemGroup>
+
+  <!-- DllImport 只在 exe 同目录探测，Content 不进 deps.json 的 native 清单，
+       所以桥 dll 必须平铺在输出根，不能塞进 runtimes\ 子目录。 -->
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\native\dist\$(Platform)\MeterCoreCLR.dll')">
+    <Content Include="$(MSBuildThisFileDirectory)..\native\dist\$(Platform)\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PRIResource Include="Strings\zh-Hans\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\ja-JP\Resources.resw" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TollCat.Tests" />
+  </ItemGroup>
+</Project>

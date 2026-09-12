@@ -1,0 +1,109 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig, type Locale } from '../config';
+import { t } from '../i18n';
+import contactFormUrl from '../scripts/contact-form.js?url';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale).sponsorsPage;
+const endpoint = `${siteConfig.apiUrl}/v1/feedback`;
+---
+
+<BaseLayout locale={locale} title={`${copy.title} — TollCat`} description={copy.description} path="sponsors">
+  <JsonLd slot="head" locale={locale} kind="sponsors" />
+  <main id="main" class="legal contact sponsors">
+    <!--
+      THESIS: One page for a vendor who wants to appear next to their own billing setup. Refuses a media kit of CPMs, banner sizes, and fake traffic.
+      OWN-WORLD: Same paper, ink, indigo, and Bricolage as the rest of tollcat.app. Legal measure, one form, no cards, no kicker, no logo wall.
+      STORY: Understand they buy a labeled block on their service’s page — not rank, users, or the homepage — then send company and a reply address.
+      FIRST VIEWPORT: Display title, two-sentence lede, then 卖什么. The form is the action, after the refusals, still on one desktop scroll.
+      FORM: Inherited legal/contact page. Specified /sponsors/ in the existing site world.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+    -->
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lede">{copy.lede}</p>
+
+      <section>
+        <h2>{copy.offer.title}</h2>
+        {copy.offer.p.map((para) => <p>{para}</p>)}
+      </section>
+
+      <section>
+        <h2>{copy.refuse.title}</h2>
+        <ul>
+          {copy.refuse.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+
+      <section>
+        <h2>{copy.who.title}</h2>
+        {copy.who.p.map((para) => <p>{para}</p>)}
+      </section>
+
+      <section>
+        <h2>{copy.form.title}</h2>
+        <p>{copy.form.lede}</p>
+        <form
+          class="contact-form"
+          data-contact
+          data-compose-prefix={copy.form.prefix}
+          data-endpoint={endpoint}
+        >
+          <input type="hidden" name="category" value="other" />
+          <label>
+            <span>{copy.form.company}</span>
+            <input
+              name="company"
+              type="text"
+              required
+              maxlength="120"
+              autocomplete="organization"
+              data-compose={copy.form.company}
+            />
+          </label>
+          <label>
+            <span>{copy.form.provider}</span>
+            <input
+              name="provider"
+              type="text"
+              maxlength="80"
+              autocomplete="off"
+              data-compose={copy.form.provider}
+            />
+            <span class="contact-hint">{copy.form.providerHint}</span>
+          </label>
+          <label>
+            <span>{copy.form.message}</span>
+            <textarea name="message" required maxlength="2000" rows="6"></textarea>
+            <span class="contact-hint">{copy.form.messageHint}</span>
+          </label>
+          <label>
+            <span>{copy.form.contact}</span>
+            <input
+              name="contact"
+              type="email"
+              required
+              maxlength="120"
+              autocomplete="email"
+            />
+            <span class="contact-hint">{copy.form.contactHint}</span>
+          </label>
+          <button class="btn" type="submit" data-sending={copy.form.sending}>{copy.form.submit}</button>
+          <p
+            class="contact-status"
+            data-contact-status
+            data-sent={copy.form.sent}
+            data-rate-limited={copy.form.rateLimited}
+            data-failed={copy.form.failed}
+            aria-live="polite"
+          ></p>
+        </form>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<script is:inline type="module" src={contactFormUrl}></script>

@@ -1,0 +1,17 @@
+<!-- GENERATED — 由 scripts/generate-android-strings.py 生成，不要手改。
+     和 iOS 同文的句子：改对应模块的 Localizable.xcstrings；
+     Android 独有的句子：改 Android/app/strings-android-only.json。 -->
+<resources>
+    <string name="onboarding_skip">スキップ</string>
+    <string name="onboarding_continue">続ける</string>
+    <string name="onboarding_add_first">最初のサービスを追加</string>
+    <string name="onboarding_page_number_title">今月いくら使った</string>
+    <string name="onboarding_page_number_body">クラウドとAIの請求を一つの数字に。開けば今月いくら使ったかわかる。</string>
+    <string name="onboarding_page_credentials_title">認証情報はこの端末から出ない</string>
+    <string name="onboarding_page_credentials_body">APIキーはこの端末のKeystoreだけ。クラウドバックアップにも入らない。機種変更は設定の「読み込みと書き出し」で。</string>
+    <string name="onboarding_page_widget_title">開かなくても見える</string>
+    <string name="onboarding_page_widget_body">通知に金額は出しません。ウィジェットをホーム画面に置けば、今月の数字が見えます。</string>
+    <string name="onboarding_page_add_title">最初のサービスを追加</string>
+    <string name="onboarding_page_add_body">まずはリストに入れる。APIキーは今なくていい。ChatGPT Pro だけでも追加できる。</string>
+    <string name="onboarding_progress">%1$d / %2$d</string>
+</resources>

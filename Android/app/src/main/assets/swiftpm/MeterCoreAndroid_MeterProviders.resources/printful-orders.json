@@ -1,0 +1,24 @@
+{
+  "code": 200,
+  "result": [
+    {
+      "id": 101,
+      "created": 1786320000,
+      "costs": {
+        "total": "34.10",
+        "currency": "USD"
+      }
+    },
+    {
+      "id": 102,
+      "created": 1786492800,
+      "costs": {
+        "total": "15.90",
+        "currency": "USD"
+      }
+    }
+  ],
+  "paging": {
+    "total": 2
+  }
+}

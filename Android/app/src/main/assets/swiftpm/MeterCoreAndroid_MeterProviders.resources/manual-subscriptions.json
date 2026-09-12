@@ -1,0 +1,26 @@
+[
+  {
+    "name": "ChatGPT Plus",
+    "amountUSD": 20,
+    "period": "annual",
+    "daysUntilCharge": 4,
+    "providerID": "openai"
+  },
+  {
+    "name": "ChatGPT Team",
+    "amountUSD": 25,
+    "period": "monthly",
+    "chargeDayOfMonth": 6,
+    "startedMonthsAgo": 9,
+    "endedMonthsAgo": 3,
+    "providerID": "openai"
+  },
+  {
+    "name": "Midjourney Standard",
+    "amountUSD": 30,
+    "period": "monthly",
+    "chargeDayOfMonth": 12,
+    "startedMonthsAgo": 7,
+    "endedMonthsAgo": 2
+  }
+]

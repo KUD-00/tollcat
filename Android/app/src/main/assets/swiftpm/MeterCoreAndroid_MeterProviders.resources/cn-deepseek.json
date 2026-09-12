@@ -1,0 +1,48 @@
+{
+  "providerID": "deepseek",
+  "kind": "prepaid",
+  "connected": true,
+  "balanceUSD": 42,
+  "currentSpendUSD": 7.62,
+  "periodStartDayOfMonth": 1,
+  "history": [
+    { "dayOfMonth": 1, "balanceUSD": 49.62 },
+    { "daysAgo": 7, "balanceUSD": 48.90 }
+  ],
+  "previousMonth": {
+    "history": [
+      { "dayOfMonth": 1, "balanceUSD": 80 },
+      { "sameDayAsNow": true, "balanceUSD": 74 }
+    ]
+  },
+  "olderMonths": [
+    {
+      "monthsBack": 2,
+      "history": [
+        { "dayOfMonth": 1, "balanceUSD": 88.5 },
+        { "sameDayAsNow": true, "balanceUSD": 83 }
+      ]
+    },
+    {
+      "monthsBack": 3,
+      "history": [
+        { "dayOfMonth": 1, "balanceUSD": 93.2 },
+        { "sameDayAsNow": true, "balanceUSD": 88.5 }
+      ]
+    },
+    {
+      "monthsBack": 4,
+      "history": [
+        { "dayOfMonth": 1, "balanceUSD": 97 },
+        { "sameDayAsNow": true, "balanceUSD": 93.2 }
+      ]
+    },
+    {
+      "monthsBack": 5,
+      "history": [
+        { "dayOfMonth": 1, "balanceUSD": 100 },
+        { "sameDayAsNow": true, "balanceUSD": 97 }
+      ]
+    }
+  ]
+}

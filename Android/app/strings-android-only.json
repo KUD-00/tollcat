@@ -1,0 +1,602 @@
+{
+  "action_back": {
+    "en": "Back",
+    "ja": "戻る",
+    "zh": "返回"
+  },
+  "action_save_credentials": {
+    "en": "Save to Keystore",
+    "ja": "Keystore に保存",
+    "zh": "保存到 Keystore"
+  },
+  "comparison_body": {
+    "en": "Then %1$s · %2$d%%",
+    "ja": "当時 %1$s · %2$d%%",
+    "zh": "当时 %1$s · %2$d%%"
+  },
+  "composition_empty": {
+    "en": "No usage composition yet.",
+    "ja": "従量の内訳はまだありません。",
+    "zh": "还没有按量构成。"
+  },
+  "confidence_line": {
+    "en": "confidence=%1$s · estimated=%2$s",
+    "ja": "confidence=%1$s · estimated=%2$s",
+    "zh": "confidence=%1$s · estimated=%2$s"
+  },
+  "dashboard_comparison_caption": {
+    "en": "vs same period %1$s",
+    "ja": "同期比 %1$s",
+    "zh": "对比同期 %1$s"
+  },
+  "dashboard_filter_a_month": {
+    "en": "A month",
+    "ja": "特定の月",
+    "zh": "某个月"
+  },
+  "dashboard_filter_last_6": {
+    "en": "Last 6 months",
+    "ja": "過去 6 か月",
+    "zh": "近 6 个月"
+  },
+  "dashboard_filter_without_kind": {
+    "en": "Without %1$s",
+    "ja": "%1$s なし",
+    "zh": "不含 %1$s"
+  },
+  "dashboard_loading": {
+    "en": "Fetching bills…",
+    "ja": "取得中…",
+    "zh": "正在取账单…"
+  },
+  "dashboard_month_to_date_a11y": {
+    "en": "Month to date %1$s",
+    "ja": "今月の合計 %1$s",
+    "zh": "本月合计 %1$s"
+  },
+  "detail_inbox_hint": {
+    "en": "This vendor has no public billing API. Enter usage by hand or via the inbox.",
+    "ja": "このサービスに公開の請求 API はありません。手入力か検針ポストで入れてください。",
+    "zh": "这家没有公开账单接口，用量需要手填或走读数信箱。"
+  },
+  "detail_usage_empty": {
+    "en": "No usage identity yet. Connect billing to see this month’s spend.",
+    "ja": "従量の接続がまだありません。請求を接続すると今月の支出が出ます。",
+    "zh": "还没有用量身份。连接账单之后，这里会显示本月花费。"
+  },
+  "dev_build_footer": {
+    "en": "No build script injects a git commit. If it is missing, only the version and APK mtime are shown.",
+    "ja": "ビルドスクリプトは git commit を注入しません。取れなければバージョンと APK の更新時刻だけです。",
+    "zh": "没有注入构建脚本。Git commit 拿不到就只显示版本号和 APK 修改时间。"
+  },
+  "dev_data_footer": {
+    "en": "Demo mode is for development. Seeding only writes into an empty store. Export copies Snapshot JSON to the clipboard and logcat.",
+    "ja": "デモモードは開発用です。投入は空のストアにだけ書きます。書き出しは Snapshot の JSON をクリップボードと logcat に出します。",
+    "zh": "演示模式只给开发用。种子只在空库写入；已有账单时先清空。「导出」把 Snapshot 打成 JSON，复制到剪贴板，logcat 也会打一份。"
+  },
+  "dev_err_disk_body": {
+    "en": "This write did not land on disk. The numbers are still in memory.",
+    "ja": "今回の書き込みはディスクに残りませんでした。数字はメモリにあります。",
+    "zh": "这次没写进本机存储。数字还在内存里。"
+  },
+  "dev_err_empty_body": {
+    "en": "The API returned, but there is no spend in this period.",
+    "ja": "API は返しましたが、この期間の利用はありません。",
+    "zh": "接口回来了，但这个周期还没有花费。"
+  },
+  "dev_err_network_body": {
+    "en": "Could not reach this vendor’s billing API.",
+    "ja": "このサービスの請求 API に届きませんでした。",
+    "zh": "连不上这家的账单接口。"
+  },
+  "dev_export": {
+    "en": "Export to clipboard",
+    "ja": "クリップボードに書き出す",
+    "zh": "导出到剪贴板"
+  },
+  "dev_gallery_search_empty_body": {
+    "en": "No services match “zzzz”.",
+    "ja": "「zzzz」に一致するサービスはありません。",
+    "zh": "没有匹配「zzzz」的服务。"
+  },
+  "dev_lab_index_note": {
+    "en": "Open a module to see design-spec numbers. It does not depend on this ledger.",
+    "ja": "開くとデザイン稿の数字が出ます。この台帳には依存しません。",
+    "zh": "点进去默认用设计稿数字，不依赖当前账本。"
+  },
+  "dev_seed_ok": {
+    "en": "Wrote the design-spec bills",
+    "ja": "デザイン稿の請求を書き込みました",
+    "zh": "已写入设计稿账单"
+  },
+  "dev_verify_footer": {
+    "en": "The gallery does not write the Keystore. Success prints an amount; failure prints the 401 copy.",
+    "ja": "ギャラリーは Keystore に書きません。成功は金額、失敗は 401 の説明です。",
+    "zh": "画廊不会写入 Keystore。成功写出金额，失败写出 401 说明。"
+  },
+  "dev_whats_new_footer": {
+    "en": "This is the only way to exercise the real path: make it older and the real test passes. Then use “Show once, real test” above — no cold launch needed.",
+    "ja": "本番の経路を確かめる唯一の方法です。古くすれば本番判定が通ります。そのあと上の「本番判定で一度出す」を押せば、コールドスタートを待つ必要はありません。",
+    "zh": "这是唯一能验收正常路径的办法：把它改老，真判据就成立了。改完可以直接按上面那条「按真判据弹一次」，不用等冷启动。"
+  },
+  "field_access_key": {
+    "en": "Access Key ID",
+    "ja": "Access Key ID",
+    "zh": "Access Key ID"
+  },
+  "field_account_id": {
+    "en": "Account ID",
+    "ja": "Account ID",
+    "zh": "Account ID"
+  },
+  "field_api_key": {
+    "en": "API Key",
+    "ja": "API Key",
+    "zh": "API Key"
+  },
+  "field_api_token": {
+    "en": "API Token",
+    "ja": "API Token",
+    "zh": "API Token"
+  },
+  "field_client_id": {
+    "en": "Client ID",
+    "ja": "Client ID",
+    "zh": "Client ID"
+  },
+  "field_client_secret": {
+    "en": "Client Secret",
+    "ja": "Client Secret",
+    "zh": "Client Secret"
+  },
+  "field_email": {
+    "en": "Email",
+    "ja": "メール",
+    "zh": "邮箱"
+  },
+  "field_key_id": {
+    "en": "Key ID",
+    "ja": "Key ID",
+    "zh": "Key ID"
+  },
+  "field_pat": {
+    "en": "Personal Access Token",
+    "ja": "Personal Access Token",
+    "zh": "Personal Access Token"
+  },
+  "field_project_id": {
+    "en": "Project ID",
+    "ja": "Project ID",
+    "zh": "Project ID"
+  },
+  "field_secret_key": {
+    "en": "Secret Access Key",
+    "ja": "Secret Access Key",
+    "zh": "Secret Access Key"
+  },
+  "field_tenant_id": {
+    "en": "Tenant ID",
+    "ja": "Tenant ID",
+    "zh": "Tenant ID"
+  },
+  "keystore_fail": {
+    "en": "Keystore credential failed",
+    "ja": "Keystore 認証情報失敗",
+    "zh": "Keystore 凭据失败"
+  },
+  "keystore_pass": {
+    "en": "Keystore credential passed",
+    "ja": "Keystore 認証情報成功",
+    "zh": "Keystore 凭据通过"
+  },
+  "kind_freetier_body": {
+    "en": "Counts as 0 in the total; track quota usage separately.",
+    "ja": "合計には 0 として記録し、枠の消費は別に確認します。",
+    "zh": "合计记 0，单独看额度用了多少。"
+  },
+  "kind_prepaid_body": {
+    "en": "This month’s burn = balance at month start − current balance. The first month is partial without a start-of-month snapshot.",
+    "ja": "今月の消費 = 月初残高 − 現在残高。月初スナップショットがない最初の月は不完全です。",
+    "zh": "本月消耗 = 月初余额 − 当前余额。第一月没有月初快照时，数字是不全的。"
+  },
+  "kind_subscription_body": {
+    "en": "Charged in full when the billing day falls in this month; never prorated.",
+    "ja": "請求日が今月内なら全額を計上し、日割りはしません。",
+    "zh": "扣款日落在本月内就计全额，不按天摊。"
+  },
+  "kind_usage_body": {
+    "en": "What you’ve spent so far, summed per calendar month. Daily granularity when the vendor offers it.",
+    "ja": "これまでの使用額を暦月ごとに合算します。日次データがあれば日次で加算します。",
+    "zh": "已经花了多少，按日历月加总。能拿到按天的数就按天加。"
+  },
+  "load_error": {
+    "en": "Swift library failed to load: %1$s",
+    "ja": "Swift ライブラリを読み込めません：%1$s",
+    "zh": "Swift 库没装上：%1$s"
+  },
+  "match_fail": {
+    "en": "Reconciliation failed",
+    "ja": "照合失敗",
+    "zh": "对账失败"
+  },
+  "match_pass": {
+    "en": "Reconciliation passed",
+    "ja": "照合成功",
+    "zh": "对账通过"
+  },
+  "module_anomaly": {
+    "en": "Anomaly",
+    "ja": "異常",
+    "zh": "异常"
+  },
+  "module_balance": {
+    "en": "Balance running low",
+    "ja": "残高が残り少ない",
+    "zh": "余额告急"
+  },
+  "module_upcoming": {
+    "en": "Upcoming charges",
+    "ja": "まもなく引き落とし",
+    "zh": "即将扣款"
+  },
+  "onboarding_page_credentials_body": {
+    "en": "API keys live in this device’s Keystore. They don’t leave with cloud backup. Move to a new phone with Import & Export in Settings.",
+    "ja": "APIキーはこの端末のKeystoreだけ。クラウドバックアップにも入らない。機種変更は設定の「読み込みと書き出し」で。",
+    "zh": "API 密钥只进本机 Keystore，不跟云备份走。换手机用设置里的导入与导出。"
+  },
+  "onboarding_page_widget_body": {
+    "en": "No amounts in notifications, and no amount alerts. Put the widget on the home screen — that’s this month’s number.",
+    "ja": "通知に金額は出しません。ウィジェットをホーム画面に置けば、今月の数字が見えます。",
+    "zh": "通知里不放金额，也没有金额告警。把小组件放到主屏，划过去就是这个月的数字。"
+  },
+  "onboarding_progress": {
+    "en": "%1$d / %2$d",
+    "ja": "%1$d / %2$d",
+    "zh": "%1$d / %2$d"
+  },
+  "setup_keystore_write_failed": {
+    "en": "Couldn’t write to Keystore. Unlock the device and try again.",
+    "ja": "Keystoreに書けませんでした。端末のロックを外してもう一度。",
+    "zh": "没法写进 Keystore。设备解锁后再试一次。"
+  },
+  "settings_transfer_locked": {
+    "en": "Too many tries. Wait %1$d seconds.",
+    "ja": "試行が多すぎます。%1$d秒待ってください。",
+    "zh": "试得太密了，等 %1$d 秒再试。"
+  },
+  "settings_danger": {
+    "en": "Erase data",
+    "ja": "データを消す",
+    "zh": "清除数据"
+  },
+  "persistence_fail": {
+    "en": "SQLite persistence failed",
+    "ja": "SQLite 保存失敗",
+    "zh": "SQLite 落盘失败"
+  },
+  "persistence_pass": {
+    "en": "SQLite persistence passed",
+    "ja": "SQLite 保存成功",
+    "zh": "SQLite 落盘通过"
+  },
+  "quota_empty": {
+    "en": "No free quotas near the limit.",
+    "ja": "上限に近い無料枠はありません。",
+    "zh": "没有快超的免费额度。"
+  },
+  "services_chart_balance_a11y": {
+    "en": "Balance line chart, %1$d readings. Touch and hold to inspect a date",
+    "ja": "残高の折れ線グラフ、%1$d 件。長押しで日付ごとの金額を確認",
+    "zh": "余额折线图，%1$d 个读数。按住查看对应日期的金额"
+  },
+  "services_chart_mtd_a11y": {
+    "en": "Month-to-date line chart, %1$d readings. Touch and hold to inspect a date",
+    "ja": "今月累計の折れ線グラフ、%1$d 件。長押しで日付ごとの金額を確認",
+    "zh": "本月至今折线图，%1$d 次读数。按住查看对应日期的金额"
+  },
+  "services_chart_spend_a11y": {
+    "en": "Spend bar chart, %1$d readings. Touch and hold to inspect a date",
+    "ja": "支出の棒グラフ、%1$d 件。長押しで日付ごとの金額を確認",
+    "zh": "花费柱形图，%1$d 个读数。按住查看对应日期的金额"
+  },
+  "services_delete_account_body": {
+    "en": "Matching Keystore credentials are deleted too. Historical snapshots stay on device and drop out of the total.",
+    "ja": "対応する Keystore の認証情報も削除されます。読み取り履歴 はこの端末に残り、合計からは外れます。",
+    "zh": "会连带删掉 Keystore 里对应的凭据。历史 Snapshot 留在本机，不再计入总额。"
+  },
+  "services_empty_body": {
+    "en": "Add the clouds you use. Totals show on the dashboard; credentials stay on this device.",
+    "ja": "使っているクラウドを追加してください。合計はダッシュボードに表示され、認証情報はこの端末から出ません。",
+    "zh": "把用着的云加进来。账单数字出现在仪表，凭据只留在这台设备。"
+  },
+  "services_keystore_body_1": {
+    "en": "Keystore is this device’s encrypted keychain. Keys you paste are kept by the system, not in this app’s own files.",
+    "ja": "Keystore はこの端末の暗号化キーチェーンです。貼り付けた鍵はシステムが保管し、このアプリのファイルには書きません。",
+    "zh": "Keystore 是这台设备自带的加密钥匙串。你填进来的密钥由系统保管，不会写进这个 App 自己的文件里。"
+  },
+  "services_keystore_body_2": {
+    "en": "We use the strictest class: only this device, and only after you unlock it. It does not follow backups onto another phone.",
+    "ja": "最も厳しいクラスだけを使います。この端末、ロック解除後だけ読めます。バックアップで別の端末には渡りません。",
+    "zh": "我们只用最严的一档：只在这台设备上、只有你解锁之后才能读。它不会跟着备份出现在别的手机上。"
+  },
+  "services_keystore_caption": {
+    "en": "Credentials will be saved to Keystore.",
+    "ja": "認証情報は Keystore に保存されます。",
+    "zh": "凭据会存进 Keystore。"
+  },
+  "services_keystore_what": {
+    "en": "What is Keystore?",
+    "ja": "Keystore とは？",
+    "zh": "什么是 Keystore？"
+  },
+  "services_ok": {
+    "en": "OK",
+    "ja": "OK",
+    "zh": "确定"
+  },
+  "services_period_footer": {
+    "en": "The charge-day amount counts in full for that month. It is not prorated.",
+    "ja": "引き落とし日の金額はその月に全額計上され、日割りしません。",
+    "zh": "这一笔按扣款日全额计入当月，不会按天摊。"
+  },
+  "services_quantity_footer": {
+    "en": "For per-seat plans (Copilot Business, Claude Team), enter the seat count.",
+    "ja": "席数課金（Copilot Business、Claude Team など）は席数を入れてください。",
+    "zh": "按席位买的（Copilot Business、Claude Team 这些）填席位数。"
+  },
+  "services_remove_footer": {
+    "en": "Matching Keystore credentials are deleted too.",
+    "ja": "対応する Keystore の認証情報も一緒に削除されます。",
+    "zh": "会连带删掉 Keystore 里对应的凭据。"
+  },
+  "services_search_empty": {
+    "en": "No matches for “%1$s”",
+    "ja": "「%1$s」に一致するものはありません",
+    "zh": "没有匹配「%1$s」"
+  },
+  "services_search_empty_hint": {
+    "en": "Try another word, or clear the query to see everything.",
+    "ja": "別の語を試すか、キーワードを消して一覧を見てください。",
+    "zh": "换个词试试，或把关键字清空看全部。"
+  },
+  "services_setup_next": {
+    "en": "Next",
+    "ja": "次へ",
+    "zh": "下一步"
+  },
+  "services_subscription_footer": {
+    "en": "For example a fixed monthly plan. Usage stays in the section above — don’t record the same money twice.",
+    "ja": "月額の定額料金など。従量は上の欄に記録し、同じ金額を二度書かないでください。",
+    "zh": "例如固定月费。用量记在上面，不要把同一笔钱写两遍。"
+  },
+  "services_test_hint": {
+    "en": "After a successful test, this button becomes Save to Keystore.",
+    "ja": "テストが通ると、このボタンは Keystore に保存 に変わります。",
+    "zh": "测通后，这颗按钮会变成保存到 Keystore。"
+  },
+  "settings_about_body": {
+    "en": "TollCat folds every vendor’s bill into the same calendar month. The ledger is USD, conversion is the same Swift MeterCore, and the UI is Material 3.",
+    "ja": "TollCat は各社の請求を同じ暦月に折りたたみます。台帳は米ドル、換算は同じ Swift MeterCore、UI は Material 3 です。",
+    "zh": "TollCat 把各家账单折到同一个日历月。账本按美元记，折算是同一份 Swift MeterCore，界面是 Material 3。"
+  },
+  "settings_about_footer": {
+    "en": "Service icons come from Simple Icons, used under the CC0 1.0 public-domain dedication.\n\nCredentials and bills stay on this device. They aren’t uploaded.",
+    "ja": "サービスアイコンは Simple Icons、CC0 1.0 パブリックドメイン。\n\n認証情報と請求はこのデバイスにだけあり、アップロードしません。",
+    "zh": "服务图标来自 Simple Icons，以 CC0 1.0 公共领域许可使用。\n\n凭据和账单只存在这台设备上，不会上传。"
+  },
+  "settings_appearance_hint": {
+    "en": "Light and dark apply on this device right away. Automatic follows the system dark theme.",
+    "ja": "ライトとダークはこの端末ですぐに反映されます。システムに従うと、端末のダーク設定に合わせます。",
+    "zh": "亮色和暗色会立刻作用在这台设备上。跟随系统时，外观跟着系统深色设置走。"
+  },
+  "settings_clear": {
+    "en": "Clear local data",
+    "ja": "この端末のデータを消去",
+    "zh": "清空本机数据"
+  },
+  "settings_clear_body": {
+    "en": "Memberships, snapshots, and credentials will be deleted from this device. This cannot be undone.",
+    "ja": "メンバーシップ、スナップショット、認証情報がこの端末から削除され、元に戻せません。",
+    "zh": "成员关系、快照和凭据都会从这台设备删掉，不能撤销。"
+  },
+  "settings_clear_hint": {
+    "en": "Memberships, snapshots, and credentials will be deleted",
+    "ja": "メンバー、スナップショット、認証情報を削除します",
+    "zh": "成员、快照和钥匙都会删掉"
+  },
+  "settings_clear_title": {
+    "en": "Clear local data?",
+    "ja": "この端末のデータを消去しますか？",
+    "zh": "清空本机数据？"
+  },
+  "settings_color_brand": {
+    "en": "TollCat Blue",
+    "ja": "TollCat ブルー",
+    "zh": "TollCat 蓝"
+  },
+  "settings_color_dynamic": {
+    "en": "Match wallpaper",
+    "ja": "壁紙に合わせる",
+    "zh": "跟随壁纸"
+  },
+  "settings_color_source": {
+    "en": "Color",
+    "ja": "カラー",
+    "zh": "配色"
+  },
+  "settings_currency_label": {
+    "en": "%1$s (%2$s)",
+    "ja": "%1$s (%2$s)",
+    "zh": "%1$s (%2$s)"
+  },
+  "settings_guide": {
+    "en": "The four kinds of money",
+    "ja": "4 種類のお金",
+    "zh": "四种钱"
+  },
+  "settings_guide_hint": {
+    "en": "How usage, prepaid, subscriptions, and free tiers enter the total",
+    "ja": "従量・前払い・サブスク・無料枠が合計に入る仕組み",
+    "zh": "用量、预充值、订阅、免费额度怎么进合计"
+  },
+  "settings_guide_keys_body": {
+    "en": "Keys stay in this device’s Keystore, not in cloud backups. To move phones, use Import and Export in Settings.",
+    "ja": "キーはこの端末の Keystore にだけ入り、クラウドバックアップには入りません。機種変更は設定の「読み込みと書き出し」を使います。",
+    "zh": "密钥只进这台设备的 Keystore，不进云备份。换手机用设置里的导入与导出。"
+  },
+  "settings_inbox_create": {
+    "en": "Create inbox",
+    "ja": "検針ポストを作る",
+    "zh": "建信箱"
+  },
+  "settings_inbox_manual_action": {
+    "en": "Enter usage in Services",
+    "ja": "サービスで使用量を手入力",
+    "zh": "去服务里手填用量"
+  },
+  "settings_list_separator": {
+    "en": ", ",
+    "ja": "、",
+    "zh": "、"
+  },
+  "settings_money_freetier_body": {
+    "en": "The total records 0; the quota is shown separately.",
+    "ja": "合計は 0 で記録し、枠の使用量は別に見ます。",
+    "zh": "合计记 0，单独看额度用了多少。"
+  },
+  "settings_money_kinds": {
+    "en": "Four kinds of money",
+    "ja": "四つのお金",
+    "zh": "四种钱"
+  },
+  "settings_money_prepaid_body": {
+    "en": "This month’s burn = balance at month start − current balance. The first month is incomplete without a starting snapshot.",
+    "ja": "今月の消費 = 月初残高 − 現在残高。初月は月初スナップショットがないと数字は不完全です。",
+    "zh": "本月消耗 = 月初余额 − 当前余额。第一月没有月初快照时，数字是不全的。"
+  },
+  "settings_money_subscription_body": {
+    "en": "If the charge day falls in this month, the full amount counts. It is not prorated.",
+    "ja": "引き落とし日が今月なら全額を計上し、日割りしません。",
+    "zh": "扣款日落在本月内就计全额，不按天摊。"
+  },
+  "settings_money_usage_body": {
+    "en": "Month-to-date spend. When daily numbers exist, they are summed by day.",
+    "ja": "すでに使った分をカレンダー月で合計します。日次が取れるときは日ごとに足します。",
+    "zh": "已经花了多少，按日历月加总。能拿到按天的数就按天加。"
+  },
+  "settings_off": {
+    "en": "Off",
+    "ja": "オフ",
+    "zh": "关"
+  },
+  "settings_on": {
+    "en": "On",
+    "ja": "オン",
+    "zh": "开"
+  },
+  "settings_outbound_footer": {
+    "en": "The app only makes requests to these hosts. Credentials and billing data stay on this device. Tip notes, feedback, and anonymous page counts go to api.tollcat.app on this list.",
+    "ja": "App が通信するのはこれらのホストだけです。認証情報と請求データはこのデバイスに残ります。チップのメッセージ、フィードバック、匿名の画面カウントはこの一覧の api.tollcat.app に送られます。",
+    "zh": "App 只会向这些域名发起请求。账单凭据和账单数据留在这台设备上。打赏留言、反馈和匿名页面计数发到清单里的 api.tollcat.app。"
+  },
+  "settings_refresh_hint": {
+    "en": "When this is on, a cold start and returning from the background each run a global refresh, same rules as the dashboard refresh button. Services that cost money to refresh stay out.",
+    "ja": "オンにすると、コールドスタートとバックグラウンドからの復帰で全体更新が一度ずつ走ります。ルールはダッシュボードの更新ボタンと同じです。更新に料金がかかるサービスは対象外です。",
+    "zh": "打开后，冷启动和从后台回到前台会各走一次全局刷新，规则和点仪表刷新按钮相同。花钱才能刷新的服务仍然不进。"
+  },
+  "settings_reminder_android_note": {
+    "en": "This preference is stored on this device. Android does not request exact-alarm permission, and reminders never include an amount.",
+    "ja": "この設定はこの端末に保存されます。Android は正確なアラーム権限を要求せず、通知に金額は含めません。",
+    "zh": "提醒偏好会记在这台设备上。Android 不会申请精确闹钟权限，通知里也不放金额。"
+  },
+  "settings_reminder_detail": {
+    "en": "Frequency & time",
+    "ja": "頻度と時刻",
+    "zh": "频率与时刻"
+  },
+  "settings_reminder_time_set": {
+    "en": "Set",
+    "ja": "設定",
+    "zh": "设定"
+  },
+  "settings_tip_loading": {
+    "en": "Loading prices from Google Play.",
+    "ja": "Google Playから価格を読み込み中。",
+    "zh": "正在从 Google Play 读取价格。"
+  },
+  "settings_tip_purchasing": {
+    "en": "Confirming with Google Play.",
+    "ja": "Google Play に確認中。",
+    "zh": "正在向 Google Play 确认。"
+  },
+  "settings_tip_store_unavailable": {
+    "en": "Can’t reach Google Play",
+    "ja": "Google Playに接続できない",
+    "zh": "暂时无法连接 Google Play"
+  },
+  "settings_tip_store_unavailable_body": {
+    "en": "Open this page again in a moment. Prices come from Google Play for your region.",
+    "ja": "しばらくしてから、このページを開き直してください。価格は Google Play が地域に合わせて表示します。",
+    "zh": "过一会儿再打开这页。价格由 Google Play 按地区显示。"
+  },
+  "settings_tip_store_unavailable_footer": {
+    "en": "Can’t reach Google Play, so prices aren’t available.",
+    "ja": "Google Play につながらないため、価格を表示できません。",
+    "zh": "暂时连不上 Google Play，价格出不来。"
+  },
+  "settings_transfer_body": {
+    "en": "On iOS, Import and Export in Settings makes one encrypted file you can take to another iPhone. On Android, credentials stay in this device’s Keystore; .tollcat import and export are not available yet. A new device means connecting again.",
+    "ja": "iOS では設定の「読み込みと書き出し」で暗号化ファイルを作り、別の iPhone に接続を移せます。Android では認証情報はこの端末の Keystore にだけあり、.tollcat の読み書きはまだできません。機種変更では接続し直してください。",
+    "zh": "iOS 可以用设置里的「导入与导出」生成一份加密文件，把接入带到另一台 iPhone。Android 上的凭据只在这台设备的 Keystore 里，还不能导入或导出 .tollcat 文件。换机需要重新接入。"
+  },
+  "settings_transfer_title": {
+    "en": "Encrypted transfer is iOS-only for now",
+    "ja": "暗号化移行は今のところ iOS のみ",
+    "zh": "加密迁移目前只在 iOS 上"
+  },
+  "settings_usage_guides_hint": {
+    "en": "The four kinds of money, and easy-to-misread details",
+    "ja": "四つのお金の種類と、見間違えやすい点",
+    "zh": "四种钱，以及用的时候容易看错的点"
+  },
+  "setup_intro": {
+    "en": "Paste the credentials. After a successful test they stay in this device’s Keystore.",
+    "ja": "認証情報を貼り付けます。テストが通ったらこの端末の Keystore にだけ保存します。",
+    "zh": "把凭据粘贴进来。测通之后再保存到本机 Keystore，不会离开这台设备。"
+  },
+  "setup_keystore_note": {
+    "en": "Credentials are stored in Android Keystore and never leave this device.",
+    "ja": "認証情報は Android Keystore にあり、この端末から出ません。",
+    "zh": "凭据保存在 Android Keystore，只在这台设备上能解开。"
+  },
+  "setup_success": {
+    "en": "Read %1$s",
+    "ja": "%1$s を読み取りました",
+    "zh": "读到 %1$s"
+  },
+  "source_line": {
+    "en": "Source: %1$s",
+    "ja": "ソース：%1$s",
+    "zh": "来源：%1$s"
+  },
+  "stub_fail": {
+    "en": "Stub fetch failed %1$s",
+    "ja": "スタブ取得失敗 %1$s",
+    "zh": "Stub 取数失败 %1$s"
+  },
+  "stub_pass": {
+    "en": "Stub fetch passed %1$s",
+    "ja": "スタブ取得成功 %1$s",
+    "zh": "Stub 取数通过 %1$s"
+  },
+  "upcoming_empty": {
+    "en": "No charges in the next 7 days.",
+    "ja": "今後7日以内の引き落としはありません。",
+    "zh": "未来 7 天没有要扣的订阅。"
+  },
+  "widget_description": {
+    "en": "This month’s total, on the home screen.",
+    "ja": "ホーム画面で今月の合計を見られます。",
+    "zh": "主屏上就能看见这个月的合计。"
+  }
+}

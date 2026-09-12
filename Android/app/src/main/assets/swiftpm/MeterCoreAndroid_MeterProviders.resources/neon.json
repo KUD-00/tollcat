@@ -1,0 +1,62 @@
+{
+  "_comment": "只给周期累计、不给日粒度，逼出 .estimated，对应设计稿总数上的 ≈",
+  "providerID": "neon",
+  "kind": "usage",
+  "connected": true,
+  "currentSpendUSD": 3.13,
+  "periodStartDayOfMonth": 1,
+  "previousMonth": {
+    "currentSpendUSD": 2.5,
+    "periodStartDayOfMonth": 1
+  },
+  "olderMonths": [
+    { "monthsBack": 2, "currentSpendUSD": 2.2, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 3, "currentSpendUSD": 2.0, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 4, "currentSpendUSD": 1.8, "periodStartDayOfMonth": 1 },
+    { "monthsBack": 5, "currentSpendUSD": 1.6, "periodStartDayOfMonth": 1 }
+  ],
+  "lines": [
+    {
+      "category": "Compute",
+      "label": "Compute",
+      "scope": "delicate-dawn-54854667",
+      "usd": 4.31,
+      "quantity": 40.7,
+      "unit": "CU-hours"
+    },
+    {
+      "category": "Storage",
+      "label": "Root branch storage",
+      "scope": "delicate-dawn-54854667",
+      "usd": 1.92,
+      "quantity": 5.48,
+      "unit": "GB-months"
+    },
+    {
+      "category": "Storage",
+      "label": "Child branch storage",
+      "scope": "delicate-dawn-54854667",
+      "usd": 0.41,
+      "quantity": 1.17,
+      "unit": "GB-months"
+    },
+    {
+      "category": "Instant restore",
+      "label": "Instant restore",
+      "scope": "delicate-dawn-54854667",
+      "usd": 0.24,
+      "quantity": 1.2,
+      "unit": "GB-months"
+    },
+    {
+      "category": "Data transfer",
+      "label": "Public network transfer",
+      "scope": "delicate-dawn-54854667",
+      "usd": 0.0,
+      "listUSD": 1.41,
+      "quantity": 14.1,
+      "unit": "GB",
+      "allowanceNote": "First 500 GB per project included"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "access_token": "ibm-access-MUST-NOT-LEAK",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}

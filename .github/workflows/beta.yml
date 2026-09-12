@@ -1,0 +1,142 @@
+name: Beta (TestFlight)
+
+# TestFlight is the only secret-bearing job with no human approval gate:
+# it is the buffer itself. The repo is still private — manual dispatch only
+# until it goes public. After going public, restore:
+#   push:
+#     branches: [main]
+#     paths-ignore: ["site/**", "worker/**", "docs/**", "**/*.md"]
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: beta
+  cancel-in-progress: true
+
+env:
+  DERIVED_DATA: /tmp/dd-beta
+
+jobs:
+  testflight:
+    name: Archive iOS and upload to TestFlight
+    runs-on: macos-26
+    # Secrets live only in this environment; ci.yml can read none of them.
+    environment: app-store
+    env:
+      ARCHIVE_PATH: /tmp/dd-beta/TollCat.xcarchive
+      EXPORT_PATH: /tmp/dd-beta/export
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Import signing certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cert="$RUNNER_TEMP/build_certificate.p12"
+          keychain="$RUNNER_TEMP/app-signing.keychain-db"
+          password="$(openssl rand -base64 24)"
+          echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$cert"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$cert" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain"
+          security list-keychain -d user -s "$keychain" login.keychain-db
+          rm -f "$cert"
+          echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
+      - name: Write App Store Connect API key
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          key="$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          echo "$PRIVATE_KEY" | base64 --decode > "$key"
+          chmod 600 "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      # Build number = run number: TestFlight requires each upload to be unique
+      # and greater than any existing number under the same MARKETING_VERSION.
+      # release.yml also uses run numbers, and the two workflows' run numbers
+      # increment independently, so release builds add a 100000 offset to stay
+      # above every beta.
+      # Team ID 不在仓库里（见 Config/Signing.xcconfig）。archive 前从 secret 写出
+      # 本地同名文件，Forget signing material 再删掉。
+      - name: Write signing team
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          [[ -n "$APPLE_TEAM_ID" ]] || { echo "secret APPLE_TEAM_ID is empty" >&2; exit 1; }
+          printf 'DEVELOPMENT_TEAM = %s\n' "$APPLE_TEAM_ID" > Config/Signing.local.xcconfig
+
+      - name: Archive
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild archive \
+            -project TollCat.xcodeproj \
+            -scheme TollCat \
+            -destination "generic/platform=iOS" \
+            -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            CURRENT_PROJECT_VERSION="${GITHUB_RUN_NUMBER}"
+
+      - name: Export IPA
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist scripts/ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID"
+
+      - name: Upload to TestFlight
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$EXPORT_PATH/TollCat.ipa" \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$ISSUER_ID"
+
+      - name: Forget signing material
+        if: always()
+        run: |
+          rm -f Config/Signing.local.xcconfig
+          [[ -n "${SIGNING_KEYCHAIN:-}" ]] && security delete-keychain "$SIGNING_KEYCHAIN" || true
+          rm -rf "$HOME/.appstoreconnect/private_keys"

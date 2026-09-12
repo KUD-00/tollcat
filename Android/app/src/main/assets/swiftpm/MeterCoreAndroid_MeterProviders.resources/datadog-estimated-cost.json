@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "id": "org1",
+      "type": "cost_by_org",
+      "attributes": {
+        "org_name": "example",
+        "total_cost": 42.5
+      }
+    }
+  ]
+}

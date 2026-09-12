@@ -1,0 +1,61 @@
+package com.zhechengqi.tollcat.ui.symbols
+
+/**
+ * App 用到的 Material Symbols（Rounded）子集。字体是官方可变字体裁剪版
+ * （res/font/material_symbols_rounded.ttf，保留 FILL/wght/GRAD/opsz 四轴），
+ * codepoint 取自同版 .codepoints 文件。加图标：重新裁剪字体后在这里补一行。
+ *
+ * [autoMirror] 标记 RTL 下需要水平镜像的方向性图标，对齐官方 automirrored 清单。
+ */
+enum class MaterialSymbol(val codepoint: Char, val autoMirror: Boolean = false) {
+    Add('\uE145'),
+    ArrowBack('\uE5C4', autoMirror = true),
+    ArrowForward('\uE5C8', autoMirror = true),
+    CalendarMonth('\uEBCC'),
+    Check('\uE668'),
+    CheckCircle('\uF0BE'),
+    Close('\uE5CD'),
+    Code('\uE86F'),
+    ContentCopy('\uE14D'),
+    Contrast('\uEB37'),
+    DarkMode('\uE51C'),
+    DeleteForever('\uE92B'),
+    Download('\uF090'),
+    Edit('\uF097'),
+    Error('\uF8B6'),
+    FilterList('\uE152'),
+    GridView('\uE9B0'),
+    History('\uE8B3'),
+    Inbox('\uE156'),
+    Info('\uE88E'),
+    KeyboardArrowRight('\uE315', autoMirror = true),
+    ListAlt('\uE677', autoMirror = true),
+    Lock('\uE899'),
+    Mail('\uE159'),
+    MenuBook('\uEA19', autoMirror = true),
+    MoreHoriz('\uE5D3'),
+    MoreVert('\uE5D4'),
+    Notifications('\uE7F5'),
+    OpenInNew('\uE89E'),
+    Palette('\uE40A'),
+    Payments('\uEF63'),
+    Pets('\uE91D'),
+    Refresh('\uE5D5'),
+    Remove('\uE15B'),
+    Schedule('\uEFD6'),
+    Search('\uEF7A'),
+    Settings('\uE8B8'),
+    Speed('\uE9E4'),
+    Storage('\uE1DB'),
+    SwapHoriz('\uE8D4'),
+    Sync('\uE627'),
+    TrendingDown('\uE8E3'),
+    TrendingFlat('\uE8E4'),
+    TrendingUp('\uE8E5'),
+    Upload('\uF09B'),
+    Visibility('\uE8F4'),
+    VisibilityOff('\uE8F5'),
+    Wallpaper('\uE1BC'),
+    Warning('\uF083'),
+    Widgets('\uE1BD'),
+}

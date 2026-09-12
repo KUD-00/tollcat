@@ -1,0 +1,28 @@
+{
+  "$comment": [
+    "全端更新说明的唯一权威。改这里后跑 python3 scripts/generate-shared.py。",
+    "铺到：五端 App 的抽屉、落地页 /changelog、Sparkle 更新弹窗、两个商店的「此版本新增」、GitHub Release。",
+    "",
+    "中文是规范字段，en / ja 是就地 overlay——和 catalog.json 一个写法，overlay 贴在它覆盖的字段旁边，",
+    "不做平行数组（条目数一旦对不上就是索引漂移，那种 bug 只有日文用户会发现）。",
+    "",
+    "发版时在 entries 顶上加一条，三语一起写。entries[0].version 必须等于 shared/version.json——",
+    "tag → 版本号 → 更新说明是一条链，闸上核对。空数组表示还没发过正式版。",
+    "",
+    "date：只有落地页读，App 的抽屉不显示日期（你正在看它，因为你刚更新完）。没上架就先不写，",
+    "Publish 那天补——那次提交只改站点，不用重出包。",
+    "platforms：这班车上的端。ios 是 iPhone + iPad 同一份。",
+    "drawer：App 要不要弹抽屉。缺省 = (patch == 0)，也就是 RELEASE.md 那条「X.Y.0 是一班车，X.Y.Z 是热修复」。",
+    "  写了以写的为准：修好一个让数字算错的 bug 该打断（true），一整班车全是看不见的管道改动就别弹（false）。",
+    "  drawer:false 只关掉抽屉——落地页、设置里的全量列表、商店文案、Sparkle 说明照常生成。",
+    "items[].id：稳定 id，给以后的远程文本 overlay 用。改名等于换一条，别改。全文件唯一。",
+    "items[].symbol：各端各写，不假装统一。ios 是 SF Symbol 名（离线校验不了，靠 review），",
+    "  android 必须是 MaterialSymbol.kt 里已有的 case 名（闸上核对：Compose 不能按名字查图标），windows 是 Fluent 图标名。",
+    "  落地页忽略它——SF Symbols 的授权不允许上网页。",
+    "hero：可选，三档。{kind:cat, mood} 走 CatView，{kind:glyph, provider} 走已生成的服务图标，",
+    "  {kind:shot, name} 是位图，放 shared/whatsnew/media/<name>-{light,dark}@3x.png。",
+    "  shot 只有 entries[0] 能带（包体因此恒定），而且图里不许有字——有字就要三语三份，必然和译文漂移。"
+  ],
+  "schemaVersion": 1,
+  "entries": []
+}

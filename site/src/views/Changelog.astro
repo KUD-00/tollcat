@@ -1,0 +1,82 @@
+---
+import JsonLd from '../components/JsonLd.astro';
+import PhoneShot from '../components/PhoneShot.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  changelog,
+  changelogAnchor,
+  formatChangelogDate,
+  formatChangelogPlatforms,
+} from '../changelog';
+import { type Locale } from '../config';
+import { t } from '../i18n';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const copy = t(locale).changelogPage;
+---
+
+<BaseLayout locale={locale} title={`${copy.title} — TollCat`} description={copy.description} path="changelog">
+  <JsonLd slot="head" locale={locale} kind="changelog" />
+  <main id="main" class="legal changelog">
+    <!--
+      THESIS: A ledger of shipping versions, newest first. Refuses a blog, a GitHub dump, and a card wall.
+      OWN-WORLD: Same paper, ink, indigo, and Bricolage as the rest of tollcat.app. Legal measure. Version numbers in the display face; no kicker, no pills, no left border.
+      STORY: The visitor sees where each official build is written down, in the same voice as the rest of the site, then can copy a version’s URL.
+      FIRST VIEWPORT: Display title, one-sentence lede, then the latest version (or the empty sentence if none). Date only when the build actually shipped.
+      FORM: Inherited legal page. Specified /changelog/ in the existing site world.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+    -->
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lede">{copy.lede}</p>
+
+      {
+        changelog.length === 0 ? (
+          <p class="changelog-empty">{copy.empty}</p>
+        ) : (
+          changelog.map((entry) => {
+            const item = entry.copy[locale];
+            const anchor = changelogAnchor(entry.version);
+            return (
+              <article class="changelog-entry" id={anchor} aria-labelledby={`${anchor}-heading`}>
+                <header class="changelog-head">
+                  <h2 class="changelog-version" id={`${anchor}-heading`}>
+                    <a href={`#${anchor}`}>{entry.version}</a>
+                  </h2>
+                  {entry.date && (
+                    <time class="changelog-date" datetime={entry.date}>
+                      {formatChangelogDate(locale, entry.date)}
+                    </time>
+                  )}
+                </header>
+                <p class="changelog-platforms">{formatChangelogPlatforms(entry.platforms)}</p>
+                <p class="changelog-title">{item.title}</p>
+                {entry.shot && (
+                  <div class="changelog-shot">
+                    <PhoneShot
+                      light={entry.shot.light}
+                      dark={entry.shot.dark}
+                      alt=""
+                      widths={[360, 720]}
+                      sizes="(min-width: 44rem) 36rem, 100vw"
+                    />
+                  </div>
+                )}
+                <ul>
+                  {item.items.map((note) => (
+                    <li>
+                      <b>{note.title}</b>
+                      <br />
+                      {note.body}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })
+        )
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,7 @@
+**/bin/
+**/obj/
+native/.build/
+native/dist/
+*.user
+*.suo
+.vs/

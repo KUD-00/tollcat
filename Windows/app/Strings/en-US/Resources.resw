@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- GENERATED — 由 scripts/generate-windows-strings.py 生成，不要手改。
+       和 iOS 同文的句子：改对应模块的 Localizable.xcstrings；
+       Windows 独有的句子：改 Windows/app/strings-windows-only.json。 -->
+
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>TollCat</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>One calendar month of cloud and AI bills.</value>
+  </data>
+  <data name="TabDashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="TabServices" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="TabSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="HeroLabel" xml:space="preserve">
+    <value>Month to Date</value>
+  </data>
+  <data name="ProjectedCaption" xml:space="preserve">
+    <value>Projected {0} by month end</value>
+  </data>
+  <data name="SubscriptionCaption" xml:space="preserve">
+    <value>Subscriptions +{0}</value>
+  </data>
+  <data name="ModuleComposition" xml:space="preserve">
+    <value>Breakdown</value>
+  </data>
+  <data name="ModuleUpcoming" xml:space="preserve">
+    <value>Upcoming charges</value>
+  </data>
+  <data name="ModuleQuota" xml:space="preserve">
+    <value>Free Quota</value>
+  </data>
+  <data name="ModuleComparison" xml:space="preserve">
+    <value>vs last month</value>
+  </data>
+  <data name="ModuleAnomaly" xml:space="preserve">
+    <value>Anomaly</value>
+  </data>
+  <data name="ModuleBalance" xml:space="preserve">
+    <value>Balance running low</value>
+  </data>
+  <data name="ModuleTrend" xml:space="preserve">
+    <value>Recent months</value>
+  </data>
+  <data name="DashboardEmptyTitle" xml:space="preserve">
+    <value>No Bills Yet</value>
+  </data>
+  <data name="DashboardEmptyBody" xml:space="preserve">
+    <value>After you connect your first cloud service, this month’s spend will show up here.</value>
+  </data>
+  <data name="DashboardEmptyAction" xml:space="preserve">
+    <value>Add First Service</value>
+  </data>
+  <data name="DashboardLoading" xml:space="preserve">
+    <value>Fetching bills…</value>
+  </data>
+  <data name="ServicesEmptyTitle" xml:space="preserve">
+    <value>No Services Connected</value>
+  </data>
+  <data name="ServicesEmptyBody" xml:space="preserve">
+    <value>Add the clouds you use. Totals show on the dashboard; credentials stay on this device.</value>
+  </data>
+  <data name="ActionAddService" xml:space="preserve">
+    <value>Add Service</value>
+  </data>
+  <data name="MoreServices" xml:space="preserve">
+    <value>More Services</value>
+  </data>
+  <data name="SearchProviders" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="ActionRefresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="ActionCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ActionTestConnection" xml:space="preserve">
+    <value>Test Connection</value>
+  </data>
+  <data name="ActionSaveCredentials" xml:space="preserve">
+    <value>Save to Credential Manager</value>
+  </data>
+  <data name="ActionConnectUsage" xml:space="preserve">
+    <value>Connect {0} billing</value>
+  </data>
+  <data name="ActionManageCredentials" xml:space="preserve">
+    <value>Manage Credentials</value>
+  </data>
+  <data name="ActionClearProvider" xml:space="preserve">
+    <value>Clear {0} billing data on this device</value>
+  </data>
+  <data name="DetailUsageEmpty" xml:space="preserve">
+    <value>No usage identity yet. Connect billing to see this month’s spend.</value>
+  </data>
+  <data name="DetailInboxHint" xml:space="preserve">
+    <value>This vendor has no public billing API. Enter usage by hand or via the inbox.</value>
+  </data>
+  <data name="SetupTitle" xml:space="preserve">
+    <value>Connect {0}</value>
+  </data>
+  <data name="SetupIntro" xml:space="preserve">
+    <value>Paste the credentials. After a successful test they stay in Credential Manager on this PC.</value>
+  </data>
+  <data name="SetupSuccess" xml:space="preserve">
+    <value>Read {0}</value>
+  </data>
+  <data name="SetupKeystoreNote" xml:space="preserve">
+    <value>Credentials stay in Windows Credential Manager on this PC. They do not roam.</value>
+  </data>
+  <data name="SetupFeedbackSuccessLede" xml:space="preserve">
+    <value>We haven’t checked this against a real bill yet. If the number looks right, tell me.</value>
+  </data>
+  <data name="SetupFeedbackFailureLede" xml:space="preserve">
+    <value>If you followed the steps and it still failed, tell me what happened.</value>
+  </data>
+  <data name="SetupFeedbackPrivacy" xml:space="preserve">
+    <value>This sends the service name, app version, OS, device model, and language. No amounts, no keys.</value>
+  </data>
+  <data name="SetupFeedbackDraftOk" xml:space="preserve">
+    <value>{0} connected. The number matches the vendor’s dashboard.</value>
+  </data>
+  <data name="SetupFeedbackDraftFail" xml:space="preserve">
+    <value>{0} couldn’t connect ({1}).</value>
+  </data>
+  <data name="SetupFeedbackDraftNetwork" xml:space="preserve">
+    <value>{0} couldn’t connect. The network is unavailable.</value>
+  </data>
+  <data name="SetupFeedbackDraftEmpty" xml:space="preserve">
+    <value>{0} connected, but no amount came back.</value>
+  </data>
+  <data name="SetupFeedbackDraftUnknown" xml:space="preserve">
+    <value>{0} couldn’t finish the test.</value>
+  </data>
+  <data name="SettingsFeedbackContactHint" xml:space="preserve">
+    <value>Email or any handle</value>
+  </data>
+  <data name="ServicesSetupHaveCredentials" xml:space="preserve">
+    <value>I have the credentials, next</value>
+  </data>
+  <data name="ServicesSetupGuideMissing" xml:space="preserve">
+    <value>Setup guide isn’t ready</value>
+  </data>
+  <data name="ServicesSetupGuideMissingBody" xml:space="preserve">
+    <value>The step-by-step guide is still being written. You can create a read-only credential on the vendor site first. Required fields are listed below.</value>
+  </data>
+  <data name="ServicesSetupOpenConsole" xml:space="preserve">
+    <value>Open the page that creates credentials</value>
+  </data>
+  <data name="ServicesNoAmount" xml:space="preserve">
+    <value>No reading</value>
+  </data>
+  <data name="ServicesNoReading" xml:space="preserve">
+    <value>No readings yet</value>
+  </data>
+  <data name="ServicesQuotaUsed" xml:space="preserve">
+    <value>{0}% used</value>
+  </data>
+  <data name="ServicesAccountN" xml:space="preserve">
+    <value>Account {0}</value>
+  </data>
+  <data name="ServicesHistory" xml:space="preserve">
+    <value>Reading details</value>
+  </data>
+  <data name="ServicesHistoryRange" xml:space="preserve">
+    <value>History range</value>
+  </data>
+  <data name="ServicesHistory7" xml:space="preserve">
+    <value>7 days</value>
+  </data>
+  <data name="ServicesHistory30" xml:space="preserve">
+    <value>30 days</value>
+  </data>
+  <data name="ServicesHistory12" xml:space="preserve">
+    <value>12 months</value>
+  </data>
+  <data name="ServicesRemoveTitle" xml:space="preserve">
+    <value>Clear {0} billing data on this device?</value>
+  </data>
+  <data name="ServicesRemoveBody" xml:space="preserve">
+    <value>This deletes usage credentials and subscriptions on this vendor. Past readings stay on this device and drop out of the totals.</value>
+  </data>
+  <data name="ServicesRemoveConfirm" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="KindUsageTitle" xml:space="preserve">
+    <value>Pay-as-you-go</value>
+  </data>
+  <data name="KindUsageBody" xml:space="preserve">
+    <value>What you’ve spent so far, summed per calendar month. Daily granularity when the vendor offers it.</value>
+  </data>
+  <data name="KindPrepaidTitle" xml:space="preserve">
+    <value>Prepaid balance</value>
+  </data>
+  <data name="KindPrepaidBody" xml:space="preserve">
+    <value>This month’s burn = balance at month start − current balance. The first month is partial without a start-of-month snapshot.</value>
+  </data>
+  <data name="KindSubscriptionTitle" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="KindSubscriptionBody" xml:space="preserve">
+    <value>Charged in full when the billing day falls in this month; never prorated.</value>
+  </data>
+  <data name="KindFreetierTitle" xml:space="preserve">
+    <value>Free tier</value>
+  </data>
+  <data name="KindFreetierBody" xml:space="preserve">
+    <value>Counts as 0 in the total; track quota usage separately.</value>
+  </data>
+  <data name="SettingsGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="SettingsCurrency" xml:space="preserve">
+    <value>Display currency</value>
+  </data>
+  <data name="SettingsAppearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="SettingsAppearanceLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="SettingsAppearanceDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="SettingsAppearanceSystem" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="SettingsHideCat" xml:space="preserve">
+    <value>Hide the cat</value>
+  </data>
+  <data name="SettingsRefreshTitle" xml:space="preserve">
+    <value>Refresh usage every time you open the app</value>
+  </data>
+  <data name="SettingsRefreshNote" xml:space="preserve">
+    <value>Services that cost money to refresh are not included.</value>
+  </data>
+  <data name="SettingsStartup" xml:space="preserve">
+    <value>Start at sign-in</value>
+  </data>
+  <data name="SettingsStartupNote" xml:space="preserve">
+    <value>Windows Settings is the source of truth. This switch only requests the startup task. To turn it off, use Settings → Apps → Startup.</value>
+  </data>
+  <data name="SettingsGuide" xml:space="preserve">
+    <value>The four kinds of money</value>
+  </data>
+  <data name="SettingsFeedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="SettingsFeedbackHint" xml:space="preserve">
+    <value>Send feedback</value>
+  </data>
+  <data name="SettingsFeedbackSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="SettingsFeedbackSent" xml:space="preserve">
+    <value>Got it. Thank you.</value>
+  </data>
+  <data name="SettingsFeedbackRateLimited" xml:space="preserve">
+    <value>That was a lot at once. Try again in ten minutes.</value>
+  </data>
+  <data name="SettingsFeedbackFailed" xml:space="preserve">
+    <value>Couldn’t send. Your text is still here — check your connection and try again.</value>
+  </data>
+  <data name="SettingsFeedbackCategory" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="SettingsFeedbackMessageLabel" xml:space="preserve">
+    <value>Feedback message</value>
+  </data>
+  <data name="SettingsFeedbackMessageHint" xml:space="preserve">
+    <value>Anything at all</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="SettingsAboutBody" xml:space="preserve">
+    <value>TollCat folds every bill into the same calendar month. The ledger is USD. Conversion is the same Swift MeterCore. The shell is WinUI 3.</value>
+  </data>
+  <data name="SettingsVersion" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="SettingsClear" xml:space="preserve">
+    <value>Clear local data</value>
+  </data>
+  <data name="SettingsClearTitle" xml:space="preserve">
+    <value>Clear local data?</value>
+  </data>
+  <data name="SettingsClearBody" xml:space="preserve">
+    <value>Memberships, snapshots, and credentials will be deleted from this device. This cannot be undone.</value>
+  </data>
+  <data name="SettingsClearConfirm" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="TrayOpenMain" xml:space="preserve">
+    <value>Open main window</value>
+  </data>
+  <data name="TrayQuit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="ToastBalanceTitle" xml:space="preserve">
+    <value>A balance is running low</value>
+  </data>
+  <data name="ToastAnomalyTitle" xml:space="preserve">
+    <value>Something needs a look</value>
+  </data>
+</root>

@@ -1,0 +1,32 @@
+---
+type Props = { kind: 'system' | 'light' | 'dark' };
+const { kind } = Astro.props;
+---
+
+{
+  kind === 'light' ? (
+    <svg class="theme-glyph" data-for="light" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"></circle>
+      <path
+        d="M12 3.2v1.8M12 19v1.8M3.2 12h1.8M19 12h1.8M5.64 5.64l1.27 1.27M17.09 17.09l1.27 1.27M5.64 18.36l1.27-1.27M17.09 6.91l1.27-1.27"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"></path>
+    </svg>
+  ) : kind === 'dark' ? (
+    <svg class="theme-glyph" data-for="dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        d="M15.15 4.35A8.15 8.15 0 1 0 19.7 14.6 6.35 6.35 0 0 1 15.15 4.35Z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linejoin="round"></path>
+    </svg>
+  ) : (
+    <svg class="theme-glyph" data-for="system" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="8.1" fill="none" stroke="currentColor" stroke-width="1.7"></circle>
+      <path d="M12 3.9a8.1 8.1 0 0 0 0 16.2Z" fill="currentColor"></path>
+    </svg>
+  )
+}

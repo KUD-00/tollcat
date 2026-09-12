@@ -1,0 +1,8 @@
+{
+  "_comment": [
+    "全端共用的用户可见版本号（X.Y.Z）。唯一权威；project.yml / build.gradle.kts / TollCat.csproj / Package.appxmanifest / TollCat.appinstaller / winget 清单都由 generate-shared.py 铺。",
+    "X.Y.0 是一班车，X.Y.Z 是热修复，X.0.0 留给 API 契约不兼容或数据迁移。某个端跳过一班是正常的，号不回退。",
+    "build 号（CURRENT_PROJECT_VERSION / versionCode / MSIX 第四段）不在这里：CI 用 run number 填，只要单调，不进仓库。"
+  ],
+  "version": "1.0.0"
+}

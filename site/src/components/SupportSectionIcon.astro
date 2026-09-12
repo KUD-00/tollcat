@@ -1,0 +1,37 @@
+---
+type IconName = 'key' | 'list' | 'tag' | 'out' | 'alert' | 'day' | 'pay' | 'history';
+type Props = { name: IconName };
+const { name } = Astro.props;
+const paths: Record<IconName, string[]> = {
+  key: [
+    'M8.4 11h7.2a1.4 1.4 0 0 1 1.4 1.4v6.4a1.4 1.4 0 0 1-1.4 1.4H8.4a1.4 1.4 0 0 1-1.4-1.4v-6.4A1.4 1.4 0 0 1 8.4 11Z',
+    'M9.4 11V8.2a2.6 2.6 0 1 1 5.2 0V11',
+  ],
+  list: ['M7 7.2h11', 'M7 12h11', 'M7 16.8h11'],
+  tag: ['M4.8 12.4 12.4 4.8h6.4v6.4l-7.6 7.6z', 'M16.4 8.2h.01'],
+  out: ['M8.4 15.6 16.4 7.6', 'M10.2 7.6h6.2V13.8'],
+  alert: ['M12 4.8a7.2 7.2 0 1 1 0 14.4 7.2 7.2 0 0 1 0-14.4Z', 'M12 8.4v4', 'M12 15.7h.01'],
+  day: [
+    'M8 5v2.4',
+    'M16 5v2.4',
+    'M5.6 7.2h12.8A1.6 1.6 0 0 1 20 8.8v9.6a1.6 1.6 0 0 1-1.6 1.6H5.6A1.6 1.6 0 0 1 4 18.4V8.8a1.6 1.6 0 0 1 1.6-1.6Z',
+    'M4 11h16',
+  ],
+  pay: ['M12 4.8a7.2 7.2 0 1 1 0 14.4 7.2 7.2 0 0 1 0-14.4Z', 'M9.4 10.2h5.2', 'M9.4 13.8h5.2'],
+  history: ['M12 5.4a6.6 6.6 0 1 1-4.6 1.9', 'M7.4 4.8v3h3', 'M12 8.8V12l2.2 1.5'],
+};
+---
+
+<svg class="support-sec-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  {
+    paths[name].map((d) => (
+      <path
+        d={d}
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    ))
+  }
+</svg>

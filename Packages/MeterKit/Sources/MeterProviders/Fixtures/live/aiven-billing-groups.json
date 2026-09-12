@@ -1,0 +1,18 @@
+{
+  "billing_groups": [
+    {
+      "billing_group_id": "588a8e63-fda7-4ff7-9bff-577debfee604",
+      "billing_group_name": "prod",
+      "billing_currency": "EUR",
+      "estimated_balance_local": "9.20",
+      "estimated_balance_usd": "10.00"
+    },
+    {
+      "billing_group_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "billing_group_name": "dev",
+      "billing_currency": "USD",
+      "estimated_balance_local": "5.50",
+      "estimated_balance_usd": "5.50"
+    }
+  ]
+}

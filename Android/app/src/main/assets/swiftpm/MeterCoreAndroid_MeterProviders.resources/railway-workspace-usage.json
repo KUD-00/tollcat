@@ -1,0 +1,13 @@
+{
+  "data": {
+    "workspace": {
+      "customer": {
+        "currentUsage": 18.42,
+        "billingPeriod": {
+          "start": "2026-08-01T00:00:00.000Z",
+          "end": "2026-09-01T00:00:00.000Z"
+        }
+      }
+    }
+  }
+}

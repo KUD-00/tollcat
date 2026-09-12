@@ -1,0 +1,14 @@
+{
+  "_comment": "照 Neon GET /users/me/organizations 文档造的，还没拿真账号核对过。来源：https://api-docs.neon.tech/reference/getcurrentuserorganizations",
+  "organizations": [
+    {
+      "id": "org-example",
+      "name": "Example Org",
+      "handle": "example-org",
+      "plan": "launch",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "managed_by": "console"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "usage_records": [
+    {
+      "category": "totalprice",
+      "price": "1.10",
+      "price_unit": "usd",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-01"
+    },
+    {
+      "category": "totalprice",
+      "price": "2.40",
+      "price_unit": "usd",
+      "start_date": "2026-08-02",
+      "end_date": "2026-08-02"
+    }
+  ],
+  "next_page_uri": null
+}

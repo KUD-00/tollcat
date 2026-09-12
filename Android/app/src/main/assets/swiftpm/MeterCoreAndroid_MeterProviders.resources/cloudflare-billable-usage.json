@@ -1,0 +1,59 @@
+{
+  "_comment": "照 Cloudflare Billable Usage API 文档造的，字段形状已对着真账号响应核过（2026-08）：每行都是 FOCUS 结构，带 ServiceFamilyName / ServiceName / ConsumedQuantity / ConsumedUnit / ListCost，免费额度写在 ServiceName 结尾的括号里。真账号上 BilledCost 常年是 0，第三行照那个样子造。来源：https://developers.cloudflare.com/api/resources/billing/subresources/usage/methods/paygo/ 与 blog.cloudflare.com/billable-usage-api/",
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": [
+    {
+      "BilledCost": 0.75,
+      "BillingAccountId": "023e105f4ecef8ad9ca31a8372d0c353",
+      "BillingAccountName": "Example Account",
+      "BillingCurrency": "USD",
+      "BillingPeriodStart": "2026-08-01T00:00:00Z",
+      "ChargeCategory": "Usage",
+      "ChargeDescription": "Workers Standard usage measured in Count",
+      "ChargePeriodEnd": "2026-08-02T00:00:00Z",
+      "ChargePeriodStart": "2026-08-01T00:00:00Z",
+      "ConsumedQuantity": 150000,
+      "ConsumedUnit": "Count",
+      "ContractedCost": 0.75,
+      "CumulatedContractedCost": 0.75,
+      "EffectiveCost": 0.75,
+      "ServiceName": "Workers Standard",
+      "ServiceFamilyName": "Workers",
+      "ListCost": 0.75
+    },
+    {
+      "BilledCost": "10.30",
+      "BillingCurrency": "USD",
+      "BillingPeriodStart": "2026-08-01T00:00:00Z",
+      "ChargePeriodStart": "2026-08-02T00:00:00Z",
+      "ChargePeriodEnd": "2026-08-03T00:00:00Z",
+      "ContractedCost": "10.30",
+      "EffectiveCost": "10.30",
+      "ServiceName": "R2 Storage",
+      "ServiceFamilyName": "R2",
+      "ListCost": "10.30",
+      "ConsumedQuantity": 42.5,
+      "ConsumedUnit": "GB-months",
+      "ChargeCategory": "Usage",
+      "ChargeDescription": "R2 Storage usage measured in GB-months"
+    },
+    {
+      "BilledCost": 0,
+      "BillingCurrency": "USD",
+      "BillingPeriodStart": "2026-08-01T00:00:00Z",
+      "ChargeCategory": "Usage",
+      "ChargeDescription": "Container vCPU (First 375 vCPU-minutes included) usage measured in vCPU-seconds",
+      "ChargePeriodStart": "2026-08-02T00:00:00Z",
+      "ChargePeriodEnd": "2026-08-03T00:00:00Z",
+      "ConsumedQuantity": 1061.65,
+      "ConsumedUnit": "vCPU-seconds",
+      "ContractedCost": 0,
+      "EffectiveCost": 0,
+      "ListCost": 0.42,
+      "ServiceFamilyName": "Containers",
+      "ServiceName": "Container vCPU (First 375 vCPU-minutes included)"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+---
+import DevicePhoto from './DevicePhoto.astro';
+import type { PhoneShotPair } from '../screenshots';
+
+type Props = {
+  class?: string;
+  label: string;
+  ipad: PhoneShotPair;
+  mac: PhoneShotPair;
+  ipadAlt: string;
+  macAlt: string;
+};
+const { class: className, label, ipad, mac, ipadAlt, macAlt } = Astro.props;
+const ipadWidths = [480, 768, 1104, 1600, 2000];
+const macWidths = [480, 768, 1100, 1600, 2000];
+---
+
+<div class:list={['platforms-cluster', className]} role="img" aria-label={label}>
+  <DevicePhoto
+    class="cluster-ipad"
+    pair={ipad}
+    widths={ipadWidths}
+    sizes="(min-width: 1440px) 40rem, (min-width: 1200px) 32rem, (min-width: 960px) 24rem, 85vw"
+  />
+  <DevicePhoto
+    class="cluster-mac"
+    pair={mac}
+    widths={macWidths}
+    sizes="(min-width: 1440px) 44rem, (min-width: 1200px) 36rem, (min-width: 960px) 26rem, 90vw"
+  />
+  <span class="sr-only">{ipadAlt} {macAlt}</span>
+</div>

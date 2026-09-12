@@ -1,0 +1,40 @@
+---
+import { getImage, Image } from 'astro:assets';
+import bezelDark from '../assets/screenshots/iphone-17-pro-deep-blue.png';
+import bezelLight from '../assets/screenshots/iphone-17-pro-silver.png';
+
+type Props = { class?: string };
+const { class: className } = Astro.props;
+const widths = [240, 400, 512, 800];
+const sizes = '(min-width: 960px) 28rem, 15.5rem';
+const darkImage = await getImage({
+  src: bezelDark,
+  format: 'webp',
+  width: 400,
+  widths,
+  quality: 85,
+});
+---
+
+<figure class:list={['phone-device', className]}>
+  <div class="device-screen phone-device-screen">
+    <slot />
+  </div>
+  <picture class="phone-device-chrome">
+    <source
+      srcset={darkImage.srcSet.attribute}
+      sizes={sizes}
+      media="(prefers-color-scheme: dark)"
+      data-theme-src="dark"
+    />
+    <Image
+      src={bezelLight}
+      alt=""
+      width={400}
+      widths={widths}
+      sizes={sizes}
+      quality={85}
+      loading="eager"
+    />
+  </picture>
+</figure>

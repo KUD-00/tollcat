@@ -1,0 +1,16 @@
+{
+  "_comment": "照 Cloudflare Billable Usage Info API 文档造的。来源：https://developers.cloudflare.com/api/resources/billing/subresources/usage/methods/paygo_info/",
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "covered": true,
+    "subscriptions": [
+      {
+        "id": "3F3CD4CQ6N7FXO7IK6NVFJBOYA",
+        "billing_cycle_anchor_timestamp": "2023-01-01T00:00:00Z",
+        "start_timestamp": "2023-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

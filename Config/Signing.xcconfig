@@ -1,0 +1,7 @@
+// 签名归属不进仓库。
+//
+// 本地：把自己的 Team ID 写进同目录的 Signing.local.xcconfig（已 gitignore）：
+//   DEVELOPMENT_TEAM = XXXXXXXXXX
+// CI：release.yml / beta.yml 在 archive 前用 secret APPLE_TEAM_ID 写出同一个文件。
+// 没有这个文件也能编译和跑测试（CI 的 test job 用 CODE_SIGNING_ALLOWED=NO，Maestro 用 ad-hoc）。
+#include? "Signing.local.xcconfig"

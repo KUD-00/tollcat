@@ -1,0 +1,666 @@
+name: Release
+
+# The repo is still private — manual dispatch only until it goes public.
+# After going public, restore:
+#   push:
+#     tags:
+#       - "v*"
+on:
+  workflow_dispatch:
+    inputs:
+      ios:
+        description: Put iOS on this train (archive, upload to App Store Connect)
+        type: boolean
+        default: true
+      mac:
+        description: Put the direct-download Mac build on this train (notarize, Sparkle-sign; the feed only switches on Publish)
+        type: boolean
+        default: true
+      android:
+        description: Put Android on this train (AAB attached to the Release; Play upload stays manual for now)
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+# One tag = one train = one GitHub Release (draft). Which platforms ride it is
+# decided by the dispatch inputs; a tag push defaults to iOS + Mac both riding.
+# iOS and Mac are not the same train: a menu-bar-only change ships mac only, an
+# iPhone-shell-only change ships ios only — neither should drag the other through
+# review / update pushes.
+# Mac's Sparkle feed does not read releases/latest; it reads the rolling
+# "mac-appcast" release, which mac-appcast.yml switches over when this Release is
+# published — so an iOS-only Release becoming latest can't break Mac users.
+#
+# Needs repo secrets. First ship must be checked by a human — see VERIFY.md.
+env:
+  DERIVED_DATA: /tmp/dd-verify
+
+jobs:
+  preflight:
+    name: Tag matches shared/version.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The version has one authority, shared/version.json; project.yml / gradle /
+      # csproj / appxmanifest / winget are all generated from it (generate-shared
+      # --check keeps them in sync). This step only checks that the tag matches it.
+      # A manual dispatch must select the tag as the ref; running from main fails here.
+      - name: Compare
+        run: |
+          set -euo pipefail
+          version="$(python3 -c 'import json;print(json.load(open("shared/version.json"))["version"])')"
+          echo "shared/version.json=$version ref=${GITHUB_REF_NAME}"
+          if [[ "${GITHUB_REF_NAME}" != "v${version}" ]]; then
+            echo "ref ${GITHUB_REF_NAME} is not v${version}; dispatch this workflow on the tag, not on a branch" >&2
+            exit 1
+          fi
+          python3 scripts/generate-shared.py --check
+
+  ios:
+    name: Archive iOS and upload to App Store Connect
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.ios }}
+    needs: preflight
+    runs-on: macos-26
+    # The release approval lives here: the environment has required reviewers,
+    # so the run pauses at this job until you click approve.
+    environment: app-store
+    env:
+      ARCHIVE_PATH: /tmp/dd-verify/TollCat.xcarchive
+      EXPORT_PATH: /tmp/dd-verify/export
+      ARTIFACTS: ${{ github.workspace }}/artifacts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+          sw_vers
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Import signing certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cert="$RUNNER_TEMP/build_certificate.p12"
+          keychain="$RUNNER_TEMP/app-signing.keychain-db"
+          password="$(openssl rand -base64 24)"
+          echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$cert"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$cert" \
+            -P "$P12_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$keychain"
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -k "$password" \
+            "$keychain"
+          security list-keychain -d user -s "$keychain" login.keychain-db
+          rm -f "$cert"
+          echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
+      - name: Write App Store Connect API key
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          key="$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          echo "$PRIVATE_KEY" | base64 --decode > "$key"
+          chmod 600 "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      # CURRENT_PROJECT_VERSION is a placeholder 1 in project.yml. App Store
+      # Connect requires a unique build number per upload and Sparkle compares by
+      # it, so both platforms override it with the run number — the same number
+      # within one run. The 100000 offset: beta.yml's TestFlight builds also use
+      # run numbers, and a release must outrank every beta of the same version.
+      # Team ID 不在仓库里（见 Config/Signing.xcconfig）。archive 前从 secret 写出
+      # 本地同名文件，Forget signing material 再删掉。
+      - name: Write signing team
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          [[ -n "$APPLE_TEAM_ID" ]] || { echo "secret APPLE_TEAM_ID is empty" >&2; exit 1; }
+          printf 'DEVELOPMENT_TEAM = %s\n' "$APPLE_TEAM_ID" > Config/Signing.local.xcconfig
+
+      - name: Archive
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild archive \
+            -project TollCat.xcodeproj \
+            -scheme TollCat \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA" \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            -allowProvisioningUpdates \
+            CURRENT_PROJECT_VERSION="$((GITHUB_RUN_NUMBER + 100000))"
+
+      - name: Export IPA
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist scripts/ExportOptions.plist \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            -allowProvisioningUpdates
+
+      - name: Collect release artifacts
+        run: |
+          bash scripts/collect-release-artifacts.sh \
+            "$ARCHIVE_PATH" \
+            "$EXPORT_PATH" \
+            "$ARTIFACTS" \
+            "$GITHUB_SHA"
+
+      - name: Upload to App Store Connect
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          # altool talks to App Store Connect. notarytool is for Developer ID
+          # notarization of Mac software, which this iOS IPA is not.
+          # fastlane would be a third-party dependency we do not want.
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$ARTIFACTS/TollCat.ipa" \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$ISSUER_ID"
+
+      - name: Attest IPA and dSYM
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ github.workspace }}/artifacts/TollCat.ipa
+            ${{ github.workspace }}/artifacts/TollCat.dSYMs.zip
+
+      - name: Hand artifacts to publish job
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Forget signing material
+        if: always()
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+        run: |
+          rm -f Config/Signing.local.xcconfig
+          rm -f "$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          if [[ -n "${SIGNING_KEYCHAIN:-}" ]]; then
+            security delete-keychain "$SIGNING_KEYCHAIN" || true
+          fi
+
+  mac:
+    name: Archive Mac, notarize, sign for Sparkle
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.mac }}
+    needs: preflight
+    runs-on: macos-26
+    environment: mac-direct
+    env:
+      ARCHIVE_PATH: /tmp/dd-verify/TollCatMac.xcarchive
+      EXPORT_PATH: /tmp/dd-verify/export-mac
+      ARTIFACTS: ${{ github.workspace }}/artifacts-mac
+      # The same release as exactVersion in project.yml; the sha256 pins it —
+      # change both places together when bumping.
+      SPARKLE_VERSION: 2.9.6
+      SPARKLE_SHA256: 52bf9e88cdd972fc0c81501377a880e90d47031bd8ca5462488f843e2609e192
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+          sw_vers
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      # Mac ships from its own spec: Sparkle lives there and nowhere else.
+      - name: Generate Xcode project
+        run: xcodegen generate --spec project-mac.yml
+
+      # The direct-download build is signed with Developer ID Application, not the
+      # App Store distribution certificate. Only the account holder can create it
+      # on the developer site; Xcode's automatic signing won't generate it for CI.
+      - name: Import Developer ID certificate
+        env:
+          DEVELOPER_ID_CERTIFICATE_BASE64: ${{ secrets.DEVELOPER_ID_CERTIFICATE_BASE64 }}
+          DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cert="$RUNNER_TEMP/developer_id.p12"
+          keychain="$RUNNER_TEMP/mac-signing.keychain-db"
+          password="$(openssl rand -base64 24)"
+          echo "$DEVELOPER_ID_CERTIFICATE_BASE64" | base64 --decode > "$cert"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$cert" \
+            -P "$DEVELOPER_ID_P12_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$keychain"
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -k "$password" \
+            "$keychain"
+          security list-keychain -d user -s "$keychain" login.keychain-db
+          rm -f "$cert"
+          echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+          security find-identity -v -p codesigning "$keychain" | grep -F "Developer ID Application" \
+            || { echo "no Developer ID Application identity in the imported p12" >&2; exit 1; }
+
+      - name: Write App Store Connect API key
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          key="$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          echo "$PRIVATE_KEY" | base64 --decode > "$key"
+          chmod 600 "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      - name: Fetch Sparkle signing tools
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/Sparkle-${SPARKLE_VERSION}.tar.xz"
+          curl -sSL --fail -o "$archive" \
+            "https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.xz"
+          echo "${SPARKLE_SHA256}  ${archive}" | shasum -a 256 -c -
+          mkdir -p "$RUNNER_TEMP/sparkle"
+          tar -xJf "$archive" -C "$RUNNER_TEMP/sparkle"
+          echo "SPARKLE_BIN=$RUNNER_TEMP/sparkle/bin" >> "$GITHUB_ENV"
+
+      - name: Write Sparkle private key
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          key="$RUNNER_TEMP/sparkle-private.key"
+          printf '%s' "$SPARKLE_PRIVATE_KEY" > "$key"
+          chmod 600 "$key"
+          echo "SPARKLE_PRIVATE_KEY_FILE=$key" >> "$GITHUB_ENV"
+
+      # Team ID 不在仓库里（见 Config/Signing.xcconfig）。archive 前从 secret 写出
+      # 本地同名文件，Forget signing material 再删掉。
+      - name: Write signing team
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          [[ -n "$APPLE_TEAM_ID" ]] || { echo "secret APPLE_TEAM_ID is empty" >&2; exit 1; }
+          printf 'DEVELOPMENT_TEAM = %s\n' "$APPLE_TEAM_ID" > Config/Signing.local.xcconfig
+
+      - name: Archive
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild archive \
+            -project TollCatMac.xcodeproj \
+            -scheme TollCatMac \
+            -destination 'generic/platform=macOS' \
+            -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA" \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            -allowProvisioningUpdates \
+            CURRENT_PROJECT_VERSION="$((GITHUB_RUN_NUMBER + 100000))"
+
+      - name: Export Developer ID app
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist scripts/ExportOptions-mac.plist \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            -allowProvisioningUpdates
+
+      - name: Notarize, staple, sign for Sparkle, write appcast
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+        run: |
+          bash scripts/package-mac-release.sh \
+            "$ARCHIVE_PATH" \
+            "$EXPORT_PATH" \
+            "$ARTIFACTS" \
+            "$GITHUB_SHA" \
+            "$GITHUB_REF_NAME" \
+            "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+
+      - name: Attest Mac zip and dSYM
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ github.workspace }}/artifacts-mac/TollCat-*-mac.zip
+            ${{ github.workspace }}/artifacts-mac/TollCat-mac.dSYMs.zip
+
+      - name: Hand artifacts to publish job
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-release
+          path: artifacts-mac/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Forget signing material
+        if: always()
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+        run: |
+          rm -f Config/Signing.local.xcconfig
+          rm -f "$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
+          rm -f "${SPARKLE_PRIVATE_KEY_FILE:-}"
+          if [[ -n "${SIGNING_KEYCHAIN:-}" ]]; then
+            security delete-keychain "$SIGNING_KEYCHAIN" || true
+          fi
+
+  windows:
+    name: Windows MSIX placeholder
+    needs: preflight
+    runs-on: windows-latest
+    environment: windows
+    env:
+      ARTIFACTS: ${{ github.workspace }}/artifacts-windows
+    steps:
+      # Windows/ reuses the main repo's source via git symlinks; core.symlinks
+      # must be on before checkout.
+      - name: Enable symlinks in git
+        run: git config --global core.symlinks true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Version matches tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(python3 -c 'import json;print(json.load(open("shared/version.json"))["version"])')"
+          csproj_version="$(sed -nE 's/.*<Version>([^<]+)<\/Version>.*/\1/p' Windows/app/TollCat.csproj | head -n 1)"
+          if [[ "${csproj_version}" != "${version}" ]]; then
+            echo "Windows/app/TollCat.csproj Version=${csproj_version} does not match ${version}" >&2
+            exit 1
+          fi
+
+      - name: Unit tests
+        run: dotnet test Windows/tests/TollCat.Tests.csproj --nologo
+
+      - name: Stage appinstaller
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$ARTIFACTS"
+          cp Windows/app/Packaging/TollCat.appinstaller "$ARTIFACTS/"
+          printf 'MSIX packaging waits for P0 Swift-on-Windows (see Windows/README.md).\n' > "$ARTIFACTS/WINDOWS-P0.txt"
+          printf '%s\n' "$GITHUB_SHA" > "$ARTIFACTS/build-info-windows.txt"
+
+      - name: Hand artifacts to publish job
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: artifacts-windows/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Forget signing material
+        if: always()
+        run: echo "no Windows signing material in this job yet"
+
+  android:
+    name: Android AAB (Swift cross-compile + gradle)
+    # Runs only when the dispatch checked android: Android rides the train in
+    # waves, not on every departure. Never run with real credentials yet; a human
+    # must watch the first run — see docs/RELEASE.md.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.android }}
+    needs: preflight
+    runs-on: ubuntu-latest
+    environment: google-play
+    env:
+      SWIFT_VERSION: 6.3.3
+      NDK_VERSION: 27.3.13750724
+      ARTIFACTS: ${{ github.workspace }}/artifacts-android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install NDK
+        run: |
+          set -euo pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;${NDK_VERSION}"
+
+      # The same Swift version and Android SDK bundle scripts/android-run.sh uses locally.
+      - name: Install Swift and the Android SDK bundle
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz" | tar -xz -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/swiftly" init --assume-yes --skip-install --quiet-shell-followup
+          . "$HOME/.local/share/swiftly/env.sh"
+          swiftly install "$SWIFT_VERSION" --use
+          swift --version
+          swift sdk install "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
+          echo "$HOME/.local/share/swiftly/bin" >> "$GITHUB_PATH"
+
+      - name: Cross-compile MeterCore and stage jniLibs
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/${{ env.NDK_VERSION }}
+        run: |
+          set -euo pipefail
+          . "$HOME/.local/share/swiftly/env.sh"
+          export SDK_BUNDLE="$HOME/.swiftpm/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android"
+          bash scripts/android-run.sh --build-only
+
+      # versionCode = run number + offset, the same rule as the iOS/Mac build
+      # numbers: monotonic is all that matters.
+      - name: Build release AAB
+        run: |
+          set -euo pipefail
+          cd Android
+          ./gradlew --no-daemon :app:bundleRelease \
+            -Pandroid.injected.version.code="$((GITHUB_RUN_NUMBER + 100000))"
+
+      - name: Sign AAB with the upload key
+        env:
+          ANDROID_UPLOAD_KEYSTORE_BASE64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_BASE64 }}
+          ANDROID_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
+          ANDROID_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_UPLOAD_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$ARTIFACTS"
+          keystore="$RUNNER_TEMP/upload.jks"
+          echo "$ANDROID_UPLOAD_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          aab="$(find Android/app/build/outputs/bundle/release -name '*.aab' -print -quit)"
+          jarsigner -keystore "$keystore" -storepass "$ANDROID_UPLOAD_KEYSTORE_PASSWORD" \
+            -sigalg SHA256withRSA -digestalg SHA-256 \
+            "$aab" "$ANDROID_UPLOAD_KEY_ALIAS"
+          cp "$aab" "$ARTIFACTS/TollCat.aab"
+          (cd "$ARTIFACTS" && shasum -a 256 TollCat.aab > TollCat.aab.sha256)
+          printf 'commit=%s\nrun=%s\nswift=%s\nndk=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$SWIFT_VERSION" "$NDK_VERSION" > "$ARTIFACTS/build-info-android.txt"
+          rm -f "$keystore"
+
+      - name: Attest AAB
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts-android/TollCat.aab
+
+      - name: Hand artifacts to publish job
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          path: artifacts-android/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish GitHub Release
+    needs: [ios, mac, windows, android]
+    # Unchecked platforms are skipped, which counts as passing; checked ones must
+    # succeed; at least one of iOS or Mac must actually have ridden.
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && (needs.ios.result == 'success' || needs.mac.result == 'success') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download iOS artifacts
+        if: ${{ needs.ios.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-release
+          path: artifacts
+
+      - name: Download Mac artifacts
+        if: ${{ needs.mac.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: mac-release
+          path: artifacts-mac
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-release
+          path: artifacts-windows
+
+      - name: Download Android artifacts
+        if: ${{ needs.android.result == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: android-release
+          path: artifacts-android
+
+      # The release is created as a draft. Once review passes and it has soaked
+      # on your own device for a day, a human clicks Publish — that one click has
+      # mac-appcast.yml switch the Sparkle feed to this version (only if it
+      # carries Mac assets), swaps the landing page's download link, and makes
+      # the changelog public. Hotfixes go through the same button, just with the
+      # wait shrunk to zero.
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          notes="$RUNNER_TEMP/release-notes.md"
+          assets=()
+          {
+            # 更新说明和 App 抽屉、落地页、商店文案同一个权威（shared/changelog.json）。
+            # 生成物在 tag 上，所以这里只是把它抄进 body，不重新排版。
+            if [[ -s docs/release/notes.md ]]; then
+              cat docs/release/notes.md
+              echo
+              echo "---"
+              echo
+            fi
+            echo "Built from \`${GITHUB_SHA}\` on this workflow. See VERIFY.md."
+            echo
+            if [[ -d artifacts ]]; then
+              echo "**iOS**: not a bit-for-bit match of the App Store binary — Apple resigns and encrypts that copy. Compare \`LC_UUID\` instead."
+              echo
+            fi
+            if [[ -d artifacts-mac ]]; then
+              echo "**Mac**: \`TollCat-*-mac.zip\` is the Developer ID build, notarized and stapled. Installed copies update through the \`mac-appcast\` feed once this release is published; \`gh attestation verify\` works on the zip as-is."
+              echo
+            fi
+            if [[ -d artifacts-android ]]; then
+              echo "**Android**: \`TollCat.aab\` is signed with the upload key; upload it to the Play Console internal track by hand for now."
+              echo
+            fi
+            echo "**Windows**: MSIX packaging is gated on P0 (Swift-on-Windows). This release ships the \`.appinstaller\` stub only. See \`Windows/README.md\`."
+            echo
+            echo "\`\`\`"
+            [[ -d artifacts ]] && { cat artifacts/build-info.txt; echo; cat artifacts/TollCat.ipa.sha256; echo; }
+            [[ -d artifacts-mac ]] && { cat artifacts-mac/build-info-mac.txt; echo; cat artifacts-mac/*.sha256; echo; }
+            [[ -d artifacts-android ]] && { cat artifacts-android/build-info-android.txt; echo; cat artifacts-android/TollCat.aab.sha256; echo; }
+            echo "\`\`\`"
+          } > "$notes"
+          if [[ -d artifacts ]]; then
+            assets+=(artifacts/TollCat.ipa artifacts/TollCat.ipa.sha256 artifacts/TollCat.dSYMs.zip artifacts/uuids.txt artifacts/build-info.txt)
+          fi
+          if [[ -d artifacts-mac ]]; then
+            assets+=(artifacts-mac/TollCat-*-mac.zip artifacts-mac/TollCat-*-mac.zip.sha256 artifacts-mac/TollCat-mac.dSYMs.zip artifacts-mac/uuids-mac.txt artifacts-mac/build-info-mac.txt artifacts-mac/appcast.xml)
+          fi
+          if [[ -d artifacts-android ]]; then
+            assets+=(artifacts-android/TollCat.aab artifacts-android/TollCat.aab.sha256 artifacts-android/build-info-android.txt)
+          fi
+          assets+=(artifacts-windows/TollCat.appinstaller artifacts-windows/WINDOWS-P0.txt artifacts-windows/build-info-windows.txt)
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "${GITHUB_REF_NAME}" \
+            --draft \
+            --notes-file "$notes" \
+            "${assets[@]}"
+
+      # Bookkeeping: each platform that rode this train gets a <platform>-vX.Y.Z
+      # tag; scripts/release-status.sh uses them to work out "which train was
+      # last" per platform. Windows is still a placeholder — no windows-v* tag
+      # until a real MSIX ships.
+      - name: Record which platforms rode this train
+        env:
+          IOS: ${{ needs.ios.result }}
+          MAC: ${{ needs.mac.result }}
+          ANDROID: ${{ needs.android.result }}
+        run: |
+          set -euo pipefail
+          for pair in "ios:$IOS" "mac:$MAC" "android:$ANDROID"; do
+            name="${pair%%:*}"; result="${pair##*:}"
+            [[ "$result" == "success" ]] || continue
+            git tag "${name}-${GITHUB_REF_NAME}" "${GITHUB_SHA}"
+            git push origin "${name}-${GITHUB_REF_NAME}"
+          done

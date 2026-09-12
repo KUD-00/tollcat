@@ -1,0 +1,29 @@
+{
+  "invoices": [
+    {
+      "invoice_id": "inv_draft",
+      "status": "DRAFT",
+      "period_start": "2026-08-01T00:00:00Z",
+      "period_end": "2026-09-01T00:00:00Z",
+      "totals": [
+        {
+          "amount": 42.5,
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "invoice_id": "inv_final",
+      "status": "FINALIZED",
+      "period_start": "2026-07-01T00:00:00Z",
+      "period_end": "2026-08-01T00:00:00Z",
+      "totals": [
+        {
+          "amount": 88,
+          "currency": "USD"
+        }
+      ]
+    }
+  ],
+  "pagination": null
+}

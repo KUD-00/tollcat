@@ -1,0 +1,15 @@
+{
+  "code": 20000,
+  "message": "OK",
+  "status": true,
+  "data": {
+    "id": "userid",
+    "name": "username",
+    "email": "user@example.com",
+    "isAdmin": false,
+    "balance": "0.88",
+    "status": "normal",
+    "chargeBalance": "88.00",
+    "totalBalance": "88.88"
+  }
+}

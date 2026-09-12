@@ -1,0 +1,18 @@
+{
+  "customer_id": "7i6HN3TK9wS159v2gPKMt",
+  "invoice_id": "mtd-2026-08",
+  "billing_start_date": "2026-08-01T00:00:00Z",
+  "billing_end_date": "2026-08-31T23:59:59Z",
+  "monthly_transaction_amount": "31.45",
+  "currency_code": "USD",
+  "transaction_line_items": [
+    {
+      "description": "North America Bandwidth",
+      "amount": "21.45"
+    },
+    {
+      "description": "Requests",
+      "amount": "10.00"
+    }
+  ]
+}

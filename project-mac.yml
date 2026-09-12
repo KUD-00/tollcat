@@ -1,0 +1,145 @@
+# XcodeGen 工程定义（macOS 直发版）。TollCatMac.xcodeproj 是它的生成物,不要手工编辑后者。
+#   nix shell nixpkgs#xcodegen -c xcodegen generate --spec project-mac.yml
+#
+# 独立一份工程，不和 iOS 挤在 `project.yml` 里：SPM 的包解析是工程级的，
+# Sparkle 只要写进那一份，iOS 构建也会先 fetch / checkout 一遍它永远不链的东西。
+# 这里是全仓库唯一出现第三方包的 spec（`check-source-invariants.py` 按这条扫）。
+#
+# 共用的选项和 base settings 在 `project-common.yml`。
+# 想在 Xcode 里和 iOS 那份同时打开，走 `TollCat.xcworkspace`（理由见 project.yml 顶上）。
+# 组装复用 App/AppEnvironment.swift；不要把 Mac 和 iOS 糊成 supportedDestinations
+# ——沙盒和 App Group 前缀两边不是一份。
+#
+# 拆成两份工程不影响商店身份：App Store 认「同一个 app」看的是 bundle id + 团队 +
+# App Store Connect 上那条记录，和仓库里有几个 .xcodeproj 无关。所以 `TollCatMac`
+# 的 PRODUCT_BUNDLE_IDENTIFIER 必须和 iOS 那份一模一样（通用购买的硬条件），
+# widget 的也一样。改这里之前先想清楚这件事。
+#
+# 真要上 Mac App Store：商店版不能带 Sparkle（更新由系统管，带第三方更新器会被拒），
+# 那时在这份 spec 里另开一个不依赖 Sparkle 的 target。界面不用改——「检查更新…」
+# 靠注入的 `AppUpdateChecker`，不挂它入口自动消失（见 AboutView / TollCatCommands）。
+
+name: TollCatMac
+
+include:
+  - project-common.yml
+
+options:
+  deploymentTarget:
+    macOS: "26.0"
+
+packages:
+  # Mac 直发版的自动更新。这是全仓库唯一的第三方依赖，只链进 TollCatMac，
+  # 不进 MeterKit、不进 iOS 工程（AGENTS.md「不要引入第三方库」的唯一例外）。
+  # 版本钉死到补丁号，和 .github/workflows/release.yml 里下载的签名工具是同一个发行版。
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    exactVersion: 2.9.6
+
+targets:
+
+  # ─────────────────────────────────────────────────────────────
+  # macOS 壳。
+  TollCatMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: Mac
+      - path: App/AppEnvironment.swift
+      - path: App/PersistenceBootstrap.swift
+      - path: App/StampedBillingProvider.swift
+      - path: TollCat.storekit
+        buildPhase: resources
+        type: file
+      - path: App/Resources/Assets.xcassets
+      - path: App/Resources/Localizable.xcstrings
+      - path: App/Resources/PrivacyInfo.xcprivacy
+    entitlements:
+      path: Mac/TollCatMac.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.files.user-selected.read-write: true
+        com.apple.security.application-groups:
+          - $(TeamIdentifierPrefix)com.zhechengqi.tollcat
+        # Keychain Sharing 在这里不是为了共享：它是唯一能逼自动签名给 Mac 壳
+        # 嵌 provisioning profile 的 capability。没有 profile，这一代 macOS 的
+        # secd 会整个忽略 app-groups entitlement，数据保护 Keychain 全部 -34018，
+        # 且 $(AppIdentifierPrefix) 展开为空、App Group 容器落到没前缀的路径。
+        keychain-access-groups:
+          - $(AppIdentifierPrefix)com.zhechengqi.tollcat
+        # Sparkle 在沙盒里装更新要经它自带的两个 XPC 服务（安装启动器 -spks、
+        # 安装器 -spki）。沙盒进程默认连不上别的 mach 服务，这是 Apple 给这类
+        # 场景留的临时例外，名字必须是 bundle id 加这两个后缀。
+        # 没有下载器服务的例外（-spkd）：App 已有 network.client，Sparkle 自己下载。
+        com.apple.security.temporary-exception.mach-lookup.global-name:
+          - $(PRODUCT_BUNDLE_IDENTIFIER)-spks
+          - $(PRODUCT_BUNDLE_IDENTIFIER)-spki
+    dependencies:
+      - package: MeterKit
+        products: [MeterFeatures, MeterPersistence, MeterProviders, MeterDesign, MeterCore, MeterTips, MeterInbox, MeterFeedback, MeterUsage]
+      - package: Sparkle
+      - target: TollCatWidgetMac
+      - sdk: StoreKit.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat
+        PRODUCT_NAME: TollCat
+        GENERATE_INFOPLIST_FILE: YES
+        COMBINE_HIDPI_IMAGES: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_CFBundleDisplayName: TollCat
+        INFOPLIST_KEY_CFBundleLocalizations: "en ja zh-Hans"
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.developer-tools
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        INFOPLIST_FILE: Mac/Supporting-Info.plist
+
+  TollCatWidgetMac:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: Widget
+        excludes:
+          - TollCatWidget.entitlements
+    entitlements:
+      path: Mac/TollCatWidgetMac.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - $(TeamIdentifierPrefix)com.zhechengqi.tollcat
+    dependencies:
+      - package: MeterKit
+        products: [MeterDesign, MeterFormat, MeterModules, MeterPersistence, MeterCore]
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: TollCat
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # 少了这一列，扩展进程只认开发语言 zh-Hans。Bundle 里的字照样按
+        # AppleLanguages 选到英文，但 `Locale.current` 被钉在中文——
+        # DateIntervalFormatter 于是在英文系统上把统计区间印成「9月1日至6日」。
+        # App target 走 INFOPLIST_KEY_CFBundleLocalizations，扩展这份得自己列。
+        CFBundleLocalizations: [zh-Hans, en, ja]
+        # MeterPersistence 拼 Mac App Group id 用。
+        AppIdentifierPrefix: $(AppIdentifierPrefix)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat.widget
+        SKIP_INSTALL: YES
+        COMBINE_HIDPI_IMAGES: YES
+        ENABLE_HARDENED_RUNTIME: YES
+
+schemes:
+  TollCatMac:
+    build:
+      targets:
+        TollCatMac: all
+        TollCatWidgetMac: all
+    run:
+      config: Debug
+      storeKitConfiguration: TollCat.storekit

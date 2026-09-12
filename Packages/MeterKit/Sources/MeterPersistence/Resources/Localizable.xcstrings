@@ -1,0 +1,22 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "请填写%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@を入力"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

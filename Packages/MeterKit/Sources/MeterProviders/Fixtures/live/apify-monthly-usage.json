@@ -1,0 +1,20 @@
+{
+  "data": {
+    "usageCycle": {
+      "startAt": "2026-08-01T00:00:00.000Z",
+      "endAt": "2026-08-31T23:59:59.999Z"
+    },
+    "dailyServiceUsages": [
+      {
+        "date": "2026-08-01T00:00:00.000Z",
+        "totalUsageCreditsUsd": 1.5
+      },
+      {
+        "date": "2026-08-10T00:00:00.000Z",
+        "totalUsageCreditsUsd": 4.2
+      }
+    ],
+    "totalUsageCreditsUsdBeforeVolumeDiscount": 6.0,
+    "totalUsageCreditsUsdAfterVolumeDiscount": 5.7
+  }
+}

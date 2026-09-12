@@ -1,0 +1,14 @@
+{
+  "api_id": "c85662b6-0f35-4ea9-b8c3-22fa1e35a4c5",
+  "meta": {
+    "auth_id": "MAsampleaccountxxxx",
+    "granularity": "month",
+    "from_date": "2026-08-01T00:00:00Z",
+    "to_date": "2026-08-16T00:00:00Z",
+    "currency": "USD",
+    "page_size": 100,
+    "total_spend": "12.40"
+  },
+  "usage": [],
+  "other_charges": []
+}

@@ -1,0 +1,5 @@
+{
+  "providerID": "openai",
+  "kind": "prepaid",
+  "connected": false
+}

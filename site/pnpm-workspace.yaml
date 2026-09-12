@@ -1,0 +1,5 @@
+# 单包。pnpm 11 把构建脚本白名单放这里，不再读 package.json 的 pnpm 字段。
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true

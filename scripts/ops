@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# TollCat ops TUI。凭据是本机 wrangler login，不打 api.tollcat.app。
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+if command -v bun >/dev/null 2>&1; then
+  BUN="$(command -v bun)"
+elif [[ -x "$HOME/.bun/bin/bun" ]]; then
+  BUN="$HOME/.bun/bin/bun"
+else
+  echo "需要 bun。curl -fsSL https://bun.sh/install | bash" >&2
+  exit 1
+fi
+
+if [[ ! -x "$ROOT/worker/node_modules/.bin/wrangler" && ! -x "$ROOT/site/node_modules/.bin/wrangler" ]]; then
+  echo "找不到 wrangler。先在 worker/ 执行 npm install。" >&2
+  exit 1
+fi
+
+if [[ ! -d "$ROOT/ops/node_modules" ]]; then
+  echo "第一次先装 ops 依赖…" >&2
+  (cd "$ROOT/ops" && "$BUN" install)
+fi
+
+exec "$BUN" "$ROOT/ops/src/cli.tsx" "$@"

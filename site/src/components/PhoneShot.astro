@@ -1,0 +1,51 @@
+---
+import { getImage, Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type Props = {
+  light: ImageMetadata;
+  dark: ImageMetadata;
+  alt: string;
+  widths: number[];
+  sizes: string;
+  quality?: number;
+  loading?: 'eager' | 'lazy';
+  priority?: boolean;
+};
+const {
+  light,
+  dark,
+  alt,
+  widths,
+  sizes,
+  quality = 80,
+  loading = 'lazy',
+  priority = false,
+} = Astro.props;
+const darkImage = await getImage({
+  src: dark,
+  format: 'webp',
+  width: 512,
+  widths,
+  quality,
+});
+---
+
+<picture>
+  <source
+    srcset={darkImage.srcSet.attribute}
+    sizes={sizes}
+    media="(prefers-color-scheme: dark)"
+    data-theme-src="dark"
+  />
+  <Image
+    src={light}
+    alt={alt}
+    width={512}
+    widths={widths}
+    sizes={sizes}
+    quality={quality}
+    loading={loading}
+    priority={priority}
+  />
+</picture>

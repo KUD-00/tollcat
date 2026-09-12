@@ -1,0 +1,12 @@
+{
+  "customer_id": "cus_meter_test",
+  "has_active_subscription": true,
+  "subscription_level": "paid",
+  "current_total_amount_usd": "12.40",
+  "current_total_amount_usd_after_discount": "11.16",
+  "billing_period": {
+    "current_period_start": "2026-08-01T00:00:00Z",
+    "current_period_end": "2026-09-01T00:00:00Z",
+    "interval": "month"
+  }
+}

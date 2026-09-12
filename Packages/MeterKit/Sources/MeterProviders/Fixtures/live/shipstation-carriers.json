@@ -1,0 +1,14 @@
+{
+  "carriers": [
+    {
+      "carrier_id": "se-1",
+      "balance": 12.5,
+      "requires_funded_amount": true
+    },
+    {
+      "carrier_id": "se-2",
+      "balance": 7.25,
+      "requires_funded_amount": true
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "_comment": "照 Twilio GET /2010-04-01/Accounts/{Sid}/Usage/Records.json（不带 Category）文档造的。父类 sms / sms-inbound / calls 和叶子同时出现；phonenumbers 是零元。合计仍以 Daily totalprice 为准，明细只留有钱的叶子。来源：https://www.twilio.com/docs/usage/api/usage-record",
+  "usage_records": [
+    {
+      "category": "totalprice",
+      "description": "Total Price",
+      "price": "3.50",
+      "price_unit": "usd",
+      "usage": "3.50",
+      "usage_unit": "usd",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "sms",
+      "description": "SMS messages",
+      "price": "2.40",
+      "price_unit": "usd",
+      "usage": "120",
+      "usage_unit": "messages",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "sms-inbound",
+      "description": "Inbound SMS",
+      "price": "0.40",
+      "price_unit": "usd",
+      "usage": "20",
+      "usage_unit": "messages",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "sms-inbound-shortcode",
+      "description": "Short Code Inbound SMS",
+      "price": "0.40",
+      "price_unit": "usd",
+      "usage": "20",
+      "usage_unit": "messages",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "sms-outbound",
+      "description": "Outbound SMS",
+      "price": "2.00",
+      "price_unit": "usd",
+      "usage": "100",
+      "usage_unit": "messages",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "calls",
+      "description": "Voice minutes",
+      "price": "1.10",
+      "price_unit": "usd",
+      "usage": "22",
+      "usage_unit": "minutes",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "calls-outbound",
+      "description": "Outbound Calls",
+      "price": "1.10",
+      "price_unit": "usd",
+      "usage": "22",
+      "usage_unit": "minutes",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    },
+    {
+      "category": "phonenumbers",
+      "description": "Phone Numbers",
+      "price": "0",
+      "price_unit": "usd",
+      "usage": "0",
+      "usage_unit": "numbers",
+      "start_date": "2026-08-01",
+      "end_date": "2026-08-16"
+    }
+  ],
+  "next_page_uri": null
+}

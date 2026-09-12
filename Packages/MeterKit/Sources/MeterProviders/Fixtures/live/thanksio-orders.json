@@ -1,0 +1,26 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "grand_total": 73,
+      "authorization_total": 73,
+      "created_at": "2026-08-10T12:00:00.000000Z"
+    },
+    {
+      "id": 2,
+      "grand_total": 127,
+      "authorization_total": 127,
+      "created_at": "2026-08-12T09:00:00.000000Z"
+    },
+    {
+      "id": 3,
+      "grand_total": 50,
+      "authorization_total": 50,
+      "created_at": "2026-07-31T23:00:00.000000Z"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1
+  }
+}

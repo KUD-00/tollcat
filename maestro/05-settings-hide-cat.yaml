@@ -1,0 +1,27 @@
+# 设置页能到，「关闭猫猫」能拨；拨完回仪表盘数字还在。
+appId: com.zhechengqi.tollcat
+---
+- launchApp:
+    clearState: true
+    arguments:
+      -seed-demo: true
+      -skip-onboarding: true
+      -clock-preset=design: true
+      seed_demo: true
+      skip_onboarding: true
+      clock_preset: design
+# 首次冷启动（Android 要解压 Swift 资源包）十几秒，默认等待不够。
+- extendedWaitUntil:
+    visible:
+      id: tab.settings
+    timeout: 60000
+- tapOn:
+    id: tab.settings
+- assertVisible:
+    id: settings.list
+- tapOn:
+    id: settings.hideCat
+- tapOn:
+    id: tab.dashboard
+- assertVisible:
+    id: dashboard.total

@@ -1,0 +1,50 @@
+# 空库：从服务空态进添加目录，选 Cloudflare，确认，走到填凭据那一步。
+# 不填凭据、不点「测试连接」——那要打真网络，不是冒烟该做的事。
+appId: com.zhechengqi.tollcat
+---
+- launchApp:
+    clearState: true
+    arguments:
+      -skip-onboarding: true
+      -skip-demo-seed: true
+      -clock-preset=design: true
+      skip_onboarding: true
+      clock_preset: design
+# 首次冷启动（Android 要解压 Swift 资源包）十几秒，默认等待不够。
+- extendedWaitUntil:
+    visible:
+      id: tab.services
+    timeout: 60000
+- tapOn:
+    id: tab.services
+- tapOn:
+    id: services.empty.add
+- assertVisible:
+    id: addProvider.list
+# 目录按字母排，Cloudflare 在首屏之下。
+- scrollUntilVisible:
+    element:
+      id: addProvider.row.cloudflare
+    direction: DOWN
+- tapOn:
+    id: addProvider.row.cloudflare
+- tapOn:
+    id: addProvider.confirm
+# 两端确认后都先落到这家的详情页，向导从「连接 X 账单」弹出。
+- assertVisible:
+    id: providerDetail.list
+- tapOn:
+    id: providerDetail.connect
+# Android 的向导多一步「介绍」，先多按一次主按钮才到连接参考。
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          id: setup.next
+- assertVisible:
+    id: setup.guide
+- tapOn:
+    id: setup.next
+- assertVisible:
+    id: setup.credentials

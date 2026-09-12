@@ -1,0 +1,339 @@
+<!-- GENERATED — 由 scripts/generate-android-strings.py 生成，不要手改。
+     和 iOS 同文的句子：改对应模块的 Localizable.xcstrings；
+     Android 独有的句子：改 Android/app/strings-android-only.json。 -->
+<resources>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_appearance_light">Light</string>
+    <string name="settings_appearance_dark">Dark</string>
+    <string name="settings_appearance_system">Automatic</string>
+    <string name="settings_appearance_hint">Light and dark apply on this device right away. Automatic follows the system dark theme.</string>
+    <string name="settings_currency_usd">US dollar</string>
+    <string name="settings_currency_cny">Chinese yuan</string>
+    <string name="settings_currency_eur">Euro</string>
+    <string name="settings_currency_gbp">British pound</string>
+    <string name="settings_currency_jpy">Japanese yen</string>
+    <string name="settings_currency_aud">Australian dollar</string>
+    <string name="settings_currency_cad">Canadian dollar</string>
+    <string name="settings_currency_sgd">Singapore dollar</string>
+    <string name="settings_currency_inr">Indian rupee</string>
+    <string name="settings_currency_brl">Brazilian real</string>
+    <string name="settings_currency_krw">South Korean won</string>
+    <string name="settings_currency_twd">New Taiwan dollar</string>
+    <string name="settings_currency_hkd">Hong Kong dollar</string>
+    <string name="settings_currency_label">%1$s (%2$s)</string>
+    <string name="settings_refresh_title">Refresh usage every time you open the app</string>
+    <string name="settings_refresh_note">Services that cost money to refresh are not included.</string>
+    <string name="settings_hide_cat">Hide the cat</string>
+    <string name="settings_hide_cat_note">The cat leaves the dashboard. Totals and the breakdown stay.</string>
+    <string name="settings_refresh_hint">When this is on, a cold start and returning from the background each run a global refresh, same rules as the dashboard refresh button. Services that cost money to refresh stay out.</string>
+    <string name="settings_usage_guides">Usage Guide</string>
+    <string name="settings_usage_guides_hint">The four kinds of money, and easy-to-misread details</string>
+    <string name="settings_whats_new">What’s New</string>
+    <string name="settings_whats_new_hint">Open the release notes for every version</string>
+    <string name="settings_tip">Treat the kitty</string>
+    <string name="settings_tip_hint">A tip — nothing gets unlocked.</string>
+    <string name="settings_tip_open_hint">Open the tip page</string>
+    <string name="settings_tip_candy">Candy</string>
+    <string name="settings_tip_coffee">Coffee</string>
+    <string name="settings_tip_pizza">Pizza</string>
+    <string name="settings_tip_send">Send</string>
+    <string name="settings_tip_retry">Try Again</string>
+    <string name="settings_tip_name_label">Name (optional)</string>
+    <string name="settings_tip_message_label">A sentence (optional)</string>
+    <string name="settings_tip_composer_footer">Name and note are optional. Leave this page to skip the note.</string>
+    <string name="settings_tip_will_retry">The note will be sent again later.</string>
+    <string name="settings_tip_unsent">Note will be sent again later</string>
+    <string name="settings_tip_history">History</string>
+    <string name="settings_tip_history_empty">No records yet</string>
+    <string name="settings_tip_cat_celebrating">The kitty got a treat and looks happy</string>
+    <string name="settings_tip_cat_waiting">The kitty is waiting for a treat</string>
+    <string name="settings_tip_buy_hint">Buy this amount</string>
+    <string name="settings_tip_cancelled">Cancelled.</string>
+    <string name="settings_tip_pending">This purchase is waiting for approval.</string>
+    <string name="settings_tip_failed">The purchase didn’t finish. Try again.</string>
+    <string name="settings_tip_thanks_small">Thank you!!</string>
+    <string name="settings_tip_thanks_medium">Thank you so much!!</string>
+    <string name="settings_tip_thanks_large">Thank you very, VERY much!!!</string>
+    <string name="settings_tip_thanks_repeat">You again!! Thank you!!</string>
+    <string name="settings_tip_note_small">One candy, and the cat’s already run off with it.</string>
+    <string name="settings_tip_note_medium">A coffee. This cat is going to be up all night.</string>
+    <string name="settings_tip_note_large">A whole pizza. The cat is already boxing it up.</string>
+    <string name="settings_tip_note_unknown">The cat has it.</string>
+    <string name="settings_tip_store_unavailable">Can’t reach Google Play</string>
+    <string name="settings_tip_store_unavailable_body">Open this page again in a moment. Prices come from Google Play for your region.</string>
+    <string name="settings_tip_loading">Loading prices from Google Play.</string>
+    <string name="settings_tip_store_unavailable_footer">Can’t reach Google Play, so prices aren’t available.</string>
+    <string name="settings_tip_purchasing">Confirming with Google Play.</string>
+    <string name="whats_new_more">More updates</string>
+    <string name="whats_new_empty">Once a version ships, it gets written down here.</string>
+    <string name="whats_new_open_hint">Open the notes for this version</string>
+    <string name="action_got_it">Got It</string>
+    <string name="settings_money_kinds">Four kinds of money</string>
+    <string name="settings_money_usage_title">Pay-as-you-go</string>
+    <string name="settings_money_usage_body">Month-to-date spend. When daily numbers exist, they are summed by day.</string>
+    <string name="settings_money_prepaid_title">Prepaid balance</string>
+    <string name="settings_money_prepaid_body">This month’s burn = balance at month start − current balance. The first month is incomplete without a starting snapshot.</string>
+    <string name="settings_money_subscription_title">Subscription</string>
+    <string name="settings_money_subscription_body">If the charge day falls in this month, the full amount counts. It is not prorated.</string>
+    <string name="settings_money_freetier_title">Free tier</string>
+    <string name="settings_money_freetier_body">The total records 0; the quota is shown separately.</string>
+    <string name="settings_guide_hero_title">The big number doesn’t include subscriptions</string>
+    <string name="settings_guide_hero_body">The largest number on the dashboard is usage, prepaid burn, and overage. Monthly fees like GitHub Copilot sit on their own line and stay out of the breakdown. Read both lines for the full bill.</string>
+    <string name="settings_guide_aws_title">Refreshing AWS costs money</string>
+    <string name="settings_guide_aws_body">Cost Explorer charges about $0.01 per request. AWS is left out of the global refresh and out of refresh-on-open. For a fresh number, refresh that service yourself — the button shows the price.</string>
+    <string name="settings_guide_keys_title">Keys don’t follow you to a new phone</string>
+    <string name="settings_guide_keys_body">Keys stay in this device’s Keystore, not in cloud backups. To move phones, use Import and Export in Settings.</string>
+    <string name="settings_guide_inbox_title">Services without an API can use the inbox</string>
+    <string name="settings_guide_inbox_body">Some services have no public billing API. You can create a reading inbox and report numbers yourself; they still land on the dashboard.</string>
+    <string name="settings_guide_widget_title">This month can sit on the Lock Screen</string>
+    <string name="settings_guide_widget_body">There are no amount-based push alerts. Put a widget on the Home Screen or Lock Screen and the number is there when you glance. Reminders only ask you to come refresh — they never include an amount.</string>
+    <string name="settings_guide_open_hint">Open this usage guide</string>
+    <string name="settings_reminder">Reminders</string>
+    <string name="settings_reminder_note">Choose when the kitty reminds you to come back and refresh</string>
+    <string name="settings_reminder_frequency">Frequency</string>
+    <string name="settings_reminder_detail">Frequency &amp; time</string>
+    <string name="settings_reminder_time">Time</string>
+    <string name="settings_reminder_weekday">Weekday</string>
+    <string name="settings_reminder_day">Day of month</string>
+    <string name="settings_reminder_day_value">Day %1$d</string>
+    <string name="settings_reminder_daily">Daily</string>
+    <string name="settings_reminder_weekly">Weekly</string>
+    <string name="settings_reminder_biweekly">Every two weeks</string>
+    <string name="settings_reminder_monthly">Monthly</string>
+    <string name="settings_reminder_android_note">This preference is stored on this device. Android does not request exact-alarm permission, and reminders never include an amount.</string>
+    <string name="settings_reminder_time_set">Set</string>
+    <string name="settings_reminder_opt_in_title">Let the kitty nudge you back</string>
+    <string name="settings_reminder_opt_in_body">When it’s time, you’ll get a reminder to open the app and check what you’ve spent this month. The notification never includes amounts.</string>
+    <string name="settings_reminder_opt_in_allow">Turn On Notifications</string>
+    <string name="settings_reminder_notice_title">Time to take a look</string>
+    <string name="settings_reminder_notice_body">Open the app and see how much you’ve spent this month.</string>
+    <string name="settings_reminder_notice_today"> Last refresh was today.</string>
+    <string name="settings_reminder_notice_yesterday"> Last refresh was 1 day ago.</string>
+    <string name="settings_reminder_notice_days"> Last refresh was %1$d days ago.</string>
+    <string name="settings_reminder_denied">Notification permission is off, so reminders won’t fire.</string>
+    <string name="settings_reminder_open_system">Open System Settings</string>
+    <string name="settings_reminder_open_system_hint">Open System Settings and turn on notifications for TollCat</string>
+    <string name="settings_reminder_preview_a11y">Notification preview: %1$s. %2$s</string>
+    <string name="settings_inbox">Reading inbox</string>
+    <string name="settings_inbox_hint">Manage the inbox and ingest keys you use to report readings yourself</string>
+    <string name="settings_inbox_empty_title">No inbox yet</string>
+    <string name="settings_inbox_empty_body">One is created for you when you connect a service without a public billing API, such as Render, Expo, or Clerk.</string>
+    <string name="settings_inbox_create">Create inbox</string>
+    <string name="settings_inbox_manual_action">Enter usage in Services</string>
+    <string name="settings_inbox_fresh">New ingest key</string>
+    <string name="settings_inbox_fresh_hint">Shown only once. Your old keys keep working — revoke them after you’ve updated your scripts.</string>
+    <string name="settings_inbox_saved">I’ve saved it</string>
+    <string name="settings_inbox_keys">Ingest key</string>
+    <string name="settings_inbox_keys_empty">No ingest keys yet</string>
+    <string name="settings_inbox_keys_hint">One key per script. If one leaks, revoke just that one — your other scripts keep working.</string>
+    <string name="settings_inbox_untitled">Unnamed</string>
+    <string name="settings_inbox_never_used">Never used</string>
+    <string name="settings_inbox_mint">Issue a new key</string>
+    <string name="settings_inbox_new_script">New script</string>
+    <string name="settings_inbox_id_label">Inbox</string>
+    <string name="settings_inbox_copy_read">Copy</string>
+    <string name="settings_inbox_privacy">The inbox holds amounts only — never any of your service accounts or keys.</string>
+    <string name="settings_inbox_delete">Delete inbox</string>
+    <string name="settings_inbox_delete_title">Delete the reading inbox?</string>
+    <string name="settings_inbox_delete_body">The readings on the server are deleted too. History already stored on this device stays.</string>
+    <string name="settings_inbox_revoke">Revoke</string>
+    <string name="settings_inbox_revoke_title">Revoke this ingest key?</string>
+    <string name="settings_inbox_revoke_body">Scripts using this key will stop working immediately. Other keys are unaffected.</string>
+    <string name="settings_inbox_rate_limited">Too many requests. Wait a moment and try again.</string>
+    <string name="settings_inbox_gone">This inbox no longer exists on the server. Delete it — a new one is created next time you connect a service.</string>
+    <string name="settings_inbox_unreachable">Can’t reach the server. The services you already connected are unaffected.</string>
+    <string name="settings_transfer">Import and Export</string>
+    <string name="settings_transfer_hint">Move connections to another device, or restore from an encrypted file</string>
+    <string name="settings_transfer_export">Export</string>
+    <string name="settings_transfer_import">Import</string>
+    <string name="settings_transfer_export_body">This file is encrypted. AirDrop it, save it, or email it — security comes from the file, not the channel.</string>
+    <string name="settings_transfer_import_body">Import replaces connections, credentials, and manual subscriptions on this device. History is not included; the app refreshes after import.</string>
+    <string name="settings_transfer_code">One-time code</string>
+    <string name="settings_transfer_code_hint">The one-time code is shown only here. It disappears when you leave this page and is never copied to the clipboard.</string>
+    <string name="settings_transfer_share">Share File</string>
+    <string name="settings_transfer_pick">Choose File</string>
+    <string name="settings_transfer_imported">Imported. Refreshing bills…</string>
+    <string name="settings_transfer_invalid_file">This file can’t be opened</string>
+    <string name="settings_transfer_bad_code">That code isn’t the right format</string>
+    <string name="settings_transfer_expired">This file has expired. Export again from the old device.</string>
+    <string name="settings_transfer_failed">Import didn’t finish. Try again.</string>
+    <string name="settings_transfer_old_schema">This transfer package is from an older version. Update TollCat on the exporting device, then export again.</string>
+    <string name="settings_transfer_lifetime">Expires in</string>
+    <string name="settings_transfer_hours">%1$d hours</string>
+    <string name="settings_transfer_deadline">Import before %1$s. Expiry only shortens the window if you send it by mistake; it does not stop someone who already has the file from trying codes offline.</string>
+    <string name="settings_transfer_remaining">Wrong code. %1$d attempts left</string>
+    <string name="settings_transfer_locked">Too many tries. Wait %1$d seconds.</string>
+    <string name="settings_whats_new_empty_title">No releases yet</string>
+    <string name="settings_whats_new_empty_body">Once a version ships, it gets written down here.</string>
+    <string name="settings_danger">Erase data</string>
+    <string name="settings_feedback">Feedback</string>
+    <string name="settings_feedback_hint">Send feedback</string>
+    <string name="settings_feedback_send">Send</string>
+    <string name="settings_feedback_sent">Got it. Thank you.</string>
+    <string name="settings_feedback_rate_limited">That was a lot at once. Try again in ten minutes.</string>
+    <string name="settings_feedback_failed">Couldn’t send. Your text is still here — check your connection and try again.</string>
+    <string name="settings_feedback_category">Type</string>
+    <string name="settings_feedback_message_label">Feedback message</string>
+    <string name="settings_feedback_message_hint">Anything at all</string>
+    <string name="settings_feedback_remaining">Room for %1$d more</string>
+    <string name="settings_feedback_contact_header">Contact (optional)</string>
+    <string name="settings_feedback_contact_hint">Email or any handle</string>
+    <string name="settings_feedback_env_header">What Gets Sent</string>
+    <string name="settings_feedback_env_version">Version</string>
+    <string name="settings_feedback_env_os">OS</string>
+    <string name="settings_feedback_env_device">Device</string>
+    <string name="settings_feedback_env_locale">Language</string>
+    <string name="settings_feedback_include_providers">Include the list of connected services</string>
+    <string name="settings_feedback_providers_attached">Will include: %1$s</string>
+    <string name="settings_feedback_providers_hint">Service names only — no amounts, no credentials.</string>
+    <string name="settings_feedback_env_footer">No amounts, no API keys, no device identifiers. What’s listed here is everything.</string>
+    <string name="settings_feedback_cat_bug">Something’s broken</string>
+    <string name="settings_feedback_cat_idea">Something I want</string>
+    <string name="settings_feedback_cat_provider">A service to support</string>
+    <string name="settings_feedback_cat_other">Other</string>
+    <string name="settings_about_version">Version</string>
+    <string name="settings_about_license">License</string>
+    <string name="settings_about_source">Source Code</string>
+    <string name="settings_about_privacy">Privacy Policy</string>
+    <string name="settings_about_support">Support</string>
+    <string name="settings_about_footer">Service icons come from Simple Icons, used under the CC0 1.0 public-domain dedication.\n\nCredentials and bills stay on this device. They aren’t uploaded.</string>
+    <string name="settings_outbound_header">Outbound hosts</string>
+    <string name="settings_outbound_footer">The app only makes requests to these hosts. Credentials and billing data stay on this device. Tip notes, feedback, and anonymous page counts go to api.tollcat.app on this list.</string>
+    <string name="settings_other">Other</string>
+    <string name="settings_on">On</string>
+    <string name="settings_off">Off</string>
+    <string name="settings_list_separator">, </string>
+    <string-array name="settings_outbound_purposes">
+        <item>Cloudflare billing API</item>
+        <item>Cloudflare dashboard and billing pages</item>
+        <item>Cloudflare docs for finding an Account ID</item>
+        <item>Neon console and billing API</item>
+        <item>AWS Cost Explorer API</item>
+        <item>AWS console and billing pages</item>
+        <item>OpenAI billing API</item>
+        <item>OpenAI console and billing pages</item>
+        <item>Anthropic billing API</item>
+        <item>Anthropic console and billing pages</item>
+        <item>Vercel billing API</item>
+        <item>Vercel dashboard and billing pages</item>
+        <item>GitHub billing API</item>
+        <item>GitHub settings and billing pages</item>
+        <item>Fly.io dashboard and billing pages</item>
+        <item>OpenRouter console and billing API</item>
+        <item>DeepSeek billing API</item>
+        <item>DeepSeek console and billing pages</item>
+        <item>Moonshot (China) billing API</item>
+        <item>Moonshot (China) console and billing pages</item>
+        <item>Moonshot (Overseas) billing API</item>
+        <item>Moonshot (Overseas) console and billing pages</item>
+        <item>xAI billing API</item>
+        <item>xAI console and billing pages</item>
+        <item>Cursor dashboard and billing pages</item>
+        <item>DigitalOcean billing API</item>
+        <item>DigitalOcean console and billing pages</item>
+        <item>Twilio billing API</item>
+        <item>Twilio console and billing pages</item>
+        <item>PlanetScale billing API</item>
+        <item>PlanetScale console and billing pages</item>
+        <item>Upstash billing API</item>
+        <item>Upstash console and billing pages</item>
+        <item>ElevenLabs billing API</item>
+        <item>ElevenLabs console and billing pages</item>
+        <item>Railway billing API</item>
+        <item>Railway console and billing pages</item>
+        <item>Stripe billing API</item>
+        <item>Stripe dashboard and billing pages</item>
+        <item>Resend billing API</item>
+        <item>Resend dashboard and billing pages</item>
+        <item>PostHog billing API</item>
+        <item>PostHog EU billing API</item>
+        <item>PostHog dashboard and billing pages</item>
+        <item>Clerk dashboard and billing pages</item>
+        <item>Sentry usage API, console and billing pages</item>
+        <item>Vultr billing API</item>
+        <item>Vultr console and billing pages</item>
+        <item>Fastly billing API</item>
+        <item>Fastly console and billing pages</item>
+        <item>Exa billing API</item>
+        <item>Exa console and billing pages</item>
+        <item>MongoDB Atlas billing API, console and billing pages</item>
+        <item>Azure service principal token exchange</item>
+        <item>Azure Cost Management API</item>
+        <item>Azure console and billing pages</item>
+        <item>Polar billing API</item>
+        <item>Polar console and billing pages</item>
+        <item>Heroku billing API</item>
+        <item>Heroku console and billing pages</item>
+        <item>RevenueCat metrics API</item>
+        <item>RevenueCat console and billing pages</item>
+        <item>GitLab console and usage quota pages</item>
+        <item>GitLab Customers Portal billing</item>
+        <item>Qdrant Cloud billing API</item>
+        <item>Qdrant Cloud console and billing pages</item>
+        <item>Render console and billing pages</item>
+        <item>Expo console and billing pages</item>
+        <item>Mistral billing API</item>
+        <item>Mistral console and billing pages</item>
+        <item>Mistral Admin API key page</item>
+        <item>Fireworks billing API</item>
+        <item>Fireworks console and billing pages</item>
+        <item>fal.ai billing API</item>
+        <item>fal.ai console and billing pages</item>
+        <item>Hugging Face billing API, console and billing pages</item>
+        <item>Turso billing API</item>
+        <item>Turso console and billing pages</item>
+        <item>Turso API token docs</item>
+        <item>Baseten billing API</item>
+        <item>Baseten console and billing pages</item>
+        <item>Baseten API key docs</item>
+        <item>ClickHouse Cloud billing API</item>
+        <item>ClickHouse Cloud console and billing pages</item>
+        <item>ClickHouse Cloud API key docs</item>
+        <item>Linode billing API</item>
+        <item>Linode console and billing pages</item>
+        <item>RunPod billing API</item>
+        <item>RunPod console and billing pages</item>
+        <item>Deepgram billing API</item>
+        <item>Deepgram console and billing pages</item>
+        <item>Deepgram API key docs</item>
+        <item>Scaleway billing API</item>
+        <item>Scaleway console and billing pages</item>
+        <item>bunny.net billing API</item>
+        <item>bunny.net console and billing pages</item>
+        <item>bunny.net API key docs</item>
+        <item>Grafana Cloud billing API, console, and docs</item>
+        <item>Elastic Cloud billing API, console, and billing pages</item>
+        <item>Elastic Cloud API key docs</item>
+        <item>Datadog billing API (US1)</item>
+        <item>Datadog billing API (EU)</item>
+        <item>Datadog billing API (US3)</item>
+        <item>Datadog billing API (US5)</item>
+        <item>Datadog billing API (AP1)</item>
+        <item>Datadog billing API (AP2)</item>
+        <item>Datadog billing API (UK1)</item>
+        <item>Datadog console and billing pages</item>
+        <item>Novita billing API</item>
+        <item>Novita console and billing pages</item>
+        <item>Apify billing API</item>
+        <item>Apify console and billing pages</item>
+        <item>Tavily usage API</item>
+        <item>Tavily console and billing pages</item>
+        <item>Tavily API key docs</item>
+        <item>DeepInfra billing API</item>
+        <item>DeepInfra console and billing pages</item>
+        <item>DeepInfra API key docs</item>
+        <item>Vast.ai billing API</item>
+        <item>Vast.ai console and billing pages</item>
+        <item>Firecrawl usage API</item>
+        <item>Firecrawl console and billing pages</item>
+        <item>CockroachDB Cloud billing API, console, and billing pages</item>
+        <item>CockroachDB Cloud API key docs</item>
+        <item>Typesense Cloud billing API, console, and billing pages</item>
+        <item>Typesense Cloud API key docs</item>
+        <item>Target of the QR code on the share card</item>
+        <item>Tip messages, the reading inbox, feedback, anonymous page counts, and the setup catalog (never any provider credentials)</item>
+    </string-array>
+    <string name="settings_color_source">Color</string>
+    <string name="settings_color_dynamic">Match wallpaper</string>
+    <string name="settings_color_brand">TollCat Blue</string>
+</resources>

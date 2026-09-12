@@ -1,0 +1,35 @@
+{
+  "periods": [
+    {
+      "timestamp": "2026-08-01T00:00:00Z",
+      "revenue": 120000,
+      "net_revenue": 114600
+    },
+    {
+      "timestamp": "2026-08-07T00:00:00Z",
+      "revenue": 45000,
+      "net_revenue": 42750
+    },
+    {
+      "timestamp": "2026-08-15T00:00:00Z",
+      "revenue": 30000,
+      "net_revenue": 28500
+    }
+  ],
+  "totals": {
+    "revenue": 195000,
+    "net_revenue": 185850
+  },
+  "metrics": {
+    "revenue": {
+      "slug": "revenue",
+      "display_name": "Revenue",
+      "type": "currency"
+    },
+    "net_revenue": {
+      "slug": "net_revenue",
+      "display_name": "Net Revenue",
+      "type": "currency"
+    }
+  }
+}
