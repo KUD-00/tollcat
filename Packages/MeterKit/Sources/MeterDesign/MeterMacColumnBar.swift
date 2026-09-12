@@ -140,18 +140,18 @@ public extension View {
 
 #Preview("Light") {
     Color.meterGroupedBackground
-        .meterMacColumnBar(title: Text("August"), showBack: true) {
+        .meterMacColumnBar(title: Text("August"), showBack: true, actions: {
             Button("Refresh", systemImage: "arrow.clockwise") {}
             Button("Filter", systemImage: "line.3.horizontal.decrease") {}
-        }
+        })
         .preferredColorScheme(.light)
 }
 
 #Preview("Dark") {
     Color.meterGroupedBackground
-        .meterMacColumnBar(title: Text("August"), showBack: true) {
+        .meterMacColumnBar(title: Text("August"), showBack: true, actions: {
             Button("Refresh", systemImage: "arrow.clockwise") {}
             Button("Filter", systemImage: "line.3.horizontal.decrease") {}
-        }
+        })
         .preferredColorScheme(.dark)
 }

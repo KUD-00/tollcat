@@ -65,7 +65,7 @@ public struct InferenceSHBillingProvider: BillingProvider, Sendable {
             let stamp = bucket.date.flatMap { BillingDateParser.parse($0, calendar: calendar) }
                 ?? current.start
             let micros = (bucket.per_app ?? [:]).values.reduce(Decimal(0)) { partial, value in
-                partial + (value.value ?? 0)
+                partial + value.value
             }
             guard micros > 0 else { continue }
             let amount = micros / Self.microcentsPerUSD

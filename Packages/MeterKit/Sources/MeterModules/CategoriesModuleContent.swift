@@ -46,7 +46,7 @@ public struct CategorySlice: Identifiable, Equatable, Sendable {
 }
 
 public extension ProviderCategory {
-    public var title: LocalizedStringResource {
+    var title: LocalizedStringResource {
         switch self {
         case .aiInference: L("AI 推理")
         case .gpuCompute: L("GPU 算力")

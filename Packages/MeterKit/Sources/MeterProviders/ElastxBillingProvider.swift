@@ -117,7 +117,7 @@ public struct ElastxBillingProvider: BillingProvider, Sendable {
         secret: String,
         projectID: String?
     ) async throws -> Auth {
-        var identity: [String: Any] = [
+        let identity: [String: Any] = [
             "methods": ["application_credential"],
             "application_credential": [
                 "id": appID,
