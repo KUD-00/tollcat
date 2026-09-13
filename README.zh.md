@@ -30,9 +30,21 @@ SwiftUI，iOS 26+ / macOS 26+，iPhone、iPad 和 Mac。免费，可选打赏，
 
 **想看剩下的？** iPad、小组件、菜单栏，每一屏都摆在落地页上——要判断这个 App 是不是你要的，看那里最快：**[tollcat.app](https://tollcat.app)**。能读到哪些家的账单，列在**[能接哪些服务](https://tollcat.app/providers/)**。
 
-## 如何验证
+## 能读哪些家
 
-App Store 上的包会被 Apple 重新签名并加密，做不到和这份源码编出逐字节相同的副本。能核对的是：公开 CI 从 tag 编出 IPA 并附上签名的溯源证明，再用 Mach-O 的 `LC_UUID` 把那次构建和你手机上的 App 对上。步骤、命令、以及做不到的事，都在 [VERIFY.md](VERIFY.zh.md)。
+<p align="center">
+  <img src=".github/readme/wall-dark.png" alt="TollCat 能读到账单的那些服务的图标" width="100%">
+</p>
+
+220 多家服务的账单直接从各家 API 读进来。其中 14 家用真实账号对过账；其余的公开文档里有账单接口，应该能接，App 里每一家都标明了是哪一档。另有 12 家没有账单接口，改为你在自己电脑上算好数字，投进读数信箱。完整名单和每家要什么凭据：**[能接哪些服务](https://tollcat.app/providers/)**。
+
+## 钥匙放在哪
+
+- 凭据只写进这台设备的 Keychain，别处都没有。不进 iCloud，不随备份走，也不经过 TollCat 的任何服务器。
+- 每次刷新都由这台设备直连各家官方 API，中间没有任何东西经手。
+- 小组件根本发不了请求：它的 target 不链接 Providers 模块。
+- 这个项目唯一的服务器（打赏、反馈、接入目录）碰不到凭据：Providers 和 Tips 互不链接。
+- 想核对 App Store 上的包就是这份源码？Apple 会重新签名并加密，做不到逐字节相同。能核对的是：公开 CI 从 tag 编出 IPA 并附上签名的溯源证明，再用 Mach-O 的 `LC_UUID` 把那次构建和你手机上的 App 对上。步骤、命令、以及做不到的事，都在 [VERIFY.md](VERIFY.zh.md)。
 
 ## 仓库里有什么
 

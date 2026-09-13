@@ -30,9 +30,21 @@ SwiftUI, iOS 26+ and macOS 26+, iPhone, iPad, and Mac. Free, with optional tips.
 
 **Want to see the rest?** iPad, the widgets, the menu bar — every screen is on the landing page, and that's the fastest way to judge whether this is for you: **[tollcat.app](https://tollcat.app)**. Everything it can read a bill from is listed at **[Supported services](https://tollcat.app/providers/)**.
 
-## Verify what you install
+## What it can read
 
-The App Store binary is re-signed and encrypted by Apple, so it can't be reproduced byte-for-byte from this source. What can be checked: public CI builds the IPA from a tag and attaches signed provenance, and the Mach-O `LC_UUID` ties that build to the app on your phone. Steps, commands, and the honest limits are in [VERIFY.md](VERIFY.md).
+<p align="center">
+  <img src=".github/readme/wall-dark.png" alt="Logos of the services TollCat can read a bill from" width="100%">
+</p>
+
+220+ services have their bill read straight from the vendor's API. 14 of those are verified against a real account; the rest have a documented billing API and should work, and the app says which is which for every entry. 12 more have no billing API at all, so you post a reading from your own machine instead. The full list, with what each one needs: **[Supported services](https://tollcat.app/providers/)**.
+
+## Where your keys go
+
+- A credential is written to this device's Keychain, and nowhere else. Not iCloud, not a backup, not any TollCat server.
+- Every refresh goes from the device straight to the vendor's official API. Nothing sits in between.
+- The widget can't make a request at all: its target doesn't link the Providers module.
+- The one server this project runs (tips, feedback, the setup catalog) never sees a credential. Providers and Tips can't link each other.
+- Want to check that the App Store build is this source? Apple re-signs and encrypts it, so it can't be reproduced byte-for-byte. What can be checked: public CI builds the IPA from a tag with signed provenance, and the Mach-O `LC_UUID` ties that build to the app on your phone. Steps, commands, and the honest limits are in [VERIFY.md](VERIFY.md).
 
 ## What's in this repo
 

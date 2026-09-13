@@ -7,9 +7,13 @@
 # 和横幅、落地页、商店宣传图同一份机壳清单。MacBook 直接拿落地页已经嵌好机壳的那张
 # （site/src/assets/screenshots/macbook-window-<语言>-dark.png）。
 #
+# 截图行下面还有一面服务图标墙（wall-dark.png，三语共用一张）：落地页 marquee 那批格子
+# 重排成静态网格，见 scripts/render-readme-wall.py。
+#
 # 输出：.github/readme/shot-{dashboard,services,wizard,mac}-<语言>.png
-# 用法：bash scripts/render-readme-shots.sh          # 三语十二张
-#       ONLY=en bash scripts/render-readme-shots.sh  # 只出一种语言
+#       .github/readme/wall-dark.png
+# 用法：bash scripts/render-readme-shots.sh          # 三语十二张 + 墙
+#       ONLY=en bash scripts/render-readme-shots.sh  # 只出一种语言（墙照出）
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -43,3 +47,8 @@ for locale in "${LOCALES[@]}"; do
   cp "$mac" "$OUT/shot-mac-$locale.png"
   echo "wrote shot-{dashboard,services,wizard,mac}-$locale.png"
 done
+
+MARQUEE="$(mktemp -d)"
+trap 'rm -rf "$MARQUEE"' EXIT
+node "$ROOT/scripts/dump-marquee-svgs.cjs" "$MARQUEE" >/dev/null
+python3 "$ROOT/scripts/render-readme-wall.py" "$MARQUEE" "$OUT/wall-dark.png" --theme dark
