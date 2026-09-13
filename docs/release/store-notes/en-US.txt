@@ -1,12 +1,10 @@
-TollCat 1.1: says the month you’re looking at
+TollCat comes to the Mac
 
-· Pick a month, and the page talks about that month
-  Choose July or the last 3 months and every spot that used to say “this month” now names that period, the superlatives section included. Over a multi-month range the subscriptions card lists what was actually charged in those months, cancelled ones too.
-· The subscription amount now sits above the date
-  With subscriptions included, a line like “(Subscriptions $20)” appears under the big number so you can see how much of the total is subscriptions. Turn them off and the line goes away. No more “included” or “not included”.
-· Setup guides for 155 services, rewritten
-  Each step now points at the exact page where the key gets created, and calls out the traps along the way: which permission to tick, keys that are shown only once. The messages you see when a connection fails were made specific to each service too.
-· DigitalOcean, Stripe, Botpress and Neo4j Aura checked against real bills
-  These four move from “pending verification” to fully supported. Connect one and the number you see is the number on your bill.
-· Stricter redaction in feedback attachments
-  If you attach the test-connection response to a feedback report, every field ending in “token” is now blanked out. A few services spelled theirs in a way that slipped through before. Usage counts like total_tokens are untouched.
+· The Mac app is here
+  The same app as on iPhone, with the same setup guides and the same numbers. Your credentials still never leave the machine you typed them into.
+· Right there in the menu bar
+  The cat sits in the menu bar, and clicking it shows what this month has cost so far. Prefer the amount always on show? Settings has three styles to choose from.
+· Closing the window does not quit it
+  Close the window and it tucks itself into the menu bar instead of quitting. You can also have it start with the Mac, so the number is already waiting for you in the morning.
+· It updates itself
+  The copy you download from the site keeps an eye out for new versions on its own, so you never have to come back just to install one.

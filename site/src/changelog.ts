@@ -39,6 +39,89 @@ export const platformNames: Record<ChangelogPlatform, string> = {
 
 export const changelog: readonly ChangelogEntry[] = [
     {
+      "version": "1.2.0",
+      "platforms": [
+        "mac"
+      ],
+      "copy": {
+        "zh": {
+          "title": "TollCat 上 Mac 了",
+          "items": [
+            {
+              "id": "macFirstRelease",
+              "title": "Mac 版来了",
+              "body": "和 iPhone 上是同一个 App，同一份接入说明，同一套数字。凭据仍然只待在你输入它的那台机器上。"
+            },
+            {
+              "id": "macMenuBar",
+              "title": "菜单栏上就能看见",
+              "body": "猫蹲在菜单栏里，点开就是这个月到现在花了多少。想让金额一直露在外面也行，设置里三种样式随便挑。"
+            },
+            {
+              "id": "macStaysAround",
+              "title": "关掉窗口它还在",
+              "body": "窗口关了只是收进菜单栏，不退出。也可以设成开机就启动，早上打开电脑，数字已经在那儿了。"
+            },
+            {
+              "id": "macAutoUpdate",
+              "title": "自己更新",
+              "body": "从官网直接下载的这一版会自己留意有没有新版本，装的时候不用再跑一趟网站。"
+            }
+          ]
+        },
+        "en": {
+          "title": "TollCat comes to the Mac",
+          "items": [
+            {
+              "id": "macFirstRelease",
+              "title": "The Mac app is here",
+              "body": "The same app as on iPhone, with the same setup guides and the same numbers. Your credentials still never leave the machine you typed them into."
+            },
+            {
+              "id": "macMenuBar",
+              "title": "Right there in the menu bar",
+              "body": "The cat sits in the menu bar, and clicking it shows what this month has cost so far. Prefer the amount always on show? Settings has three styles to choose from."
+            },
+            {
+              "id": "macStaysAround",
+              "title": "Closing the window does not quit it",
+              "body": "Close the window and it tucks itself into the menu bar instead of quitting. You can also have it start with the Mac, so the number is already waiting for you in the morning."
+            },
+            {
+              "id": "macAutoUpdate",
+              "title": "It updates itself",
+              "body": "The copy you download from the site keeps an eye out for new versions on its own, so you never have to come back just to install one."
+            }
+          ]
+        },
+        "ja": {
+          "title": "TollCat が Mac にやってきました",
+          "items": [
+            {
+              "id": "macFirstRelease",
+              "title": "Mac 版ができました",
+              "body": "iPhone と同じアプリで、接続ガイドも数字も同じです。認証情報は入力したその Mac から出ません。"
+            },
+            {
+              "id": "macMenuBar",
+              "title": "メニューバーからすぐ",
+              "body": "猫がメニューバーに座っていて、クリックすると今月ここまでの金額が出ます。金額を出しっぱなしにもできます。設定にスタイルが三つあります。"
+            },
+            {
+              "id": "macStaysAround",
+              "title": "ウィンドウを閉じても残ります",
+              "body": "ウィンドウを閉じるとメニューバーに収まり、終了はしません。ログイン時に起動する設定にもできるので、朝には数字がもう出ています。"
+            },
+            {
+              "id": "macAutoUpdate",
+              "title": "自分で更新します",
+              "body": "サイトから直接ダウンロードした版は、新しいバージョンを自分で見つけます。入れ直すためにサイトへ戻る必要はありません。"
+            }
+          ]
+        }
+      }
+    },
+    {
       "version": "1.1.0",
       "platforms": [
         "ios"

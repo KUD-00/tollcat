@@ -33,6 +33,36 @@ public static class WhatsNewCatalog
     public static readonly IReadOnlyList<WhatsNewEntry> Entries = new List<WhatsNewEntry>
     {
         new WhatsNewEntry(
+            "1.2.0",
+            new[] { "mac" },
+            false,
+            "cat",
+            "normal",
+            new WhatsNewText("TollCat 上 Mac 了", "TollCat comes to the Mac", "TollCat が Mac にやってきました"),
+            new List<WhatsNewItem>
+            {
+                new WhatsNewItem(
+                    "macFirstRelease",
+                    null,
+                    new WhatsNewText("Mac 版来了", "The Mac app is here", "Mac 版ができました"),
+                    new WhatsNewText("和 iPhone 上是同一个 App，同一份接入说明，同一套数字。凭据仍然只待在你输入它的那台机器上。", "The same app as on iPhone, with the same setup guides and the same numbers. Your credentials still never leave the machine you typed them into.", "iPhone と同じアプリで、接続ガイドも数字も同じです。認証情報は入力したその Mac から出ません。")),
+                new WhatsNewItem(
+                    "macMenuBar",
+                    null,
+                    new WhatsNewText("菜单栏上就能看见", "Right there in the menu bar", "メニューバーからすぐ"),
+                    new WhatsNewText("猫蹲在菜单栏里，点开就是这个月到现在花了多少。想让金额一直露在外面也行，设置里三种样式随便挑。", "The cat sits in the menu bar, and clicking it shows what this month has cost so far. Prefer the amount always on show? Settings has three styles to choose from.", "猫がメニューバーに座っていて、クリックすると今月ここまでの金額が出ます。金額を出しっぱなしにもできます。設定にスタイルが三つあります。")),
+                new WhatsNewItem(
+                    "macStaysAround",
+                    null,
+                    new WhatsNewText("关掉窗口它还在", "Closing the window does not quit it", "ウィンドウを閉じても残ります"),
+                    new WhatsNewText("窗口关了只是收进菜单栏，不退出。也可以设成开机就启动，早上打开电脑，数字已经在那儿了。", "Close the window and it tucks itself into the menu bar instead of quitting. You can also have it start with the Mac, so the number is already waiting for you in the morning.", "ウィンドウを閉じるとメニューバーに収まり、終了はしません。ログイン時に起動する設定にもできるので、朝には数字がもう出ています。")),
+                new WhatsNewItem(
+                    "macAutoUpdate",
+                    null,
+                    new WhatsNewText("自己更新", "It updates itself", "自分で更新します"),
+                    new WhatsNewText("从官网直接下载的这一版会自己留意有没有新版本，装的时候不用再跑一趟网站。", "The copy you download from the site keeps an eye out for new versions on its own, so you never have to come back just to install one.", "サイトから直接ダウンロードした版は、新しいバージョンを自分で見つけます。入れ直すためにサイトへ戻る必要はありません。")),
+            }),
+        new WhatsNewEntry(
             "1.1.0",
             new[] { "ios" },
             true,

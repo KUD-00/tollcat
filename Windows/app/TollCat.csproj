@@ -20,7 +20,7 @@
     <AppxBundlePlatforms>x64|arm64</AppxBundlePlatforms>
     <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>ZHE CHENG QI</Authors>
     <Product>TollCat</Product>
     <AssemblyTitle>路费猫</AssemblyTitle>

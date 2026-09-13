@@ -14,6 +14,39 @@ import MeterDesign
 enum WhatsNewCatalog {
     static let entries: [WhatsNewEntry] = [
         WhatsNewEntry(
+            version: "1.2.0",
+            platforms: [.mac],
+            showsDrawer: false,
+            hero: .cat(.normal),
+            title: WhatsNewText(zh: "TollCat 上 Mac 了", en: "TollCat comes to the Mac", ja: "TollCat が Mac にやってきました"),
+            items: [
+                WhatsNewItem(
+                    id: "macFirstRelease",
+                    symbol: "laptopcomputer",
+                    title: WhatsNewText(zh: "Mac 版来了", en: "The Mac app is here", ja: "Mac 版ができました"),
+                    body: WhatsNewText(zh: "和 iPhone 上是同一个 App，同一份接入说明，同一套数字。凭据仍然只待在你输入它的那台机器上。", en: "The same app as on iPhone, with the same setup guides and the same numbers. Your credentials still never leave the machine you typed them into.", ja: "iPhone と同じアプリで、接続ガイドも数字も同じです。認証情報は入力したその Mac から出ません。")
+                ),
+                WhatsNewItem(
+                    id: "macMenuBar",
+                    symbol: "menubar.rectangle",
+                    title: WhatsNewText(zh: "菜单栏上就能看见", en: "Right there in the menu bar", ja: "メニューバーからすぐ"),
+                    body: WhatsNewText(zh: "猫蹲在菜单栏里，点开就是这个月到现在花了多少。想让金额一直露在外面也行，设置里三种样式随便挑。", en: "The cat sits in the menu bar, and clicking it shows what this month has cost so far. Prefer the amount always on show? Settings has three styles to choose from.", ja: "猫がメニューバーに座っていて、クリックすると今月ここまでの金額が出ます。金額を出しっぱなしにもできます。設定にスタイルが三つあります。")
+                ),
+                WhatsNewItem(
+                    id: "macStaysAround",
+                    symbol: "power",
+                    title: WhatsNewText(zh: "关掉窗口它还在", en: "Closing the window does not quit it", ja: "ウィンドウを閉じても残ります"),
+                    body: WhatsNewText(zh: "窗口关了只是收进菜单栏，不退出。也可以设成开机就启动，早上打开电脑，数字已经在那儿了。", en: "Close the window and it tucks itself into the menu bar instead of quitting. You can also have it start with the Mac, so the number is already waiting for you in the morning.", ja: "ウィンドウを閉じるとメニューバーに収まり、終了はしません。ログイン時に起動する設定にもできるので、朝には数字がもう出ています。")
+                ),
+                WhatsNewItem(
+                    id: "macAutoUpdate",
+                    symbol: "arrow.down.circle",
+                    title: WhatsNewText(zh: "自己更新", en: "It updates itself", ja: "自分で更新します"),
+                    body: WhatsNewText(zh: "从官网直接下载的这一版会自己留意有没有新版本，装的时候不用再跑一趟网站。", en: "The copy you download from the site keeps an eye out for new versions on its own, so you never have to come back just to install one.", ja: "サイトから直接ダウンロードした版は、新しいバージョンを自分で見つけます。入れ直すためにサイトへ戻る必要はありません。")
+                ),
+            ]
+        ),
+        WhatsNewEntry(
             version: "1.1.0",
             platforms: [.ios],
             showsDrawer: true,
