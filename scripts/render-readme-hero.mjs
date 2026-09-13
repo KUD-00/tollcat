@@ -41,15 +41,15 @@ const LOCALES = ["zh", "en", "ja"];
 const COPY = {
   zh: {
     lines: ["把各家云账单，", "装进口袋。"],
-    sub: "锁屏上就一个数字 · 凭据不出这台设备",
+    sub: "各家加成一个数 · 凭据不出这台设备",
   },
   en: {
     lines: ["Your cloud bills,", "in your pocket."],
-    sub: "One number on your Lock Screen · credentials never leave this device",
+    sub: "One total across every vendor · credentials never leave this device",
   },
   ja: {
     lines: ["クラウドの請求を、", "ポケットに。"],
-    sub: "ロック画面にひとつの数字 · 認証情報はこの端末から出ない",
+    sub: "全社をひとつの数字に · 認証情報はこの端末から出ない",
   },
 };
 

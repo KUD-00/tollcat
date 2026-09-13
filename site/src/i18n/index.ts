@@ -456,7 +456,7 @@ const zh: Copy = {
   },
   facts: {
     title: '它做什么',
-    lede: '账单 App，管你自己在付的那些云和 AI。把各家后台这个月的花费加在一起，总数放在锁屏、主屏幕小组件，以及 Mac 的菜单栏和桌面小组件上。',
+    lede: '账单 App，管你自己在付的那些云和 AI。把各家后台这个月的花费加在一起，给你一个总数，底下是各家的明细。这个数也能放到锁屏、主屏小组件和 Mac 菜单栏上。',
     items: [
       '凭据只写本机 Keychain，不进 iCloud，也不经过 TollCat 的服务器。',
       '只读：不关实例、不改配额、不远程推送。',
@@ -948,7 +948,7 @@ const en: Copy = {
   },
   facts: {
     title: 'What it is',
-    lede: 'A billing app for the cloud and AI services you pay for. It adds up what your backends have spent this month and puts the total on the Lock Screen, the Home Screen widget, and — on Mac — the menu bar and Desktop widgets.',
+    lede: 'A billing app for the cloud and AI services you pay for. It adds up what your backends have spent this month into one total, with the per-vendor breakdown underneath. That total can also sit on the Lock Screen, in a Home Screen widget, or in the Mac menu bar.',
     items: [
       'Credentials stay in on-device Keychain. Not iCloud. Not any TollCat server.',
       'Read-only: it does not shut down instances, change quotas, or send remote push.',
@@ -1441,7 +1441,7 @@ const ja: Copy = {
   },
   facts: {
     title: '何をするか',
-    lede: '自分で払っているクラウドと AI サービスの請求アプリ。各社バックエンドの今月の支出を足し合わせ、その合計をロック画面・ホーム画面のウィジェット、Mac ではメニューバーとデスクトップのウィジェットに置く。',
+    lede: '自分で払っているクラウドと AI サービスの請求アプリ。各社バックエンドの今月の支出を足し合わせて、ひとつの合計に。その下に各社の内訳が並ぶ。合計はロック画面やホーム画面のウィジェット、Mac のメニューバーにも置ける。',
     items: [
       '認証情報は端末の Keychain だけ。iCloud にも TollCat のサーバーにも入らない。',
       '読み取り専用。インスタンスを止めず、クォータを変えず、遠隔プッシュもしない。',

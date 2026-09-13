@@ -6,11 +6,29 @@
 
 [English](README.md) · 中文 · [日本語](README.ja.md)
 
-TollCat 是账单 App，管你自己在付的那些云和 AI 服务。它读出你这个月在各家花了多少，把总数放在你不必打开也能看见的地方：iPhone 的锁屏和主屏小组件，Mac 的菜单栏和桌面小组件。凭据只存本机 Keychain，不进 iCloud，也不随备份走；取账单由这台设备直连各家官方 API，中间没有任何服务器经手。
+TollCat 是账单 App，管你自己在付的那些云和 AI 服务。它把你这个月在各家花的钱加在一起，给你一个总数，底下是各家的明细。凭据只存本机 Keychain，不进 iCloud，也不随备份走；取账单由这台设备直连各家官方 API，中间没有任何服务器经手。这个总数也可以放到你顺手一瞥的地方：iPhone 的小组件，Mac 的菜单栏。
 
 SwiftUI，iOS 26+ / macOS 26+，iPhone、iPad 和 Mac。免费，可选打赏，MIT 许可。
 
-**想看看实际长什么样？** iPhone、iPad、Mac 的每一屏，加上小组件，都摆在落地页上——要判断这个 App 是不是你要的，看那里最快：**[tollcat.app](https://tollcat.app)**。能读到哪些家的账单，列在**[能接哪些服务](https://tollcat.app/providers/)**。
+<table>
+  <tr>
+    <td width="33%"><img src=".github/readme/shot-dashboard-zh.png" alt="仪表盘：这个月的总数、预计到月底的数，以及各家的明细" width="100%"></td>
+    <td width="33%"><img src=".github/readme/shot-services-zh.png" alt="服务列表：加进来的每一家，按计费方式分组" width="100%"></td>
+    <td width="33%"><img src=".github/readme/shot-wizard-zh.png" alt="接入向导：该开哪个只读权限，一步一步写着" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>一个总数，底下是各家明细</sub></td>
+    <td align="center"><sub>加进来的每一家，按计费方式分组</sub></td>
+    <td align="center"><sub>每家一份接入向导：只读权限，一步一步来</sub></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src=".github/readme/shot-mac-zh.png" alt="同一个仪表盘，在 Mac 上" width="100%">
+  <br><sub>同一个 App，在 Mac 上。iPad 也有。</sub>
+</p>
+
+**想看剩下的？** iPad、小组件、菜单栏，每一屏都摆在落地页上——要判断这个 App 是不是你要的，看那里最快：**[tollcat.app](https://tollcat.app)**。能读到哪些家的账单，列在**[能接哪些服务](https://tollcat.app/providers/)**。
 
 ## 如何验证
 

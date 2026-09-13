@@ -6,11 +6,29 @@
 
 English · [中文](README.zh.md) · [日本語](README.ja.md)
 
-TollCat is a billing app for the cloud and AI services you pay for. It reads what you've spent this month across all of them and puts the total where you can see it without opening the app: Lock Screen and Home Screen widgets on iPhone, the menu bar and Desktop widgets on Mac. Credentials stay in the on-device Keychain — never iCloud, never a backup — and the device talks directly to each vendor's official API, with no server in between.
+TollCat is a billing app for the cloud and AI services you pay for. It adds up what you've spent this month across all of them and gives you one total, with the per-vendor breakdown underneath. Credentials stay in the on-device Keychain — never iCloud, never a backup — and the device talks directly to each vendor's official API, with no server in between. The total also goes wherever you'd glance at it: iPhone widgets, the Mac menu bar.
 
 SwiftUI, iOS 26+ and macOS 26+, iPhone, iPad, and Mac. Free, with optional tips. MIT licensed.
 
-**Want to see what it actually looks like?** Every screen, on iPhone, iPad and Mac, plus the widgets, is on the landing page — that's the fastest way to judge whether this is for you: **[tollcat.app](https://tollcat.app)**. Everything it can read a bill from is listed at **[Supported services](https://tollcat.app/providers/)**.
+<table>
+  <tr>
+    <td width="33%"><img src=".github/readme/shot-dashboard-en.png" alt="Dashboard: this month's total, the projection, and the per-vendor breakdown" width="100%"></td>
+    <td width="33%"><img src=".github/readme/shot-services-en.png" alt="Services: every vendor you've added, grouped by how it bills" width="100%"></td>
+    <td width="33%"><img src=".github/readme/shot-wizard-en.png" alt="Setup guide: which read-only permission to grant, step by step" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>One total, with the breakdown underneath</sub></td>
+    <td align="center"><sub>Every service, grouped by how it bills</sub></td>
+    <td align="center"><sub>A setup guide per service: read-only, step by step</sub></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src=".github/readme/shot-mac-en.png" alt="The same dashboard on Mac" width="100%">
+  <br><sub>The same app on Mac. iPad too.</sub>
+</p>
+
+**Want to see the rest?** iPad, the widgets, the menu bar — every screen is on the landing page, and that's the fastest way to judge whether this is for you: **[tollcat.app](https://tollcat.app)**. Everything it can read a bill from is listed at **[Supported services](https://tollcat.app/providers/)**.
 
 ## Verify what you install
 

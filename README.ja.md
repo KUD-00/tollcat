@@ -6,11 +6,29 @@
 
 [English](README.md) · [中文](README.zh.md) · 日本語
 
-TollCat は、自分で払っているクラウドと AI サービスの請求アプリです。各社で今月いくら使ったかを読み取り、アプリを開かなくても見える場所へ置きます。iPhone ではロック画面とホーム画面のウィジェット、Mac ではメニューバーとデスクトップのウィジェットです。認証情報はこの端末の Keychain にだけ保存され、iCloud にもバックアップにも入りません。請求の取得は端末から各社の公式 API へ直接行い、間にサーバーはありません。
+TollCat は、自分で払っているクラウドと AI サービスの請求アプリです。各社で今月使った金額を足し合わせて、ひとつの合計にします。その下に各社の内訳が並びます。認証情報はこの端末の Keychain にだけ保存され、iCloud にもバックアップにも入りません。請求の取得は端末から各社の公式 API へ直接行い、間にサーバーはありません。合計は、ふと目をやる場所にも置けます。iPhone のウィジェットや、Mac のメニューバーです。
 
 SwiftUI、iOS 26+ / macOS 26+、iPhone、iPad、Mac。無料、任意のチップ、MIT ライセンスです。
 
-**実際どんな見た目か知りたいときは。** iPhone・iPad・Mac の各画面とウィジェットは、すべてランディングページに並べてあります。自分に合うかを判断するにはそこが一番早いです：**[tollcat.app](https://tollcat.app/ja/)**。どのサービスの請求を読めるかは**[対応サービス](https://tollcat.app/ja/providers/)**にあります。
+<table>
+  <tr>
+    <td width="33%"><img src=".github/readme/shot-dashboard-ja.png" alt="ダッシュボード：今月の合計、月末の見込み、各社の内訳" width="100%"></td>
+    <td width="33%"><img src=".github/readme/shot-services-ja.png" alt="サービス一覧：追加した各社を、課金方式ごとにまとめて表示" width="100%"></td>
+    <td width="33%"><img src=".github/readme/shot-wizard-ja.png" alt="セットアップガイド：どの読み取り専用権限を付けるか、手順つき" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>ひとつの合計と、その下に各社の内訳</sub></td>
+    <td align="center"><sub>追加した各社を、課金方式ごとに</sub></td>
+    <td align="center"><sub>サービスごとのセットアップガイド：読み取り専用、手順つき</sub></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src=".github/readme/shot-mac-ja.png" alt="同じダッシュボードを Mac で" width="100%">
+  <br><sub>同じアプリが Mac にも。iPad にも。</sub>
+</p>
+
+**残りの画面は。** iPad、ウィジェット、メニューバーまで、すべてランディングページに並べてあります。自分に合うかを判断するにはそこが一番早いです：**[tollcat.app](https://tollcat.app/ja/)**。どのサービスの請求を読めるかは**[対応サービス](https://tollcat.app/ja/providers/)**にあります。
 
 ## インストールしたものを検証する
 
