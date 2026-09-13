@@ -29,6 +29,16 @@ export type PlatformDialogCopy = {
   title: string;
   lede: string;
   slides: PlatformSlide[];
+  /**
+   * 直接下载那一颗。只有 Mac 有：iOS 走 App Store，安卓和 Windows 还没发。
+   * `note` 必须说清「拖进应用程序」——zip 解开就在「下载」里，在那儿直接双击
+   * 运行的话 macOS 会把它挪到一个随机只读路径（app translocation），
+   * Sparkle 之后就没法原地更新了。
+   */
+  download?: {
+    label: string;
+    note: string;
+  };
 };
 
 export function faqPlain(item: Faq, origin = siteConfig.url): string {
@@ -412,6 +422,10 @@ const zh: Copy = {
       mac: {
         title: 'Mac 版',
         lede: '原生 Mac 应用。菜单栏里会多出一只账单猫猫。',
+        download: {
+          label: '下载 Mac 版',
+          note: '下载后解压，把 TollCat 拖进「应用程序」。需要 macOS 26。',
+        },
         slides: [
           {
             title: '菜单栏',
@@ -904,6 +918,10 @@ const en: Copy = {
       mac: {
         title: 'Mac',
         lede: 'A native Mac app. A billing cat shows up in your menu bar.',
+        download: {
+          label: 'Download for Mac',
+          note: 'Unzip it, then drag TollCat into Applications. Needs macOS 26.',
+        },
         slides: [
           {
             title: 'Menu bar',
@@ -1397,6 +1415,10 @@ const ja: Copy = {
       mac: {
         title: 'Mac 版',
         lede: 'ネイティブの Mac アプリです。メニューバーに請求猫が一匹増えます。',
+        download: {
+          label: 'Mac 版をダウンロード',
+          note: '展開したら TollCat を「アプリケーション」に入れてください。macOS 26 が必要です。',
+        },
         slides: [
           {
             title: 'メニューバー',

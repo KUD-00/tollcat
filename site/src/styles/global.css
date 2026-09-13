@@ -1220,6 +1220,22 @@ html[data-theme="dark"] .device-photo {
   margin-bottom: 0.7rem;
 }
 
+/* Mac 直发版的下载。按钮和说明竖着排：说明那句是要照做的步骤（解压、拖进
+   「应用程序」），不是脚注——挤到按钮右边会在窄屏上先折行再被忽略。 */
+.platform-download {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.platform-download-note {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .story-platforms {
   display: none;
 }

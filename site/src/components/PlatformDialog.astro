@@ -104,6 +104,16 @@ function hrefFor(to: 'github' | undefined): string | undefined {
                 }
                 <h3>{slide.title}</h3>
                 {index === 0 && <p class="platform-lede">{copy.lede}</p>}
+                {
+                  index === 0 && copy.download && (
+                    <p class="platform-download">
+                      <a class="btn" href={siteConfig.macDownloadUrl} rel="noopener noreferrer">
+                        {copy.download.label}
+                      </a>
+                      <span class="platform-download-note">{copy.download.note}</span>
+                    </p>
+                  )
+                }
                 {slide.paragraphs.map((paragraph) => (
                   <p>{paragraph}</p>
                 ))}

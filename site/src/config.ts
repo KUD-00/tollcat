@@ -17,6 +17,14 @@ export const siteConfig = {
   appStoreUrl: 'https://apps.apple.com/app/tollcat/id6805479811' as string | null,
   /** 源码仓库，public。 */
   githubUrl: 'https://github.com/KUD-00/tollcat',
+  /**
+   * Mac 直发版。指向滚动 Release `mac-appcast` 上那个不带版本号的文件名——
+   * 每次 Mac 上车并 Publish 之后，`mac-appcast.yml` 会用新的包覆盖它。
+   *
+   * **不要指向 `releases/latest`**：四个端不是同一班车，只发 iOS 的那一班会
+   * 让 latest 变成一个没有 Mac 资产的 Release，这个链接当场 404。
+   */
+  macDownloadUrl: 'https://github.com/KUD-00/tollcat/releases/download/mac-appcast/TollCat-mac.zip',
   /** 反馈、目录、信箱。站点表单和 App 打同一个 origin。 */
   apiUrl: 'https://api.tollcat.app',
   /** iTunes 数字 ID，给 Smart App Banner 和 JSON-LD 用。 */
