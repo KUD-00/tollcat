@@ -4,9 +4,10 @@ import MeterCore
 /// CockroachDB Cloud 本周期草稿发票。
 ///
 /// 文档：`GET /api/v1/invoices`
-/// 认证：`Authorization: Bearer <secret key>`，角色 Billing Coordinator 或 Cluster Admin。
+/// 认证：`Authorization: Bearer <secret key>`，Organization 范围的 Billing Coordinator。
 ///
 /// 正在累计的那张是 `DRAFT`。`totals[].amount` 是该币种的金额，不是美分。
+/// 免费期间发票列表是空的，记用量 $0，不是没读到。
 public struct CockroachBillingProvider: BillingProvider, Sendable {
     public static var descriptor: ProviderDescriptor { ProviderCatalog.cockroach }
     public static let draftStatus = "DRAFT"
@@ -71,12 +72,14 @@ public struct CockroachBillingProvider: BillingProvider, Sendable {
             }
         }
         guard let invoice = Self.currentInvoice(invoices, now: now, calendar: calendar) else {
+            // 免费期间接口给 `{"invoices":[]}`。成功读到空列表就是本月 $0。
             return try Snapshot(
                 providerID: .cockroach,
                 kind: .usage,
                 fetchedAt: now,
                 periodStart: window.start,
                 periodEnd: window.endInclusive,
+                currentSpendUSD: .zero,
                 dailyUSD: daily.snapshotDaily
             ).convertedToUSD(using: currency, rates: rateSource.current)
         }

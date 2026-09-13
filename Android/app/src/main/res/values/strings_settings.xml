@@ -326,7 +326,6 @@
         <item>api.firecrawl.dev</item>
         <item>www.firecrawl.dev</item>
         <item>cockroachlabs.cloud</item>
-        <item>www.cockroachlabs.com</item>
         <item>cloud.typesense.org</item>
         <item>typesense.org</item>
         <item>tollcat.app</item>
@@ -456,7 +455,6 @@
         <item>Firecrawl 用量 API</item>
         <item>Firecrawl 控制台与账单页</item>
         <item>CockroachDB Cloud 账单 API、控制台与账单页</item>
-        <item>CockroachDB Cloud API 密钥文档</item>
         <item>Typesense Cloud 账单 API、控制台与账单页</item>
         <item>Typesense Cloud API 密钥文档</item>
         <item>分享卡片上二维码指向的地址</item>

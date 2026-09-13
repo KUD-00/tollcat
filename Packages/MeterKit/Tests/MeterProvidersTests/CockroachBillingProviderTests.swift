@@ -33,14 +33,15 @@ struct CockroachBillingProviderTests {
         #expect(request.value(forHTTPHeaderField: "Cc-Version") == CockroachBillingProvider.apiVersion)
     }
 
-    @Test("还没生成草稿时报没读到，不是 $0")
-    func missingDraftIsUnread() async throws {
+    @Test("免费期间空发票列表是本月 $0")
+    func emptyInvoicesAreZero() async throws {
         let client = LiveProviderHarness.stub([
             (CockroachBillingProvider.invoicesURL, LiveProviderHarness.json(["invoices": [] as [Any]])),
         ])
         let snapshot = try await provider(client).fetch(credential: credential)
-        #expect(snapshot.currentSpendUSD == nil)
+        #expect(snapshot.currentSpendUSD == .zero)
         #expect(snapshot.kind == .usage)
+        #expect(snapshot.hasBillableMetrics)
     }
 
     private var credential: Credential {

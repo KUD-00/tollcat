@@ -122,7 +122,7 @@ SwiftUI · iOS 26+ / macOS 26+ · 8 providers · 无后端
 | DeepInfra | `GET /payment/usage` 的 `total_cost` | API Key | 免费 | 可用 · 美分 |
 | Vast.ai | `GET /api/v0/users/current/` 的 `credit` | API Key | 免费 | 可用 · 预充值余额 |
 | Firecrawl | `GET /v2/team/credit-usage` 的 `remainingCredits` / `planCredits` | API Key | 免费 | 可用 · credits 额度占比，不报钱 |
-| CockroachDB Cloud | `GET /api/v1/invoices` 的草稿 `totals` | Secret Key（Billing Coordinator） | 免费 | 可用 · 本周期草稿发票 |
+| CockroachDB Cloud | `GET /api/v1/invoices` 的草稿 `totals` | Secret Key（Organization · Billing Coordinator） | 免费 | 可用 · 本周期草稿发票。免费期间空列表记 $0 |
 | Typesense Cloud | `GET /api/v1/invoices` 的 `amount_cents` | Management API Key | 免费 | **需先验证** · 按周出账 |
 | Aiven | `GET /v1/billing-group` 的 `estimated_balance_usd` | Personal token（`aivenv1`） | 免费 | 可用 · 各计费组税前预估合计 |
 | SiliconFlow | `GET /v1/user/info` 的 `totalBalance`（`api.siliconflow.cn`） | API Key | 免费 | 可用 · 国内站人民币，按目录汇率折美元 |
@@ -603,6 +603,7 @@ struct SetupPart {
 - **GitHub** — Fine-grained PAT（`github_pat_`）。Expiration 选 No expiration，Repository access 选 Public repositories，Account permissions 把 Plan 开成 Read-only。没有 Billing 这一项。用户级账单只覆盖 Actions 分钟和自购的 Copilot。
 - **Neon** — 组织 Settings → API keys，Key scope 选 Org-wide。没有只读选项，这把是组织级管理员权限。
 - **Vercel** — Account Tokens，SCOPE 选付账的那个团队，不要点进项目。没有只读权限。Hobby 没有发票，读数是 $0。
+- **CockroachDB Cloud** — Service Accounts 签发 secret key，Edit Roles：Scope Organization，Role Billing Coordinator。免费期间发票列表为空，读数是 $0。
 - **Fly.io** — GraphQL 没有本月花费。走读数信箱；Launch 档固定费走手动订阅。
 - **Google Cloud / Slack / Notion / Figma / Supabase / Linear / Pulumi Cloud** — 没有公开账单金额接口。走读数信箱；固定订阅走手动订阅。Google Cloud 没有一份可自助选的固定席位 SKU，只记用量。
 

@@ -14,7 +14,7 @@ extension ProviderCatalog {
         credentialSetupURL: URL(string: "https://railway.com/account/tokens")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
-        accessStatus: .pendingVerification,
+        accessStatus: .available,
         searchKeywords: ["railway.app", "deploy", "部署"]
     )
 

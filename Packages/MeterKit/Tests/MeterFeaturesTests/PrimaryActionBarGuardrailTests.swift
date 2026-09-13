@@ -36,6 +36,8 @@ struct PrimaryActionBarGuardrailTests {
         #expect(bar.contains("primaryActionMinHeight"))
         #expect(bar.contains("func meterInlineActionStyle()"))
         #expect(bar.contains("controlSize(.regular)"))
+        #expect(bar.contains("meterSheetCloseHosted, isVisible"))
+        #expect(!bar.contains("meterSheetCloseHosted, true"))
         #expect(fill.contains("controlSize(.large)"))
         #expect(fill.contains("Capsule()"))
         #expect(!fill.contains("RoundedRectangle"))

@@ -168,9 +168,9 @@
       "stepsFingerprint": "sha256:b8430a254cac8f4ce8141ddf1cb1e09ffb420c03888d6f2e66c444d87397d277"
     },
     "cockroach": {
-      "sourceURL": "https://www.cockroachlabs.com/docs/cockroachcloud/managing-access",
-      "verified": false,
-      "stepsFingerprint": "sha256:9a72c0385d0e7c135874f65c2f3b0e5a8aeb2e68dd42ebe7aee681e0c17fa7bf"
+      "sourceURL": "https://cockroachlabs.cloud/service-accounts",
+      "verified": true,
+      "stepsFingerprint": "sha256:bcbc362ad125aafd89b7a7eefb604f1fb91e0c89583913a7324752fd44154e69"
     },
     "coned": {
       "sourceURL": "https://www.coned.com/en/accounts-billing/share-energy-usage-data/become-a-third-party",

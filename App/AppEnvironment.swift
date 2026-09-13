@@ -75,6 +75,7 @@ final class AppEnvironment {
     }
 
     private static func makeUsageAnalytics() -> any UsageAnalyticsRecording {
+        // Debug 包走 NoOp，见 `FeatureLaunchArguments.stubUsageAnalytics`。
         if FeatureLaunchArguments.stubUsageAnalytics { return NoOpUsageAnalytics() }
         let short = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.1.0"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"

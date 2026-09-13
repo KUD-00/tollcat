@@ -2301,7 +2301,7 @@ export const catalogEntries: readonly CatalogEntry[] = [
     "key": "railway",
     "name": "Railway",
     "kind": "usage",
-    "status": "pendingVerification",
+    "status": "available",
     "inbox": false,
     "costsMoneyToRefresh": false,
     "supportsDailyGranularity": false,
@@ -8360,9 +8360,14 @@ export const catalogEntries: readonly CatalogEntry[] = [
     ],
     "steps": [
       {
-        "zh": "打开 CockroachDB Cloud 的 managing-access 文档，给服务账号 Billing Coordinator，再签发一把 secret key。",
-        "en": "Open CockroachDB Cloud’s managing-access docs, give the service account Billing Coordinator, then issue a secret key.",
-        "ja": "CockroachDB Cloud の managing-access のドキュメントを開き、サービスアカウントに Billing Coordinator を付けてから secret key を発行します。"
+        "zh": "打开 CockroachDB Cloud 的 Service Accounts，新建一个服务账号。创建后签发一把 secret key，立刻复制。",
+        "en": "Open Service Accounts in CockroachDB Cloud and create a service account. After creating it, issue a secret key and copy it right away.",
+        "ja": "CockroachDB Cloud の Service Accounts を開き、サービスアカウントを新規作成します。作成したら secret key を発行し、すぐにコピーします。"
+      },
+      {
+        "zh": "给这个账号 Edit Roles：Scope 选 Organization，Role 选 Billing Coordinator。",
+        "en": "Edit Roles for this account: set Scope to Organization and Role to Billing Coordinator.",
+        "ja": "このアカウントで Edit Roles：Scope は Organization、Role は Billing Coordinator にします。"
       }
     ],
     "troubleshooting": [
@@ -8386,9 +8391,9 @@ export const catalogEntries: readonly CatalogEntry[] = [
           "ja": "この認証情報では請求を読めません。"
         },
         "nextStep": {
-          "zh": "确认服务账号有 Billing Coordinator 或 Cluster Admin。",
-          "en": "Confirm the service account has Billing Coordinator or Cluster Admin.",
-          "ja": "サービスアカウントに Billing Coordinator または Cluster Admin があるか確認してください。"
+          "zh": "回 Service Accounts 给这个账号 Edit Roles：Scope 选 Organization，Role 选 Billing Coordinator。",
+          "en": "Go back to Service Accounts and Edit Roles for this account: Scope Organization, Role Billing Coordinator.",
+          "ja": "Service Accounts に戻り、このアカウントで Edit Roles：Scope は Organization、Role は Billing Coordinator にします。"
         },
         "httpStatus": 403
       }
@@ -8397,16 +8402,16 @@ export const catalogEntries: readonly CatalogEntry[] = [
     "notices": [],
     "guideURLs": [],
     "billingURL": "https://cockroachlabs.cloud",
-    "credentialSetupURL": "https://www.cockroachlabs.com/docs/cockroachcloud/managing-access",
+    "credentialSetupURL": "https://cockroachlabs.cloud/service-accounts",
     "summary": {
-      "zh": "托管数据库。按本周期草稿发票。",
-      "en": "A managed database. The draft invoice for this cycle.",
-      "ja": "マネージドデータベース。本周期の下書きインボイスです。"
+      "zh": "托管数据库。按本周期草稿发票。免费期间没有发票，读数是 $0。",
+      "en": "A managed database. The draft invoice for this cycle. During the free period there are no invoices, so the reading is $0.",
+      "ja": "マネージドデータベース。本周期の下書きインボイスです。無料期間はインボイスがなく、読み取りは $0 です。"
     },
     "verifyHint": {
-      "zh": "这个数字应该和 CockroachDB Cloud 本周期草稿发票合计一致。",
-      "en": "This number should match the draft invoice total for this cycle on CockroachDB Cloud.",
-      "ja": "この数字は CockroachDB Cloud の本周期下書きインボイス合計と一致するはずです。"
+      "zh": "这个数字应该和 CockroachDB Cloud 本周期草稿发票合计一致。免费期间没有发票，会显示 $0。",
+      "en": "This number should match the draft invoice total for this cycle on CockroachDB Cloud. During the free period there are no invoices, so it shows $0.",
+      "ja": "この数字は CockroachDB Cloud の本周期下書きインボイス合計と一致するはずです。無料期間はインボイスがなく、$0 と表示されます。"
     }
   },
   {

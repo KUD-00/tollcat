@@ -175,6 +175,7 @@
 		76EC39A33D2D7B1DEB5F69D4 /* TipRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6097DC6EAD9C800DD7FAEF50 /* TipRecordTests.swift */; };
 		775D4B161CC4D3D9B4B01FFB /* PeriodEndpointTimeZoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691A86476718D36E2F3F6E71 /* PeriodEndpointTimeZoneTests.swift */; };
 		77C8648134AD789A23BE197D /* ServicesEmptyStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA941DECB79492875C72D14 /* ServicesEmptyStateTests.swift */; };
+		77FAD9562C92327A1A8D1EAB /* UsageAnalyticsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F34D8E7A1CC445E6D4323A /* UsageAnalyticsLaunchTests.swift */; };
 		77FDAD27CCA92511173DCD1E /* InboxServiceRowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB3857A51C5CDBA3DE4FE31 /* InboxServiceRowTests.swift */; };
 		7830E72B65E3AE85709AC72A /* QoveryBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853EDB89EDBC814333951418 /* QoveryBillingProviderTests.swift */; };
 		7850EFC1E406696CD994FD20 /* StoreKitTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98BE617C198FA2D8B877340 /* StoreKitTest.framework */; };
@@ -633,6 +634,7 @@
 		A7AEA82C246FF0B7AD9378F1 /* DNSimpleBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNSimpleBillingProviderTests.swift; sourceTree = "<group>"; };
 		A98BE617C198FA2D8B877340 /* StoreKitTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKitTest.framework; path = System/Library/Frameworks/StoreKitTest.framework; sourceTree = SDKROOT; };
 		A9A0FF802BF8D062387CC777 /* IBMCloudBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBMCloudBillingProviderTests.swift; sourceTree = "<group>"; };
+		A9F34D8E7A1CC445E6D4323A /* UsageAnalyticsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageAnalyticsLaunchTests.swift; sourceTree = "<group>"; };
 		AB1CB4788C8B51E617386D6E /* TogetherBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherBillingProviderTests.swift; sourceTree = "<group>"; };
 		AB8A428470EC896A56BF1802 /* CloudflareBillingCycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudflareBillingCycleTests.swift; sourceTree = "<group>"; };
 		AC0A59D57CCF09155A17E315 /* NamecheapBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamecheapBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -985,6 +987,7 @@
 				BE5ACC5F51392A5DB4FD1BDE /* SpendBreakdownBuilderTests.swift */,
 				3B278F6996C6276E1AB1C5E2 /* SpendSublineBuilderTests.swift */,
 				A65C72A73AC9AE1E598A877A /* TipModelTests.swift */,
+				A9F34D8E7A1CC445E6D4323A /* UsageAnalyticsLaunchTests.swift */,
 				E7A63AB3FF2FD84E8711CC19 /* UsageGuideLaunchTests.swift */,
 				9AD89D93D91A21D2FF7236DB /* UsageRefreshOnActivateTests.swift */,
 				5E9364A8382D17716E3421CC /* UsageSetupPresentationTests.swift */,
@@ -1804,6 +1807,7 @@
 				8EA13FC387BBFAA49CEBFD9E /* UpstashBillingProviderTests.swift in Sources */,
 				807A855A6A08EB800AB929B0 /* UpsunBillingProviderTests.swift in Sources */,
 				EE8DB3BF7F087E34C980A70F /* UsageAnalyticsClientTests.swift in Sources */,
+				77FAD9562C92327A1A8D1EAB /* UsageAnalyticsLaunchTests.swift in Sources */,
 				612BE7C09233820F9905BBDE /* UsageEndpointTests.swift in Sources */,
 				ADD6584E965095CAB0B9A5D0 /* UsageGuideLaunchTests.swift in Sources */,
 				645B8AEBC236957893E2F7F2 /* UsageRefreshOnActivateTests.swift in Sources */,

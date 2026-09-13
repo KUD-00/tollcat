@@ -705,7 +705,7 @@ struct ProviderDetailView: View {
         isPresentingUsageSetup = true
     }
 
-    /// 结束之后这一页仍然有用（历史订阅、历史用量都在上面），所以不 dismiss。
+    /// 结束之后这一页仍然有用（历史订阅、历史用量都在上面），所以不离开。
     private func endProvider() {
         Task {
             try? await model.endProvider()
@@ -716,10 +716,21 @@ struct ProviderDetailView: View {
         Task {
             do {
                 try await model.deleteConnection()
-                dismiss()
+                leaveDetail()
             } catch {
                 return
             }
+        }
+    }
+
+    /// 手机从栈上 pop。宽壳详情是分栏 root，`dismiss` 没东西可关——选中由
+    /// `ServicesModel.reload` 清掉，详情列回到「选择一项服务」。
+    /// Mac 列内推进来的详情（历史服务、仪表盘）走手工栈。
+    private func leaveDetail() {
+        if let macColumnStack, macColumnStack.canPop {
+            macColumnStack.pop()
+        } else {
+            dismiss()
         }
     }
 }

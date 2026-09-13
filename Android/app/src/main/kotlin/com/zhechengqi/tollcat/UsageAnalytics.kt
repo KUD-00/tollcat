@@ -3,6 +3,7 @@ package com.zhechengqi.tollcat
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import com.zhechengqi.tollcat.developer.isDebuggable
 import com.zhechengqi.tollcat.settings.appVersionCaption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter
  * 匿名页面计数。连续停在同一页不计第二次。失败丢掉这一批，宁可少计。
  *
  * 不带账号、广告标识、设备指纹、账单、凭据、厂商名。
+ * debuggable 包不发：开发点来点去会把生产表打脏。
  */
 object UsageAnalytics {
     private const val PREFS = "usage_analytics"
@@ -33,6 +35,7 @@ object UsageAnalytics {
     @Volatile private var impl: Impl? = null
 
     fun start(context: Context) {
+        if (isDebuggable(context)) return
         if (impl != null) return
         impl = Impl(context.applicationContext)
     }

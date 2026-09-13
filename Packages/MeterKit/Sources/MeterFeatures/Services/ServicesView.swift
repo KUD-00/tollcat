@@ -92,7 +92,9 @@ struct ServicesView: View {
             }
         }
         .onChange(of: model.selectedProviderID) { old, new in
-            guard usesPadChrome, let new, old != new else { return }
+            // 换成另一家、或清空后变 nil，都要把列内栈卸掉。以前 `let new`
+            // 把 nil 挡掉了，清空之后手工栈还压着刚删的那一页。
+            guard usesPadChrome, old != new else { return }
             model.setupPath.removeAll()
             macDetailStack.popToRoot()
         }

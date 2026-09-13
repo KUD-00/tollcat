@@ -51,9 +51,14 @@ public enum FeatureLaunchArguments {
         arguments.contains("-stub-inbox")
     }
 
-    /// 验收用：匿名页面计数不打真 Worker。
+    /// Debug 构建一律不发匿名页面计数：本机点来点去会把生产表打脏。
+    /// 截图脚本仍传 `-stub-usage-analytics`；Release 里 `arguments` 本来就是空的。
     public static var stubUsageAnalytics: Bool {
-        arguments.contains("-stub-usage-analytics")
+        #if DEBUG
+        true
+        #else
+        false
+        #endif
     }
 
     /// 验收用：每次刷新给金额加一笔固定增量，好看出「刷新真的发生了」。

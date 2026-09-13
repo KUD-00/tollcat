@@ -137,7 +137,6 @@ public enum OutboundHosts: Sendable {
         OutboundHost(host: "api.firecrawl.dev", purpose: L("Firecrawl 用量 API")),
         OutboundHost(host: "www.firecrawl.dev", purpose: L("Firecrawl 控制台与账单页")),
         OutboundHost(host: "cockroachlabs.cloud", purpose: L("CockroachDB Cloud 账单 API、控制台与账单页")),
-        OutboundHost(host: "www.cockroachlabs.com", purpose: L("CockroachDB Cloud API 密钥文档")),
         OutboundHost(host: "cloud.typesense.org", purpose: L("Typesense Cloud 账单 API、控制台与账单页")),
         OutboundHost(host: "typesense.org", purpose: L("Typesense Cloud API 密钥文档")),
         OutboundHost(host: "api.aiven.io", purpose: L("Aiven 账单 API")),

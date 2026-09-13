@@ -198,7 +198,7 @@ extension ProviderCatalog {
         tierReason: "独立分布式 SQL 的企业级代表，融资估值高但近年无新一轮、排名偏后。",
         colorKey: "cockroach",
         billingURL: URL(string: "https://cockroachlabs.cloud")!,
-        credentialSetupURL: URL(string: "https://www.cockroachlabs.com/docs/cockroachcloud/managing-access")!,
+        credentialSetupURL: URL(string: "https://cockroachlabs.cloud/service-accounts")!,
         costsMoneyToRefresh: false,
         supportsDailyGranularity: false,
         historyLookbackMonths: 12,
