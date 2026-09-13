@@ -847,6 +847,7 @@ jobs:
           path: artifacts-mac-appstore
 
       - name: Download Windows artifacts
+        if: ${{ needs.windows.result == 'success' }}
         uses: actions/download-artifact@v4
         with:
           name: windows-release
@@ -899,8 +900,10 @@ jobs:
               echo "**Android**: \`TollCat.aab\` is signed with the upload key; upload it to the Play Console internal track by hand for now."
               echo
             fi
-            echo "**Windows**: MSIX packaging is gated on P0 (Swift-on-Windows). This release ships the \`.appinstaller\` stub only. See \`Windows/README.md\`."
-            echo
+            if [[ -d artifacts-windows ]]; then
+              echo "**Windows**: MSIX packaging is gated on P0 (Swift-on-Windows). This release ships the \`.appinstaller\` stub only. See \`Windows/README.md\`."
+              echo
+            fi
             echo "\`\`\`"
             [[ -d artifacts ]] && { cat artifacts/build-info.txt; echo; cat artifacts/TollCat.ipa.sha256; echo; }
             [[ -d artifacts-mac ]] && { cat artifacts-mac/build-info-mac.txt; echo; cat artifacts-mac/*.sha256; echo; }
@@ -920,7 +923,12 @@ jobs:
           if [[ -d artifacts-android ]]; then
             assets+=(artifacts-android/TollCat.aab artifacts-android/TollCat.aab.sha256 artifacts-android/build-info-android.txt)
           fi
-          assets+=(artifacts-windows/TollCat.appinstaller artifacts-windows/WINDOWS-P0.txt artifacts-windows/build-info-windows.txt)
+          # Windows only rides when ticked, so these are usually absent; naming a
+          # missing file here fails `gh release create` and the train ends with
+          # no Release at all, which is how v1.2.0 lost its first draft.
+          if [[ -d artifacts-windows ]]; then
+            assets+=(artifacts-windows/TollCat.appinstaller artifacts-windows/WINDOWS-P0.txt artifacts-windows/build-info-windows.txt)
+          fi
           gh release create "${GITHUB_REF_NAME}" \
             --repo "${GITHUB_REPOSITORY}" \
             --title "${GITHUB_REF_NAME}" \
