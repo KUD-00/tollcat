@@ -303,6 +303,41 @@ jobs:
           security find-identity -v -p codesigning "$keychain" | grep -F "Developer ID Application" \
             || { echo "no Developer ID Application identity in the imported p12" >&2; exit 1; }
 
+      # Developer ID provisioning profiles are NOT cloud-managed. Automatic
+      # signing asks App Store Connect to mint one and gets "Cloud signing
+      # permission error" no matter which API key it holds — that is what broke
+      # the first two v1.1.0 trains. The two profiles are created once against
+      # the Developer ID Application certificate and carried here in secrets.
+      #
+      # They are also not optional: the app groups and keychain groups in
+      # Mac/*.entitlements only take effect when a profile is embedded. Without
+      # one, secd ignores them and every Keychain call returns -34018, so the
+      # app ships unable to store a single credential.
+      - name: Install Developer ID provisioning profiles
+        env:
+          MAC_DIRECT_PROFILE_BASE64: ${{ secrets.MAC_DIRECT_PROFILE_BASE64 }}
+          MAC_DIRECT_WIDGET_PROFILE_BASE64: ${{ secrets.MAC_DIRECT_WIDGET_PROFILE_BASE64 }}
+        run: |
+          set -euo pipefail
+          dir="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
+          legacy="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$dir" "$legacy"
+          install_profile() {
+            local label="$1" blob="$2"
+            [[ -n "$blob" ]] || { echo "missing provisioning profile secret for $label" >&2; exit 1; }
+            local tmp="$RUNNER_TEMP/$label.provisionprofile"
+            echo "$blob" | base64 --decode > "$tmp"
+            local uuid name
+            uuid="$(security cms -D -i "$tmp" | plutil -extract UUID raw -)"
+            name="$(security cms -D -i "$tmp" | plutil -extract Name raw -)"
+            cp "$tmp" "$dir/$uuid.provisionprofile"
+            cp "$tmp" "$legacy/$uuid.provisionprofile"
+            rm -f "$tmp"
+            echo "installed $label: $name ($uuid)"
+          }
+          install_profile app "$MAC_DIRECT_PROFILE_BASE64"
+          install_profile widget "$MAC_DIRECT_WIDGET_PROFILE_BASE64"
+
       - name: Write App Store Connect API key
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
@@ -364,20 +399,17 @@ jobs:
             -allowProvisioningUpdates \
             CURRENT_PROJECT_VERSION="$((GITHUB_RUN_NUMBER + 100000))"
 
+      # No API key and no -allowProvisioningUpdates here on purpose: both are
+      # what send xcodebuild down the cloud-signing path that Developer ID does
+      # not support. Everything this step needs is already on the runner — the
+      # certificate in the keychain, the two profiles installed above.
       - name: Export Developer ID app
-        env:
-          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
-          ISSUER_ID: ${{ secrets.ISSUER_ID }}
         run: |
           set -euo pipefail
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportPath "$EXPORT_PATH" \
-            -exportOptionsPlist scripts/ExportOptions-mac.plist \
-            -authenticationKeyPath "$ASC_KEY_PATH" \
-            -authenticationKeyID "$APP_STORE_CONNECT_KEY_ID" \
-            -authenticationKeyIssuerID "$ISSUER_ID" \
-            -allowProvisioningUpdates
+            -exportOptionsPlist scripts/ExportOptions-mac.plist
 
       - name: Notarize, staple, sign for Sparkle, write appcast
         env:
@@ -415,6 +447,8 @@ jobs:
           rm -f Config/Signing.local.xcconfig
           rm -f "$HOME/.appstoreconnect/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
           rm -f "${SPARKLE_PRIVATE_KEY_FILE:-}"
+          rm -rf "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles" \
+                 "$HOME/Library/MobileDevice/Provisioning Profiles"
           if [[ -n "${SIGNING_KEYCHAIN:-}" ]]; then
             security delete-keychain "$SIGNING_KEYCHAIN" || true
           fi

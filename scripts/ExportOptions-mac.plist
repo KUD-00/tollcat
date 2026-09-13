@@ -8,8 +8,25 @@
 	<string>developer-id</string>
 	<key>destination</key>
 	<string>export</string>
+	<!-- 手动签名，不是自动。Developer ID 的描述文件**不能云托管**：自动签名会让
+	     xcodebuild 去 App Store Connect 现要一份，每次都回 “Cloud signing permission
+	     error”，换哪把 API key 都一样。两份描述文件在开发者后台一次性建好，由
+	     release.yml 的「Install Developer ID provisioning profiles」装进 runner。
+	     也不能退回到无描述文件签名：Mac/*.entitlements 里的 app-groups 和
+	     keychain-access-groups 只有嵌了描述文件才算数，否则 secd 直接忽略，
+	     所有 Keychain 调用回 -34018（凭据存不进去，等于 App 不能用）。 -->
 	<key>signingStyle</key>
-	<string>automatic</string>
+	<string>manual</string>
+	<key>signingCertificate</key>
+	<string>Developer ID Application</string>
+	<!-- 键是 bundle id，值是描述文件的 Name（不是 UUID，换发后名字不变）。 -->
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.zhechengqi.tollcat</key>
+		<string>TollCat Mac Direct</string>
+		<key>com.zhechengqi.tollcat.widget</key>
+		<string>TollCat Mac Widget Direct</string>
+	</dict>
 	<key>stripSwiftSymbols</key>
 	<true/>
 </dict>
