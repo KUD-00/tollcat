@@ -385,7 +385,17 @@ struct ShareCardTests {
         )
         try await model.seedDemoData()
         // 折叠在后台排（见 `DashboardModel.loadFromPersistence` 结尾那个 Task）。
-        await model.syncLedger()
+        //
+        // 一趟 `syncLedger()` 不够：它和那个后台 Task 是两路并发的折叠，
+        // `LedgerSync.sync` 发现期间库又变过（`storeRevision` 动了）就回 nil，
+        // 于是这一趟什么都不换，账本还是空的——构成没有段，卡上没有环。
+        // 本机快，后台那趟一般先跑完；CI 的机器忙，就翻出来了。
+        // 等到账本真有行为止，而不是赌一次调用的时序。
+        for _ in 0..<100 where model.ledger.latest.isEmpty {
+            try await Task.sleep(for: .milliseconds(20))
+            await model.syncLedger()
+        }
+        #expect(!model.ledger.latest.isEmpty, "演示种子折完之前不要往下断言")
         return model
     }
 }

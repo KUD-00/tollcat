@@ -51,6 +51,11 @@ run_gate \
   python3 scripts/check-source-invariants.py
 
 run_gate \
+  "xcstrings normalized" \
+  "String Catalog 不是规范写法。Xcode 每次构建都会回写 .xcstrings——重排键、给没抽到的键盖 stale——那是构建副产物，混进提交只会让人在上千行里找哪几行是真的。修法：python3 scripts/normalize-xcstrings.py。想让它连 git status 都不出现，按 .gitattributes 里那行配一次 clean filter。" \
+  python3 scripts/normalize-xcstrings.py --check
+
+run_gate \
   "copy terms" \
   "对外文案里出现了 BRAND.md 词表废弃的词：日文漏进中文词或旧术语（資格情報/読数/受信箱/送信キー…），中文黑话外泄（取数/落盘/利用指南），或英文散文用了直引号。修法：按 check-copy-terms.py 打出的位置改词，词表本身要变先改 BRAND.md。" \
   python3 scripts/check-copy-terms.py

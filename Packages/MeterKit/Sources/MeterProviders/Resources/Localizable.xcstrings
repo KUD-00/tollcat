@@ -227,6 +227,86 @@
         }
       }
     },
+    "AI/ML API 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI/ML API console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI/ML API コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "AI/ML API 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI/ML API billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI/ML API 請求 API"
+          }
+        }
+      }
+    },
+    "AWS Cost Explorer API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS Cost Explorer API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS Cost Explorer API"
+          }
+        }
+      }
+    },
+    "AWS 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "Active24 API Token 管理" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active24 API token management"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active24 の API Token 管理"
+          }
+        }
+      }
+    },
     "Active24 控制台与文档" : {
       "localizations" : {
         "en" : {
@@ -271,38 +351,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Admin コンソールと請求ページ"
-          }
-        }
-      }
-    },
-    "AI/ML API 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI/ML API console and billing pages"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI/ML API コンソール / 請求ページ"
-          }
-        }
-      }
-    },
-    "AI/ML API 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI/ML API billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI/ML API 請求 API"
           }
         }
       }
@@ -721,6 +769,22 @@
         }
       }
     },
+    "Armada Delivery 商家控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Armada Delivery business app"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Armada Delivery ビジネスアプリ"
+          }
+        }
+      }
+    },
     "Armada 发票 API" : {
       "localizations" : {
         "en" : {
@@ -783,38 +847,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Armada 文档"
-          }
-        }
-      }
-    },
-    "AWS Cost Explorer API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AWS Cost Explorer API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AWS Cost Explorer API"
-          }
-        }
-      }
-    },
-    "AWS 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AWS console and billing pages"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AWS コンソール / 請求ページ"
           }
         }
       }
@@ -979,22 +1011,6 @@
         }
       }
     },
-    "Binarylane 控制台与文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Binarylane console and docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Binarylane コンソールとドキュメント"
-          }
-        }
-      }
-    },
     "BinaryLane 账单 API" : {
       "localizations" : {
         "en" : {
@@ -1007,6 +1023,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BinaryLane 請求 API"
+          }
+        }
+      }
+    },
+    "Binarylane 控制台与文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binarylane console and docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binarylane コンソールとドキュメント"
           }
         }
       }
@@ -1147,50 +1179,98 @@
         }
       }
     },
-    "bunny.net API Key 文档" : {
+    "CM.com API 文档" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bunny.net API key docs"
+            "value" : "CM.com API docs"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bunny.net API キーのドキュメント"
+            "value" : "CM.com API ドキュメント"
           }
         }
       }
     },
-    "bunny.net 控制台与账单页" : {
+    "CM.com 交易账单 API" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bunny.net console and billing pages"
+            "value" : "CM.com 交易Billing API"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bunny.net コンソール / 請求ページ"
+            "value" : "CM.com 交易請求 API"
           }
         }
       }
     },
-    "bunny.net 账单 API" : {
+    "CUDO Compute Billing 文档" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bunny.net billing API"
+            "value" : "CUDO Compute Billing Docs"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bunny.net 請求 API"
+            "value" : "CUDO Compute Billing ドキュメント"
+          }
+        }
+      }
+    },
+    "CUDO Compute 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute Console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute コンソール"
+          }
+        }
+      }
+    },
+    "CUDO Compute 控制台与 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute console and API keys"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute コンソールと API Key"
+          }
+        }
+      }
+    },
+    "CUDO Compute 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUDO Compute 請求 API"
           }
         }
       }
@@ -1627,120 +1707,6 @@
         }
       }
     },
-    "Cloudflare 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudflare dashboard and billing pages"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudflare ダッシュボード / 請求ページ"
-          }
-        }
-      }
-    },
-    "Cloudflare 查找 Account ID 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudflare docs for finding an Account ID"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudflare の Account ID の探し方ドキュメント"
-          }
-        }
-      }
-    },
-    "Cloudflare 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudflare billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudflare 請求 API"
-          }
-        }
-      }
-    },
-    "Cloudheed 官网" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed website"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed サイト"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed 官网"
-          }
-        }
-      }
-    },
-    "Cloudheed 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed ドキュメント"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed 文档"
-          }
-        }
-      }
-    },
-    "Cloudheed 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed 請求 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudheed 账单 API"
-          }
-        }
-      }
-    },
     "CloudSigma CRK 账单 API" : {
       "localizations" : {
         "en" : {
@@ -2071,6 +2037,120 @@
         }
       }
     },
+    "Cloudflare 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudflare dashboard and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudflare ダッシュボード / 請求ページ"
+          }
+        }
+      }
+    },
+    "Cloudflare 查找 Account ID 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudflare docs for finding an Account ID"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudflare の Account ID の探し方ドキュメント"
+          }
+        }
+      }
+    },
+    "Cloudflare 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudflare billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudflare 請求 API"
+          }
+        }
+      }
+    },
+    "Cloudheed 官网" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed website"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed サイト"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed 官网"
+          }
+        }
+      }
+    },
+    "Cloudheed 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed ドキュメント"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed 文档"
+          }
+        }
+      }
+    },
+    "Cloudheed 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed 請求 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cloudheed 账单 API"
+          }
+        }
+      }
+    },
     "Cm 控制台与文档" : {
       "localizations" : {
         "en" : {
@@ -2083,38 +2163,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cm コンソールとドキュメント"
-          }
-        }
-      }
-    },
-    "CM.com API 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CM.com API docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CM.com API ドキュメント"
-          }
-        }
-      }
-    },
-    "CM.com 交易账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CM.com 交易Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CM.com 交易請求 API"
           }
         }
       }
@@ -2287,6 +2335,22 @@
         }
       }
     },
+    "ConoHa 签发 API 用户文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ConoHa API user docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ConoHa API ユーザーのドキュメント"
+          }
+        }
+      }
+    },
     "Console 控制台与账单页" : {
       "localizations" : {
         "en" : {
@@ -2319,54 +2383,6 @@
         }
       }
     },
-    "CUDO Compute Billing 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute Billing Docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute Billing ドキュメント"
-          }
-        }
-      }
-    },
-    "CUDO Compute 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute Console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute コンソール"
-          }
-        }
-      }
-    },
-    "CUDO Compute 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute 請求 API"
-          }
-        }
-      }
-    },
     "Cursor 控制台与账单页" : {
       "localizations" : {
         "en" : {
@@ -2395,6 +2411,162 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Customer コンソールと請求ページ"
+          }
+        }
+      }
+    },
+    "DNScale 官网" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNScale Website"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNScale 公式サイト"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNScale 官网"
+          }
+        }
+      }
+    },
+    "DNScale 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNScale Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNScale 請求 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNScale 账单 API"
+          }
+        }
+      }
+    },
+    "DNSimple Access Token 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Access Token docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Access Token ドキュメント"
+          }
+        }
+      }
+    },
+    "DNSimple Billing Charges 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Billing Charges docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Billing Charges ドキュメント"
+          }
+        }
+      }
+    },
+    "DNSimple 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple コンソール"
+          }
+        }
+      }
+    },
+    "DNSimple 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNSimple 請求 API"
+          }
+        }
+      }
+    },
+    "DataPacket GraphQL 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket GraphQL Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket GraphQL 請求 API"
+          }
+        }
+      }
+    },
+    "DataPacket 客户面板与 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket client panel and API keys"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket クライアントパネルと API Key"
+          }
+        }
+      }
+    },
+    "DataPacket 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket Console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DataPacket コンソール"
           }
         }
       }
@@ -2527,38 +2699,6 @@
         }
       }
     },
-    "DataPacket GraphQL 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DataPacket GraphQL Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DataPacket GraphQL 請求 API"
-          }
-        }
-      }
-    },
-    "DataPacket 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DataPacket Console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DataPacket コンソール"
-          }
-        }
-      }
-    },
     "Deel API 文档" : {
       "localizations" : {
         "en" : {
@@ -2603,54 +2743,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deel コンソール"
-          }
-        }
-      }
-    },
-    "Deepgram API Key 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deepgram API key docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deepgram API キーのドキュメント"
-          }
-        }
-      }
-    },
-    "Deepgram 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deepgram console and billing pages"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deepgram コンソール / 請求ページ"
-          }
-        }
-      }
-    },
-    "Deepgram 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deepgram billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deepgram 請求 API"
           }
         }
       }
@@ -2731,6 +2823,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "DeepSeek 請求 API"
+          }
+        }
+      }
+    },
+    "Deepgram API Key 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deepgram API key docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deepgram API キーのドキュメント"
+          }
+        }
+      }
+    },
+    "Deepgram 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deepgram console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deepgram コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "Deepgram 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deepgram billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deepgram 請求 API"
           }
         }
       }
@@ -2837,6 +2977,22 @@
         }
       }
     },
+    "Dilmune Portal 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilmune Portal API Key page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilmune Portal の API Key 発行"
+          }
+        }
+      }
+    },
     "Dilmune 官网" : {
       "localizations" : {
         "en" : {
@@ -2893,98 +3049,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dm コンソールとドキュメント"
-          }
-        }
-      }
-    },
-    "DNScale 官网" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNScale Website"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNScale 公式サイト"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNScale 官网"
-          }
-        }
-      }
-    },
-    "DNScale 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNScale Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNScale 請求 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNScale 账单 API"
-          }
-        }
-      }
-    },
-    "DNSimple Billing Charges 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple Billing Charges docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple Billing Charges ドキュメント"
-          }
-        }
-      }
-    },
-    "DNSimple 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple コンソール"
-          }
-        }
-      }
-    },
-    "DNSimple 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple 請求 API"
           }
         }
       }
@@ -3109,22 +3173,6 @@
         }
       }
     },
-    "Dynatrace Account SSO OAuth" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dynatrace Account SSO OAuth"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dynatrace Account SSO OAuth"
-          }
-        }
-      }
-    },
     "Dynatrace API 文档" : {
       "localizations" : {
         "en" : {
@@ -3137,6 +3185,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dynatrace API ドキュメント"
+          }
+        }
+      }
+    },
+    "Dynatrace Account SSO OAuth" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dynatrace Account SSO OAuth"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dynatrace Account SSO OAuth"
           }
         }
       }
@@ -3169,6 +3233,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dynatrace 账户コンソール"
+          }
+        }
+      }
+    },
+    "EasyPost API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EasyPost API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EasyPost API Keys ページ"
           }
         }
       }
@@ -3413,38 +3493,6 @@
         }
       }
     },
-    "fal.ai 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "fal.ai console and billing pages"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "fal.ai コンソール / 請求ページ"
-          }
-        }
-      }
-    },
-    "fal.ai 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "fal.ai billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "fal.ai 請求 API"
-          }
-        }
-      }
-    },
     "Fastly 控制台与账单页" : {
       "localizations" : {
         "en" : {
@@ -3657,6 +3705,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fiskil 官网"
+          }
+        }
+      }
+    },
+    "Fiskil 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiskil console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiskil コンソール"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiskil 控制台"
           }
         }
       }
@@ -3965,6 +4035,22 @@
         }
       }
     },
+    "Gcore API tokens 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gcore API tokens docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gcore API tokens ドキュメント"
+          }
+        }
+      }
+    },
     "Gcore 控制台与文档" : {
       "localizations" : {
         "en" : {
@@ -4077,6 +4163,22 @@
         }
       }
     },
+    "GitLab Customers Portal 账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitLab Customers Portal billing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitLab Customers Portal の請求ページ"
+          }
+        }
+      }
+    },
     "GitLab 控制台与用量配额页" : {
       "localizations" : {
         "en" : {
@@ -4093,18 +4195,18 @@
         }
       }
     },
-    "GitLab Customers Portal 账单页" : {
+    "GleSYS Cloud 签发 API key" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GitLab Customers Portal billing"
+            "value" : "GleSYS Cloud API key issue page"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "GitLab Customers Portal の請求ページ"
+            "value" : "GleSYS Cloud の API key 発行"
           }
         }
       }
@@ -4207,54 +4309,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Grafana Cloud 請求 API / コンソール / ドキュメント"
-          }
-        }
-      }
-    },
-    "gridscale Public API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gridscale Public API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gridscale Public API"
-          }
-        }
-      }
-    },
-    "gridscale 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gridscale console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gridscale コンソール"
-          }
-        }
-      }
-    },
-    "gridscale 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gridscale docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gridscale ドキュメント"
           }
         }
       }
@@ -4437,44 +4491,6 @@
         }
       }
     },
-    "Hostcircle 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hostcircle Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hostcircle 請求 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hostcircle 账单 API"
-          }
-        }
-      }
-    },
-    "Hostens 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hostens Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hostens 請求 API"
-          }
-        }
-      }
-    },
     "HostUp API 文档" : {
       "localizations" : {
         "en" : {
@@ -4519,6 +4535,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "HostUp 請求 API 与コンソール"
+          }
+        }
+      }
+    },
+    "Hostcircle 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hostcircle Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hostcircle 請求 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hostcircle 账单 API"
+          }
+        }
+      }
+    },
+    "Hostens 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hostens Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hostens 請求 API"
           }
         }
       }
@@ -4589,6 +4643,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hubble 官网与文档"
+          }
+        }
+      }
+    },
+    "Hubble 签发 API Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hubble API Token page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hubble の API Token 発行"
           }
         }
       }
@@ -4679,54 +4749,6 @@
         }
       }
     },
-    "i3D.net Billing 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net Billing Docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net Billing ドキュメント"
-          }
-        }
-      }
-    },
-    "i3D.net 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net Console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net コンソール"
-          }
-        }
-      }
-    },
-    "i3D.net 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net 請求 API"
-          }
-        }
-      }
-    },
     "IBM Cloud 换取访问令牌" : {
       "localizations" : {
         "en" : {
@@ -4797,6 +4819,22 @@
         }
       }
     },
+    "IDCF Cloud 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCF Cloud API Key page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCF Cloud の API Key 発行"
+          }
+        }
+      }
+    },
     "IDCF Cloud 账单 API" : {
       "localizations" : {
         "en" : {
@@ -4841,6 +4879,22 @@
         }
       }
     },
+    "IDCloudHost 控制台签发 API Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCloudHost console API token"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IDCloudHost コンソールの API Token 発行"
+          }
+        }
+      }
+    },
     "IDCloudHost 账单 API" : {
       "localizations" : {
         "en" : {
@@ -4863,6 +4917,54 @@
         }
       }
     },
+    "IONOS Cloud 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IONOS Cloud console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IONOS Cloud コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "IONOS Cloud 签发 token 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IONOS Cloud token documentation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IONOS Cloud トークン発行ドキュメント"
+          }
+        }
+      }
+    },
+    "IONOS Cloud 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IONOS Cloud billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IONOS Cloud 請求 API"
+          }
+        }
+      }
+    },
     "Igor 控制台与文档" : {
       "localizations" : {
         "en" : {
@@ -4875,38 +4977,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Igor コンソールとドキュメント"
-          }
-        }
-      }
-    },
-    "inference.sh 控制台与文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "inference.sh console and docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "inference.sh コンソールとドキュメント"
-          }
-        }
-      }
-    },
-    "inference.sh 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "inference.sh Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "inference.sh 請求 API"
           }
         }
       }
@@ -5025,120 +5095,6 @@
         }
       }
     },
-    "IONOS Cloud 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IONOS Cloud console and billing pages"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IONOS Cloud コンソール / 請求ページ"
-          }
-        }
-      }
-    },
-    "IONOS Cloud 签发 token 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IONOS Cloud token documentation"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IONOS Cloud トークン発行ドキュメント"
-          }
-        }
-      }
-    },
-    "IONOS Cloud 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IONOS Cloud billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IONOS Cloud 請求 API"
-          }
-        }
-      }
-    },
-    "iwinv API 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv API docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv API ドキュメント"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv API 文档"
-          }
-        }
-      }
-    },
-    "iwinv 官网" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv website"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv サイト"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv 官网"
-          }
-        }
-      }
-    },
-    "iwinv 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv 請求 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv 账单 API"
-          }
-        }
-      }
-    },
     "Klaviyo API 文档" : {
       "localizations" : {
         "en" : {
@@ -5231,6 +5187,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Learning API ドキュメント"
+          }
+        }
+      }
+    },
+    "Leaseweb API Key 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leaseweb API Key docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leaseweb API Key ドキュメント"
           }
         }
       }
@@ -5387,6 +5359,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mac 版アップデートのダウンロード。アップデート情報自体は github.com 上のこのプロジェクトの Releases にあり、App Store 版はどちらにも接続しません"
+          }
+        }
+      }
+    },
+    "Magalu Cloud API Key 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magalu Cloud API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magalu Cloud API Key ページ"
           }
         }
       }
@@ -5806,50 +5794,18 @@
         }
       }
     },
-    "mittwald API 文档" : {
+    "Mixpeek Studio 控制台" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "mittwald API docs"
+            "value" : "Mixpeek Studio"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "mittwald API ドキュメント"
-          }
-        }
-      }
-    },
-    "mittwald 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mittwald console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mittwald コンソール"
-          }
-        }
-      }
-    },
-    "mittwald 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mittwald Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mittwald 請求 API"
+            "value" : "Mixpeek Studio"
           }
         }
       }
@@ -6048,6 +6004,22 @@
         }
       }
     },
+    "MySendingBox API 密钥页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MySendingBox API keys"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MySendingBox API キーページ"
+          }
+        }
+      }
+    },
     "MySendingBox API 文档" : {
       "localizations" : {
         "en" : {
@@ -6092,6 +6064,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "MySendingBox 請求 API"
+          }
+        }
+      }
+    },
+    "NAVER Cloud 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud Console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud コンソール"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud 控制台"
+          }
+        }
+      }
+    },
+    "NAVER Cloud 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud Docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud ドキュメント"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud 文档"
+          }
+        }
+      }
+    },
+    "NAVER Cloud 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud 請求 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAVER Cloud 账单 API"
           }
         }
       }
@@ -6172,72 +6210,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Namecheap 請求 API"
-          }
-        }
-      }
-    },
-    "NAVER Cloud 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud Console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud コンソール"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud 控制台"
-          }
-        }
-      }
-    },
-    "NAVER Cloud 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud Docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud ドキュメント"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud 文档"
-          }
-        }
-      }
-    },
-    "NAVER Cloud 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud 請求 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAVER Cloud 账单 API"
           }
         }
       }
@@ -6324,6 +6296,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nomos 官网"
+          }
+        }
+      }
+    },
+    "Nomos 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nomos dashboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nomos ダッシュボード"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nomos 控制台"
           }
         }
       }
@@ -6452,6 +6446,54 @@
         }
       }
     },
+    "OVHcloud API 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVHcloud API console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVHcloud API コンソール"
+          }
+        }
+      }
+    },
+    "OVHcloud APIv6" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVHcloud APIv6"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVHcloud APIv6"
+          }
+        }
+      }
+    },
+    "OVHcloud 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVHcloud console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OVHcloud コンソール"
+          }
+        }
+      }
+    },
     "Ocamba Invoices 文档" : {
       "localizations" : {
         "en" : {
@@ -6564,6 +6606,22 @@
         }
       }
     },
+    "OpenRouter 控制台与账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OpenRouter console and billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OpenRouter コンソール / 請求 API"
+          }
+        }
+      }
+    },
     "Openprovider 发票 API" : {
       "localizations" : {
         "en" : {
@@ -6586,18 +6644,18 @@
         }
       }
     },
-    "OpenRouter 控制台与账单 API" : {
+    "Openprovider 启用 API 说明" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OpenRouter console and billing API"
+            "value" : "Openprovider API access guide"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OpenRouter コンソール / 請求 API"
+            "value" : "Openprovider API 有効化の案内"
           }
         }
       }
@@ -6634,50 +6692,18 @@
         }
       }
     },
-    "OVHcloud API 控制台" : {
+    "Orange Developer 控制台" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OVHcloud API console"
+            "value" : "Orange Developer console"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OVHcloud API コンソール"
-          }
-        }
-      }
-    },
-    "OVHcloud APIv6" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OVHcloud APIv6"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OVHcloud APIv6"
-          }
-        }
-      }
-    },
-    "OVHcloud 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OVHcloud console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OVHcloud コンソール"
+            "value" : "Orange Developer コンソール"
           }
         }
       }
@@ -6770,6 +6796,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Oyster コンソール"
+          }
+        }
+      }
+    },
+    "PDFShift 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFShift Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFShift 請求 API"
+          }
+        }
+      }
+    },
+    "PG&E Share My Data / Green Button API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PG&E Share My Data / Green Button API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PG&E Share My Data / Green Button API"
+          }
+        }
+      }
+    },
+    "PG&E Share My Data 注册" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PG&E Share My Data 注册"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PG&E Share My Data 注册"
+          }
+        }
+      }
+    },
+    "PG&E 控制台与文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PG&E console and docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PG&E コンソールとドキュメント"
+          }
+        }
+      }
+    },
+    "Parasail API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parasail API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parasail API Keys ページ"
           }
         }
       }
@@ -6954,70 +7060,6 @@
         }
       }
     },
-    "PDFShift 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PDFShift Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PDFShift 請求 API"
-          }
-        }
-      }
-    },
-    "PG&E Share My Data / Green Button API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PG&E Share My Data / Green Button API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PG&E Share My Data / Green Button API"
-          }
-        }
-      }
-    },
-    "PG&E Share My Data 注册" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PG&E Share My Data 注册"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PG&E Share My Data 注册"
-          }
-        }
-      }
-    },
-    "PG&E 控制台与文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PG&E console and docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PG&E コンソールとドキュメント"
-          }
-        }
-      }
-    },
     "Phaxio 控制台与文档" : {
       "localizations" : {
         "en" : {
@@ -7046,98 +7088,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phaxio 請求 API"
-          }
-        }
-      }
-    },
-    "phoenixNAP API 文档" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP API docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP API ドキュメント"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP API 文档"
-          }
-        }
-      }
-    },
-    "phoenixNAP BMC OAuth" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC OAuth"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC OAuth"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC OAuth"
-          }
-        }
-      }
-    },
-    "phoenixNAP BMC 控制台" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC コンソール"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC 控制台"
-          }
-        }
-      }
-    },
-    "phoenixNAP Invoicing API" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP Invoicing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP 請求 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP Invoicing API"
           }
         }
       }
@@ -7224,6 +7174,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pleo 官网"
+          }
+        }
+      }
+    },
+    "Pleo 控制台签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pleo console API key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pleo コンソールの API Key 発行"
           }
         }
       }
@@ -7558,6 +7524,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Printify 订单 API"
+          }
+        }
+      }
+    },
+    "Prodigi 控制台与 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prodigi dashboard and API key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prodigi ダッシュボードと API Key"
           }
         }
       }
@@ -8080,6 +8062,28 @@
         }
       }
     },
+    "STACKIT Invoice Exporter API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STACKIT Invoice Exporter API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STACKIT Invoice Exporter API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STACKIT Invoice Exporter API"
+          }
+        }
+      }
+    },
     "Scaleway 控制台与账单页" : {
       "localizations" : {
         "en" : {
@@ -8200,6 +8204,22 @@
         }
       }
     },
+    "Scalingo 账户设置文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scalingo account settings docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scalingo アカウント設定ドキュメント"
+          }
+        }
+      }
+    },
     "Seeweb ECS 账单 API" : {
       "localizations" : {
         "en" : {
@@ -8212,6 +8232,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seeweb ECS 請求 API"
+          }
+        }
+      }
+    },
+    "Seeweb Ermes 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seeweb Ermes control panel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seeweb Ermes コントロールパネル"
           }
         }
       }
@@ -8244,6 +8280,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seeweb ドキュメント"
+          }
+        }
+      }
+    },
+    "Sendcloud API 集成页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendcloud API integrations"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendcloud API 連携ページ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendcloud API 集成页"
           }
         }
       }
@@ -8396,6 +8454,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Servers.com 請求 API"
+          }
+        }
+      }
+    },
+    "Sevalla API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevalla API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevalla API Keys ページ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevalla API Keys 页"
           }
         }
       }
@@ -8562,6 +8642,86 @@
         }
       }
     },
+    "ShipStation / ShipEngine 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation / ShipEngine Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation / ShipEngine 請求 API"
+          }
+        }
+      }
+    },
+    "ShipStation API 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API ドキュメント"
+          }
+        }
+      }
+    },
+    "ShipStation API 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API key page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API の API Key 発行"
+          }
+        }
+      }
+    },
+    "ShipStation API 认证文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API auth docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation API の認証ドキュメント"
+          }
+        }
+      }
+    },
+    "ShipStation 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation console and billing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ShipStation コンソールと請求ページ"
+          }
+        }
+      }
+    },
     "Shipmondo 官网" : {
       "localizations" : {
         "en" : {
@@ -8650,6 +8810,22 @@
         }
       }
     },
+    "Shippo API Portal 签发 token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shippo API Portal token issue page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shippo API Portal の token 発行"
+          }
+        }
+      }
+    },
     "Shippo 控制台" : {
       "localizations" : {
         "en" : {
@@ -8698,54 +8874,6 @@
         }
       }
     },
-    "ShipStation / ShipEngine 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation / ShipEngine Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation / ShipEngine 請求 API"
-          }
-        }
-      }
-    },
-    "ShipStation API 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation API docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation API ドキュメント"
-          }
-        }
-      }
-    },
-    "ShipStation 控制台与账单页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation console and billing"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation コンソールと請求ページ"
-          }
-        }
-      }
-    },
     "Shipwell Settlements 文档" : {
       "localizations" : {
         "en" : {
@@ -8774,6 +8902,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shipwell コンソール"
+          }
+        }
+      }
+    },
+    "Shipwell 控制台与 API Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shipwell dashboard and API token"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shipwell ダッシュボードと API Token"
           }
         }
       }
@@ -8986,28 +9130,6 @@
         }
       }
     },
-    "STACKIT Invoice Exporter API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "STACKIT Invoice Exporter API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "STACKIT Invoice Exporter API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "STACKIT Invoice Exporter API"
-          }
-        }
-      }
-    },
     "Stannp 控制台与文档" : {
       "localizations" : {
         "en" : {
@@ -9200,6 +9322,22 @@
         }
       }
     },
+    "SurrealDB 账户门户" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SurrealDB account portal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SurrealDB アカウントポータル"
+          }
+        }
+      }
+    },
     "Tavily API Key 文档" : {
       "localizations" : {
         "en" : {
@@ -9244,50 +9382,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tavily 使用量 API"
-          }
-        }
-      }
-    },
-    "teelaunch 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "teelaunch Console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "teelaunch コンソール"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "teelaunch 控制台"
-          }
-        }
-      }
-    },
-    "teelaunch 支付历史 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "teelaunch Payment History API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "teelaunch 支払履歴 API"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "teelaunch 支付历史 API"
           }
         }
       }
@@ -9356,50 +9450,50 @@
         }
       }
     },
-    "thanks.io 控制台与账单页" : {
+    "TiDB Cloud API 文档" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "thanks.io console and billing"
+            "value" : "TiDB Cloud API docs"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "thanks.io コンソールと請求ページ"
+            "value" : "TiDB Cloud API ドキュメント"
           }
         }
       }
     },
-    "thanks.io 认证文档" : {
+    "TiDB Cloud 控制台" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "thanks.io auth docs"
+            "value" : "TiDB Cloud console"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "thanks.io 認証ドキュメント"
+            "value" : "TiDB Cloud コンソール"
           }
         }
       }
     },
-    "thanks.io 账单 API" : {
+    "TiDB Cloud 账单 API" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "thanks.io Billing API"
+            "value" : "TiDB Cloud Billing API"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "thanks.io 請求 API"
+            "value" : "TiDB Cloud 請求 API"
           }
         }
       }
@@ -9448,54 +9542,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tibber コンソール"
-          }
-        }
-      }
-    },
-    "TiDB Cloud API 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TiDB Cloud API docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TiDB Cloud API ドキュメント"
-          }
-        }
-      }
-    },
-    "TiDB Cloud 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TiDB Cloud console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TiDB Cloud コンソール"
-          }
-        }
-      }
-    },
-    "TiDB Cloud 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TiDB Cloud Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TiDB Cloud 請求 API"
           }
         }
       }
@@ -10154,6 +10200,22 @@
         }
       }
     },
+    "VPS.NET 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VPS.NET Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VPS.NET 請求 API"
+          }
+        }
+      }
+    },
     "Vast.ai 控制台与账单页" : {
       "localizations" : {
         "en" : {
@@ -10218,6 +10280,38 @@
         }
       }
     },
+    "VoltView Invoices 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VoltView Invoices docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VoltView Invoices ドキュメント"
+          }
+        }
+      }
+    },
+    "VoltView 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VoltView Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VoltView 請求 API"
+          }
+        }
+      }
+    },
     "Voltage Park 控制台" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10247,38 +10341,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voltage Park ドキュメント"
-          }
-        }
-      }
-    },
-    "VoltView Invoices 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VoltView Invoices docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VoltView Invoices ドキュメント"
-          }
-        }
-      }
-    },
-    "VoltView 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VoltView Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VoltView 請求 API"
           }
         }
       }
@@ -10327,22 +10389,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vonage 請求 API"
-          }
-        }
-      }
-    },
-    "VPS.NET 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VPS.NET Billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VPS.NET 請求 API"
           }
         }
       }
@@ -10427,34 +10473,18 @@
         }
       }
     },
-    "xAI 控制台与账单页" : {
+    "Websupport API 密钥说明" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "xAI console and billing pages"
+            "value" : "Websupport API key guide"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "xAI コンソール / 請求ページ"
-          }
-        }
-      }
-    },
-    "xAI 账单 API" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "xAI billing API"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "xAI 請求 API"
+            "value" : "Websupport API キーの案内"
           }
         }
       }
@@ -10541,6 +10571,22 @@
         }
       }
     },
+    "Zoom App Marketplace" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom App Marketplace"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom App Marketplace"
+          }
+        }
+      }
+    },
     "Zoom Billing API" : {
       "localizations" : {
         "en" : {
@@ -10573,18 +10619,636 @@
         }
       }
     },
-    "さくらクラウド API マニュアル" : {
+    "bunny.net API Key 文档" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "さくらクラウド API マニュアル"
+            "value" : "bunny.net API key docs"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "さくらクラウド API マニュアル"
+            "value" : "bunny.net API キーのドキュメント"
+          }
+        }
+      }
+    },
+    "bunny.net 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bunny.net console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bunny.net コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "bunny.net 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bunny.net billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bunny.net 請求 API"
+          }
+        }
+      }
+    },
+    "fal.ai 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "fal.ai console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "fal.ai コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "fal.ai 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "fal.ai billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "fal.ai 請求 API"
+          }
+        }
+      }
+    },
+    "gridscale Public API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gridscale Public API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gridscale Public API"
+          }
+        }
+      }
+    },
+    "gridscale 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gridscale console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gridscale コンソール"
+          }
+        }
+      }
+    },
+    "gridscale 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gridscale docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gridscale ドキュメント"
+          }
+        }
+      }
+    },
+    "i3D.net API Keys 页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net API Keys page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net API Keys ページ"
+          }
+        }
+      }
+    },
+    "i3D.net Billing 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net Billing Docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net Billing ドキュメント"
+          }
+        }
+      }
+    },
+    "i3D.net 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net Console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net コンソール"
+          }
+        }
+      }
+    },
+    "i3D.net 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "i3D.net 請求 API"
+          }
+        }
+      }
+    },
+    "inference.sh 控制台与文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh console and docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh コンソールとドキュメント"
+          }
+        }
+      }
+    },
+    "inference.sh 签发 API Key" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh API key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh の API Key 発行"
+          }
+        }
+      }
+    },
+    "inference.sh 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inference.sh 請求 API"
+          }
+        }
+      }
+    },
+    "iwinv API 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv API docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv API ドキュメント"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv API 文档"
+          }
+        }
+      }
+    },
+    "iwinv 官网" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv website"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv サイト"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv 官网"
+          }
+        }
+      }
+    },
+    "iwinv 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv コンソール"
+          }
+        }
+      }
+    },
+    "iwinv 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv 請求 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iwinv 账单 API"
+          }
+        }
+      }
+    },
+    "mittwald API 文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald API docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald API ドキュメント"
+          }
+        }
+      }
+    },
+    "mittwald mStudio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald mStudio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald mStudio"
+          }
+        }
+      }
+    },
+    "mittwald 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald コンソール"
+          }
+        }
+      }
+    },
+    "mittwald 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mittwald 請求 API"
+          }
+        }
+      }
+    },
+    "phoenixNAP API 文档" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP API docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP API ドキュメント"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP API 文档"
+          }
+        }
+      }
+    },
+    "phoenixNAP BMC OAuth" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC OAuth"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC OAuth"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC OAuth"
+          }
+        }
+      }
+    },
+    "phoenixNAP BMC 凭据文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC credentials docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC 認証情報ドキュメント"
+          }
+        }
+      }
+    },
+    "phoenixNAP BMC 控制台" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC コンソール"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP BMC 控制台"
+          }
+        }
+      }
+    },
+    "phoenixNAP Invoicing API" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP Invoicing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP 請求 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phoenixNAP Invoicing API"
+          }
+        }
+      }
+    },
+    "teelaunch 控制台" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "teelaunch Console"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "teelaunch コンソール"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "teelaunch 控制台"
+          }
+        }
+      }
+    },
+    "teelaunch 支付历史 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "teelaunch Payment History API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "teelaunch 支払履歴 API"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "teelaunch 支付历史 API"
+          }
+        }
+      }
+    },
+    "thanks.io 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io console and billing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io コンソールと請求ページ"
+          }
+        }
+      }
+    },
+    "thanks.io 签发 Personal Access Token" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io Personal Access Token page"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io の Personal Access Token 発行"
+          }
+        }
+      }
+    },
+    "thanks.io 认证文档" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io auth docs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io 認証ドキュメント"
+          }
+        }
+      }
+    },
+    "thanks.io 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io Billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "thanks.io 請求 API"
+          }
+        }
+      }
+    },
+    "xAI 控制台与账单页" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "xAI console and billing pages"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "xAI コンソール / 請求ページ"
+          }
+        }
+      }
+    },
+    "xAI 账单 API" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "xAI billing API"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "xAI 請求 API"
           }
         }
       }
@@ -10601,6 +11265,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "さくらのクラウド API"
+          }
+        }
+      }
+    },
+    "さくらクラウド API マニュアル" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "さくらクラウド API マニュアル"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "さくらクラウド API マニュアル"
           }
         }
       }
@@ -10861,6 +11541,28 @@
         }
       }
     },
+    "金山云 IAM AccessKey" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kingsoft Cloud IAM AccessKey"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kingsoft Cloud IAM AccessKey"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金山云 IAM AccessKey"
+          }
+        }
+      }
+    },
     "金山云文档" : {
       "localizations" : {
         "en" : {
@@ -10923,708 +11625,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "金山云费用账单 API"
-          }
-        }
-      }
-    },
-    "Orange Developer 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Orange Developer console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Orange Developer コンソール"
-          }
-        }
-      }
-    },
-    "mittwald mStudio" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mittwald mStudio"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mittwald mStudio"
-          }
-        }
-      }
-    },
-    "Zoom App Marketplace" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoom App Marketplace"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zoom App Marketplace"
-          }
-        }
-      }
-    },
-    "CUDO Compute 控制台与 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute console and API keys"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CUDO Compute コンソールと API Key"
-          }
-        }
-      }
-    },
-    "DataPacket 客户面板与 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DataPacket client panel and API keys"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DataPacket クライアントパネルと API Key"
-          }
-        }
-      }
-    },
-    "i3D.net API Keys 页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net API Keys page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i3D.net API Keys ページ"
-          }
-        }
-      }
-    },
-    "Leaseweb API Key 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leaseweb API Key docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leaseweb API Key ドキュメント"
-          }
-        }
-      }
-    },
-    "Magalu Cloud API Key 页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Magalu Cloud API Keys page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Magalu Cloud API Key ページ"
-          }
-        }
-      }
-    },
-    "phoenixNAP BMC 凭据文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC credentials docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "phoenixNAP BMC 認証情報ドキュメント"
-          }
-        }
-      }
-    },
-    "Prodigi 控制台与 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prodigi dashboard and API key"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prodigi ダッシュボードと API Key"
-          }
-        }
-      }
-    },
-    "Shipwell 控制台与 API Token" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shipwell dashboard and API token"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shipwell ダッシュボードと API Token"
-          }
-        }
-      }
-    },
-    "MySendingBox API 密钥页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MySendingBox API keys"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MySendingBox API キーページ"
-          }
-        }
-      }
-    },
-    "Openprovider 启用 API 说明" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Openprovider API access guide"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Openprovider API 有効化の案内"
-          }
-        }
-      }
-    },
-    "SurrealDB 账户门户" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SurrealDB account portal"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SurrealDB アカウントポータル"
-          }
-        }
-      }
-    },
-    "Armada Delivery 商家控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Armada Delivery business app"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Armada Delivery ビジネスアプリ"
-          }
-        }
-      }
-    },
-    "Mixpeek Studio 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mixpeek Studio"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mixpeek Studio"
-          }
-        }
-      }
-    },
-    "Parasail API Keys 页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parasail API Keys page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parasail API Keys ページ"
-          }
-        }
-      }
-    },
-    "Seeweb Ermes 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seeweb Ermes control panel"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seeweb Ermes コントロールパネル"
-          }
-        }
-      }
-    },
-    "ConoHa 签发 API 用户文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ConoHa API user docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ConoHa API ユーザーのドキュメント"
-          }
-        }
-      }
-    },
-    "EasyPost API Keys 页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "EasyPost API Keys page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "EasyPost API Keys ページ"
-          }
-        }
-      }
-    },
-    "GleSYS Cloud 签发 API key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GleSYS Cloud API key issue page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GleSYS Cloud の API key 発行"
-          }
-        }
-      }
-    },
-    "Shippo API Portal 签发 token" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shippo API Portal token issue page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shippo API Portal の token 発行"
-          }
-        }
-      }
-    },
-    "Dilmune Portal 签发 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dilmune Portal API Key page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dilmune Portal の API Key 発行"
-          }
-        }
-      }
-    },
-    "DNSimple Access Token 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple Access Token docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DNSimple Access Token ドキュメント"
-          }
-        }
-      }
-    },
-    "Hubble 签发 API Token" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hubble API Token page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hubble の API Token 発行"
-          }
-        }
-      }
-    },
-    "IDCF Cloud 签发 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IDCF Cloud API Key page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IDCF Cloud の API Key 発行"
-          }
-        }
-      }
-    },
-    "iwinv 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iwinv コンソール"
-          }
-        }
-      }
-    },
-    "ShipStation API 签发 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation API key page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation API の API Key 発行"
-          }
-        }
-      }
-    },
-    "ShipStation API 认证文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation API auth docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ShipStation API の認証ドキュメント"
-          }
-        }
-      }
-    },
-    "thanks.io 签发 Personal Access Token" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "thanks.io Personal Access Token page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "thanks.io の Personal Access Token 発行"
-          }
-        }
-      }
-    },
-    "Fiskil 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fiskil console"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fiskil コンソール"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fiskil 控制台"
-          }
-        }
-      }
-    },
-    "Nomos 控制台" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nomos dashboard"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nomos ダッシュボード"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nomos 控制台"
-          }
-        }
-      }
-    },
-    "Active24 API Token 管理" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active24 API token management"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active24 の API Token 管理"
-          }
-        }
-      }
-    },
-    "Gcore API tokens 文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gcore API tokens docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gcore API tokens ドキュメント"
-          }
-        }
-      }
-    },
-    "IDCloudHost 控制台签发 API Token" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IDCloudHost console API token"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IDCloudHost コンソールの API Token 発行"
-          }
-        }
-      }
-    },
-    "Pleo 控制台签发 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pleo console API key"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pleo コンソールの API Key 発行"
-          }
-        }
-      }
-    },
-    "Scalingo 账户设置文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scalingo account settings docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scalingo アカウント設定ドキュメント"
-          }
-        }
-      }
-    },
-    "Websupport API 密钥说明" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Websupport API key guide"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Websupport API キーの案内"
-          }
-        }
-      }
-    },
-    "inference.sh 签发 API Key" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "inference.sh API key"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "inference.sh の API Key 発行"
-          }
-        }
-      }
-    },
-    "Sendcloud API 集成页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sendcloud API integrations"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sendcloud API 連携ページ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sendcloud API 集成页"
-          }
-        }
-      }
-    },
-    "Sevalla API Keys 页" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sevalla API Keys page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sevalla API Keys ページ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sevalla API Keys 页"
-          }
-        }
-      }
-    },
-    "金山云 IAM AccessKey" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kingsoft Cloud IAM AccessKey"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kingsoft Cloud IAM AccessKey"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "金山云 IAM AccessKey"
           }
         }
       }

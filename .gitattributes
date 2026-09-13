@@ -1,0 +1,13 @@
+# String Catalog 走规范化 filter，见 scripts/normalize-xcstrings.py。
+#
+# Xcode 每次构建都会回写 `.xcstrings`（重排键、盖 stale 标记），那是构建副产物，
+# 不是谁改的。挂上 clean filter 之后，这类回写在 `git status` 里根本不出现。
+#
+# 每台机器要配一次（没配也不坏，git 对没定义的 filter 原样放行）：
+#
+#   git config filter.xcstrings.clean "python3 scripts/normalize-xcstrings.py --stdin"
+#
+# 只点名人写的那几份。`Android/app/src/main/assets/swiftpm/` 下的同名文件是
+# Android native 构建摆出来的副本，收拾它只会让下一次构建又不一致。
+Packages/MeterKit/Sources/**/Resources/*.xcstrings filter=xcstrings
+App/Resources/*.xcstrings filter=xcstrings

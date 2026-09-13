@@ -4,38 +4,6 @@
     "" : {
       "shouldTranslate" : false
     },
-    "，" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ", "
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "、"
-          }
-        }
-      }
-    },
-    "。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ". "
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "。"
-          }
-        }
-      }
-    },
     "%@，%@" : {
       "localizations" : {
         "en" : {
@@ -153,40 +121,6 @@
         }
       }
     },
-    "3 美元 20 美分" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3 dollars and 20 cents"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3ドル 20セント"
-          }
-        }
-      }
-    },
-    "7 美元 62 美分" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "7 dollars and 62 cents"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "7ドル 62セント"
-          }
-        }
-      }
-    },
     "11 美元 5 美分" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -234,6 +168,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "21ドル 40セント"
+          }
+        }
+      }
+    },
+    "3 美元 20 美分" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 dollars and 20 cents"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3ドル 20セント"
+          }
+        }
+      }
+    },
+    "7 美元 62 美分" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 dollars and 62 cents"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7ドル 62セント"
+          }
+        }
+      }
+    },
+    "。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". "
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "。"
           }
         }
       }
@@ -406,6 +390,22 @@
         }
       }
     },
+    "取消" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    },
     "在 Safari 打开" : {
       "localizations" : {
         "en" : {
@@ -434,22 +434,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "コピー"
-          }
-        }
-      }
-    },
-    "返回" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Back"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "戻る"
           }
         }
       }
@@ -716,6 +700,22 @@
         }
       }
     },
+    "清空" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリア"
+          }
+        }
+      }
+    },
     "猫猫吓到了，账单涨得很快" : {
       "localizations" : {
         "en" : {
@@ -861,6 +861,23 @@
         }
       }
     },
+    "约 $0.01" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About $0.01"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "約 $0.01"
+          }
+        }
+      }
+    },
     "约 %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -925,23 +942,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "約 %lld セント"
-          }
-        }
-      }
-    },
-    "约 $0.01" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About $0.01"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "約 $0.01"
           }
         }
       }
@@ -1099,6 +1099,22 @@
         }
       }
     },
+    "返回" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "戻る"
+          }
+        }
+      }
+    },
     "还没有账单" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1149,34 +1165,18 @@
         }
       }
     },
-    "取消" : {
+    "，" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cancel"
+            "value" : ", "
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "キャンセル"
-          }
-        }
-      }
-    },
-    "清空" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "クリア"
+            "value" : "、"
           }
         }
       }
