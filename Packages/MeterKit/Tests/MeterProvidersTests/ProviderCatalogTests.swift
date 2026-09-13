@@ -117,4 +117,12 @@ struct ProviderCatalogTests {
         #expect(ProviderCatalog.digitalocean.accessStatus == .available)
         #expect(ProviderCatalog.digitalocean.kind == .usage)
     }
+
+    @Test("Railway 已对过真账，仍是用量后付费")
+    func railwayIsAvailableUsage() {
+        #expect(ProviderAssembly.liveRESTProviderIDs.contains(.railway))
+        #expect(ProviderCatalog.railway.isOffered)
+        #expect(ProviderCatalog.railway.accessStatus == .available)
+        #expect(ProviderCatalog.railway.kind == .usage)
+    }
 }

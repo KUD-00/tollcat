@@ -4,9 +4,17 @@ namespace TollCat;
 
 /// <summary>
 /// 匿名页面计数。载荷在这边攒，HTTP 经 Swift 桥发出，平台字段 windows。
+/// Debug 配置不发：开发点来点去会把生产表打脏。
 /// </summary>
 internal static class UsageAnalytics
 {
+    private static bool Sends =>
+#if DEBUG
+        false;
+#else
+        true;
+#endif
+
     private static readonly object Gate = new();
     private static readonly Dictionary<string, int> Counts = new();
     private static string? _lastScreen;
@@ -14,6 +22,7 @@ internal static class UsageAnalytics
 
     public static void Record(string screen)
     {
+        if (!Sends) return;
         if (!UsageScreens.All.Contains(screen)) return;
         lock (Gate)
         {
@@ -39,6 +48,7 @@ internal static class UsageAnalytics
 
     public static void Flush()
     {
+        if (!Sends) return;
         JsonObject? payload;
         lock (Gate)
         {

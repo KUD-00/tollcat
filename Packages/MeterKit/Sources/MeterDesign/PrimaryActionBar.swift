@@ -47,7 +47,8 @@ public struct PrimaryActionBar<BarContent: View>: ViewModifier {
     private func macSheetBar(_ content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .environment(\.meterSheetCloseHosted, true)
+            // 底栏没画时不能声称托管了关闭：主按钮藏起来之后，取消和完成都会消失。
+            .environment(\.meterSheetCloseHosted, isVisible)
             .onPreferenceChange(MeterSheetClosePreference.self) { closeHandler = $0 }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if isVisible {

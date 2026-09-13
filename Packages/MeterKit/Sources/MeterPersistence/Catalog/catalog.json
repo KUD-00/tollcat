@@ -6717,7 +6717,7 @@
       }
     },
     "cockroach": {
-      "summary": "托管数据库。按本周期草稿发票。",
+      "summary": "托管数据库。按本周期草稿发票。免费期间没有发票，读数是 $0。",
       "parts": [
         {
           "fields": [
@@ -6745,36 +6745,63 @@
           ],
           "steps": [
             {
-              "text": "打开 CockroachDB Cloud 的 managing-access 文档，给服务账号 Billing Coordinator，再签发一把 secret key。",
+              "text": "打开 CockroachDB Cloud 的 Service Accounts，新建一个服务账号。创建后签发一把 secret key，立刻复制。",
               "emphasized": [
-                "Billing Coordinator"
+                "Service Accounts",
+                "secret key"
               ],
               "linkPhrases": [
-                "managing-access 文档"
+                "Service Accounts"
               ],
               "en": {
-                "text": "Open CockroachDB Cloud’s managing-access docs, give the service account Billing Coordinator, then issue a secret key.",
+                "text": "Open Service Accounts in CockroachDB Cloud and create a service account. After creating it, issue a secret key and copy it right away.",
                 "emphasized": [
-                  "Billing Coordinator"
+                  "Service Accounts",
+                  "secret key"
                 ],
                 "linkPhrases": [
-                  "managing-access docs"
+                  "Service Accounts"
                 ]
               },
               "ja": {
-                "text": "CockroachDB Cloud の managing-access のドキュメントを開き、サービスアカウントに Billing Coordinator を付けてから secret key を発行します。",
+                "text": "CockroachDB Cloud の Service Accounts を開き、サービスアカウントを新規作成します。作成したら secret key を発行し、すぐにコピーします。",
                 "emphasized": [
-                  "Billing Coordinator"
+                  "Service Accounts",
+                  "secret key"
                 ],
                 "linkPhrases": [
-                  "managing-access のドキュメント"
+                  "Service Accounts"
+                ]
+              }
+            },
+            {
+              "text": "给这个账号 Edit Roles：Scope 选 Organization，Role 选 Billing Coordinator。",
+              "emphasized": [
+                "Edit Roles",
+                "Organization",
+                "Billing Coordinator"
+              ],
+              "en": {
+                "text": "Edit Roles for this account: set Scope to Organization and Role to Billing Coordinator.",
+                "emphasized": [
+                  "Edit Roles",
+                  "Organization",
+                  "Billing Coordinator"
+                ]
+              },
+              "ja": {
+                "text": "このアカウントで Edit Roles：Scope は Organization、Role は Billing Coordinator にします。",
+                "emphasized": [
+                  "Edit Roles",
+                  "Organization",
+                  "Billing Coordinator"
                 ]
               }
             }
           ]
         }
       ],
-      "verifyHint": "这个数字应该和 CockroachDB Cloud 本周期草稿发票合计一致。",
+      "verifyHint": "这个数字应该和 CockroachDB Cloud 本周期草稿发票合计一致。免费期间没有发票，会显示 $0。",
       "troubleshooting": [
         {
           "httpStatus": 401,
@@ -6792,24 +6819,24 @@
         {
           "httpStatus": 403,
           "explanation": "这把凭据读不到账单。",
-          "nextStep": "确认服务账号有 Billing Coordinator 或 Cluster Admin。",
+          "nextStep": "回 Service Accounts 给这个账号 Edit Roles：Scope 选 Organization，Role 选 Billing Coordinator。",
           "en": {
             "explanation": "These credentials can’t read billing.",
-            "nextStep": "Confirm the service account has Billing Coordinator or Cluster Admin."
+            "nextStep": "Go back to Service Accounts and Edit Roles for this account: Scope Organization, Role Billing Coordinator."
           },
           "ja": {
             "explanation": "この認証情報では請求を読めません。",
-            "nextStep": "サービスアカウントに Billing Coordinator または Cluster Admin があるか確認してください。"
+            "nextStep": "Service Accounts に戻り、このアカウントで Edit Roles：Scope は Organization、Role は Billing Coordinator にします。"
           }
         }
       ],
       "en": {
-        "summary": "A managed database. The draft invoice for this cycle.",
-        "verifyHint": "This number should match the draft invoice total for this cycle on CockroachDB Cloud."
+        "summary": "A managed database. The draft invoice for this cycle. During the free period there are no invoices, so the reading is $0.",
+        "verifyHint": "This number should match the draft invoice total for this cycle on CockroachDB Cloud. During the free period there are no invoices, so it shows $0."
       },
       "ja": {
-        "summary": "マネージドデータベース。本周期の下書きインボイスです。",
-        "verifyHint": "この数字は CockroachDB Cloud の本周期下書きインボイス合計と一致するはずです。"
+        "summary": "マネージドデータベース。本周期の下書きインボイスです。無料期間はインボイスがなく、読み取りは $0 です。",
+        "verifyHint": "この数字は CockroachDB Cloud の本周期下書きインボイス合計と一致するはずです。無料期間はインボイスがなく、$0 と表示されます。"
       }
     },
     "typesense": {

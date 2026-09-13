@@ -127,6 +127,19 @@ struct SheetCloseGuardrailTests {
         #expect(offenders.isEmpty, Comment(rawValue: offenders.joined(separator: "\n")))
     }
 
+    @Test("Mac 连接参考不在整张双栏再画完成")
+    func padWizardDoesNotDrawUnhostedMacDone() throws {
+        let layout = try GuardrailSourceScan.sourceText(named: "SetupWizardPadLayout.swift")
+        #expect(layout.contains("meterSheetClose(isActive: hostedClose == nil)"))
+        #expect(layout.contains("hostedClose"))
+        let credentials = try GuardrailSourceScan.sourceText(named: "SetupCredentialsStepView.swift")
+        let inbox = try GuardrailSourceScan.sourceText(named: "InboxHandoffStepView.swift")
+        #expect(credentials.contains("meterSheetClose(isActive: onClose != nil)"))
+        #expect(inbox.contains("meterSheetClose(isActive: onClose != nil)"))
+        #expect(credentials.contains("meterPrimaryActionBar"))
+        #expect(inbox.contains("meterPrimaryActionBar"))
+    }
+
     @Test("管理凭据从右侧推进，不是抽屉")
     func credentialManagementPushesInsteadOfDrawer() throws {
         let text = try GuardrailSourceScan.sourceText(named: "CredentialManagementSheet.swift")

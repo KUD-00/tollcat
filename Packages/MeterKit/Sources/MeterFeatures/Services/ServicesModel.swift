@@ -105,6 +105,15 @@ final class ServicesModel {
     @ObservationIgnored private var lastReloadStamp: (revision: PresentationRevision, minute: Int)?
 
     func reload() {
+        let members = Set(dashboard.memberships().map(\.providerID))
+        // 宽壳详情列靠 `selectedProviderID` 活着，不是导航栈。清空把成员关系
+        // 删了之后，`dismiss()` 在分栏 root 上是空操作——不在这里丢掉选中，
+        // 第三栏会留着一页幽灵详情。结束只归档，成员还在，选中要留。
+        if let selected = selectedProviderID, !members.contains(selected) {
+            selectedProviderID = nil
+            setupPath.removeAll()
+        }
+
         let stamp = (
             revision: dashboard.revision,
             minute: Int(dashboard.clock.now.timeIntervalSinceReferenceDate / 60)
@@ -124,7 +133,6 @@ final class ServicesModel {
             calendar: dashboard.clock.calendar,
             presentation: dashboard.moneyPresentation
         )
-        let members = Set(dashboard.memberships().map(\.providerID))
         manualSubscriptions = dashboard.subscriptionItems().filter { item in
             guard let providerID = item.providerID else { return true }
             return !members.contains(providerID)

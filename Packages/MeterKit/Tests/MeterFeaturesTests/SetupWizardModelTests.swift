@@ -68,6 +68,16 @@ struct SetupWizardModelTests {
         #expect(SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.digitalocean) == false)
     }
 
+    @Test("Railway 已对过真账，是完全支持，用量后付费")
+    func railwayIntroFacts() {
+        #expect(SetupProviderFacts.supportLevel(for: ProviderCatalog.railway) == .full)
+        #expect(SetupProviderFacts.supportTitle(for: ProviderCatalog.railway) == String(localized: L("完全支持")))
+        #expect(SetupProviderFacts.supportBars(for: ProviderCatalog.railway) == 3)
+        #expect(SetupProviderFacts.kindTitle(for: ProviderCatalog.railway) == String(localized: L("用量后付费")))
+        #expect(SetupProviderFacts.supportCaption(for: ProviderCatalog.railway).isEmpty)
+        #expect(SetupProviderFacts.offersSetupFeedback(for: ProviderCatalog.railway) == false)
+    }
+
     @Test("Sentry 已对过真账，是完全支持")
     func sentryIntroFacts() {
         #expect(SetupProviderFacts.supportLevel(for: ProviderCatalog.sentry) == .full)

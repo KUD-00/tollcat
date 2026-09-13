@@ -108,11 +108,14 @@ struct MeterGlassLabelButtonStyle: ButtonStyle {
 }
 
 public extension View {
+    /// `actions` 必须是最后一个参数并带默认值。`#Preview` 会把最后一个闭包
+    /// 收成尾随闭包；若旁边再有一个 `() -> Void` 重载，按钮会绑到 `onBack`，
+    /// 预览里变成 unused 结果。
     func meterMacColumnBar<Actions: View>(
         title: Text?,
         showBack: Bool = false,
         onBack: @escaping () -> Void = {},
-        @ViewBuilder actions: () -> Actions
+        @ViewBuilder actions: () -> Actions = { EmptyView() }
     ) -> some View {
         modifier(
             MeterMacColumnBar(
@@ -121,19 +124,6 @@ public extension View {
                 onBack: onBack,
                 actions: actions()
             )
-        )
-    }
-
-    func meterMacColumnBar(
-        title: Text?,
-        showBack: Bool = false,
-        onBack: @escaping () -> Void = {}
-    ) -> some View {
-        meterMacColumnBar(
-            title: title,
-            showBack: showBack,
-            onBack: onBack,
-            actions: { EmptyView() }
         )
     }
 }

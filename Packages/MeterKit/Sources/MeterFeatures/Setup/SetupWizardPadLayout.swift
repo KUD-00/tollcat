@@ -48,7 +48,8 @@ struct SetupWizardPadLayout: View {
             Text("\(SetupWizardStep.guide.displayNumber)–\(SetupWizardStep.credentials.displayNumber) / \(SetupWizardStep.totalCount)")
         )
         #endif
-        .meterSheetClose { onClose() }
+        // Mac 关闭已经交给右栏底栏的「取消」。这里再挂一次，会在主按钮下面再画一颗「完成」。
+        .meterSheetClose(isActive: hostedClose == nil) { onClose() }
     }
 
     /// Mac 底栏「取消」由凭据/信箱那一栏上报；iPad 导航栏 X 走整张 sheet 这一颗。

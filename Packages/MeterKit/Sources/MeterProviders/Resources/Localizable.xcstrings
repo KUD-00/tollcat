@@ -2119,22 +2119,6 @@
         }
       }
     },
-    "CockroachDB Cloud API 密钥文档" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CockroachDB Cloud API key docs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CockroachDB Cloud API キーのドキュメント"
-          }
-        }
-      }
-    },
     "CockroachDB Cloud 账单 API、控制台与账单页" : {
       "localizations" : {
         "en" : {
