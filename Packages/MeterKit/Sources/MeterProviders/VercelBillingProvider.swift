@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import MeterCore
 
 /// Vercel FOCUS v1.3 billing charges。
