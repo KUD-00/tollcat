@@ -75,45 +75,55 @@ final class JsonLedgerStore: @unchecked Sendable {
         }
     }
 
+    /// 改动必须落在拿到文件锁之后重读的那份上：init 时读进来的快照可能早被另一个
+    /// tollcat 进程改过，拿它写回会把对方那行盖掉。锁拿不到就不写——没锁的并发写者
+    /// 同样会互相覆盖账本。
     private func mutate(_ body: (inout LedgerDocument) -> Void) {
         lock.lock()
         defer { lock.unlock() }
         withFileLock {
-            body(&document)
-            persistLocked()
+            var fresh = Self.load(path)
+            body(&fresh)
+            persistLocked(fresh)
+            document = fresh
         }
     }
 
-    private func persistLocked() {
+    /// 账本里有账户、订阅和金额，只给本人读写：umask 022 下默认会落成 0644。
+    private func persistLocked(_ document: LedgerDocument) {
+        let fileManager = FileManager.default
         let directory = path.deletingLastPathComponent()
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try? fileManager.createDirectory(
+            at: directory,
+            withIntermediateDirectories: true,
+            attributes: [.posixPermissions: 0o700]
+        )
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         guard let data = try? encoder.encode(document) else { return }
         let temporary = path.appendingPathExtension("tmp")
         try? data.write(to: temporary, options: .atomic)
-        _ = try? FileManager.default.replaceItemAt(path, withItemAt: temporary)
-        if !FileManager.default.fileExists(atPath: path.path) {
+        try? fileManager.setAttributes([.posixPermissions: 0o600], ofItemAtPath: temporary.path)
+        _ = try? fileManager.replaceItemAt(path, withItemAt: temporary)
+        if !fileManager.fileExists(atPath: path.path) {
             try? data.write(to: path, options: .atomic)
         }
+        try? fileManager.setAttributes([.posixPermissions: 0o600], ofItemAtPath: path.path)
     }
 
     private func withFileLock(_ body: () -> Void) {
         let lockURL = path.appendingPathExtension("lock")
         try? FileManager.default.createDirectory(
             at: lockURL.deletingLastPathComponent(),
-            withIntermediateDirectories: true
+            withIntermediateDirectories: true,
+            attributes: [.posixPermissions: 0o700]
         )
-        let fd = open(lockURL.path, O_CREAT | O_RDWR, 0o644)
-        guard fd >= 0 else {
-            body()
-            return
-        }
-        _ = flock(fd, LOCK_EX)
-        defer {
-            _ = flock(fd, LOCK_UN)
-            close(fd)
-        }
+        let fd = open(lockURL.path, O_CREAT | O_RDWR, 0o600)
+        guard fd >= 0 else { return }
+        defer { close(fd) }
+        _ = fchmod(fd, 0o600)
+        guard flock(fd, LOCK_EX) == 0 else { return }
+        defer { _ = flock(fd, LOCK_UN) }
         body()
     }
 

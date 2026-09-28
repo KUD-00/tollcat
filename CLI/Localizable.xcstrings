@@ -384,6 +384,22 @@
           }
         }
       }
+    },
+    "%@ 的凭据没能从钥匙环删除，已保留接入。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't delete the %@ credential from the keyring, so the service is still connected."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ の認証情報をキーリングから削除できなかったため、接続はそのままにした。"
+          }
+        }
+      }
     }
   }
 }

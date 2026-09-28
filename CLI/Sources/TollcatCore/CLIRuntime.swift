@@ -251,6 +251,8 @@ package enum CLIRuntime {
             return JNICopy.format("取数失败：%@", localeTag, message)
         case .notConnected(let provider):
             return JNICopy.format("没有接入 %@。", localeTag, provider.displayName)
+        case .credentialDeleteFailed(let provider):
+            return JNICopy.format("%@ 的凭据没能从钥匙环删除，已保留接入。", localeTag, provider.displayName)
         }
     }
 }
@@ -260,7 +262,7 @@ private extension AddError {
         switch self {
         case .unknownService, .declined, .noLiveFetch, .needEnvironment, .missingField, .notConnected:
             return true
-        case .fetchFailed:
+        case .fetchFailed, .credentialDeleteFailed:
             return false
         }
     }

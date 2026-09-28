@@ -10,13 +10,16 @@ struct KeychainVault: CredentialVault {
         self.service = service
     }
 
+    /// 不原地 SecItemUpdate：同一用户下的别的进程可以抢先埋一条同 service/account 的条目，
+    /// 带宽松 ACL 或可同步属性；update 只换数据，那些属性会原样留下，凭据等于写进了别人的条目。
+    /// 所以先把同名条目（含可同步的）全删掉，删不掉就不写，再按本类的属性新建。
     func save(_ secret: String, reference: String) throws {
         let data = Data(secret.utf8)
         let query = baseQuery(reference: reference)
-        let attributes: [String: Any] = [kSecValueData as String: data]
-        let update = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if update == errSecSuccess { return }
-        if update != errSecItemNotFound {
+        var existing = query
+        existing[kSecAttrSynchronizable as String] = kSecAttrSynchronizableAny
+        let removal = SecItemDelete(existing as CFDictionary)
+        guard removal == errSecSuccess || removal == errSecItemNotFound else {
             throw CredentialVaultError.saveFailed
         }
         var add = query
@@ -43,9 +46,11 @@ struct KeychainVault: CredentialVault {
     }
 
     func delete(reference: String) throws {
-        let status = SecItemDelete(baseQuery(reference: reference) as CFDictionary)
+        var query = baseQuery(reference: reference)
+        query[kSecAttrSynchronizable as String] = kSecAttrSynchronizableAny
+        let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
-            throw CredentialVaultError.readFailed
+            throw CredentialVaultError.deleteFailed
         }
     }
 

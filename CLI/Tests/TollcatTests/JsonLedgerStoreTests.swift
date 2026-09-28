@@ -45,6 +45,34 @@ struct JsonLedgerStoreTests {
         #expect(reload.snapshots().first?.currentSpendUsd == "7.62")
     }
 
+    @Test func twoProcessesDoNotDropEachOthersRows() throws {
+        let path = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tollcat-test-\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: path) }
+        // 两个进程各自在对方写之前读进账本。
+        let first = JsonLedgerStore(path: path)
+        let second = JsonLedgerStore(path: path)
+        first.upsertMembership(LedgerMembership(providerId: "openai", sortIndex: 0))
+        second.upsertMembership(LedgerMembership(providerId: "neon", sortIndex: 1))
+        let reload = JsonLedgerStore(path: path)
+        #expect(Set(reload.memberships().map(\.providerId)) == ["openai", "neon"])
+        #expect(Set(second.memberships().map(\.providerId)) == ["openai", "neon"])
+    }
+
+    @Test func ledgerIsOwnerOnly() throws {
+        let path = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tollcat-test-\(UUID().uuidString).json")
+        defer {
+            try? FileManager.default.removeItem(at: path)
+            try? FileManager.default.removeItem(at: path.appendingPathExtension("lock"))
+        }
+        JsonLedgerStore(path: path).upsertMembership(LedgerMembership(providerId: "openai", sortIndex: 0))
+        for file in [path, path.appendingPathExtension("lock")] {
+            let attributes = try FileManager.default.attributesOfItem(atPath: file.path)
+            #expect((attributes[.posixPermissions] as? NSNumber)?.intValue == 0o600)
+        }
+    }
+
     @Test func sharedFixture() throws {
         let fixture = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

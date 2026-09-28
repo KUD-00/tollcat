@@ -22,7 +22,8 @@ struct SecretServiceVault: CredentialVault {
     }
 
     func delete(reference: String) throws {
-        _ = reference.withCString { tollcat_secret_clear($0) }
+        let ok = reference.withCString { tollcat_secret_clear($0) }
+        guard ok != 0 else { throw CredentialVaultError.deleteFailed }
     }
 }
 #endif

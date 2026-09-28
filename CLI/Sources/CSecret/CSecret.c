@@ -89,12 +89,22 @@ char *tollcat_secret_lookup(const char *reference) {
     return lookup(&schema, NULL, NULL, "reference", reference, NULL);
 }
 
+typedef void (*error_free_fn)(void *error);
+
+// clear 的 gboolean 在「本来就没有这条」时也是 FALSE，拿它判成败会把幂等删除当失败；
+// 真正的失败（钥匙环锁着、D-Bus 断了）只体现在 GError 上。
 int tollcat_secret_clear(const char *reference) {
     void *handle = libsecret();
     if (!handle || !reference) return 0;
     clear_fn clear = (clear_fn)dlsym(handle, "secret_password_clear_sync");
     if (!clear) return 0;
-    clear(&schema, NULL, NULL, "reference", reference, NULL);
+    void *error = NULL;
+    clear(&schema, NULL, &error, "reference", reference, NULL);
+    if (error) {
+        error_free_fn release = (error_free_fn)dlsym(handle, "g_error_free");
+        if (release) release(error);
+        return 0;
+    }
     return 1;
 }
 

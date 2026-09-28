@@ -121,5 +121,6 @@ package enum JNICopy {
         "%@ ↘ 预计 %@": Entry(en: "%@ ↘ projected %@", ja: "%@ ↘ 見込み %@"),
         "%@ · 预计 %@": Entry(en: "%@ · projected %@", ja: "%@ · 見込み %@"),
         "Secret Service 不可用。凭据请用环境变量 TOLLCAT_<服务>_<字段>。": Entry(en: "Secret Service isn't available. Set credentials with TOLLCAT_<SERVICE>_<FIELD>.", ja: "Secret Service が使えない。認証情報は環境変数 TOLLCAT_<サービス>_<フィールド> で渡して。"),
+        "%@ 的凭据没能从钥匙环删除，已保留接入。": Entry(en: "Couldn't delete the %@ credential from the keyring, so the service is still connected.", ja: "%@ の認証情報をキーリングから削除できなかったため、接続はそのままにした。"),
     ]
 }

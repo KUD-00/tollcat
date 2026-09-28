@@ -125,8 +125,22 @@ struct CLISession {
         guard ledger.memberships().contains(where: { $0.providerId == provider.id }) || !accounts.isEmpty else {
             return .failure(.notConnected(provider))
         }
+        // 凭据删不掉就不动账本：先删账本等于把钥匙环里那份的引用扔了，再也清不掉。
+        // 确定查不到的（没存过、或这台机器没有 Secret Service）没有要删的，不拦；
+        // 读本身报错（钥匙串锁着）说明可能还在，照样要删成功。
         for account in accounts {
-            try? vault.delete(reference: account.credentialReference)
+            let mayBeStored: Bool
+            do {
+                mayBeStored = try vault.read(reference: account.credentialReference) != nil
+            } catch {
+                mayBeStored = true
+            }
+            guard mayBeStored else { continue }
+            do {
+                try vault.delete(reference: account.credentialReference)
+            } catch {
+                return .failure(.credentialDeleteFailed(provider))
+            }
         }
         ledger.deleteMembership(providerID: provider.id)
         return .success(provider)
@@ -185,4 +199,5 @@ enum AddError: Error, Equatable {
     case missingField(String)
     case fetchFailed(String)
     case notConnected(CatalogProvider)
+    case credentialDeleteFailed(CatalogProvider)
 }

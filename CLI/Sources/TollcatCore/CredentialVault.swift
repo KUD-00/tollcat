@@ -7,5 +7,6 @@ protocol CredentialVault: Sendable {
 enum CredentialVaultError: Error, Equatable {
     case saveFailed
     case readFailed
+    case deleteFailed
     case unavailable
 }
