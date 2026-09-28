@@ -760,6 +760,7 @@ jobs:
     environment: google-play
     env:
       SWIFT_VERSION: 6.3.3
+      ANDROID_SDK_CHECKSUM: d160cc3206dd1886dae3fef2337af5e25ec034692cd0ec225721c56cc69da7f5
       NDK_VERSION: 27.3.13750724
       ARTIFACTS: ${{ github.workspace }}/artifacts-android
     steps:
@@ -791,7 +792,10 @@ jobs:
           . "$HOME/.local/share/swiftly/env.sh"
           swiftly install "$SWIFT_VERSION" --use
           swift --version
-          swift sdk install "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
+          # Remote bundles need --checksum. Value from swift.org/api/v1/install/releases.json
+          # (6.3.3 → "Android SDK"); bump it together with SWIFT_VERSION.
+          swift sdk install --checksum "${ANDROID_SDK_CHECKSUM}" \
+            "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
           echo "$HOME/.local/share/swiftly/bin" >> "$GITHUB_PATH"
 
       - name: Cross-compile MeterCore and stage jniLibs
