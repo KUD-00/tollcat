@@ -34,6 +34,7 @@ python3 scripts/check-follow-up.py stamp dashboard android --decision reviewed -
 | `developer` | `MeterFeatures/Developer/` |
 | `share` | `MeterFeatures/Share/` |
 | `shell` | `MeterFeatures/` 根上的 `.swift` |
+| `watch` | `MeterFeatures/Watch/`（手表推送；三端都是 `n/a`） |
 | `bridge` | `Android/native/Sources/MeterBridge/*.swift` |
 
 新文件丢进其中一个目录，自动进该目录的哈希。新目录：表和 `watches` 各加一行。

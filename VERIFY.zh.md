@@ -262,3 +262,18 @@ workflow 是同一个 [`release.yml`](.github/workflows/release.yml) 的 `window
 - [ ] 三语全屏走查（zh / en / ja）
 - [ ] C# 源码里没有 `HttpClient`（提交闸已经扫）
 
+## 9. CLI（`tollcat`）
+
+Linux 的原生形态是终端。同一份 Swift 核心，没有 JNI / C ABI 皮。规格：[`docs/cli/SPEC.md`](docs/cli/SPEC.md)。本机：`swift test --package-path CLI`。
+
+### 首发人工检查单
+
+- [ ] `swift run --package-path CLI tollcat` 对 ≥2 家真实 provider 出数，与 iOS 一致
+- [ ] macOS 二进制已签名公证；Linux x86_64 与 aarch64 是全静态（Swift Static Linux SDK）；挂在同一个 GitHub Release 并 attest
+- [ ] 一台没有 Swift 的 Linux 盒子：scp 二进制，`tollcat add` + `tollcat` 打出本月数字
+- [ ] 凭据：macOS 钥匙串，Linux Secret Service；无图形会话用环境变量 `TOLLCAT_<PROVIDER>_<FIELD>`，不落盘
+- [ ] `--json` 的 stdout 是纯 JSON，没有凭据字段
+- [ ] `LANG=ja_JP.UTF-8 tollcat` 和 `LANG=en_US.UTF-8 tollcat` 走查
+- [ ] tap 上 `brew install tollcat`；`--version` 打印 tag 和 commit
+- [ ] 不发遥测；出站只有各家账单 API
+

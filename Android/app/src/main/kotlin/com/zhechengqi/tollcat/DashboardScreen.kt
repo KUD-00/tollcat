@@ -1,26 +1,26 @@
 package com.zhechengqi.tollcat
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingToolbarDefaults
-import androidx.compose.material3.HorizontalFloatingToolbar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LoadingIndicator
-import androidx.compose.material3.MediumFlexibleTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,32 +28,31 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
+import com.zhechengqi.tollcat.dashboard.CategoriesDetailView
 import com.zhechengqi.tollcat.dashboard.ComparisonDetailView
 import com.zhechengqi.tollcat.dashboard.CompositionDetailView
-import com.zhechengqi.tollcat.dashboard.DashboardEmptyView
-import com.zhechengqi.tollcat.dashboard.DashboardFilterAccount
-import com.zhechengqi.tollcat.dashboard.dashboardFilterNote
 import com.zhechengqi.tollcat.dashboard.DashboardEditSheet
+import com.zhechengqi.tollcat.dashboard.DashboardEmptyView
+import com.zhechengqi.tollcat.dashboard.DashboardFabMenu
+import com.zhechengqi.tollcat.dashboard.DashboardFabScrim
+import com.zhechengqi.tollcat.dashboard.DashboardFilterAccount
 import com.zhechengqi.tollcat.dashboard.DashboardFilterSheet
-import com.zhechengqi.tollcat.dashboard.CategoriesDetailView
-import com.zhechengqi.tollcat.dashboard.HeatmapDetailView
-import com.zhechengqi.tollcat.dashboard.SubscriptionsDetailView
 import com.zhechengqi.tollcat.dashboard.DashboardPopulatedView
 import com.zhechengqi.tollcat.dashboard.DashboardRoute
 import com.zhechengqi.tollcat.dashboard.DashboardSkeleton
+import com.zhechengqi.tollcat.dashboard.HeatmapDetailView
+import com.zhechengqi.tollcat.dashboard.SubscriptionsDetailView
+import com.zhechengqi.tollcat.dashboard.dashboardFilterNote
+import com.zhechengqi.tollcat.services.ProviderSubscriptionSheet
 import com.zhechengqi.tollcat.share.ShareCardBuilder
 import com.zhechengqi.tollcat.share.ShareCardExporter
 import com.zhechengqi.tollcat.ui.FadeThroughContent
 import com.zhechengqi.tollcat.ui.HierarchicalContent
-import com.zhechengqi.tollcat.ui.symbols.MaterialSymbol
-import com.zhechengqi.tollcat.ui.symbols.SymbolIcon
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -63,7 +62,9 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
     var route by rememberSaveable { mutableStateOf(DashboardRoute.Home) }
     var showFilter by remember { mutableStateOf(false) }
     var showEdit by remember { mutableStateOf(false) }
-    var showMore by remember { mutableStateOf(false) }
+    var addingSubscription by remember { mutableStateOf(false) }
+    var fabExpanded by rememberSaveable { mutableStateOf(false) }
+    var heroBehindStatusBar by remember { mutableStateOf(true) }
     val accounts = DashboardFilterAccount.from(session)
     val filterNote = dashboardFilterNote(session.filter, accounts)
     val shareContent = ShareCardBuilder.content(
@@ -80,35 +81,40 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
         tagline = stringResource(R.string.share_card_tagline),
     )
     val shareChooser = stringResource(R.string.action_share_to)
-    val shareA11y = stringResource(R.string.dashboard_share_a11y)
     // 筛选是重算：JNI 返回的构成已经带着取景框，这里不再二次过滤。
     val composition = dashboard.composition
-
     val persistenceStatus = session.persistenceStatus()
-    val periodTitle = dashboard.periodCaption.ifBlank { dashboard.monthTitle }
-    val showPeriodBar = !dashboard.empty && route == DashboardRoute.Home
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val subscriptionAccountId = dashboard.subscriptions?.items
-        ?.map { it.accountId }
-        ?.filter { it.isNotBlank() }
-        ?.distinct()
-        ?.singleOrNull()
+    val homeScroll = rememberScrollState()
+
+    val phase = when {
+        !dashboard.empty -> DashboardPhase.Populated
+        session.isRefreshing -> DashboardPhase.Loading
+        else -> DashboardPhase.Empty
+    }
+    val showsHome = phase == DashboardPhase.Populated && route == DashboardRoute.Home
+    // 顶栏还垫在状态栏底下时，图标颜色跟着顶栏（主色）走；滑过去以后回到页面底色的规则。
+    DashboardStatusBarAppearance(overHero = showsHome && heroBehindStatusBar)
 
     TrackScreen(dashboardUsageScreen(route))
     Scaffold(
-        modifier = if (showPeriodBar) modifier.nestedScroll(scrollBehavior.nestedScrollConnection) else modifier,
-        topBar = {
-            if (showPeriodBar) {
-                MediumFlexibleTopAppBar(
-                    title = { Text(periodTitle) },
-                    scrollBehavior = scrollBehavior,
+        modifier = modifier,
+        floatingActionButton = {
+            if (showsHome) {
+                DashboardFabMenu(
+                    expanded = fabExpanded,
+                    onExpandedChange = { fabExpanded = it },
+                    onAddService = { session.openAdd() },
+                    onAddSubscription = { addingSubscription = true },
+                    onEditDashboard = { showEdit = true },
                 )
             }
         },
     ) { inner ->
+        // 主页的顶栏自己钻到状态栏下面，不吃 Scaffold 的上边距；二级页照旧。
+        val padding = if (showsHome) PaddingValues(bottom = inner.calculateBottomPadding()) else inner
         Box(
             Modifier
-                .padding(inner)
+                .padding(padding)
                 .fillMaxSize(),
         ) {
             val refreshState = rememberPullToRefreshState()
@@ -120,11 +126,6 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
             ) {
                 // 空态三相：没服务→引导；有服务但首笔数据在路上→骨架；有数据→正文。
                 // fade-through 让内容盖着骨架淡入（skeleton loader 定式的收尾）。
-                val phase = when {
-                    !dashboard.empty -> DashboardPhase.Populated
-                    session.isRefreshing -> DashboardPhase.Loading
-                    else -> DashboardPhase.Empty
-                }
                 FadeThroughContent(
                     targetState = phase,
                     modifier = Modifier.fillMaxSize(),
@@ -191,114 +192,41 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                                     onOpenSubscriptions = { route = DashboardRoute.Subscriptions },
                                     extraModules = session.preferences.extraModules,
                                     moduleOrder = session.preferences.enabledModuleOrder(),
-                                    hidesCat = session.preferences.hidesCat,
+                                    nowMillis = session.nowMillis(),
                                     includesSubscriptions = session.filter.includesSubscriptions,
                                     onToggleSubscriptions = { include ->
                                         session.applyFilter(
                                             session.filter.copy(includesSubscriptions = include),
                                         )
                                     },
-                                    onSelectSubscription = subscriptionAccountId?.let { id ->
-                                        { session.openAccountOrProvider(id) }
-                                    },
-                                    staleCaption = dashboard.staleCaption,
+                                    onFilter = { showFilter = true },
+                                    onShare = { ShareCardExporter.share(context, shareContent, shareChooser) },
+                                    isRefreshing = session.isRefreshing,
                                     persistenceStatus = persistenceStatus,
                                     onDismissDemo = { session.dismissDemoBanner() },
                                     refreshFailed = session.refreshFailed,
+                                    scrollState = homeScroll,
+                                    onHeroBehindStatusBar = { heroBehindStatusBar = it },
                                 )
                             }
                         }
                     }
                 }
             }
-            if (!dashboard.empty && route == DashboardRoute.Home) {
-                // iOS 顶栏三颗：刷新、筛选、更多（分享和编辑进菜单）。添加走服务 tab。
-                HorizontalFloatingToolbar(
-                    expanded = true,
-                    colors = FloatingToolbarDefaults.standardFloatingToolbarColors(),
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                ) {
-                    IconButton(
-                        onClick = { session.refreshAll() },
-                        shapes = IconButtonDefaults.shapes(),
-                    ) {
-                        if (session.isRefreshing) {
-                            LoadingIndicator(modifier = Modifier.size(24.dp))
-                        } else {
-                            SymbolIcon(
-                                MaterialSymbol.Refresh,
-                                contentDescription = stringResource(R.string.action_refresh),
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = { showFilter = true },
-                        shapes = IconButtonDefaults.shapes(),
-                    ) {
-                        val filterActive = session.filter.isActive
-                        val filterNote = dashboardFilterNote(session.filter, accounts)
-                        val period = dashboard.periodCaption.takeIf {
-                            !session.filter.isCurrentMonth && it.isNotBlank()
-                        }
-                        val filterSummary = listOfNotNull(period, filterNote).joinToString(" · ")
-                        val filterDescription = if (filterActive && filterSummary.isNotBlank()) {
-                            stringResource(R.string.dashboard_filter_active, filterSummary)
-                        } else {
-                            stringResource(R.string.dashboard_filter)
-                        }
-                        SymbolIcon(
-                            MaterialSymbol.FilterList,
-                            contentDescription = filterDescription,
-                            filled = filterActive,
-                        )
-                    }
-                    Box {
-                        IconButton(
-                            onClick = { showMore = true },
-                            shapes = IconButtonDefaults.shapes(),
-                        ) {
-                            SymbolIcon(
-                                MaterialSymbol.MoreHoriz,
-                                contentDescription = stringResource(R.string.action_more),
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = showMore,
-                            onDismissRequest = { showMore = false },
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_share)) },
-                                onClick = {
-                                    showMore = false
-                                    ShareCardExporter.share(context, shareContent, shareChooser)
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_share),
-                                        contentDescription = null,
-                                    )
-                                },
-                                modifier = Modifier.semantics {
-                                    contentDescription = shareA11y
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.dashboard_edit)) },
-                                onClick = {
-                                    showMore = false
-                                    showEdit = true
-                                },
-                                leadingIcon = {
-                                    SymbolIcon(
-                                        MaterialSymbol.GridView,
-                                        contentDescription = null,
-                                    )
-                                },
-                            )
-                        }
-                    }
-                }
+            if (showsHome && homeScroll.value > 0) {
+                // 一滑动就在状态栏底下垫一条：顶栏还在时垫主色，滑走以后垫页面底色，
+                // 字不从状态栏图标底下穿过去。
+                Box(
+                    Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxWidth()
+                        .windowInsetsTopHeight(WindowInsets.statusBars)
+                        .background(
+                            if (heroBehindStatusBar) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                        ),
+                )
             }
+            DashboardFabScrim(expanded = showsHome && fabExpanded, onDismiss = { fabExpanded = false })
         }
     }
 
@@ -346,6 +274,43 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
             onDismiss = { showFilter = false },
         )
     }
+    if (addingSubscription) {
+        ProviderSubscriptionSheet(
+            providerId = null,
+            accountId = null,
+            editing = null,
+            onDismiss = { addingSubscription = false },
+            onSave = { row ->
+                session.saveSubscription(row)
+                addingSubscription = false
+            },
+            onDelete = null,
+        )
+    }
+}
+
+/**
+ * 状态栏图标深浅：[overHero] 时看顶栏主色的亮度（浅色主题主色是深蓝→白图标；
+ * 深色主题主色是浅紫→黑图标），否则看页面底色。离开主页时还原成页面底色的规则。
+ */
+@Composable
+internal fun DashboardStatusBarAppearance(overHero: Boolean) {
+    val view = LocalView.current
+    if (view.isInEditMode) return
+    val heroIsLight = MaterialTheme.colorScheme.primary.luminance() > 0.5f
+    val surfaceIsLight = MaterialTheme.colorScheme.surface.luminance() > 0.5f
+    DisposableEffect(overHero, heroIsLight, surfaceIsLight) {
+        val window = view.context.findActivity()?.window
+        val controller = window?.let { WindowCompat.getInsetsController(it, view) }
+        controller?.isAppearanceLightStatusBars = if (overHero) heroIsLight else surfaceIsLight
+        onDispose { controller?.isAppearanceLightStatusBars = surfaceIsLight }
+    }
+}
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
 
 private enum class DashboardPhase { Empty, Loading, Populated }

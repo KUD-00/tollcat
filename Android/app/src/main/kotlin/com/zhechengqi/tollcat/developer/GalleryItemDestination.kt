@@ -7,12 +7,15 @@ import com.zhechengqi.tollcat.developer.gallery.GalleryAmountStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryAttentionStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryCatStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryChartStatesView
+import com.zhechengqi.tollcat.developer.gallery.GalleryChromeView
 import com.zhechengqi.tollcat.developer.gallery.GalleryComparisonStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryCompositionStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryCredentialFieldsView
+import com.zhechengqi.tollcat.developer.gallery.GalleryDashboardPageView
 import com.zhechengqi.tollcat.developer.gallery.GalleryEmptyStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryErrorStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryGlyphStatesView
+import com.zhechengqi.tollcat.developer.gallery.GalleryModulesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryMonthRangeView
 import com.zhechengqi.tollcat.developer.gallery.GalleryOverflowStatesView
 import com.zhechengqi.tollcat.developer.gallery.GalleryRefreshView
@@ -30,6 +33,9 @@ fun GalleryItemDestination(
     modifier: Modifier = Modifier,
 ) {
     when (GalleryItemID.fromRaw(id)) {
+        GalleryItemID.DashboardPage -> GalleryDashboardPageView(onBack = onBack, modifier = modifier)
+        GalleryItemID.Chrome -> GalleryChromeView(onBack = onBack, modifier = modifier)
+        GalleryItemID.Modules -> GalleryModulesView(onBack = onBack, modifier = modifier)
         GalleryItemID.Empty -> GalleryEmptyStatesView(onBack = onBack, modifier = modifier)
         GalleryItemID.Errors -> GalleryErrorStatesView(onBack = onBack, modifier = modifier)
         GalleryItemID.Amounts -> GalleryAmountStatesView(onBack = onBack, modifier = modifier)

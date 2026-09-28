@@ -12,7 +12,7 @@
 		03026A8475B38561345DBCEB /* CUDOComputeBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973CD335DA1D9A52C05E3066 /* CUDOComputeBillingProviderTests.swift */; };
 		0392A81D23B8CAB9B61F2D2E /* RailwayBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF94B38D8F98A5F6EEF93E /* RailwayBillingProviderTests.swift */; };
 		046CABBF1054DBBE4CB5DB1D /* DeviceTransferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DA7850CF50D557AC465427 /* DeviceTransferTests.swift */; };
-		05B89A66300CBDAD54437ED6 /* MeterFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = 012BED5756BF32F4FC276CF9 /* MeterFeatures */; };
+		05B89A66300CBDAD54437ED6 /* MeterModules in Frameworks */ = {isa = PBXBuildFile; productRef = C68599A6D1FF52D3B7E187D8 /* MeterModules */; };
 		060A44B181C536271C063C86 /* LaunchCat-dark.svg in Resources */ = {isa = PBXBuildFile; fileRef = 7D5DC7D16B38CD67D7E6E06A /* LaunchCat-dark.svg */; };
 		065A1063C1ACD7F51560A34D /* QdrantBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F8539CD9BC8F9CF8CAEFD6 /* QdrantBillingProviderTests.swift */; };
 		07B0A0E80D70A02985C76591 /* InboxMailboxTransferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0B5A6116B16FACA55E6A84 /* InboxMailboxTransferTests.swift */; };
@@ -20,6 +20,7 @@
 		0A365B38C324E65B82762A1C /* MistralBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D77D9700A3C221654C776D4 /* MistralBillingProviderTests.swift */; };
 		0A9718B9961091DE068953AC /* ShipStationBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BF013C8565223FB18FAE32 /* ShipStationBillingProviderTests.swift */; };
 		0B59403613BFB92750514427 /* StoreKitConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F80759FD1668D560BD859 /* StoreKitConfigurationTests.swift */; };
+		0C52F2102E9BA6835F489E43 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7487EB7E19316C4381AFAA3D /* Localizable.xcstrings */; };
 		0C8D82492CC7F16F48764718 /* MeterFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = FEB19AF7455B02E63BD32AE1 /* MeterFeedback */; };
 		0DB35DBE81FB98CECBCD324C /* InboxHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF52CB8E4FBCA4FC20AF00 /* InboxHarness.swift */; };
 		0DC8C35C2662D59793E294D3 /* ChartMoneyScaleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79CF9740472605A2B6D19AD /* ChartMoneyScaleTests.swift */; };
@@ -35,7 +36,7 @@
 		1504B7184FBE23B7F68D444B /* CatMotionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D23FB2B866580EFACE08D5 /* CatMotionTests.swift */; };
 		1558A188C55F39F6342A1BA2 /* CloudSigmaBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BC550158E9BBCCED63D52F /* CloudSigmaBillingProviderTests.swift */; };
 		174C1B8FAD170149AFEEB502 /* PersistenceContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D02838D6CACEA6C90545C45 /* PersistenceContainerTests.swift */; };
-		176A6C931B444FF0C3AEE4B3 /* MeterTips in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB961FE5B36D7B80BEB5F4C /* MeterTips */; };
+		176A6C931B444FF0C3AEE4B3 /* MeterFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = 012BED5756BF32F4FC276CF9 /* MeterFeatures */; };
 		192908137C4D79F15C0F01EF /* InferenceSHBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8470CE3514F104F427A0CA82 /* InferenceSHBillingProviderTests.swift */; };
 		19567609E6CFF7A95330F22E /* TollCatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEBDB4966E0273A43C57E00 /* TollCatApp.swift */; };
 		195C18598B249932A8DDE2C3 /* Time4VPSBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B265C5F7D304667233A1F6 /* Time4VPSBillingProviderTests.swift */; };
@@ -46,7 +47,7 @@
 		1BF4E37A7057BDEE1AC2CFF1 /* MoneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4888C7AA27AE7BCEFD2F21 /* MoneyTests.swift */; };
 		1C09C228D408EEE7E2A5320B /* BunnyBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C1535179F20139715CE3E3 /* BunnyBillingProviderTests.swift */; };
 		1D3DFBE90B73AA8D89FBB6D6 /* TransferPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6EDDEECDB6CDFC601575C0 /* TransferPayloadTests.swift */; };
-		1DD0DB373C702EFD372A5CCE /* MeterInbox in Frameworks */ = {isa = PBXBuildFile; productRef = 994D9ED42A9F41420D364966 /* MeterInbox */; };
+		1DD0DB373C702EFD372A5CCE /* MeterTips in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB961FE5B36D7B80BEB5F4C /* MeterTips */; };
 		1E00B976B81F969F824E0821 /* ResendBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38305F1371800A15E26F4A26 /* ResendBillingProviderTests.swift */; };
 		1E9C3435E5727394AF09CC57 /* WhatsNewCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32594A6AB3652973A392283 /* WhatsNewCatalogTests.swift */; };
 		1EA6D868312737F6B449F270 /* AivenBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA40F49840569C59519092C /* AivenBillingProviderTests.swift */; };
@@ -54,11 +55,13 @@
 		1F73DC9369C7B621C6158A07 /* Neo4jAuraBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0650B83A6832BA7955E5C /* Neo4jAuraBillingProviderTests.swift */; };
 		1FDE2E149E87215EB01193CE /* CatMoodResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416B1C53DD1A4AAB7D1ED80 /* CatMoodResolverTests.swift */; };
 		21B7EAC8B66D6A6FAFA58031 /* DemoSeedPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DA3A7BDC0BE2E82BF63959 /* DemoSeedPipelineTests.swift */; };
+		22B0769E0C974FA6645AF8AA /* GlanceStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A23CF815DBE6634E506B90 /* GlanceStoreTests.swift */; };
 		2442D764DE5BA1825CCD0AAD /* ProviderOAuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96737A553D6897FE5FA22DB4 /* ProviderOAuthTests.swift */; };
 		24587CFEEECAF06620FEB2BE /* DNSimpleBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AEA82C246FF0B7AD9378F1 /* DNSimpleBillingProviderTests.swift */; };
 		2464A59EC9C298CFEED714B7 /* ServersComBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923D6115A540120EBF70B82E /* ServersComBillingProviderTests.swift */; };
 		24C6F3F9568EC24E92FCBE39 /* OxahostBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C1B005F5CAF81FDC2C0302 /* OxahostBillingProviderTests.swift */; };
 		2554A1032EFE2762B4F8ED44 /* LaunchCat.svg in Resources */ = {isa = PBXBuildFile; fileRef = FC49A91017913DD8A05732B8 /* LaunchCat.svg */; };
+		2661B2B319CF6A57C17CBE77 /* MeterGlance in Frameworks */ = {isa = PBXBuildFile; productRef = 1D508642B3D42DC7513FB338 /* MeterGlance */; };
 		269FD17A44AB04F28C014F08 /* ConoHaBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337AD30B892EA355F023C7D /* ConoHaBillingProviderTests.swift */; };
 		2859C044ABB4DD222105BE83 /* HTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CD7A3DCFA228CCF89CB7E4 /* HTTPClientTests.swift */; };
 		29A83B4F46E0920C39020C30 /* FiskilBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E0B58509E77A50A1A94BFF /* FiskilBillingProviderTests.swift */; };
@@ -81,6 +84,7 @@
 		32FCE9E53E4B1DF7FA59C2F3 /* KeychainCredentialStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F654FEBEBD74DBA45EDD5581 /* KeychainCredentialStoreTests.swift */; };
 		33268266E2E388E2A4190FC2 /* FalBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F74C1491F413611FDCB10A /* FalBillingProviderTests.swift */; };
 		35384ED95868604F621E43B1 /* OutboundHostsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CF61681DE85A7D4F8F2A0C /* OutboundHostsTests.swift */; };
+		37428320407B7ECE569D31D8 /* WatchGlancePublisherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2714A00C8DDA9EB6172EC4D3 /* WatchGlancePublisherTests.swift */; };
 		37BDB225392400D4D5F465F2 /* RedisCloudBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9615AAF3F580C83430AC2 /* RedisCloudBillingProviderTests.swift */; };
 		38BBE341853918F133248448 /* EasyPostBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC96AD47764A1D261133F0 /* EasyPostBillingProviderTests.swift */; };
 		3A2D73F90F50EB6E31F2020C /* FormspringBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB74EF725E26628C8A4FF7A /* FormspringBillingProviderTests.swift */; };
@@ -90,6 +94,7 @@
 		3C0A0BFA6D936DE67654C23E /* GleSYSBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952A12465AF6CF78A37CE148 /* GleSYSBillingProviderTests.swift */; };
 		3C78ADD4E47A4752AA79648C /* SentryBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F51A1302B82D993279774F /* SentryBillingProviderTests.swift */; };
 		3C9B39AA612F11FFA43DD48F /* CloudflareBillingCycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8A428470EC896A56BF1802 /* CloudflareBillingCycleTests.swift */; };
+		3E94C9FC392C2D3476050638 /* MeterGlance in Frameworks */ = {isa = PBXBuildFile; productRef = F048BC60AA62FB1009E8017C /* MeterGlance */; };
 		3ED587D8D76808666C1C92A5 /* GuardrailSourceScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A4D83527506FEDD98B0A35 /* GuardrailSourceScan.swift */; };
 		3F6A5C751E07118C3A7572E2 /* LinodeBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC5987AE4D53EC8FDF1AE8F /* LinodeBillingProviderTests.swift */; };
 		401350AA9CA71504DBCA08EA /* InboxHandoffModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099FF59816B51B35E408090C /* InboxHandoffModelTests.swift */; };
@@ -111,10 +116,12 @@
 		48BF5C0022D1B31F49E9F0E8 /* GandiBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C96004D04699F7395EDEB37 /* GandiBillingProviderTests.swift */; };
 		494BBF7E3FB070B7C6A80E51 /* DeepgramBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FEB88A8C89BB9E22AAD89C /* DeepgramBillingProviderTests.swift */; };
 		4A6835B795507710C5552731 /* CerebriumBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E7FCD8B02B1CB95C94436 /* CerebriumBillingProviderTests.swift */; };
+		4ABDD7E8A837C0F07B0F57DE /* GlanceCodecTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33745077C74624756825B8 /* GlanceCodecTests.swift */; };
 		4B2DCF2679D1ADC2BFD34334 /* DestructiveSwipeConfirmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC45AB697E8271819C13B2A1 /* DestructiveSwipeConfirmTests.swift */; };
 		4B639A0CBDF4AC8A3E0985BC /* OcambaBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C88421D8AA15DC3D831F0 /* OcambaBillingProviderTests.swift */; };
 		4C2C4767C111C98D656797F8 /* IDCFBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B8CD3AC3FF01F3A3856D9D /* IDCFBillingProviderTests.swift */; };
 		4C3EB6A6C20B9985F80A332A /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA393B1E6061E47B459C755 /* CatalogTests.swift */; };
+		4C73550590EEF0BC7E057E29 /* TollCatWatchWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F77C6E7B70C25C99F77FEE48 /* TollCatWatchWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4CFD6A0A53B7843B20C646EA /* FeedbackPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D22F7DD2583E494B97326B /* FeedbackPayloadTests.swift */; };
 		4D316EC7EA371D23D92BEA49 /* HistoryChartMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE355772558FCBB65A6BFA1 /* HistoryChartMathTests.swift */; };
 		4D3E1DB6DAB96AEE52FD8EA6 /* LegalURLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DEC17B10F97E7C6913E21E /* LegalURLTests.swift */; };
@@ -139,18 +146,21 @@
 		5A4C15318CC6234EBB24D762 /* StannpBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D4044B0FCCB9EA118B89E4 /* StannpBillingProviderTests.swift */; };
 		5A77971419F83DC046247243 /* TipModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65C72A73AC9AE1E598A877A /* TipModelTests.swift */; };
 		5B21B90B76EFED8819E5BC7A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82E22D94658E494E9BD5C5D /* AppEnvironment.swift */; };
-		5B56D9FEB878C5AF86337076 /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = C09155A3AF18F0466BD33E49 /* MeterCore */; };
+		5B56D9FEB878C5AF86337076 /* MeterPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 4269B125B82D1E04F00E5F32 /* MeterPersistence */; };
 		5B9BAEE5EE60679651D0FA14 /* TimewebBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE804D8813F426D3DEFD8EEA /* TimewebBillingProviderTests.swift */; };
+		5BE2CFE6FC0BF319898FCBC2 /* WatchGlanceReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA3656E3EE94AA8E17A1DCA /* WatchGlanceReceiver.swift */; };
 		5E04246668B8C63E7A0700E8 /* MeterInbox in Frameworks */ = {isa = PBXBuildFile; productRef = 3B76BD86BB1D99789E3C4EA5 /* MeterInbox */; };
 		5ECE3185CE6D1286B1D450E7 /* ProdigiBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61ECDD5FF906AF137347A28 /* ProdigiBillingProviderTests.swift */; };
 		5F190518594E2AB1B464E8A0 /* InboxLaneIsolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F230085DCC9F3E0B57B45FD3 /* InboxLaneIsolationTests.swift */; };
+		5F76639BF6B3E633A01E381B /* MeterGlance in Frameworks */ = {isa = PBXBuildFile; productRef = 7EA04D82C07120972E9C54B8 /* MeterGlance */; };
+		5FFEC7EFC1D75B5E09299F82 /* PendingRefreshTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5853CFC862C40D353DF0F8 /* PendingRefreshTasks.swift */; };
 		6019009F915BDEA207197EF4 /* ArmadaBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0229520AC6AC2B88A6FA4F3 /* ArmadaBillingProviderTests.swift */; };
 		6050780B3D00FAA0CF9A4FC4 /* MeterDesign in Frameworks */ = {isa = PBXBuildFile; productRef = F023526A79B0492246F23ACE /* MeterDesign */; };
 		612BE7C09233820F9905BBDE /* UsageEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6866940795ABD8EBB6AE1BAD /* UsageEndpointTests.swift */; };
 		61CD20F6699F869202C7FABA /* ProviderHistoryChartPagingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B6C94E47D9B08698317A7C /* ProviderHistoryChartPagingTests.swift */; };
 		6299A2E6A9D5AFAF743682FA /* TursoBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00C3DE527F9693345681A1 /* TursoBillingProviderTests.swift */; };
 		645B8AEBC236957893E2F7F2 /* UsageRefreshOnActivateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD89D93D91A21D2FF7236DB /* UsageRefreshOnActivateTests.swift */; };
-		6489B89C91064F6F7E582CB6 /* MeterModules in Frameworks */ = {isa = PBXBuildFile; productRef = C68599A6D1FF52D3B7E187D8 /* MeterModules */; };
+		6489B89C91064F6F7E582CB6 /* MeterDashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 5D40B076930960E768998D7C /* MeterDashboard */; };
 		6525B45C591F017383108743 /* ElevenLabsBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932E04E6E8226AD60600BC1 /* ElevenLabsBillingProviderTests.swift */; };
 		657414FF8089DAE4D4F2CB59 /* MeterDigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1C05E1E9073311531C3037 /* MeterDigestTests.swift */; };
 		659BB4327F8A1B2D4C0CA75D /* TollCatWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A091E53D9C2B5BD948D86915 /* TollCatWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -158,6 +168,7 @@
 		66442E3E5DCBD619B4946B34 /* ShareCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F896152347F7F70624C5265C /* ShareCardTests.swift */; };
 		666BA99AA50EF4DB8EA556D1 /* InboxRefreshLaneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D591D18D2578F966A6961176 /* InboxRefreshLaneTests.swift */; };
 		697F570F356C1634E7FB8C51 /* OpenRouterBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E8D02D112AA51B2B4EC356 /* OpenRouterBillingProviderTests.swift */; };
+		6992CC5CB8A7BA0DCFDCA9B1 /* MeterGlance in Frameworks */ = {isa = PBXBuildFile; productRef = 79D1EC1A667FC42BA9A279D9 /* MeterGlance */; };
 		6B5E1FBBBAF342FA8D6EF4EE /* GootenBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047185FC73CA219B92107F63 /* GootenBillingProviderTests.swift */; };
 		6B8483F3BCA0EE09A3ECB1B1 /* ServiceRelativeTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EA153DED5B92FE61A8C30C /* ServiceRelativeTimeTests.swift */; };
 		6BB0E90FB1C53ECF2850E7F3 /* MeterFeatures in Frameworks */ = {isa = PBXBuildFile; productRef = B0C9BB23846E5CD6756C3AFC /* MeterFeatures */; };
@@ -199,8 +210,9 @@
 		845214F58FAEDBB0F56225CB /* BasetenBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A58A0E5D5FF0F42F6DA9D7 /* BasetenBillingProviderTests.swift */; };
 		8465740670915EC8B765D9FC /* LedgerFoldCostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403E790409FF1850D1025DD1 /* LedgerFoldCostTests.swift */; };
 		8497591C35E8061929A969E7 /* UsageSetupPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9364A8382D17716E3421CC /* UsageSetupPresentationTests.swift */; };
-		84B8CD45B6A989E96A26A388 /* MeterPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 4269B125B82D1E04F00E5F32 /* MeterPersistence */; };
+		84B8CD45B6A989E96A26A388 /* MeterModules in Frameworks */ = {isa = PBXBuildFile; productRef = FF549E2FA3C5EB2630837E9A /* MeterModules */; };
 		852476FE0BE49F1D5FC583CA /* NeonBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41C9E7BFE76876665EE0CEF /* NeonBillingProviderTests.swift */; };
+		85321224BAA96F9D7E69B07B /* GlanceTimelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC20CBE671AABDA710DB01D8 /* GlanceTimelineTests.swift */; };
 		86411EF863EAE03E96CE0A7E /* TipTreatArtworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5842AEC9F07E00E50BBBFA /* TipTreatArtworkTests.swift */; };
 		86990AAD26AFB72D0944C798 /* AlchemyBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA1E7A9825966B2D69222FF /* AlchemyBillingProviderTests.swift */; };
 		86DBB26DC8FC52CBFEFD263A /* PleoBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1ADA6BB8AA9D0B13C54CDC /* PleoBillingProviderTests.swift */; };
@@ -228,6 +240,7 @@
 		91D9A958047E6AC722FF24C1 /* MonthSpendHistoryCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E958BA5F3A93B561E51D6232 /* MonthSpendHistoryCalculatorTests.swift */; };
 		9211E109846DB774435B7F9B /* QiniuBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DF6CF57C7D3E1AB755FA2E /* QiniuBillingProviderTests.swift */; };
 		93817A680360B217B0BF5EC6 /* DashboardFilterSurfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC27C4AB91668E9822593ED2 /* DashboardFilterSurfaceTests.swift */; };
+		9384F18992C8D0D92934C9FC /* GlanceBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7075D671628B9408B8BB3E44 /* GlanceBuilderTests.swift */; };
 		952ECAD5DEF7222F31693F2C /* TipProductIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF2E9782412A2F4013A5453 /* TipProductIDTests.swift */; };
 		9659CC3FAB69537E21CB2DA0 /* FastlyBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A198A693EF959438E84129D6 /* FastlyBillingProviderTests.swift */; };
 		9680201CAB15EC9EFD9C4BA4 /* TwilioBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991DF616D0E95DF4ECC684B9 /* TwilioBillingProviderTests.swift */; };
@@ -236,17 +249,20 @@
 		97EF6FAAB7EDBF0630E21308 /* MariaDBCloudBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2BE2BD706C6B9CC84FD749 /* MariaDBCloudBillingProviderTests.swift */; };
 		98B8CA43B5B39661FEA6A6DE /* DilmuneBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E244C16BD5C8245CB52A0C61 /* DilmuneBillingProviderTests.swift */; };
 		9983B744BB2B0B6A70C8B4B9 /* RunPodBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A1D3D522357484C77CE2B5 /* RunPodBillingProviderTests.swift */; };
+		9A546CAAD0F2C1C018FBFD5B /* TollCatWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD63A34AA5066895D04CCE /* TollCatWatchApp.swift */; };
 		9B2623DB76BDC9450EDBD2AC /* DeveloperDebugLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25CD2212E180F6A9331DDD2 /* DeveloperDebugLogTests.swift */; };
 		9BC2E054A0CC8A488CC2378C /* CatalogLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC168F94E1F64986EEC3B669 /* CatalogLocalizationTests.swift */; };
 		9C66EE0DBF4AFC5640FBFBA7 /* NamecheapBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0A59D57CCF09155A17E315 /* NamecheapBillingProviderTests.swift */; };
 		9EA91B51BFB047C84F93B501 /* ManualUsageKindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE12542E801514CA4ADE775 /* ManualUsageKindTests.swift */; };
 		9EB0A0FCC36116B312033201 /* FeedbackEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003508BEAD9E978911F0243 /* FeedbackEndpointTests.swift */; };
 		A199A3DDF90FC72B3B88CE9B /* VolcengineBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88BA72912A4D8260F69D283 /* VolcengineBillingProviderTests.swift */; };
+		A1A28E045AAF603A31E11FBF /* GlanceWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F503C404B452C85CF01FB4 /* GlanceWidgets.swift */; };
 		A1EAC35B0289F296CDAAA1B2 /* ListRowHitTargetGuardrailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11AF81FB133AAB658CCE630 /* ListRowHitTargetGuardrailTests.swift */; };
 		A2CF3B1C6F28B1764D80992C /* ShipwellBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A9213AC8F947D2442E2487 /* ShipwellBillingProviderTests.swift */; };
 		A30D9A91923E11808FACE96C /* HetrixToolsBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4428052F6D6FD5AC9E3DE5D /* HetrixToolsBillingProviderTests.swift */; };
 		A3C97FA5F141FA9542EC4EE3 /* FrankEnergieBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60268EF7FBD30F23BE44D4A4 /* FrankEnergieBillingProviderTests.swift */; };
 		A3E157835897756B9BAB2A06 /* PostHogBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3B65901D2A1D20FD382641 /* PostHogBillingProviderTests.swift */; };
+		A521177F055F323B07013C56 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3C2A7FA5F65D36B8ECD176FC /* PrivacyInfo.xcprivacy */; };
 		A560F532EFFE08F286509C91 /* CatSpeechFallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDD59022560B3E44BB40B56 /* CatSpeechFallbackTests.swift */; };
 		A59285D761CE208D3501F817 /* CockroachBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550D1F8DE7384D77D5F422A1 /* CockroachBillingProviderTests.swift */; };
 		A6195C7BAB53E537BC9AC197 /* SetupWizardModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2036071B1E2AA90B1F1F13B2 /* SetupWizardModelTests.swift */; };
@@ -254,7 +270,7 @@
 		A8CD9544EFC155B40B127482 /* StampedBillingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23360DE2870D7BBAC0EA29AE /* StampedBillingProvider.swift */; };
 		A96AC4E146D9E3ADE049FD43 /* MessageBirdBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF0EAE9BE18FAABB583108 /* MessageBirdBillingProviderTests.swift */; };
 		A98F66F7849F56E06A885D3B /* TransIPBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A670E934080C0DB846D85F /* TransIPBillingProviderTests.swift */; };
-		AB8642C0D214BB9031F5BB69 /* MeterFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = FBF90F912D51E02A8709DE2C /* MeterFeedback */; };
+		AB8642C0D214BB9031F5BB69 /* MeterInbox in Frameworks */ = {isa = PBXBuildFile; productRef = 994D9ED42A9F41420D364966 /* MeterInbox */; };
 		AC1ED387FE9FA874BDA809B6 /* BotpressBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001B27B4CB021DC08814FE1C /* BotpressBillingProviderTests.swift */; };
 		ACA68C1138065E9B9B63FF4E /* Api2PdfBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006039E75E7CD891AD1BD1E /* Api2PdfBillingProviderTests.swift */; };
 		AD61F6C804376D00DB6445CC /* LedgerTimingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330CDB604BB588F706AB7436 /* LedgerTimingTests.swift */; };
@@ -268,9 +284,13 @@
 		B050AC6BE8FD1CB8319C93E0 /* DashboardLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B12EFA811DD8D754254913B /* DashboardLayoutTests.swift */; };
 		B11882557A5804E1B8131185 /* PorkbunBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6CEA40673DFF318711392 /* PorkbunBillingProviderTests.swift */; };
 		B1634ADEFBDCB5A60EFB144D /* HuggingFaceBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB732EADB1D7DAE2CCBA157B /* HuggingFaceBillingProviderTests.swift */; };
-		B1878FD658B838AD3168E902 /* MeterModules in Frameworks */ = {isa = PBXBuildFile; productRef = FF549E2FA3C5EB2630837E9A /* MeterModules */; };
+		B1878FD658B838AD3168E902 /* MeterDashboard in Frameworks */ = {isa = PBXBuildFile; productRef = D80940E5E648E1CB85489110 /* MeterDashboard */; };
+		B229799DF94CB591D528BB10 /* GlanceStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD04EC72BABA785717233E4D /* GlanceStyleTests.swift */; };
+		B2C3D5D5ED92EDA8A038C4D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 494C033F665B1D2F8D7D2B60 /* Assets.xcassets */; };
 		B2FFE2929412F885914FEF47 /* HostcircleBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4576D1A67F260B25865A715 /* HostcircleBillingProviderTests.swift */; };
+		B4839702C273BA5499765BC6 /* WatchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56E4C311BC793D77857FE49 /* WatchAppDelegate.swift */; };
 		B507245B7CEBF68F668978A3 /* ThanksIOBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AE611DAF1D45ACBA0E3D74 /* ThanksIOBillingProviderTests.swift */; };
+		B51B1D04AC9C76560CC5AD4F /* TollCatWatchWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733AD3D53D17E013D999543 /* TollCatWatchWidgetBundle.swift */; };
 		B6CF5960E46AB6245F3F1202 /* KingsoftCloudBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33AACDB5941F20DF7629DB9 /* KingsoftCloudBillingProviderTests.swift */; };
 		B703E315FDBC1F36DF6453D5 /* FixtureAggregationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC709B5C78E8D45697DBD7EB /* FixtureAggregationTests.swift */; };
 		B858692ACE69003ECAD01553 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 90F96B04F5ECF81E2914913A /* PrivacyInfo.xcprivacy */; };
@@ -278,7 +298,9 @@
 		B8A9977888437B29328C6570 /* MoonshotBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713B6DF7CBFC658B92BF57BF /* MoonshotBillingProviderTests.swift */; };
 		B9150F47E5BC4FA37DA3443E /* TransferCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802F135E7667A2B9E7780557 /* TransferCodeTests.swift */; };
 		B929E1A2D0FB2FD7ABB062AB /* RealtimeRegisterBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0C14B1D442FA06D767A5F7 /* RealtimeRegisterBillingProviderTests.swift */; };
+		B9EC423D6FD5475745B6C46F /* MeterUsage in Frameworks */ = {isa = PBXBuildFile; productRef = BB11B6F8F87AAFA3E5B342A3 /* MeterUsage */; };
 		BA055100B9C892F3B3ACA4F9 /* CheckoutBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333646A78EB98D8BFC276BCF /* CheckoutBillingProviderTests.swift */; };
+		BB26C3C278EFD92286BD8DE0 /* GlanceTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AC7B0B390C8B72AA6C329C /* GlanceTextTests.swift */; };
 		BB3CE6C50B586BCE91765A74 /* NomosBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0427688EB73C56F41E8598DF /* NomosBillingProviderTests.swift */; };
 		BBFA5988033D1A48F60CF87A /* FilesComBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC913302E70CABB80AB27FD /* FilesComBillingProviderTests.swift */; };
 		BC1D3CE752DCC201AFB05F59 /* CatRasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CD2C6A77B5458E876940F7 /* CatRasterTests.swift */; };
@@ -293,6 +315,7 @@
 		C1980458BD3048C72AEFCC63 /* TextmagicBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC75F6BE94C4A7BE7FA3CD7D /* TextmagicBillingProviderTests.swift */; };
 		C49FCE20D6117948A38E9796 /* TelnyxBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D1DC01241894D497BC8D63 /* TelnyxBillingProviderTests.swift */; };
 		C4A5DFC903B00D592AD543B3 /* OnboardingPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA22F810D1A1C2282C75522 /* OnboardingPageTests.swift */; };
+		C4C08AA43337F5CD9CA8A7EE /* WatchGlanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4533F610C79C7F6DB4E720 /* WatchGlanceModel.swift */; };
 		C5C168356BE9B12186631CBE /* HivelocityBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221B3B2FA2CA630604DC7E24 /* HivelocityBillingProviderTests.swift */; };
 		C696CA2F452B560311F14F74 /* MonthlyLedgerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A315BF9A97FD05322DDCC6 /* MonthlyLedgerStoreTests.swift */; };
 		C6B7A45D7FFEAE8A49D5770E /* ShipBobBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFC8F45D8A68DAA181E885 /* ShipBobBillingProviderTests.swift */; };
@@ -300,6 +323,7 @@
 		C8CF81A247C906EC1843D1E6 /* DoitBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BDAF631EA6B034C05A828E /* DoitBillingProviderTests.swift */; };
 		C959F5FCB18BE437AD487A48 /* SevallaBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ECAB0578E434635843DD2D /* SevallaBillingProviderTests.swift */; };
 		CAEE4EB42CC16B16A8A35FE7 /* SpendLineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D354C4F8A89F2C3C498B63 /* SpendLineTests.swift */; };
+		CB894F965BCA608D0F853823 /* GlanceDisplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0714B7A9CF2E1D7034853448 /* GlanceDisplayTests.swift */; };
 		CC4938AC0755FF27A5D76596 /* ProviderAssemblyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5FA3DEE95A277B2867B5DF /* ProviderAssemblyTests.swift */; };
 		CCCA098AED584FD7D9F53AC5 /* CurrencyConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58471FC2E647BC05553E3929 /* CurrencyConversionTests.swift */; };
 		CE0F55FF6232756A489DC4F1 /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6A134678293F51A0FFB4136E /* MeterCore */; };
@@ -322,6 +346,7 @@
 		D91C8453868C9D79CF441F58 /* CatalogEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84907106875BABE0ED1AAD4 /* CatalogEndpointTests.swift */; };
 		D92D26ED6C9B62458A9A245F /* I3DNetBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C355E3507365674436CD789F /* I3DNetBillingProviderTests.swift */; };
 		D97852A7569F3AA3B6AFB96D /* OutboundEgressHardeningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E56F5572EB493CD146C68B /* OutboundEgressHardeningTests.swift */; };
+		D99145DBAA75A9B002C695BD /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5BAFDC838AB73623F6469109 /* PrivacyInfo.xcprivacy */; };
 		DB82456CFFA98584F8999BD0 /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = D25C7C4E5BC9675C3E84A7BA /* MeterCore */; };
 		DBB2F9ABBDF5512F6BC0E6D5 /* MeterPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 427ED7CB74706A2157F08774 /* MeterPersistence */; };
 		DBD59FB7172ABE30C22A1713 /* OpenAIBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB8E10BC2D3EE60972D1AE3 /* OpenAIBillingProviderTests.swift */; };
@@ -341,7 +366,7 @@
 		E42E5EB98D65E107ECC6C81A /* LatitudeSHBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C7474F4FB62F533F70EF09 /* LatitudeSHBillingProviderTests.swift */; };
 		E4D0CEF23221CE7F98F8450F /* ProviderSubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1EE8826925DFE680BBF1DF /* ProviderSubscriptionTests.swift */; };
 		E794B91FB19DF55FBE91A014 /* TipModuleIsolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3988E29B21A9153E224DA /* TipModuleIsolationTests.swift */; };
-		E85657F2831AAF8A1B4DB94F /* MeterUsage in Frameworks */ = {isa = PBXBuildFile; productRef = BB11B6F8F87AAFA3E5B342A3 /* MeterUsage */; };
+		E85657F2831AAF8A1B4DB94F /* MeterFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = FBF90F912D51E02A8709DE2C /* MeterFeedback */; };
 		E860B6977644CD4645BCFBBE /* HerokuBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9B310343B7D18C886028D4 /* HerokuBillingProviderTests.swift */; };
 		E866A5B8F79DD70CE09263AD /* DeviceTransferCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13929234529577725B58E882 /* DeviceTransferCoverageTests.swift */; };
 		E881AE21DA80638700C0FDD4 /* VastAIBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31748E8D518401B46CD5B5B /* VastAIBillingProviderTests.swift */; };
@@ -370,9 +395,11 @@
 		F7EE9C90E5A8ED23BE01965D /* PersistenceBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E307C57FF574CF808160329 /* PersistenceBootstrap.swift */; };
 		F9656A46730490385281309B /* ConfidenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85131250395DCBB9EDDB0F4 /* ConfidenceTests.swift */; };
 		F971F27C3853F362F675FBD8 /* MollieBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6B354732ACB031F356B42 /* MollieBillingProviderTests.swift */; };
+		F9BCAEA6E2903822CF454084 /* MeterCore in Frameworks */ = {isa = PBXBuildFile; productRef = C09155A3AF18F0466BD33E49 /* MeterCore */; };
 		FA9F21D49278BE17929A207B /* StripeBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCE7A4FE2EB4B64A0984C2 /* StripeBillingProviderTests.swift */; };
 		FB21699E066304D608684393 /* CatSquashAnchorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159799A4C67720F896DDB5A5 /* CatSquashAnchorTests.swift */; };
 		FB2E09763CB3515D803FB712 /* AppPreferencesRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF01D87C57F7916ABE8825D3 /* AppPreferencesRecordTests.swift */; };
+		FB63330B6338202F9327A544 /* TollCatWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3E00D9B07E90EE99DDE58302 /* TollCatWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FB6D74ABC20D0EEABDA35FFF /* DeepSeekBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D566C40DC25D1CA1C813C0 /* DeepSeekBillingProviderTests.swift */; };
 		FD7E38BF42533D247D85848F /* ReminderSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F8690B728E0E2B20C4FA44 /* ReminderSchedulerTests.swift */; };
 		FE9FDEC15D2E821058DD7EE2 /* ThreePLGuysBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F40908345647C290633C059 /* ThreePLGuysBillingProviderTests.swift */; };
@@ -380,6 +407,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		02CF83021C548502ABD73F34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BAEB506EA028F18898EFB4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FD980A9FBF05D1AC7F331F48;
+			remoteInfo = TollCatWatchWidget;
+		};
 		4115D027C9EDC89EE5772D51 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B0BAEB506EA028F18898EFB4 /* Project object */;
@@ -394,6 +428,13 @@
 			remoteGlobalIDString = F527587E3066B3BF53F1768E;
 			remoteInfo = TollCatWidget;
 		};
+		D2B71753F6EB8290B87B596D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BAEB506EA028F18898EFB4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C64E31DC936DC9FEE325C706;
+			remoteInfo = TollCatWatch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -404,6 +445,28 @@
 			dstSubfolderSpec = 13;
 			files = (
 				659BB4327F8A1B2D4C0CA75D /* TollCatWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0AA1F57CA03E3F74FDD01FA /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				FB63330B6338202F9327A544 /* TollCatWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC6F4C8218E054190F8F017F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4C73550590EEF0BC7E057E29 /* TollCatWatchWidget.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -426,6 +489,7 @@
 		047185FC73CA219B92107F63 /* GootenBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GootenBillingProviderTests.swift; sourceTree = "<group>"; };
 		05F74C1491F413611FDCB10A /* FalBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FalBillingProviderTests.swift; sourceTree = "<group>"; };
 		064DD417BC15D0C1E4C928A9 /* TransloaditBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransloaditBillingProviderTests.swift; sourceTree = "<group>"; };
+		0714B7A9CF2E1D7034853448 /* GlanceDisplayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceDisplayTests.swift; sourceTree = "<group>"; };
 		072FF3B1A2D43AF7B1BB9CD9 /* UpsunBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsunBillingProviderTests.swift; sourceTree = "<group>"; };
 		07DA7850CF50D557AC465427 /* DeviceTransferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTransferTests.swift; sourceTree = "<group>"; };
 		08A670E934080C0DB846D85F /* TransIPBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransIPBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -454,9 +518,11 @@
 		159799A4C67720F896DDB5A5 /* CatSquashAnchorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSquashAnchorTests.swift; sourceTree = "<group>"; };
 		15AB36810E51FD6AB23683B2 /* AddProviderSearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProviderSearchTests.swift; sourceTree = "<group>"; };
 		1744F72E6FB7DC01844E1743 /* ComparisonBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonBuilderTests.swift; sourceTree = "<group>"; };
+		17FD63A34AA5066895D04CCE /* TollCatWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TollCatWatchApp.swift; sourceTree = "<group>"; };
 		19C72A0B518A08E6870C46A2 /* VoltViewBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltViewBillingProviderTests.swift; sourceTree = "<group>"; };
 		1AC913302E70CABB80AB27FD /* FilesComBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesComBillingProviderTests.swift; sourceTree = "<group>"; };
 		1B00C3DE527F9693345681A1 /* TursoBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TursoBillingProviderTests.swift; sourceTree = "<group>"; };
+		1B4533F610C79C7F6DB4E720 /* WatchGlanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGlanceModel.swift; sourceTree = "<group>"; };
 		1E1EE8826925DFE680BBF1DF /* ProviderSubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderSubscriptionTests.swift; sourceTree = "<group>"; };
 		1E6E0B02FC549FB7608EE4B1 /* ApifyBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApifyBillingProviderTests.swift; sourceTree = "<group>"; };
 		1F551ADBEDF7116BDABDCE19 /* PrepaidRunwayCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepaidRunwayCalculatorTests.swift; sourceTree = "<group>"; };
@@ -468,6 +534,7 @@
 		21AAFD6D42DB1ADC38C5505F /* DeveloperGalleryIsolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperGalleryIsolationTests.swift; sourceTree = "<group>"; };
 		221B3B2FA2CA630604DC7E24 /* HivelocityBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HivelocityBillingProviderTests.swift; sourceTree = "<group>"; };
 		22216FF3DB1ED9B58A54EC2E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		223AEE6DEEDF131BF3A5B05A /* TollCatWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TollCatWatch.entitlements; sourceTree = "<group>"; };
 		227E6510720C2C2E1DE036DE /* DashboardFilterPastMonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardFilterPastMonthTests.swift; sourceTree = "<group>"; };
 		2309CB6C0DC058FEEA2DBAE5 /* ScalewayBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalewayBillingProviderTests.swift; sourceTree = "<group>"; };
 		23360DE2870D7BBAC0EA29AE /* StampedBillingProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampedBillingProvider.swift; sourceTree = "<group>"; };
@@ -475,6 +542,7 @@
 		24B85F8CC0FA23AB691ED083 /* XAIBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XAIBillingProviderTests.swift; sourceTree = "<group>"; };
 		25A9213AC8F947D2442E2487 /* ShipwellBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipwellBillingProviderTests.swift; sourceTree = "<group>"; };
 		27120837F7F5BF1999145970 /* ModuleMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleMathTests.swift; sourceTree = "<group>"; };
+		2714A00C8DDA9EB6172EC4D3 /* WatchGlancePublisherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGlancePublisherTests.swift; sourceTree = "<group>"; };
 		27C5074439139D2C2C8DA0E6 /* ExaBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExaBillingProviderTests.swift; sourceTree = "<group>"; };
 		2B12EFA811DD8D754254913B /* DashboardLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardLayoutTests.swift; sourceTree = "<group>"; };
 		2B7DB63844ECF604D8E167AD /* PrimaryActionBarGuardrailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryActionBarGuardrailTests.swift; sourceTree = "<group>"; };
@@ -501,6 +569,8 @@
 		3B1D27006E86AF48F40599E0 /* MagaluCloudBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagaluCloudBillingProviderTests.swift; sourceTree = "<group>"; };
 		3B278F6996C6276E1AB1C5E2 /* SpendSublineBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendSublineBuilderTests.swift; sourceTree = "<group>"; };
 		3C0DF363336364A5FB0C4106 /* FlexportBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexportBillingProviderTests.swift; sourceTree = "<group>"; };
+		3C2A7FA5F65D36B8ECD176FC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3E00D9B07E90EE99DDE58302 /* TollCatWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TollCatWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E307C57FF574CF808160329 /* PersistenceBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceBootstrap.swift; sourceTree = "<group>"; };
 		3E5842AEC9F07E00E50BBBFA /* TipTreatArtworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipTreatArtworkTests.swift; sourceTree = "<group>"; };
 		3FFD46405CC76FB85D7E93B6 /* UsageAnalyticsClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageAnalyticsClientTests.swift; sourceTree = "<group>"; };
@@ -508,7 +578,9 @@
 		425B174AEE716D7400A14550 /* PhaxioBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhaxioBillingProviderTests.swift; sourceTree = "<group>"; };
 		43AF0EAE9BE18FAABB583108 /* MessageBirdBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBirdBillingProviderTests.swift; sourceTree = "<group>"; };
 		44AB4D2F34FC3884402AB989 /* VariableComparisonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableComparisonTests.swift; sourceTree = "<group>"; };
+		4733AD3D53D17E013D999543 /* TollCatWatchWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TollCatWatchWidgetBundle.swift; sourceTree = "<group>"; };
 		48D6B354732ACB031F356B42 /* MollieBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MollieBillingProviderTests.swift; sourceTree = "<group>"; };
+		494C033F665B1D2F8D7D2B60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49F807DBE777C92507F87D8F /* OnboardingDemoContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDemoContentTests.swift; sourceTree = "<group>"; };
 		4A163D8DCE6486AB6E6FEB84 /* TollCat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TollCat.entitlements; sourceTree = "<group>"; };
 		4A1C05E1E9073311531C3037 /* MeterDigestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterDigestTests.swift; sourceTree = "<group>"; };
@@ -523,6 +595,7 @@
 		4CDF52CB8E4FBCA4FC20AF00 /* InboxHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxHarness.swift; sourceTree = "<group>"; };
 		4F611362E3961D246639BF1F /* LedgerSelfCheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerSelfCheckTests.swift; sourceTree = "<group>"; };
 		50087073DF1B542BE1D51481 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		507C4E7BFA6A60B905B0B09F /* TollCatWatchWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TollCatWatchWidget.entitlements; sourceTree = "<group>"; };
 		550D1F8DE7384D77D5F422A1 /* CockroachBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CockroachBillingProviderTests.swift; sourceTree = "<group>"; };
 		5634BC0A06BB4FB252406205 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		56A315BF9A97FD05322DDCC6 /* MonthlyLedgerStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyLedgerStoreTests.swift; sourceTree = "<group>"; };
@@ -538,6 +611,7 @@
 		5AC5987AE4D53EC8FDF1AE8F /* LinodeBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinodeBillingProviderTests.swift; sourceTree = "<group>"; };
 		5B53129105F72EA45BF617CE /* AtlasBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasBillingProviderTests.swift; sourceTree = "<group>"; };
 		5BAEB484F7CEA73DCE20EF4F /* SendcloudBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendcloudBillingProviderTests.swift; sourceTree = "<group>"; };
+		5BAFDC838AB73623F6469109 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5C1888DAD943764357E84FE4 /* OpenproviderBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenproviderBillingProviderTests.swift; sourceTree = "<group>"; };
 		5D1B721E916E3591F48CE1A9 /* StackitBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackitBillingProviderTests.swift; sourceTree = "<group>"; };
 		5DA393B1E6061E47B459C755 /* CatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTests.swift; sourceTree = "<group>"; };
@@ -564,22 +638,26 @@
 		6D860D5ACCC72389AEE9C2F1 /* TavilyBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TavilyBillingProviderTests.swift; sourceTree = "<group>"; };
 		6DAD795089F270D6336BD20A /* PaystackBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaystackBillingProviderTests.swift; sourceTree = "<group>"; };
 		6DD17961F4335E20907D405F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7075D671628B9408B8BB3E44 /* GlanceBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceBuilderTests.swift; sourceTree = "<group>"; };
 		70BC550158E9BBCCED63D52F /* CloudSigmaBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSigmaBillingProviderTests.swift; sourceTree = "<group>"; };
 		713B6DF7CBFC658B92BF57BF /* MoonshotBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonshotBillingProviderTests.swift; sourceTree = "<group>"; };
 		730328AE16986BD80A66B670 /* ManualUsageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualUsageTests.swift; sourceTree = "<group>"; };
 		7330B8244355380CCACDD62C /* VultrBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VultrBillingProviderTests.swift; sourceTree = "<group>"; };
 		73A47F2DE971CB590D211538 /* MoneyPresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyPresentationTests.swift; sourceTree = "<group>"; };
+		7487EB7E19316C4381AFAA3D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		75D354C4F8A89F2C3C498B63 /* SpendLineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendLineTests.swift; sourceTree = "<group>"; };
 		765264C03FA0E2EA05A8F7CF /* ProviderHistoryChartBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderHistoryChartBuilderTests.swift; sourceTree = "<group>"; };
 		76E56F5572EB493CD146C68B /* OutboundEgressHardeningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutboundEgressHardeningTests.swift; sourceTree = "<group>"; };
 		77C1535179F20139715CE3E3 /* BunnyBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BunnyBillingProviderTests.swift; sourceTree = "<group>"; };
 		780ED0D98F568FE17DF8CD7F /* BringBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BringBillingProviderTests.swift; sourceTree = "<group>"; };
 		7AB74EF725E26628C8A4FF7A /* FormspringBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormspringBillingProviderTests.swift; sourceTree = "<group>"; };
+		7C33745077C74624756825B8 /* GlanceCodecTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceCodecTests.swift; sourceTree = "<group>"; };
 		7C6DA848F3347637E5044CC5 /* ProviderCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderCatalogTests.swift; sourceTree = "<group>"; };
 		7D5DC7D16B38CD67D7E6E06A /* LaunchCat-dark.svg */ = {isa = PBXFileReference; path = "LaunchCat-dark.svg"; sourceTree = "<group>"; };
 		7E66E799573C75321F599094 /* InboxSettingsEmptyStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxSettingsEmptyStateTests.swift; sourceTree = "<group>"; };
 		7F5FA3DEE95A277B2867B5DF /* ProviderAssemblyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderAssemblyTests.swift; sourceTree = "<group>"; };
 		802F135E7667A2B9E7780557 /* TransferCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferCodeTests.swift; sourceTree = "<group>"; };
+		81A23CF815DBE6634E506B90 /* GlanceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceStoreTests.swift; sourceTree = "<group>"; };
 		8470CE3514F104F427A0CA82 /* InferenceSHBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceSHBillingProviderTests.swift; sourceTree = "<group>"; };
 		849E7FCD8B02B1CB95C94436 /* CerebriumBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CerebriumBillingProviderTests.swift; sourceTree = "<group>"; };
 		853EDB89EDBC814333951418 /* QoveryBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QoveryBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -626,6 +704,7 @@
 		A372E8C90E525A74B152DE35 /* TransferLockoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferLockoutTests.swift; sourceTree = "<group>"; };
 		A3AD530C65F8798271B564E8 /* MonthToDateCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthToDateCalculatorTests.swift; sourceTree = "<group>"; };
 		A3E0B58509E77A50A1A94BFF /* FiskilBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiskilBillingProviderTests.swift; sourceTree = "<group>"; };
+		A3F503C404B452C85CF01FB4 /* GlanceWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceWidgets.swift; sourceTree = "<group>"; };
 		A408CE7523DE9E09C537D20B /* TollCatWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TollCatWidgetView.swift; sourceTree = "<group>"; };
 		A428E2008D8E45A8BE1B432B /* MixpeekBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixpeekBillingProviderTests.swift; sourceTree = "<group>"; };
 		A5CF61681DE85A7D4F8F2A0C /* OutboundHostsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutboundHostsTests.swift; sourceTree = "<group>"; };
@@ -636,6 +715,7 @@
 		A9A0FF802BF8D062387CC777 /* IBMCloudBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBMCloudBillingProviderTests.swift; sourceTree = "<group>"; };
 		A9F34D8E7A1CC445E6D4323A /* UsageAnalyticsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageAnalyticsLaunchTests.swift; sourceTree = "<group>"; };
 		AB1CB4788C8B51E617386D6E /* TogetherBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherBillingProviderTests.swift; sourceTree = "<group>"; };
+		AB5853CFC862C40D353DF0F8 /* PendingRefreshTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingRefreshTasks.swift; sourceTree = "<group>"; };
 		AB8A428470EC896A56BF1802 /* CloudflareBillingCycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudflareBillingCycleTests.swift; sourceTree = "<group>"; };
 		AC0A59D57CCF09155A17E315 /* NamecheapBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamecheapBillingProviderTests.swift; sourceTree = "<group>"; };
 		AD0B5A6116B16FACA55E6A84 /* InboxMailboxTransferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxMailboxTransferTests.swift; sourceTree = "<group>"; };
@@ -678,6 +758,7 @@
 		C2F51A1302B82D993279774F /* SentryBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryBillingProviderTests.swift; sourceTree = "<group>"; };
 		C355E3507365674436CD789F /* I3DNetBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I3DNetBillingProviderTests.swift; sourceTree = "<group>"; };
 		C3A46C01F9EB44EC361BF255 /* FireworksBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworksBillingProviderTests.swift; sourceTree = "<group>"; };
+		C3AC7B0B390C8B72AA6C329C /* GlanceTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceTextTests.swift; sourceTree = "<group>"; };
 		C3CD2C6A77B5458E876940F7 /* CatRasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRasterTests.swift; sourceTree = "<group>"; };
 		C4576D1A67F260B25865A715 /* HostcircleBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostcircleBillingProviderTests.swift; sourceTree = "<group>"; };
 		C533C72C156EF61A76843906 /* GitHubBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -694,6 +775,7 @@
 		CF01D87C57F7916ABE8825D3 /* AppPreferencesRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferencesRecordTests.swift; sourceTree = "<group>"; };
 		CF5235FF5589749A4A2F1A01 /* TipMessagePayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipMessagePayloadTests.swift; sourceTree = "<group>"; };
 		CF9EB6EE4A4B6102290EC9AF /* InfobipBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfobipBillingProviderTests.swift; sourceTree = "<group>"; };
+		D04937A51E22A0E640386D73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D0C4648E444AC236073DBB2C /* CloudheedBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudheedBillingProviderTests.swift; sourceTree = "<group>"; };
 		D0DC9DEAC03E33B799D95821 /* SoftwareKeyboardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareKeyboardTests.swift; sourceTree = "<group>"; };
 		D1003C6CD551AC98B398BD5A /* MelbicomBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MelbicomBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -723,6 +805,7 @@
 		E2BED2C384F798DE1E8D842A /* MikroCloudBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MikroCloudBillingProviderTests.swift; sourceTree = "<group>"; };
 		E358B81A335184BDD7B50878 /* TollCat.storekit */ = {isa = PBXFileReference; path = TollCat.storekit; sourceTree = "<group>"; };
 		E4AE611DAF1D45ACBA0E3D74 /* ThanksIOBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThanksIOBillingProviderTests.swift; sourceTree = "<group>"; };
+		E56E4C311BC793D77857FE49 /* WatchAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppDelegate.swift; sourceTree = "<group>"; };
 		E5D566C40DC25D1CA1C813C0 /* DeepSeekBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekBillingProviderTests.swift; sourceTree = "<group>"; };
 		E6CD13F1E4F5E93D36C12879 /* StoreResetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreResetTests.swift; sourceTree = "<group>"; };
 		E6DA9B2EA615A1F873575B2E /* DigitalOceanBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalOceanBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -747,6 +830,7 @@
 		F654FEBEBD74DBA45EDD5581 /* KeychainCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainCredentialStoreTests.swift; sourceTree = "<group>"; };
 		F6EEDA36C4CCA240BDE1731B /* LiveProviderHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveProviderHarness.swift; sourceTree = "<group>"; };
 		F71463B36D00F277BF6E50BA /* IDCloudHostBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCloudHostBillingProviderTests.swift; sourceTree = "<group>"; };
+		F77C6E7B70C25C99F77FEE48 /* TollCatWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TollCatWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7F67B65FDFE88736C9B4776 /* VonageBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VonageBillingProviderTests.swift; sourceTree = "<group>"; };
 		F896152347F7F70624C5265C /* ShareCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardTests.swift; sourceTree = "<group>"; };
 		F8D22F7DD2583E494B97326B /* FeedbackPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackPayloadTests.swift; sourceTree = "<group>"; };
@@ -756,13 +840,16 @@
 		FB1199C4DBC43EC9DD034B8D /* UsesPadChromeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsesPadChromeTests.swift; sourceTree = "<group>"; };
 		FB90E98A4926BECE77E3E5C8 /* ShipmondoBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipmondoBillingProviderTests.swift; sourceTree = "<group>"; };
 		FBE2ABA46DA14D4EE73BAFF9 /* ExchangeRateCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateCatalogTests.swift; sourceTree = "<group>"; };
+		FC20CBE671AABDA710DB01D8 /* GlanceTimelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceTimelineTests.swift; sourceTree = "<group>"; };
 		FC27C4AB91668E9822593ED2 /* DashboardFilterSurfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardFilterSurfaceTests.swift; sourceTree = "<group>"; };
 		FC49A91017913DD8A05732B8 /* LaunchCat.svg */ = {isa = PBXFileReference; path = LaunchCat.svg; sourceTree = "<group>"; };
 		FC709B5C78E8D45697DBD7EB /* FixtureAggregationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureAggregationTests.swift; sourceTree = "<group>"; };
 		FC9F0323DB7AD294BED09671 /* LoginetBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginetBillingProviderTests.swift; sourceTree = "<group>"; };
+		FD04EC72BABA785717233E4D /* GlanceStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceStyleTests.swift; sourceTree = "<group>"; };
 		FD3715B290C32961B400805D /* CleverCloudBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleverCloudBillingProviderTests.swift; sourceTree = "<group>"; };
 		FE3C96AD7B94E076ACEA530A /* DashboardCatPerchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCatPerchTests.swift; sourceTree = "<group>"; };
 		FE4AC0C57ACEBB0EC4E0BD6B /* ClickHouseBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickHouseBillingProviderTests.swift; sourceTree = "<group>"; };
+		FEA3656E3EE94AA8E17A1DCA /* WatchGlanceReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchGlanceReceiver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -783,6 +870,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1953FE34D819BB0D48E3BD4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F76639BF6B3E633A01E381B /* MeterGlance in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		25CA348E7076CA93E547A503 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6992CC5CB8A7BA0DCFDCA9B1 /* MeterGlance in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3250A3F30A9B100767E74E16 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -791,12 +894,14 @@
 				6EC8CDBD3AAF31747144ED1C /* MeterProviders in Frameworks */,
 				7F2899BCBF461ABFD5DB5064 /* MeterPersistence in Frameworks */,
 				9122CAD775824141F96BE456 /* MeterDesign in Frameworks */,
-				6489B89C91064F6F7E582CB6 /* MeterModules in Frameworks */,
-				05B89A66300CBDAD54437ED6 /* MeterFeatures in Frameworks */,
-				176A6C931B444FF0C3AEE4B3 /* MeterTips in Frameworks */,
-				1DD0DB373C702EFD372A5CCE /* MeterInbox in Frameworks */,
-				AB8642C0D214BB9031F5BB69 /* MeterFeedback in Frameworks */,
-				E85657F2831AAF8A1B4DB94F /* MeterUsage in Frameworks */,
+				6489B89C91064F6F7E582CB6 /* MeterDashboard in Frameworks */,
+				05B89A66300CBDAD54437ED6 /* MeterModules in Frameworks */,
+				176A6C931B444FF0C3AEE4B3 /* MeterFeatures in Frameworks */,
+				1DD0DB373C702EFD372A5CCE /* MeterTips in Frameworks */,
+				AB8642C0D214BB9031F5BB69 /* MeterInbox in Frameworks */,
+				E85657F2831AAF8A1B4DB94F /* MeterFeedback in Frameworks */,
+				B9EC423D6FD5475745B6C46F /* MeterUsage in Frameworks */,
+				3E94C9FC392C2D3476050638 /* MeterGlance in Frameworks */,
 				D7745F7E02A304425504821E /* StoreKit.framework in Frameworks */,
 				7850EFC1E406696CD994FD20 /* StoreKitTest.framework in Frameworks */,
 			);
@@ -808,9 +913,11 @@
 			files = (
 				E955F6DDEE2C20D8C87387E4 /* MeterDesign in Frameworks */,
 				AE811856744B92975D54D83E /* MeterFormat in Frameworks */,
-				B1878FD658B838AD3168E902 /* MeterModules in Frameworks */,
-				84B8CD45B6A989E96A26A388 /* MeterPersistence in Frameworks */,
-				5B56D9FEB878C5AF86337076 /* MeterCore in Frameworks */,
+				B1878FD658B838AD3168E902 /* MeterDashboard in Frameworks */,
+				84B8CD45B6A989E96A26A388 /* MeterModules in Frameworks */,
+				5B56D9FEB878C5AF86337076 /* MeterPersistence in Frameworks */,
+				F9BCAEA6E2903822CF454084 /* MeterCore in Frameworks */,
+				2661B2B319CF6A57C17CBE77 /* MeterGlance in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +940,8 @@
 			children = (
 				F8E4DCC334E935E496FFAB46 /* MeterKitTests.xctest */,
 				0D9C6C63720B9F9D771A125C /* TollCat.app */,
+				3E00D9B07E90EE99DDE58302 /* TollCatWatch.app */,
+				F77C6E7B70C25C99F77FEE48 /* TollCatWatchWidget.appex */,
 				A091E53D9C2B5BD948D86915 /* TollCatWidget.appex */,
 			);
 			name = Products;
@@ -844,6 +953,20 @@
 				5634BC0A06BB4FB252406205 /* Signing.xcconfig */,
 			);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		46A1710A313580CF1ABA157E /* Watch */ = {
+			isa = PBXGroup;
+			children = (
+				FC192780DC503D5E63B636E2 /* Resources */,
+				AB5853CFC862C40D353DF0F8 /* PendingRefreshTasks.swift */,
+				223AEE6DEEDF131BF3A5B05A /* TollCatWatch.entitlements */,
+				17FD63A34AA5066895D04CCE /* TollCatWatchApp.swift */,
+				E56E4C311BC793D77857FE49 /* WatchAppDelegate.swift */,
+				1B4533F610C79C7F6DB4E720 /* WatchGlanceModel.swift */,
+				FEA3656E3EE94AA8E17A1DCA /* WatchGlanceReceiver.swift */,
+			);
+			path = Watch;
 			sourceTree = "<group>";
 		};
 		4AC5372232FEE2A26075011D /* MeterInboxTests */ = {
@@ -864,6 +987,17 @@
 				F8D22F7DD2583E494B97326B /* FeedbackPayloadTests.swift */,
 			);
 			path = MeterFeedbackTests;
+			sourceTree = "<group>";
+		};
+		50B48EADACD2BCE130302853 /* WatchWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D04937A51E22A0E640386D73 /* Info.plist */,
+				5BAFDC838AB73623F6469109 /* PrivacyInfo.xcprivacy */,
+				507C4E7BFA6A60B905B0B09F /* TollCatWatchWidget.entitlements */,
+				4733AD3D53D17E013D999543 /* TollCatWatchWidgetBundle.swift */,
+			);
+			path = WatchWidget;
 			sourceTree = "<group>";
 		};
 		6412DB541A54DB362CA6ED01 /* Resources */ = {
@@ -946,6 +1080,7 @@
 				C059E4AF88CA38E6CDB1C415 /* DrawerChromeGuardrailTests.swift */,
 				31B718EF3EFA54919CA9B157 /* EndedServiceRowTests.swift */,
 				034916D29145F592AE8E9A40 /* FeedbackModelTests.swift */,
+				7075D671628B9408B8BB3E44 /* GlanceBuilderTests.swift */,
 				C6A4D83527506FEDD98B0A35 /* GuardrailSourceScan.swift */,
 				099FF59816B51B35E408090C /* InboxHandoffModelTests.swift */,
 				F230085DCC9F3E0B57B45FD3 /* InboxLaneIsolationTests.swift */,
@@ -992,6 +1127,7 @@
 				9AD89D93D91A21D2FF7236DB /* UsageRefreshOnActivateTests.swift */,
 				5E9364A8382D17716E3421CC /* UsageSetupPresentationTests.swift */,
 				FB1199C4DBC43EC9DD034B8D /* UsesPadChromeTests.swift */,
+				2714A00C8DDA9EB6172EC4D3 /* WatchGlancePublisherTests.swift */,
 				B32594A6AB3652973A392283 /* WhatsNewCatalogTests.swift */,
 				0D0EC28550A8B0D616416E65 /* WhatsNewLaunchTests.swift */,
 			);
@@ -1012,6 +1148,7 @@
 				EC9EE15BA6D146D6A85BA1DC /* MeterDesignTests */,
 				74F41221340058EA170B9629 /* MeterFeaturesTests */,
 				5084C1240C73D96D1B0C99F7 /* MeterFeedbackTests */,
+				B40ADDF8E2C39CA0BA51E45B /* MeterGlanceTests */,
 				4AC5372232FEE2A26075011D /* MeterInboxTests */,
 				809CE8E7D75BE488D4958B02 /* MeterKitTests */,
 				70ECF8FEEA676A86958C35CB /* MeterPersistenceTests */,
@@ -1058,6 +1195,8 @@
 				A661915A75E7F95A116874C4 /* App */,
 				2B377AF83483CCBB68B9C422 /* Config */,
 				E73A92B0908933AB88D54F81 /* Packages */,
+				46A1710A313580CF1ABA157E /* Watch */,
+				50B48EADACD2BCE130302853 /* WatchWidget */,
 				D864537A1CF2EAD30D32EBC2 /* Widget */,
 				E358B81A335184BDD7B50878 /* TollCat.storekit */,
 				7008E69FF7FB1CA6F2DCFCCF /* Frameworks */,
@@ -1078,6 +1217,19 @@
 				BEEBDB4966E0273A43C57E00 /* TollCatApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		B40ADDF8E2C39CA0BA51E45B /* MeterGlanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				7C33745077C74624756825B8 /* GlanceCodecTests.swift */,
+				0714B7A9CF2E1D7034853448 /* GlanceDisplayTests.swift */,
+				81A23CF815DBE6634E506B90 /* GlanceStoreTests.swift */,
+				FD04EC72BABA785717233E4D /* GlanceStyleTests.swift */,
+				C3AC7B0B390C8B72AA6C329C /* GlanceTextTests.swift */,
+				FC20CBE671AABDA710DB01D8 /* GlanceTimelineTests.swift */,
+			);
+			path = MeterGlanceTests;
 			sourceTree = "<group>";
 		};
 		BD91B726EE09A855CE89FA7A /* MeterProvidersTests */ = {
@@ -1276,6 +1428,7 @@
 		D864537A1CF2EAD30D32EBC2 /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				A3F503C404B452C85CF01FB4 /* GlanceWidgets.swift */,
 				50087073DF1B542BE1D51481 /* Info.plist */,
 				589398FD81FCD52BC2E2E5CE /* PrivacyInfo.xcprivacy */,
 				DE6ABDCDD1848E6F725E09A1 /* TollCatWidget.entitlements */,
@@ -1319,6 +1472,16 @@
 			path = MeterDesignTests;
 			sourceTree = "<group>";
 		};
+		FC192780DC503D5E63B636E2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				494C033F665B1D2F8D7D2B60 /* Assets.xcassets */,
+				7487EB7E19316C4381AFAA3D /* Localizable.xcstrings */,
+				3C2A7FA5F65D36B8ECD176FC /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1330,11 +1493,13 @@
 				786E012502444B6504489548 /* Resources */,
 				00FC44134A2248A53A391839 /* Frameworks */,
 				3E51C286BA09296AB3299AF2 /* Embed Foundation Extensions */,
+				D0AA1F57CA03E3F74FDD01FA /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				CCDEE198D8CD85795BEACC1C /* PBXTargetDependency */,
+				216F4A8DFD1C43557D9BBA04 /* PBXTargetDependency */,
 			);
 			name = TollCat;
 			packageProductDependencies = (
@@ -1371,16 +1536,40 @@
 				21098A20BEEACFA29DDF5938 /* MeterProviders */,
 				2920140DE1069D9BBDBE59F2 /* MeterPersistence */,
 				62A01930BE6F3274D4074257 /* MeterDesign */,
+				5D40B076930960E768998D7C /* MeterDashboard */,
 				C68599A6D1FF52D3B7E187D8 /* MeterModules */,
 				012BED5756BF32F4FC276CF9 /* MeterFeatures */,
 				6EB961FE5B36D7B80BEB5F4C /* MeterTips */,
 				994D9ED42A9F41420D364966 /* MeterInbox */,
 				FBF90F912D51E02A8709DE2C /* MeterFeedback */,
 				BB11B6F8F87AAFA3E5B342A3 /* MeterUsage */,
+				F048BC60AA62FB1009E8017C /* MeterGlance */,
 			);
 			productName = MeterKitTests;
 			productReference = F8E4DCC334E935E496FFAB46 /* MeterKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C64E31DC936DC9FEE325C706 /* TollCatWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1B7B30AD4FBE557D4EBEFA56 /* Build configuration list for PBXNativeTarget "TollCatWatch" */;
+			buildPhases = (
+				98E1119F0E4069F7A0BC6F70 /* Sources */,
+				CA1F0401463D91E72AA3E3FC /* Resources */,
+				25CA348E7076CA93E547A503 /* Frameworks */,
+				DC6F4C8218E054190F8F017F /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				670DF6ACDC009405D898E6D4 /* PBXTargetDependency */,
+			);
+			name = TollCatWatch;
+			packageProductDependencies = (
+				79D1EC1A667FC42BA9A279D9 /* MeterGlance */,
+			);
+			productName = TollCatWatch;
+			productReference = 3E00D9B07E90EE99DDE58302 /* TollCatWatch.app */;
+			productType = "com.apple.product-type.application";
 		};
 		F527587E3066B3BF53F1768E /* TollCatWidget */ = {
 			isa = PBXNativeTarget;
@@ -1398,12 +1587,34 @@
 			packageProductDependencies = (
 				2574FFD9796C0BD4D79C2032 /* MeterDesign */,
 				F4B7507D31E99739AE1F5072 /* MeterFormat */,
+				D80940E5E648E1CB85489110 /* MeterDashboard */,
 				FF549E2FA3C5EB2630837E9A /* MeterModules */,
 				4269B125B82D1E04F00E5F32 /* MeterPersistence */,
 				C09155A3AF18F0466BD33E49 /* MeterCore */,
+				1D508642B3D42DC7513FB338 /* MeterGlance */,
 			);
 			productName = TollCatWidget;
 			productReference = A091E53D9C2B5BD948D86915 /* TollCatWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		FD980A9FBF05D1AC7F331F48 /* TollCatWatchWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CBE1F4EFAAE7C6688F145DA /* Build configuration list for PBXNativeTarget "TollCatWatchWidget" */;
+			buildPhases = (
+				82621E7A32164545890F4FD3 /* Sources */,
+				DA118704DDEC6F5A9B424BFB /* Resources */,
+				1953FE34D819BB0D48E3BD4C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TollCatWatchWidget;
+			packageProductDependencies = (
+				7EA04D82C07120972E9C54B8 /* MeterGlance */,
+			);
+			productName = TollCatWatchWidget;
+			productReference = F77C6E7B70C25C99F77FEE48 /* TollCatWatchWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -1421,7 +1632,13 @@
 					6BCAC171D1345DC56089CA79 = {
 						ProvisioningStyle = Automatic;
 					};
+					C64E31DC936DC9FEE325C706 = {
+						ProvisioningStyle = Automatic;
+					};
 					F527587E3066B3BF53F1768E = {
+						ProvisioningStyle = Automatic;
+					};
+					FD980A9FBF05D1AC7F331F48 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1447,6 +1664,8 @@
 			targets = (
 				0149CD792CEE4A65A39DA111 /* TollCat */,
 				F527587E3066B3BF53F1768E /* TollCatWidget */,
+				C64E31DC936DC9FEE325C706 /* TollCatWatch */,
+				FD980A9FBF05D1AC7F331F48 /* TollCatWatchWidget */,
 				6BCAC171D1345DC56089CA79 /* MeterKitTests */,
 			);
 		};
@@ -1484,6 +1703,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA1F0401463D91E72AA3E3FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2C3D5D5ED92EDA8A038C4D4 /* Assets.xcassets in Resources */,
+				0C52F2102E9BA6835F489E43 /* Localizable.xcstrings in Resources */,
+				A521177F055F323B07013C56 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA118704DDEC6F5A9B424BFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D99145DBAA75A9B002C695BD /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1491,9 +1728,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1A28E045AAF603A31E11FBF /* GlanceWidgets.swift in Sources */,
 				1A29B3D4A5CBBEB98E852A70 /* TollCatWidgetBundle.swift in Sources */,
 				74D27958A81D0868F2F0A349 /* TollCatWidgetEntry.swift in Sources */,
 				DEAC1207788557F0FD16EE09 /* TollCatWidgetView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82621E7A32164545890F4FD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B51B1D04AC9C76560CC5AD4F /* TollCatWatchWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98E1119F0E4069F7A0BC6F70 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FFEC7EFC1D75B5E09299F82 /* PendingRefreshTasks.swift in Sources */,
+				9A546CAAD0F2C1C018FBFD5B /* TollCatWatchApp.swift in Sources */,
+				B4839702C273BA5499765BC6 /* WatchAppDelegate.swift in Sources */,
+				C4C08AA43337F5CD9CA8A7EE /* WatchGlanceModel.swift in Sources */,
+				5BE2CFE6FC0BF319898FCBC2 /* WatchGlanceReceiver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1603,6 +1861,13 @@
 				48BF5C0022D1B31F49E9F0E8 /* GandiBillingProviderTests.swift in Sources */,
 				8F4B5FB180976CB117EA8CB6 /* GelatoBillingProviderTests.swift in Sources */,
 				44B3B0B3E2B947F54B56C70C /* GitHubBillingProviderTests.swift in Sources */,
+				9384F18992C8D0D92934C9FC /* GlanceBuilderTests.swift in Sources */,
+				4ABDD7E8A837C0F07B0F57DE /* GlanceCodecTests.swift in Sources */,
+				CB894F965BCA608D0F853823 /* GlanceDisplayTests.swift in Sources */,
+				22B0769E0C974FA6645AF8AA /* GlanceStoreTests.swift in Sources */,
+				B229799DF94CB591D528BB10 /* GlanceStyleTests.swift in Sources */,
+				BB26C3C278EFD92286BD8DE0 /* GlanceTextTests.swift in Sources */,
+				85321224BAA96F9D7E69B07B /* GlanceTimelineTests.swift in Sources */,
 				3C0A0BFA6D936DE67654C23E /* GleSYSBillingProviderTests.swift in Sources */,
 				6B5E1FBBBAF342FA8D6EF4EE /* GootenBillingProviderTests.swift in Sources */,
 				520C426F71CA4D23F6D2FD99 /* GrafanaBillingProviderTests.swift in Sources */,
@@ -1822,6 +2087,7 @@
 				AF8FF54708B8C76ED7BD3EDB /* VoltViewBillingProviderTests.swift in Sources */,
 				8755A21A3502611D4E97848C /* VonageBillingProviderTests.swift in Sources */,
 				01E52539782818252FCF7DAB /* VultrBillingProviderTests.swift in Sources */,
+				37428320407B7ECE569D31D8 /* WatchGlancePublisherTests.swift in Sources */,
 				1E9C3435E5727394AF09CC57 /* WhatsNewCatalogTests.swift in Sources */,
 				8762947E3CC6407CD179EE72 /* WhatsNewLaunchTests.swift in Sources */,
 				EEB349BB34492FF809D720E6 /* XAIBillingProviderTests.swift in Sources */,
@@ -1847,6 +2113,16 @@
 			isa = PBXTargetDependency;
 			target = 0149CD792CEE4A65A39DA111 /* TollCat */;
 			targetProxy = 4115D027C9EDC89EE5772D51 /* PBXContainerItemProxy */;
+		};
+		216F4A8DFD1C43557D9BBA04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C64E31DC936DC9FEE325C706 /* TollCatWatch */;
+			targetProxy = D2B71753F6EB8290B87B596D /* PBXContainerItemProxy */;
+		};
+		670DF6ACDC009405D898E6D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FD980A9FBF05D1AC7F331F48 /* TollCatWatchWidget */;
+			targetProxy = 02CF83021C548502ABD73F34 /* PBXContainerItemProxy */;
 		};
 		CCDEE198D8CD85795BEACC1C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1917,12 +2193,29 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
+		};
+		02E051FD9941351A855FB915 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WatchWidget/TollCatWatchWidget.entitlements;
+				INFOPLIST_FILE = WatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhechengqi.tollcat.watchkitapp.widget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
 		};
 		061BB5D8AF8FFC7457068968 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2016,6 +2309,44 @@
 			};
 			name = Release;
 		};
+		74E49072A431EA26868BF47E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Watch/TollCatWatch.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = TollCat;
+				INFOPLIST_KEY_CFBundleLocalizations = "en ja zh-Hans";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.zhechengqi.tollcat;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhechengqi.tollcat.watchkitapp;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		89C97DA3F88C93251B1EE987 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Watch/TollCatWatch.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = TollCat;
+				INFOPLIST_KEY_CFBundleLocalizations = "en ja zh-Hans";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.zhechengqi.tollcat;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhechengqi.tollcat.watchkitapp;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
 		93AFF530B840F5653EA0CFC9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2087,10 +2418,10 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -2111,6 +2442,23 @@
 			};
 			name = Release;
 		};
+		F1635146674EF0652544B694 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WatchWidget/TollCatWatchWidget.entitlements;
+				INFOPLIST_FILE = WatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhechengqi.tollcat.watchkitapp.widget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2119,6 +2467,24 @@
 			buildConfigurations = (
 				08B0FD3EA00516C9D35DC9D0 /* Debug */,
 				CF3295A03E7842CF5A66222C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1B7B30AD4FBE557D4EBEFA56 /* Build configuration list for PBXNativeTarget "TollCatWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74E49072A431EA26868BF47E /* Debug */,
+				89C97DA3F88C93251B1EE987 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4CBE1F4EFAAE7C6688F145DA /* Build configuration list for PBXNativeTarget "TollCatWatchWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1635146674EF0652544B694 /* Debug */,
+				02E051FD9941351A855FB915 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2168,6 +2534,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterUsage;
 		};
+		1D508642B3D42DC7513FB338 /* MeterGlance */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterGlance;
+		};
 		21098A20BEEACFA29DDF5938 /* MeterProviders */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterProviders;
@@ -2192,6 +2562,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterPersistence;
 		};
+		5D40B076930960E768998D7C /* MeterDashboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterDashboard;
+		};
 		62A01930BE6F3274D4074257 /* MeterDesign */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterDesign;
@@ -2203,6 +2577,14 @@
 		6EB961FE5B36D7B80BEB5F4C /* MeterTips */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterTips;
+		};
+		79D1EC1A667FC42BA9A279D9 /* MeterGlance */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterGlance;
+		};
+		7EA04D82C07120972E9C54B8 /* MeterGlance */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterGlance;
 		};
 		994D9ED42A9F41420D364966 /* MeterInbox */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2232,6 +2614,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterCore;
 		};
+		D80940E5E648E1CB85489110 /* MeterDashboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterDashboard;
+		};
 		E570D6BAA3447D955A5C3E76 /* MeterTips */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterTips;
@@ -2239,6 +2625,10 @@
 		F023526A79B0492246F23ACE /* MeterDesign */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MeterDesign;
+		};
+		F048BC60AA62FB1009E8017C /* MeterGlance */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeterGlance;
 		};
 		F4B7507D31E99739AE1F5072 /* MeterFormat */ = {
 			isa = XCSwiftPackageProductDependency;

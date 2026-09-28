@@ -14,7 +14,7 @@ public enum MeterDateFormat {
     private static let dateFormatters = FormatterCache<DateFormatter>()
     private static let intervalFormatters = FormatterCache<DateIntervalFormatter>()
 
-    public static func monthName(now: Date, calendar: Calendar, locale: Locale = .current) -> String {
+    public static func monthName(now: Date, calendar: Calendar, locale: Locale = PortableLocale.formatting) -> String {
         templated(now, template: "MMMM", calendar: calendar, locale: locale)
     }
 
@@ -26,7 +26,7 @@ public enum MeterDateFormat {
     /// 那个月序号会被当成另一套历法的月份，印出来根本不是那个月。
     ///
     /// 月序号本来就是公历的，所以这里用公历解，年份取哪一年都一样（月份名与年无关）。
-    public static func monthName(monthOfYear: Int, locale: Locale = .current) -> String {
+    public static func monthName(monthOfYear: Int, locale: Locale = PortableLocale.formatting) -> String {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = locale
         guard
@@ -39,21 +39,21 @@ public enum MeterDateFormat {
         return templated(date, template: "MMMM", calendar: calendar, locale: locale)
     }
 
-    public static func yearMonth(_ date: Date, calendar: Calendar, locale: Locale = .current) -> String {
+    public static func yearMonth(_ date: Date, calendar: Calendar, locale: Locale = PortableLocale.formatting) -> String {
         templated(date, template: "yMMMM", calendar: calendar, locale: locale)
     }
 
-    /// Android 的 JNI 出口没有可靠的 `Locale.current`，locale 从参数进来。
-    public static func monthAndDay(_ date: Date, calendar: Calendar, locale: Locale = .current) -> String {
+    /// Android 的 JNI 出口没有可靠的 `Locale.current`：桥设了 `PortableLocale` 就跟它走。
+    public static func monthAndDay(_ date: Date, calendar: Calendar, locale: Locale = PortableLocale.formatting) -> String {
         templated(date, template: "MMMMd", calendar: calendar, locale: locale)
     }
 
     public static func monthDayTime(_ date: Date, calendar: Calendar) -> String {
-        templated(date, template: "MMMMdjjmm", calendar: calendar, locale: .current)
+        templated(date, template: "MMMMdjjmm", calendar: calendar, locale: PortableLocale.formatting)
     }
 
     public static func monthDayNumeric(_ date: Date, calendar: Calendar) -> String {
-        templated(date, template: "Md", calendar: calendar, locale: .current)
+        templated(date, template: "Md", calendar: calendar, locale: PortableLocale.formatting)
     }
 
     /// 「五月–七月」。跨年时两端都带上年份，否则「十二月–二月」读起来像倒着的。
@@ -64,7 +64,7 @@ public enum MeterDateFormat {
         from start: Date,
         to end: Date,
         calendar: Calendar,
-        locale: Locale = .current
+        locale: Locale = PortableLocale.formatting
     ) -> String {
         let sameYear = calendar.component(.year, from: start) == calendar.component(.year, from: end)
         let left = sameYear
@@ -112,11 +112,12 @@ public enum MeterDateFormat {
         kind: String,
         configure: (DateIntervalFormatter) -> Void
     ) -> String {
-        intervalFormatters.use(key: cacheKey(kind, calendar: calendar, locale: .current), make: {
+        let locale = PortableLocale.formatting
+        return intervalFormatters.use(key: cacheKey(kind, calendar: calendar, locale: locale), make: {
             let formatter = DateIntervalFormatter()
             formatter.calendar = calendar
             formatter.timeZone = calendar.timeZone
-            formatter.locale = .current
+            formatter.locale = locale
             configure(formatter)
             return formatter
         }) { $0.string(from: start, to: end) }
@@ -126,14 +127,14 @@ public enum MeterDateFormat {
         "\(what)|\(locale.identifier)|\(calendar.identifier)|\(calendar.timeZone.identifier)"
     }
 
-    // RelativeDateTimeFormatter 和 L() 在 Android 的 swift-foundation 里没有；
+    // RelativeDateTimeFormatter 在 Android 的 swift-foundation 里没有；
     // Android 侧相对时间由 Kotlin 用 DateUtils 做（locale 由系统给）。
     #if !os(Android)
     private static let relativeFormatters = FormatterCache<RelativeDateTimeFormatter>()
 
     public static func relative(from date: Date, now: Date, calendar: Calendar) -> String {
         if abs(now.timeIntervalSince(date)) < 60 {
-            return String(localized: L("刚刚"))
+            return L("刚刚")
         }
         return relativeFormatters.use(key: cacheKey("relative", calendar: calendar, locale: .current), make: {
             let formatter = RelativeDateTimeFormatter()
@@ -143,16 +144,16 @@ public enum MeterDateFormat {
             return formatter
         }) { $0.localizedString(for: date, relativeTo: now) }
     }
+    #endif
 
     public static func todayOrTomorrow(_ date: Date, now: Date, calendar: Calendar) -> String? {
         if calendar.isDate(date, inSameDayAs: now) {
-            return String(localized: L("今天"))
+            return L("今天")
         }
         if let tomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)),
            calendar.isDate(date, inSameDayAs: tomorrow) {
-            return String(localized: L("明天"))
+            return L("明天")
         }
         return nil
     }
-    #endif
 }

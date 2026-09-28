@@ -9,13 +9,33 @@ package enum ProductCatalog {
     /// Android / Windows 上 `Bundle.module` 的访问器找不到 bundle 会直接 fatalError——
     /// 不要碰它。平台皮把 SwiftPM 的 resource bundle 解压到私有目录后经
     /// `setResourceRoot` 注入，唯一合法的读取路径是那里。
-    package static let bundled: Catalog? = {
+    /// 每次现读：CLI 在第一次调用前才注入资源根，不能用 `static let` 把空结果钉死。
+    package static var bundled: Catalog? {
+        if let catalog = loadFromInjectedRoot() {
+            return catalog
+        }
+        // Android / Windows 上 `Bundle.module` 找不到包会 fatalError，不要碰。
+        // Apple / Linux 的 SwiftPM 可执行文件可以把 catalog.json 编进这个 target 的 bundle。
+        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS) || os(Linux)
+        if let url = Bundle.module.url(forResource: "catalog", withExtension: "json"),
+           let data = try? Data(contentsOf: url),
+           let catalog = try? CatalogCodec.decode(data)
+        {
+            return catalog
+        }
+        #endif
+        return nil
+    }
+
+    private static func loadFromInjectedRoot() -> Catalog? {
         // setResourceRoot 注入的是 fixtures 根（历史原因指到 MeterProviders 的
         // resources 里），本 target 的 bundle 在它的邻层——向上找两级。
         guard let root = JNIResourceRoot.url else { return nil }
         let bundleNames = [
             "MeterCoreAndroid_MeterBridge.resources",
             "MeterCoreWindows_MeterBridge.resources",
+            "MeterCoreCLI_MeterBridge.resources",
+            "MeterCoreCLI_MeterBridge.bundle",
             // 桥拆出来之前 APK 里还叫这个名字；解压缓存对得上就继续用。
             "MeterCoreAndroid_MeterCoreJNI.resources",
         ]
@@ -37,7 +57,7 @@ package enum ProductCatalog {
             }
         }
         return nil
-    }()
+    }
 
     package static func json(localeTag: String) -> String {
         let language = CatalogLanguage.resolving(localeTag: localeTag)

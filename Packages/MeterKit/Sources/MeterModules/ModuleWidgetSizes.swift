@@ -3,6 +3,7 @@
 
 
 import CoreGraphics
+import MeterDashboard
 
 /// 小组件的尺寸。和 WidgetKit 的 `WidgetFamily` 一一对应，但**不是它**：
 /// MeterModules 不链 WidgetKit——模块这一层不该认识宿主框架。

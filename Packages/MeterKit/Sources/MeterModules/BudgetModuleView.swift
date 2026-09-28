@@ -1,3 +1,4 @@
+import MeterDashboard
 import SwiftUI
 import MeterCore
 import MeterDesign
@@ -122,12 +123,14 @@ public struct BudgetModuleView: View {
 
 public enum BudgetPreviewData {
     public static let sample = BudgetModuleContent(
-        spentText: "$47.20", budgetText: "$80.00", fraction: 0.59,
+        spentText: "$47.20", budgetText: "$80.00",
+        remainingText: "$32.80", overText: "$0.00", fraction: 0.59,
         caption: "还剩 $32.80，用了 59%", spokenLabel: "预算 80 美元，已花 47 美元 20 美分",
         isOver: false, isClose: false
     )
     public static let over = BudgetModuleContent(
-        spentText: "$91.30", budgetText: "$80.00", fraction: 1.14,
+        spentText: "$91.30", budgetText: "$80.00",
+        remainingText: "$0.00", overText: "$11.30", fraction: 1.14,
         caption: "超出 $11.30", spokenLabel: "预算 80 美元，已花 91 美元 30 美分，超出 11 美元 30 美分",
         isOver: true, isClose: true
     )

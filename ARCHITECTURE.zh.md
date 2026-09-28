@@ -38,13 +38,15 @@ cost/
 │   └── Resources/
 ├── Mac/                        # macOS 壳: WindowGroup + MenuBarExtra。组装复用 AppEnvironment
 ├── Widget/                     # Widget 源码。iOS / Mac 两个 extension target 各编一份
+├── Watch/ · WatchWidget/       # 手表 App + 表盘扩展。只链 MeterGlance
 ├── Android/                    # Compose 壳 + JNI。算账、说钱、目录都是 Packages 里那份 Swift
 │   ├── app/                    # Kotlin UI + Keystore/SQLite 适配器。不算账、不自己格式化金额
-│   └── native/                 # SwiftPM：symlink MeterCore + MeterProviders + MeterFormat + MeterBridge，产出 libMeterCoreJNI.so
+│   └── native/                 # SwiftPM：symlink MeterCore + MeterProviders + MeterFormat + MeterDashboard + MeterBridge，产出 libMeterCoreJNI.so
 │                               #   MeterBridge 是平台中立 JSON 进出；MeterCoreJNI 只剩 JNI 皮
 ├── Windows/                    # WinUI 3 壳 + C ABI。算账、说钱、目录都是同一份 Swift
 │   ├── app/                    # C# UI + 凭据管理器 / JSON 账本。不算账、不自己发 HTTP
 │   └── native/                 # SwiftPM：symlink 同上，产出 MeterCoreCLR.dll
+├── CLI/                        # 终端壳。共核 symlink；Linux 的原生形态是 `tollcat`
 ├── Packages/MeterKit/
 │   ├── Package.swift           # 依赖方向在这里强制,不要放宽
 │   ├── Sources/
@@ -55,8 +57,12 @@ cost/
 │   │   ├── MeterPersistence/   # SwiftData + Keychain。依赖 Core
 │   │   ├── MeterTips / MeterInbox / MeterFeedback / MeterUsage
 │   │   │                       # 叶子：打赏 / 信箱 / 反馈 / 匿名页面计数。不链接 Providers
-│   │   ├── MeterModules/       # 仪表盘模块：视图 + 值 + 折算它们的 builder
-│   │   │                       # 只依赖 Core/Design/Format —— widget 链得到
+│   │   ├── MeterGlance/        # 「一眼」：表盘、智能叠放、锁屏，和手表 App 那一屏
+│   │   │                       # 零依赖 —— 手表只链它
+│   │   ├── MeterDashboard/     # 仪表盘的折算：builder + 它们产出的值
+│   │   │                       # 只依赖 Core/Format —— Android / Windows / CLI 的桥也编它
+│   │   ├── MeterModules/       # 仪表盘模块的视图
+│   │   │                       # 只依赖 Core/Design/Format/Dashboard/Glance —— widget 链得到
 │   │   └── MeterFeatures/      # 界面。依赖以上全部
 │   └── Tests/
 │       ├── MeterCoreTests/     # 重点在这里
@@ -75,17 +81,21 @@ cost/
           │            ↑          │
    MeterPersistence    │     MeterDesign
           ↑            │          ↑
-          │            │     MeterModules ──→ Core + Design + Format
+          │            │     MeterModules ──→ Core + Design + Format + Dashboard + Glance
           ↑            │          ↑
           └──── MeterFeatures ────┘
                      ↑
-                App target        Widget target ──→ Core + Design + Format + Modules + Persistence
+                App target        Widget target ──→ Core + Design + Format + Dashboard + Modules + Persistence
                 Mac target        Mac Widget        （不含 Providers）
                      │            同一份 Widget/ 源码，各用各的 App Group
                      │
-                     │  JNI / C ABI，同一份 Core + Providers + Format + MeterBridge
+                     │  WatchConnectivity（一份折好、排好字的 `Glance`）
                      ▼
-               Android/app（Compose）    Windows/app（WinUI 3）
+                手表 App + 表盘扩展 ──→ 只有 MeterGlance
+                     │
+                     │  JNI / C ABI，同一份 Core + Providers + Format + Dashboard + MeterBridge
+                     ▼
+               Android/app（Compose）    Windows/app（WinUI 3）    CLI（`tollcat`）
 ```
 
 硬规则：
@@ -95,6 +105,8 @@ cost/
 - `MeterDesign` **不 import 任何 `Meter*` 模块**——它不知道什么是 Provider、什么是 Snapshot，组件收到的是已格式化的字符串和 `0...1` 的比例，不是领域对象。系统的 UI 框架照用（SwiftUI、Charts、CoreGraphics、位图导出要的 ImageIO / CoreImage / UniformTypeIdentifiers、`os`，以及动态 `Color(light:dark:)` 要碰的 UIColor / NSColor；Features 不许直接碰后者）。
 - `MeterProviders` 不 import SwiftUI、不 import SwiftData。
 - Widget target 不链接 `MeterProviders`（见上文原因 2）。
+- 手表两个 target **只链 `MeterGlance`**，`MeterGlance` 自己不 import 任何 `Meter*` 模块。
+  这是「凭据、账本、厂商适配器上不了手表」的编译期证明（`check_watch_linkage`）。
 - 反向依赖一律不允许；需要回调就定协议，具体实现在 `AppEnvironment` 注入。
 - **展示路径不持有快照日志。** `Snapshot` 是事件流不是读模型：每次刷新每家写一条，于是「八月花了多少」的成本会正比于**你在八月刷新了多少次**。视图和它的 model 收到的是 `LedgerView`（物化读模型），问的是有名字的问题；原始读数只从门上那个明确开的口出来——`DashboardModel.readings(for:since:)`，而那是一条带范围的查询：**连 `DashboardModel` 自己也不持有日志**，读口在 `MeterPersistence/SnapshotLog`。`check-source-invariants.py` 的 `LEDGER_ALLOWED` 和 `LedgerBoundaryTests` 守这条，**那份名单只减不增**。见 [docs/LEDGER.md](docs/LEDGER.md)。
 - **日历日落盘只存分量。** 日桶的键、账本行的月份是日历上的位置，不是某个时区的零点那一刻：`DailySpendCodec` 存 `yyyy-MM-dd`，`MonthlyRollupRecord` 存年 + 月，`SubscriptionRecord` 存年 / 月 / 日，读时按此刻的日历还原（`MeterCore/CalendarKeys.swift` 的 `DayKey` / `MonthKey`）。存时间戳的话换一次时区整张表错一天、同一天被算两遍。
@@ -192,10 +204,61 @@ protocol BillingProvider: Sendable {
 - `MeterUsage`：匿名页面计数。连 MeterCore 都不依赖。只上报允许名单里的
   页面名、平台、UTC 日是否第一次打开。不留设备标识
 
+### MeterGlance — 表盘、智能叠放、锁屏
+
+一个值 `Glance`：本月金额、预计月底、归一化的累计走势、预算、花得最多的五家——
+**在 iPhone 上折好、排好字**：`MeterModules/GlanceBuilder` 读的是和主屏 widget
+同一份 `DashboardContents`（`DashboardContentsBuilder.widget`，三处一个入口）。
+手表不折算、不格式化金额、不出网，只判断手上这份**现在**还能不能这么说
+（`GlanceDisplay`：三小时算旧；过了 iPhone 盖的月底就说「等 iPhone 更新本月的数」）。
+
+- iPhone → 手表：`MeterFeatures/Watch/WatchGlancePublisher` 在每次库写完之后推
+  （和 `WidgetTimelineReloader` 同一刻）。`applicationContext` 每次都发；
+  复杂功能那条通道有每日额度，只在表盘看得出变化时才花。
+- 手表上：App 收到后写 App Group 里的一个文件（`GlanceStore`），表盘扩展读它。没有数据库，没有历史。
+- iPhone 锁屏那几格（`Widget/GlanceWidgets.swift`，只在 iOS 上编）和表盘登记同一张表
+  （`GlanceWidgetKind`），画同一套视图。
+- 手表链不了 MeterDesign，用到的系统色在 `GlanceStyle` 另列一份；
+  `GlanceStyleTests` 逐个核对它们和 `MeterColor` 相同。
+
+### MeterDashboard — 仪表盘的折算，四个平台同一份
+
+模块读的值（`XxxModuleContent`），以及**把账本折算成这些值的 builder**
+（`DashboardContentsBuilder` 是唯一入口）。只依赖 `MeterCore` 和 `MeterFormat`，因为它要被
+**编五次**：App、widget，以及经 symlink 的 Android、Windows、CLI 三座桥。
+`MeterBridge/ProductDashboard.swift` 只做三件事：把 Kotlin 递来的快照日志折成读模型、
+钉住语言、调 `DashboardContentsBuilder.make` 再写成 JSON。里面没有规则。
+
+这个 target 存在的全部理由就是这个。以前 builder 和 SwiftUI 视图住在一起，桥链不到，
+`ProductDashboardModules.swift` 就抄了六个 builder。抄的那份照例漂了：Android 的固定订阅卡
+只按月费折算，年付的 ChatGPT Plus 显示成 `$1.67`，哪里都没写「每年」。现在桥里只要调用
+builder 用到的任何一条 `MeterCore` 规则，提交闸就红（`check_dashboard_portable`）。
+
+**这里不许出现**Android 的 Foundation 没有、或只在 Apple 平台才有意义的东西：`SwiftUI`、
+`MeterDesign`、`LocalizedStringResource`、`RelativeDateTimeFormatter`、`String(localized:)`、
+`Bundle.module`。`ArchitectureGuardrailTests.dashboardTargetStaysPortable` 和闸各扫一遍。
+两处例外都在 `#if canImport(Darwin)` 里：`StaleSinceText`（Apple 平台用系统的相对时间，
+别处按天说）和生成的 `MeterDashboardCopy`。
+
+**要在四个平台出同一份字的文案**走 `MeterFormat/PortableText`。调用点照旧写带插值的
+`L("…")`，键就是 String Catalog 里那条中文源串（`%@` / `%lld`，字面量 `%` 写 `%%`），
+i18n 闸不用变。解析顺序：
+
+- Apple 平台、没钉语言：交给本 target 的 String Catalog，和原来的 `String(localized:)` 一样。
+- 桥钉了 `PortableLocale.$languageTag`（桥总会钉）：查从同一份 catalog 生成的三语表
+  （`<Target>Copy.swift`，GENERATED，`scripts/generate-shared.py` 出）。Android / Windows 的
+  SwiftPM 构建不编 String Catalog，没有这张表每句话都会静默回落中文。
+- `MeterDateFormat` 的默认 locale 同理改成 `PortableLocale.formatting`：JNI 线程上的
+  `Locale.current` 不可靠。
+
+只有某一端才需要的句子留在那一端（Android 顶栏那句「本月订阅 … · 未计入」走 `JNICopy`）——
+但金额、百分比、排序和阈值永远不留。
+
 ### MeterModules — 仪表盘的模块
 
-模块的 view、它们读的值（`XxxModuleContent`），以及**把账本折算成这些值的 builder**
-（`DashboardContentsBuilder` 是唯一入口）。`DashboardModel`、页面和导航仍在 MeterFeatures。
+模块的 view。它们画的值和算这些值的 builder 在 `MeterDashboard`；`DashboardModel`、
+页面和导航仍在 MeterFeatures。要 SwiftUI 或 `LocalizedStringResource` 的展示零件
+（模块的标题和 SF Symbol、给 Charts 的 `TrendModuleContent.points`）是这一层的 extension。
 
 **有几块由 `DashboardModuleID` 说了算，文档里不写死数字。**写死过一次「12 块」，
 下架「即将扣款」之后三处全成了错的——而这种错没有任何一步会发现。
@@ -207,17 +270,15 @@ protocol BillingProvider: Sendable {
 「涨得最多」挑谁、三块按什么顺序排，预算条什么时候变色，明细怎么分桶、
 超出几组折成「其他」。这一层的 builder 只负责把值写成句子。
 
-理由是 Android 和 Windows：它们的桥**链不了这个 target**（经 MeterDesign 带进 SwiftUI），
-所以在拆开之前，`ProductDashboardModules.swift` 把其中五个 builder 又实现了一遍——
-而且已经漂了。本月之最的顺序不一样，还把整月的涨跌幅安在了构成里第一家头上；
-按类别构成各段自己四舍五入，一列数字能加成 99。**两端都需要的规则，
-就该放在两端都已经在编的那个零依赖层里。**
+来历：这些规则先下沉到 `MeterCore`，是因为桥链不到 builder、把其中五个又实现了一遍——
+本月之最顺序不一样，按类别各段自己四舍五入、一列能加成 99。规则下沉修好了那五处，
+但 builder 本身还是抄的，抄的那份继续漂。`MeterDashboard` 把抄的那份删掉了。
 
 单独一个 target 只有一个理由：**widget 链得到**。Widget 不能链 MeterFeatures
 （那会把三十多家账单适配器拖进扩展，SPEC 第 09 节也不许 widget 自己调 API）。
-折算之所以能一起下来，是因为它要的只有「这家叫什么、什么色、什么类」——
+折算之所以能放在 Features 之下，是因为它要的只有「这家叫什么、什么色、什么类」——
 那是 `MeterCore/ProviderIdentity.swift`（生成物，权威在 `ProviderCatalog.swift`），
-不是取数。依赖表（Core / Design / Format）就是「widget 会链进什么」的安全说明书，
+不是取数。依赖表（Core / Design / Format / Dashboard / Glance）就是「widget 会链进什么」的安全说明书，
 `ArchitectureGuardrailTests` 和 `check-source-invariants.py` 各扫一遍。
 
 于是主屏上的数字和 App 里的数字是**同一份代码从同一份数据算出来的**，
@@ -289,7 +350,7 @@ App 上一次运行（跨月单独处理了，预测值不会自己往前走）�
 
 | 事实 | 权威 | 生成物 | 命令 |
 |---|---|---|---|
-| 钱的折算 / 取数 | `MeterCore` / `MeterProviders`（Swift 源码） | Android / Windows 侧同一份源码经 symlink 双编 | `scripts/android-run.sh`；Windows 见 `Windows/native/build.ps1` |
+| 钱的折算 / 取数 / 仪表盘模块 | `MeterCore` / `MeterProviders` / `MeterDashboard`（Swift 源码） | Android / Windows / CLI 侧同一份源码经 symlink 再编一次 | `scripts/android-run.sh`；Windows 见 `Windows/native/build.ps1` |
 | provider 视觉身份（Simple Icons path、light/dark 品牌色、fill、evenOdd、letterReason） | `shared/providers.json` | `ProviderGlyphArtwork.swift/.kt/.cs`、`ProviderPalette.swift`、`ProviderColors.kt`、`ProviderPalette.cs`、`site/src/providers.ts` | `scripts/generate-shared.py` |
 | provider 接入分层（完全支持 / 理论支持 / 读数信箱 / 不接入） | `ProviderCatalog.swift` 的 `accessStatus` 与 `supportsInboxIngest` | `site/src/supportTiers.ts` | 同上 |
 | 落地页服务详情（计费种类、凭据字段、套餐、官方 URL） | `ProviderCatalog.swift` + `Catalog/catalog.json` | `site/src/catalogEntries.ts` | 同上 |
@@ -297,6 +358,7 @@ App 上一次运行（跨月单独处理了，预测值不会自己往前走）�
 | 猫的动效常数 | 三端手写（平台渲染归属） | —（`check_cat_motion_constants` 闸强制数值一致） | — |
 | 用户可见文案 | 各模块 `Localizable.xcstrings`（zh 源串 + en/ja） | Android `values-en/`、`values-ja/`；Windows `en-US`/`ja-JP` resw。独有句分别在 `strings-android-only.json` / `strings-windows-only.json` | `scripts/generate-android-strings.py`；`scripts/generate-windows-strings.py` |
 | 桥出口的文案 | `shared/jni-copy.json` 选键，译文取自 xcstrings | `Android/native/Sources/MeterBridge/JNICopy.swift`（三语表编进动态库） | `scripts/generate-shared.py` |
+| 四个平台同一份的文案（`MeterFormat` / `MeterDashboard` 说的话） | 该 target 的 `Localizable.xcstrings` | `MeterFormat/MeterFormatCopy.swift`、`MeterDashboard/MeterDashboardCopy.swift`（桥钉了 `PortableLocale` 时 `PortableCatalog` 查的三语表） | `scripts/generate-shared.py` |
 | API 契约（字段上限、类别枚举、匿名页面名单） | `shared/api-contract.json` | `worker/src/contract.ts`、`TipFieldLimits.swift`、`FeedbackFieldLimits.swift`、`UsageAnalyticsScreen.swift`、`UsageFieldLimits.swift`、`UsageScreens.kt`、`UsageScreens.cs`、site 表单（补丁式） | 同上 |
 | 接入目录（教程、套餐、汇率） | `Packages/.../MeterPersistence/Catalog/catalog.json`（中文规范字段；`en` / `ja` 为可选 overlay，展示时解析，缺列回落中文） | worker、Android 桥、Windows 壳资源均为 symlink（`check_catalog_sync` 闸） | — |
 | 教程出处（只给人和 agent 对账，App 永不打开） | `docs/setup-guide-sources.json` | —（`check_setup_guide_sources`：有教程就必须有 `sourceURL`；改了 fields/steps 不刷新 `stepsFingerprint` 就红） | `python3 scripts/refresh-setup-guide-source.py <id>` |

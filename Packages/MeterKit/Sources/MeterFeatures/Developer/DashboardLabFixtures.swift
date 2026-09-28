@@ -1,6 +1,7 @@
 #if DEBUG
 import Foundation
 import MeterCore
+import MeterDashboard
 import MeterFormat
 import MeterModules
 import MeterProviders

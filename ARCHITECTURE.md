@@ -54,13 +54,15 @@ cost/
 │   └── Resources/
 ├── Mac/                        # macOS shell: WindowGroup + MenuBarExtra. Composition reuses AppEnvironment
 ├── Widget/                     # Widget source. iOS / Mac extension targets each compile a copy
+├── Watch/ · WatchWidget/       # watchOS app + watch-face extension. Link MeterGlance only
 ├── Android/                    # Compose shell + JNI. Math, money copy, and catalog are the Swift in Packages/
 │   ├── app/                    # Kotlin UI + Keystore/SQLite adapters. Does no math, never formats money itself
-│   └── native/                 # SwiftPM: symlinks MeterCore + MeterProviders + MeterFormat + MeterBridge, produces libMeterCoreJNI.so
+│   └── native/                 # SwiftPM: symlinks MeterCore + MeterProviders + MeterFormat + MeterDashboard + MeterBridge, produces libMeterCoreJNI.so
 │                               #   MeterBridge is platform-neutral JSON in/out; MeterCoreJNI is only the JNI skin
 ├── Windows/                    # WinUI 3 shell + C ABI. Math, money copy, and catalog are the same Swift
 │   ├── app/                    # C# UI + Credential Manager / JSON ledger. Does no math, never talks HTTP itself
 │   └── native/                 # SwiftPM: same symlinks, produces MeterCoreCLR.dll
+├── CLI/                        # Terminal shell. Same Swift core via symlink; Linux's native form is `tollcat`
 ├── Packages/MeterKit/
 │   ├── Package.swift           # Dependency directions are enforced here — do not loosen
 │   ├── Sources/
@@ -71,8 +73,12 @@ cost/
 │   │   ├── MeterPersistence/   # SwiftData + Keychain. Depends on Core
 │   │   ├── MeterTips / MeterInbox / MeterFeedback / MeterUsage
 │   │   │                       # Leaves: tips / inbox / feedback / anonymous page counts. None links Providers
-│   │   ├── MeterModules/       # Dashboard modules: views + values + the builders
-│   │   │                       # Core/Design/Format only — a widget can link it
+│   │   ├── MeterGlance/        # The glance (watch faces, Smart Stack, Lock Screen, the watch app's one screen)
+│   │   │                       # Zero dependencies — the watch links nothing else
+│   │   ├── MeterDashboard/     # Dashboard math: the builders + the values they produce
+│   │   │                       # Core/Format only — the Android / Windows / CLI bridges compile it too
+│   │   ├── MeterModules/       # Dashboard module views
+│   │   │                       # Core/Design/Format/Dashboard/Glance only — a widget can link it
 │   │   └── MeterFeatures/      # UI. Depends on all of the above
 │   └── Tests/
 │       ├── MeterCoreTests/     # The tests that matter most live here
@@ -91,17 +97,21 @@ cost/
           │            ↑          │
    MeterPersistence    │     MeterDesign
           ↑            │          ↑
-          │            │     MeterModules ──→ Core + Design + Format
+          │            │     MeterModules ──→ Core + Design + Format + Dashboard + Glance
           ↑            │          ↑
           └──── MeterFeatures ────┘
                      ↑
-                App target        Widget target ──→ Core + Design + Format + Modules + Persistence
+                App target        Widget target ──→ Core + Design + Format + Dashboard + Modules + Persistence
                 Mac target        Mac Widget         (no Providers)
                      │            same Widget/ source, each with its own App Group
                      │
-                     │  JNI / C ABI, same Core + Providers + Format + MeterBridge
+                     │  WatchConnectivity (a `Glance`, already folded and formatted)
                      ▼
-               Android/app (Compose)    Windows/app (WinUI 3)
+                Watch app + watch-face extension ──→ MeterGlance only
+                     │
+                     │  JNI / C ABI, same Core + Providers + Format + Dashboard + MeterBridge
+                     ▼
+               Android/app (Compose)    Windows/app (WinUI 3)    CLI (`tollcat`)
 ```
 
 Hard rules:
@@ -136,6 +146,9 @@ Hard rules:
   single `#if os` (the commit gate greps for it).
 - `MeterProviders` imports neither SwiftUI nor SwiftData.
 - The widget target does not link `MeterProviders` (reason 2 above).
+- The watch targets link **`MeterGlance` and nothing else**, and `MeterGlance` imports no
+  `Meter*` module. That is the compile-time proof that credentials, the ledger and the
+  vendor adapters can't reach the watch (`check_watch_linkage`).
 - Reverse dependencies are never allowed; if a callback is needed, define a protocol
   and inject the concrete implementation in `AppEnvironment`.
 - **The presentation path never holds the snapshot log.** `Snapshot` is an event
@@ -304,11 +317,73 @@ The worker source lives in `worker/` at the repo root.
   allowlisted page names, the platform, and whether this UTC day is a first open. No
   device identifiers
 
+### MeterGlance — watch faces, Smart Stack, Lock Screen
+
+One value, `Glance`: this month's amount, the projection, a normalised trend line, the
+budget, the top five services — **folded and formatted on the iPhone**, by
+`MeterModules/GlanceBuilder` reading the same `DashboardContents` the Home Screen widget
+draws (`DashboardContentsBuilder.widget`, one entry point for all three). The watch never
+folds, never formats money, never goes online; it only decides whether what it holds can
+still be said *now* (`GlanceDisplay`: stale after three hours, "waiting" once past the
+month end the iPhone stamped).
+
+- iPhone → watch: `MeterFeatures/Watch/WatchGlancePublisher` pushes after every store
+  write (same moment as `WidgetTimelineReloader`). `applicationContext` every time;
+  the complication channel only when the face would visibly change — it has a daily budget.
+- On the watch: the app receives and writes one file in its App Group (`GlanceStore`),
+  the watch-face extension reads it. No database, no history.
+- The Lock Screen widgets (`Widget/GlanceWidgets.swift`, iOS only) and the watch faces
+  register the same table (`GlanceWidgetKind`) and draw the same views.
+- Watch colors are listed again in `GlanceStyle` (the watch can't link MeterDesign);
+  `GlanceStyleTests` checks each against `MeterColor`.
+
+### MeterDashboard — the dashboard math, on every platform
+
+The values the modules read (`XxxModuleContent`) and **the builders that turn the ledger
+into those values** (`DashboardContentsBuilder` is the single entry point). It depends on
+`MeterCore` and `MeterFormat` and nothing else, because it is compiled **five times**:
+by the app, by the widget, and — through a symlink — by the Android, Windows and CLI
+bridges. `MeterBridge/ProductDashboard.swift` folds the snapshot log Kotlin hands over,
+pins the language, calls `DashboardContentsBuilder.make` and serialises the result. It
+contains no rules.
+
+That is the whole reason for the target. Before it existed the builders lived next to the
+SwiftUI views, the bridges couldn't link them, and `ProductDashboardModules.swift` kept a
+copy of six builders. The copy drifted the way copies do: the Fixed Subscriptions card on
+Android summed monthly plans only as a run rate and showed an annual ChatGPT Plus as
+`$1.67` with no "per year" anywhere. The gate now fails if the bridge calls any of the
+`MeterCore` rules a builder uses (`check_dashboard_portable`).
+
+**What may not appear here** — anything Android's Foundation lacks or only means something
+on Apple platforms: `SwiftUI`, `MeterDesign`, `LocalizedStringResource`,
+`RelativeDateTimeFormatter`, `String(localized:)`, `Bundle.module`.
+`ArchitectureGuardrailTests.dashboardTargetStaysPortable` and the gate check it. Two files
+are exempt, both inside `#if canImport(Darwin)`: `StaleSinceText` (the system's relative
+time on Apple platforms, whole days elsewhere) and the generated `MeterDashboardCopy`.
+
+**Copy that has to come out the same on four platforms** goes through
+`MeterFormat/PortableText`. Call sites still write `L("…")` with interpolation; the key is
+the same Chinese source string the String Catalog uses (`%@` / `%lld`, literal `%` as
+`%%`), so the i18n gate is unchanged. Resolution:
+
+- On Apple platforms with no language pinned: the target's String Catalog, exactly as
+  `String(localized:)` did.
+- When a bridge pins `PortableLocale.$languageTag` (it always does): a zh/en/ja table
+  generated from that same catalog (`<Target>Copy.swift`, GENERATED by
+  `scripts/generate-shared.py`). Android / Windows SwiftPM builds don't compile String
+  Catalogs, so without the table every sentence would silently fall back to Chinese.
+- `MeterDateFormat`'s default locale is `PortableLocale.formatting` for the same reason:
+  `Locale.current` isn't reliable on a JNI thread.
+
+Sentences only one shell needs stay in that shell (Android's hero chip "本月订阅 … · 未计入"
+comes from `JNICopy`) — but amounts, percentages, orderings and thresholds never do.
+
 ### MeterModules — the dashboard modules
 
-The module views, the values they read (`XxxModuleContent`), and **the builders that
-turn the ledger into those values** (`DashboardContentsBuilder` is the single entry
-point). `DashboardModel`, pages and navigation stay in MeterFeatures.
+The module views. The values they draw and the builders that compute them are in
+`MeterDashboard`; `DashboardModel`, pages and navigation stay in MeterFeatures. Display
+bits that need SwiftUI or `LocalizedStringResource` (a module's title and SF Symbol,
+`TrendModuleContent.points` for Charts) are extensions here.
 
 **How many there are is `DashboardModuleID`'s business; prose never spells a number.**
 It said "12 modules" in three places, and retiring Upcoming Charges made all three wrong —
@@ -323,22 +398,20 @@ what order the three lines appear, when the budget bar turns amber, how spend li
 bucket and collapse into "other". The builders here only turn those values into
 sentences.
 
-The reason is Android and Windows: their bridge **cannot link this target** (it pulls in
-SwiftUI through MeterDesign), so before the split it re-implemented five of these
-builders in `ProductDashboardModules.swift` — and they had already drifted. Superlatives
-came out in a different order and pinned the whole month's change ratio on whichever
-vendor happened to be first; categories rounded each share on its own, so the column
-could add up to 99. A rule that two platforms need is a rule that belongs in the
-zero-dependency layer both of them already compile.
+History: these rules first moved into `MeterCore` because the bridge couldn't link the
+builders and had re-implemented five of them — superlatives came out in a different
+order, categories rounded each share on its own so the column could add up to 99.
+Moving the rules down fixed those five, but the builders themselves were still copied,
+and the copy kept drifting. `MeterDashboard` removed the copy.
 
 There is exactly one reason this is its own target: **a widget can link it.** A widget
 cannot link MeterFeatures — that would drag thirty-odd billing adapters into the
 extension, and SPEC §09 forbids a widget from calling APIs itself. The builders can
-come down here because all they need above the domain is "what is this provider
+sit below Features because all they need above the domain is "what is this provider
 called, what colour, what category" — and that is
 `MeterCore/ProviderIdentity.swift` (generated; the authority is `ProviderCatalog.swift`),
-which is data, not fetching. The dependency list (Core / Design / Format) is the
-safety datasheet for what a widget pulls in; `ArchitectureGuardrailTests` and
+which is data, not fetching. The dependency list (Core / Design / Format / Dashboard /
+Glance) is the safety datasheet for what a widget pulls in; `ArchitectureGuardrailTests` and
 `check-source-invariants.py` each enforce it.
 
 So the number on the Home Screen and the number in the app are computed by the same
@@ -422,7 +495,7 @@ commit gate red.
 
 | Fact | Authority | Generated artifacts | Command |
 |---|---|---|---|
-| Cost math / fetching | `MeterCore` / `MeterProviders` (Swift source) | The same source double-compiled via symlinks on the Android / Windows side | `scripts/android-run.sh`; for Windows see `Windows/native/build.ps1` |
+| Cost math / fetching / dashboard modules | `MeterCore` / `MeterProviders` / `MeterDashboard` (Swift source) | The same source compiled again via symlinks on the Android / Windows / CLI side | `scripts/android-run.sh`; for Windows see `Windows/native/build.ps1` |
 | Provider visual identity (Simple Icons path, light/dark brand colors, fill, evenOdd, letterReason) | `shared/providers.json` | `ProviderGlyphArtwork.swift/.kt/.cs`, `ProviderPalette.swift`, `ProviderColors.kt`, `ProviderPalette.cs`, `site/src/providers.ts` | `scripts/generate-shared.py` |
 | Provider access tiers (fully supported / theoretically supported / readings inbox / not onboarded) | `accessStatus` and `supportsInboxIngest` in `ProviderCatalog.swift` | `site/src/supportTiers.ts` | same as above |
 | Landing-page service details (billing kind, credential fields, plans, official URLs) | `ProviderCatalog.swift` + `Catalog/catalog.json` | `site/src/catalogEntries.ts` | same as above |
@@ -430,6 +503,7 @@ commit gate red.
 | Cat motion constants | Hand-written on all three platforms (rendering belongs to each platform) | — (the `check_cat_motion_constants` gate enforces identical values) | — |
 | User-visible copy | Each module's `Localizable.xcstrings` (zh source strings + en/ja) | Android `values-en/`, `values-ja/`; Windows `en-US`/`ja-JP` resw. Platform-only strings live in `strings-android-only.json` / `strings-windows-only.json` | `scripts/generate-android-strings.py`; `scripts/generate-windows-strings.py` |
 | Copy exported over the bridge | `shared/jni-copy.json` picks the keys; translations come from xcstrings | `Android/native/Sources/MeterBridge/JNICopy.swift` (the trilingual table compiled into the dynamic library) | `scripts/generate-shared.py` |
+| Portable copy (what `MeterFormat` / `MeterDashboard` say on every platform) | That target's `Localizable.xcstrings` | `MeterFormat/MeterFormatCopy.swift`, `MeterDashboard/MeterDashboardCopy.swift` (zh/en/ja tables `PortableCatalog` reads when a bridge pins `PortableLocale`) | `scripts/generate-shared.py` |
 | API contract (field limits, category enums, anonymous page allowlist) | `shared/api-contract.json` | `worker/src/contract.ts`, `TipFieldLimits.swift`, `FeedbackFieldLimits.swift`, `UsageAnalyticsScreen.swift`, `UsageFieldLimits.swift`, `UsageScreens.kt`, `UsageScreens.cs`, site forms (patch-style) | same as above |
 | Onboarding catalog (tutorials, plans, exchange rates) | `Packages/.../MeterPersistence/Catalog/catalog.json` (Chinese is the canonical field; `en` / `ja` are optional overlays, resolved at display time, falling back to Chinese) | worker, Android bridge, and Windows shell resources are all symlinks (the `check_catalog_sync` gate) | — |
 | Tutorial source citations (audit only; the app never opens these) | `docs/setup-guide-sources.json` | — (`check_setup_guide_sources`: every catalog guide with steps has a `sourceURL`; changing fields/steps without refreshing `stepsFingerprint` fails the gate) | `python3 scripts/refresh-setup-guide-source.py <id>` |

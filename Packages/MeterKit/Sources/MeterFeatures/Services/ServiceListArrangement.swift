@@ -68,7 +68,7 @@ enum ServiceListArrangement {
                 id: category.rawValue,
                 kind: nil,
                 category: category,
-                title: showTitles ? String(localized: category.title) : nil,
+                title: showTitles ? category.title : nil,
                 rows: buckets[category] ?? []
             )
         }

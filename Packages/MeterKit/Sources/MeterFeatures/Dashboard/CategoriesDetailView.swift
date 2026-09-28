@@ -1,3 +1,4 @@
+import MeterDashboard
 import SwiftUI
 import MeterCore
 import MeterDesign
@@ -29,7 +30,7 @@ struct CategoriesDetailView: View {
                             amountCaption: "",
                             indent: MeterSpacing.compositionSwatch + MeterSpacing.xs,
                             spokenLabel: String(
-                                localized: L("\(String(localized: slice.title)) 含 \(slice.memberNames.joined(separator: "、"))")
+                                localized: L("\(slice.title) 含 \(slice.memberNames.joined(separator: "、"))")
                             )
                         )
                     }
@@ -64,7 +65,7 @@ struct CategoriesDetailView: View {
         .meterListRowHitTarget()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
-            L("\(String(localized: slice.title))，\(slice.amountText)，\(percentText(slice.percent))")
+            L("\(slice.title)，\(slice.amountText)，\(percentText(slice.percent))")
         )
     }
 
@@ -74,7 +75,7 @@ struct CategoriesDetailView: View {
                 id: slice.category.rawValue,
                 color: color(at: index),
                 fraction: slice.fraction,
-                name: String(localized: slice.title),
+                name: slice.title,
                 amountText: slice.amountText,
                 mergedNames: slice.memberNames
             )

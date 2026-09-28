@@ -1,5 +1,6 @@
 #if DEBUG
 import Foundation
+import MeterDashboard
 import MeterModules
 
 /// 实验室目录的分组。跟编辑面同一份模块清单，不另开名单。

@@ -177,7 +177,7 @@ targets:
           - $(TeamIdentifierPrefix)com.zhechengqi.tollcat
     dependencies:
       - package: MeterKit
-        products: [MeterDesign, MeterFormat, MeterModules, MeterPersistence, MeterCore]
+        products: [MeterDesign, MeterFormat, MeterDashboard, MeterModules, MeterPersistence, MeterCore]
     info:
       path: Widget/Info.plist
       properties:

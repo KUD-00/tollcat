@@ -322,6 +322,21 @@ def check_privacy_manifests(root: Path, errors: list[str]) -> None:
     app_categories = privacy_categories(app_manifest)
     widget_categories = privacy_categories(widget_manifest)
 
+    # 手表两个 bundle 各自一份清单。它们只链 MeterGlance，所以按「壳 + MeterGlance」扫。
+    glance = "Packages/MeterKit/Sources/MeterGlance"
+    for label, manifest, folders in (
+        ("手表 App", root / "Watch" / "Resources" / "PrivacyInfo.xcprivacy", ("Watch", glance)),
+        ("表盘扩展", root / "WatchWidget" / "PrivacyInfo.xcprivacy", ("WatchWidget", glance)),
+    ):
+        if not manifest.is_file():
+            errors.append(f"缺少 {rel(root, manifest)}")
+            continue
+        code = concatenated(production_swift(root, *folders))
+        categories = privacy_categories(manifest)
+        for api, patterns, category in REQUIRED_REASON_RULES:
+            if any(re.search(pattern, code) for pattern in patterns) and category not in categories:
+                errors.append(f"{label}用了{api}，{rel(root, manifest)} 要声明 {category}")
+
     for label, patterns, category in REQUIRED_REASON_RULES:
         app_hit = any(re.search(pattern, app_code) for pattern in patterns)
         widget_hit = any(re.search(pattern, widget_code) for pattern in patterns)
@@ -399,6 +414,31 @@ def check_app_icon(root: Path, errors: list[str]) -> None:
         errors.append(f"{default} 带透明通道。默认 App Store 图标必须不透明。")
 
 
+def check_watch_icon(root: Path, errors: list[str]) -> None:
+    """手表只有一个 1024 槽位，系统裁成圆。和 iPhone 那张一样不许带透明通道。"""
+    iconset = root / "Watch" / "Resources" / "Assets.xcassets" / "AppIcon.appiconset"
+    contents_path = iconset / "Contents.json"
+    if not contents_path.is_file():
+        errors.append("缺少 Watch 的 AppIcon.appiconset/Contents.json")
+        return
+    import json
+
+    images = json.loads(contents_path.read_text(encoding="utf-8")).get("images") or []
+    watch = [i for i in images if i.get("platform") == "watchos" and i.get("size") == "1024x1024"]
+    if not watch or not watch[0].get("filename"):
+        errors.append("Watch AppIcon 缺 watchOS 1024×1024")
+        return
+    path = iconset / watch[0]["filename"]
+    header = png_ihdr(path) if path.is_file() else None
+    if header is None:
+        errors.append(f"Watch AppIcon 引用的 {watch[0]['filename']} 不在或不是 PNG")
+        return
+    if header[:2] != (1024, 1024):
+        errors.append(f"Watch AppIcon 是 {header[0]}×{header[1]}，要 1024×1024")
+    if png_has_alpha(path):
+        errors.append("Watch AppIcon 带透明通道")
+
+
 def check_launch_screen(root: Path, errors: list[str]) -> None:
     yml = (root / "project.yml").read_text(encoding="utf-8")
     if "INFOPLIST_KEY_UILaunchStoryboardName" not in yml:
@@ -419,6 +459,12 @@ def check_app_groups(root: Path, errors: list[str]) -> None:
             root / "Mac" / "TollCatMac.entitlements",
             root / "Mac" / "TollCatWidgetMac.entitlements",
             "Mac",
+        ),
+        # 手表 App 收、表盘扩展读，中间只有 App Group 里那一个文件。
+        (
+            root / "Watch" / "TollCatWatch.entitlements",
+            root / "WatchWidget" / "TollCatWatchWidget.entitlements",
+            "watchOS",
         ),
     )
     for app, widget, label in pairs:
@@ -546,6 +592,7 @@ def main() -> int:
     check_export_compliance(root, errors)
     check_ats_and_webviews(root, errors)
     check_app_icon(root, errors)
+    check_watch_icon(root, errors)
     check_launch_screen(root, errors)
     check_app_groups(root, errors)
     check_marketing_screenshots(root, errors)

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,9 +43,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.zhechengqi.tollcat.dashboard.CompositionTones
 import com.zhechengqi.tollcat.dashboard.DashboardPreviewData
-import com.zhechengqi.tollcat.dashboard.MonthToDateModuleView
+import com.zhechengqi.tollcat.dashboard.CompositionSegmentBar
+import com.zhechengqi.tollcat.dashboard.DashboardHeroHeader
+import com.zhechengqi.tollcat.dashboard.dashboardHeroState
 import com.zhechengqi.tollcat.services.ServiceGlyph
 import com.zhechengqi.tollcat.settings.currencyLabel
 import com.zhechengqi.tollcat.ui.MeterSpacing
@@ -253,44 +253,24 @@ private fun OnboardingDashboardPreview() {
     val snapshot = DashboardPreviewData.snapshot
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(MeterSpacing.xs),
+        verticalArrangement = Arrangement.spacedBy(MeterSpacing.sm),
     ) {
-        MonthToDateModuleView(
-            amountText = snapshot.formattedVariable.ifBlank { snapshot.formattedTotal },
-            monthTitle = snapshot.monthTitle,
-            projectedCaption = stringResource(R.string.projected_caption, snapshot.formattedProjected),
-            subscriptionCaption = snapshot.subscriptionFormatted?.let {
-                stringResource(R.string.dashboard_subscription_excluded, it)
-            },
-            currencyNote = null,
-            filterNote = null,
+        DashboardHeroHeader(
+            state = dashboardHeroState(
+                dashboard = snapshot,
+                filterNote = null,
+                includesSubscriptions = false,
+                canToggleScope = false,
+                nowMillis = OnboardingPreviewClockMillis,
+            ),
+            fullBleed = false,
         )
-        OnboardingCompositionStrip()
+        CompositionSegmentBar(slices = snapshot.composition, height = MeterSpacing.sm)
     }
 }
 
-@Composable
-private fun OnboardingCompositionStrip() {
-    val rows = DashboardPreviewData.snapshot.composition
-    if (rows.isEmpty()) return
-    val total = rows.sumOf { it.fraction.coerceAtLeast(0.01f).toDouble() }.toFloat().coerceAtLeast(0.01f)
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(MeterSpacing.sm)
-            .clip(MaterialTheme.shapes.small),
-        horizontalArrangement = Arrangement.spacedBy(MeterSpacing.budgetBlockGap),
-    ) {
-        rows.forEachIndexed { index, row ->
-            Box(
-                Modifier
-                    .weight(row.fraction.coerceAtLeast(0.01f) / total)
-                    .fillMaxHeight()
-                    .background(CompositionTones.color(index)),
-            )
-        }
-    }
-}
+/** 引导页那张样例仪表停在设计稿的那一天（2026-08-16），进度条和「今天」才对得上样例数字。 */
+private const val OnboardingPreviewClockMillis = 1_786_881_600_000L
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -403,7 +383,7 @@ private fun OnboardingWidgetPreview() {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(MeterSpacing.xs))
-            OnboardingCompositionStrip()
+            CompositionSegmentBar(slices = DashboardPreviewData.snapshot.composition, height = MeterSpacing.sm)
         }
     }
 }

@@ -52,6 +52,7 @@ SwiftUI，iOS 26+ / macOS 26+，iPhone、iPad 和 Mac。免费，可选打赏，
 - `Packages/MeterKit/` —— 全部 Swift 代码，按模块分层。依赖方向的合约在 [ARCHITECTURE.md](ARCHITECTURE.zh.md)，其中两条底线：Widget 不链接 Providers，自己发不了任何请求；Providers 和 Tips 互不链接，账单凭据走不到打赏 Worker。
 - `Android/` —— 开发中的 Android 版，凭据同样只存本机（Android Keystore）。还没做完，敬请期待！等不及的话，欢迎搭把爪。
 - `Windows/` —— WinUI 3 的皮，底下是交叉编译成 DLL 的同一份 Swift 核心。代码写完了，还没在 Windows 11 上跑起来过。
+- `CLI/` —— 终端命令 `tollcat`，底下还是同一份 Swift 核心。这就是 Linux 版。见 [CLI/README.md](CLI/README.md)。
 - `shared/` —— 跨端的事实源（JSON + 生成器）。改这里再跑生成器，带 `GENERATED` 头的文件不要手改。
 - `site/` —— [tollcat.app](https://tollcat.app) 落地页，静态站。
 - `worker/` —— 这个项目唯一的服务端，见下一节。

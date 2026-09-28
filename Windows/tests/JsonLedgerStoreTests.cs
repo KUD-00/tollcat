@@ -32,4 +32,24 @@ public class JsonLedgerStoreTests
             if (File.Exists(path)) File.Delete(path);
         }
     }
+
+    [Fact]
+    public void SharedFixtureRoundTrip()
+    {
+        var fixture = Path.Combine(AppContext.BaseDirectory, "ledger-v4.json");
+        Assert.True(File.Exists(fixture), fixture);
+        var path = Path.Combine(Path.GetTempPath(), "tollcat-shared-" + Guid.NewGuid() + ".json");
+        File.Copy(fixture, path, overwrite: true);
+        try
+        {
+            var store = new JsonLedgerStore(path);
+            Assert.Equal("openai", store.Memberships().Single().ProviderId);
+            Assert.Equal("7.62", store.Snapshots().Single().CurrentSpendUsd);
+            Assert.StartsWith("acct.", store.Accounts("openai").Single().CredentialReference);
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
 }

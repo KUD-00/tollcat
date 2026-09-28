@@ -22,6 +22,7 @@ include:
 options:
   deploymentTarget:
     iOS: "26.0"
+    watchOS: "26.0"
 
 targets:
 
@@ -44,6 +45,8 @@ targets:
       - package: MeterKit
         products: [MeterFeatures, MeterPersistence, MeterProviders, MeterDesign, MeterCore, MeterTips, MeterInbox, MeterFeedback, MeterUsage]
       - target: TollCatWidget
+      # 手表 App 跟着 iPhone 包一起装（Embed Watch Content）。
+      - target: TollCatWatch
       - sdk: StoreKit.framework
       # 不要给 App target 链 StoreKitTest.framework:那个框架在真机上不存在,
       # dyld 一启动就找不到,直接 __abort_with_payload → SIGABRT。
@@ -88,7 +91,7 @@ targets:
           - group.com.zhechengqi.tollcat
     dependencies:
       - package: MeterKit
-        products: [MeterDesign, MeterFormat, MeterModules, MeterPersistence, MeterCore]
+        products: [MeterDesign, MeterFormat, MeterDashboard, MeterModules, MeterPersistence, MeterCore, MeterGlance]
     info:
       path: Widget/Info.plist
       properties:
@@ -110,6 +113,72 @@ targets:
         SKIP_INSTALL: YES
 
   # ─────────────────────────────────────────────────────────────
+  # 手表壳。**只链 MeterGlance**（零依赖）：账本、凭据、厂商适配器在编译期就上不了手表。
+  # 它看到的每一个数都是 iPhone 经 WatchConnectivity 推来的（`WatchGlancePublisher`），
+  # 自己不出网。App Group 和 iPhone 同一个 id，但那是手表上自己的容器，里面只有一个
+  # `glance.json`——手表 App 收、表盘扩展读。
+  TollCatWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: Watch
+    entitlements:
+      path: Watch/TollCatWatch.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.zhechengqi.tollcat
+    dependencies:
+      - package: MeterKit
+        products: [MeterGlance]
+      - target: TollCatWatchWidget
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat.watchkitapp
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: TollCat
+        INFOPLIST_KEY_CFBundleLocalizations: "en ja zh-Hans"
+        INFOPLIST_KEY_WKApplication: YES
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.zhechengqi.tollcat
+        # 没有 iPhone 就没有数：单独装在手表上没有意义。
+        INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "4"
+        SKIP_INSTALL: YES
+
+  # ─────────────────────────────────────────────────────────────
+  # 表盘和智能叠放那几格。和 iPhone 锁屏同一张表（`GlanceWidgetKind`）、同一套视图。
+  TollCatWatchWidget:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - path: WatchWidget
+    entitlements:
+      path: WatchWidget/TollCatWatchWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.zhechengqi.tollcat
+    dependencies:
+      - package: MeterKit
+        products: [MeterGlance]
+    info:
+      path: WatchWidget/Info.plist
+      properties:
+        CFBundleDisplayName: TollCat
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # 和 iPhone 那个扩展同一个坑：不列的话 `Locale.current` 钉在开发语言，
+        # 英文表上的「3 小时前」会印成中文。
+        CFBundleLocalizations: [zh-Hans, en, ja]
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zhechengqi.tollcat.watchkitapp.widget
+        TARGETED_DEVICE_FAMILY: "4"
+        SKIP_INSTALL: YES
+
+  # ─────────────────────────────────────────────────────────────
   # 单元测试。测试源文件放在 MeterKit 包的 Tests/ 目录下,由这个
   # target 编译并在模拟器上跑 —— 这样 MeterKit 可以保持 iOS-only。
   # Mac 工程里没有测试 target：同一份 Tests/ 跑一遍就够，跑的是纯逻辑。
@@ -124,7 +193,7 @@ targets:
     dependencies:
       - target: TollCat
       - package: MeterKit
-        products: [MeterCore, MeterProviders, MeterPersistence, MeterDesign, MeterModules, MeterFeatures, MeterTips, MeterInbox, MeterFeedback, MeterUsage]
+        products: [MeterCore, MeterProviders, MeterPersistence, MeterDesign, MeterDashboard, MeterModules, MeterFeatures, MeterTips, MeterInbox, MeterFeedback, MeterUsage, MeterGlance]
       - sdk: StoreKit.framework
       - sdk: StoreKitTest.framework
     settings:

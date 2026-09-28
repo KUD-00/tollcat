@@ -67,6 +67,15 @@ final class AppEnvironment {
         )
         // 种子是刚才铺的，`bootstrap.containsDemoData` 那一份比它早，问仪表才准。
         status.containsDemoData = dashboardModel.containsDemoData()
+        #if os(iOS)
+        // 手表上的每一个数都是从这里推过去的：和 widget 读同一份 App Group 库。
+        // Mac 壳也编这个文件，但 Mac 配不了手表。
+        WatchGlancePublisher.shared.start(
+            container: bootstrap.container,
+            catalog: catalogResolver,
+            clock: clock
+        )
+        #endif
         settingsModel = SettingsModel(
             dashboard: dashboardModel,
             persistenceStatus: persistenceStatus

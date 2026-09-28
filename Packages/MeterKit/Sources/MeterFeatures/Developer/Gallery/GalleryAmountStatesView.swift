@@ -1,4 +1,5 @@
 #if DEBUG
+import MeterDashboard
 import SwiftUI
 import MeterCore
 import MeterDesign

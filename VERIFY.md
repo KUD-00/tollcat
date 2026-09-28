@@ -292,3 +292,22 @@ Below is the manual first-ship checklist.
 - [ ] The winget manifest is searchable and installable
 - [ ] Full-screen walkthrough in all three languages (zh / en / ja)
 - [ ] No `HttpClient` in the C# source (the commit gate already scans)
+
+## 9. CLI (`tollcat`)
+
+Linux's native form is the terminal. Same Swift core, no JNI / C ABI skin. Spec:
+[`docs/cli/SPEC.md`](docs/cli/SPEC.md). Local loop: `swift test --package-path CLI`.
+
+### First-ship manual checklist
+
+- [ ] `swift run --package-path CLI tollcat` against ≥2 live providers matches iOS
+- [ ] macOS binary is signed and notarized; Linux x86_64 and aarch64 are fully static
+      (Swift Static Linux SDK); both are attested on the same GitHub Release
+- [ ] A Linux box with no Swift toolchain: scp the binary, `tollcat add` + `tollcat`
+      prints this month's number
+- [ ] Credentials: macOS Keychain, Linux Secret Service; headless env vars
+      `TOLLCAT_<PROVIDER>_<FIELD>` never land on disk
+- [ ] `--json` stdout is pure JSON and contains no credential fields
+- [ ] `LANG=ja_JP.UTF-8 tollcat` and `LANG=en_US.UTF-8 tollcat` walk through
+- [ ] `brew install tollcat` from the tap; `--version` prints the tag and commit
+- [ ] No telemetry; outbound hosts are provider APIs only

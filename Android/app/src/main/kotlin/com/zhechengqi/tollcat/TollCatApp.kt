@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -122,61 +123,8 @@ fun TollCatApp(session: TollCatSession) {
             return@FadeThroughContent
         }
         val tab = session.tab
-        val tabDashboardSpoken = stringResource(R.string.tab_dashboard)
-        val tabServicesSpoken = stringResource(R.string.tab_services)
-        val tabSettingsSpoken = stringResource(R.string.tab_settings)
-        NavigationSuiteScaffold(
-            layoutType = NavigationSuiteScaffoldDefaults.navigationSuiteType(
-                currentWindowAdaptiveInfoV2(),
-            ),
-            navigationSuiteItems = {
-                item(
-                    selected = tab == AppTab.Dashboard,
-                    onClick = { session.tab = AppTab.Dashboard },
-                    icon = {
-                        SymbolIcon(
-                            MaterialSymbol.Speed,
-                            contentDescription = null,
-                            filled = tab == AppTab.Dashboard,
-                        )
-                    },
-                    label = { Text(stringResource(R.string.tab_dashboard)) },
-                    modifier = Modifier
-                        .semantics { contentDescription = tabDashboardSpoken }
-                        .testTag(UITestId.TAB_DASHBOARD),
-                )
-                item(
-                    selected = tab == AppTab.Services,
-                    onClick = { session.tab = AppTab.Services },
-                    icon = {
-                        SymbolIcon(
-                            MaterialSymbol.Widgets,
-                            contentDescription = null,
-                            filled = tab == AppTab.Services,
-                        )
-                    },
-                    label = { Text(stringResource(R.string.tab_services)) },
-                    modifier = Modifier
-                        .semantics { contentDescription = tabServicesSpoken }
-                        .testTag(UITestId.TAB_SERVICES),
-                )
-                item(
-                    selected = tab == AppTab.Settings,
-                    onClick = { session.tab = AppTab.Settings },
-                    icon = {
-                        SymbolIcon(
-                            MaterialSymbol.Settings,
-                            contentDescription = null,
-                            filled = tab == AppTab.Settings,
-                        )
-                    },
-                    label = { Text(stringResource(R.string.tab_settings)) },
-                    modifier = Modifier
-                        .semantics { contentDescription = tabSettingsSpoken }
-                        .testTag(UITestId.TAB_SETTINGS),
-                )
-            },
-        ) {
+        val layoutType = NavigationSuiteScaffoldDefaults.navigationSuiteType(currentWindowAdaptiveInfoV2())
+        val tabContent: @Composable () -> Unit = {
             // ShortNavigationBar 已经把系统底 inset 算进自己的高度；内容是它的兄弟，
             // 不在这里消耗的话，里面的 Scaffold 会再垫一次，栏顶上留一条空缝。
             Box(
@@ -195,6 +143,31 @@ fun TollCatApp(session: TollCatSession) {
                     }
                 }
             }
+        }
+        if (layoutType == NavigationSuiteType.ShortNavigationBarCompact) {
+            // 手机：短导航栏，项目横排（AppShortNavigationItems）。
+            NavigationSuiteScaffold(
+                navigationItems = { AppShortNavigationItems(tab = tab, onSelect = { session.tab = it }) },
+                navigationSuiteType = layoutType,
+                content = tabContent,
+            )
+        } else {
+            // 平板 / 折叠屏展开：交给自适应导航（侧边 rail），项目还是那三个。
+            NavigationSuiteScaffold(
+                layoutType = layoutType,
+                navigationSuiteItems = {
+                    AppTab.entries.forEach { entry ->
+                        item(
+                            selected = tab == entry,
+                            onClick = { session.tab = entry },
+                            icon = { SymbolIcon(entry.symbol, contentDescription = null, filled = tab == entry) },
+                            label = { Text(stringResource(entry.labelRes)) },
+                            modifier = Modifier.testTag(entry.testTag),
+                        )
+                    }
+                },
+                content = tabContent,
+            )
         }
     }
 }

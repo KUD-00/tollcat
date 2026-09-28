@@ -69,6 +69,13 @@
         "gitRev": "2900247d67521cd55980132021554110cf89ac12",
         "hash": "1ab73a69c835e75c1b010f0fd19c9e9b8d0a28ab02500c785d860084a7ea7422",
         "note": "底栏「仪表盘」；亮屏 15 分钟保鲜；刚走完开场不弹更新说明；小组件点进仪表。"
+      },
+      "watch": {
+        "date": "2026-09-23",
+        "decision": "n/a",
+        "gitRev": "4fb1d2ee161c05a897a1a0a2bb0625a547922479",
+        "hash": "",
+        "note": "Apple Watch 同步（WatchConnectivity）。这一端没有手表；Wear OS 未排期。"
       }
     },
     "windows": {
@@ -99,14 +106,22 @@
         "gitRev": "da277c52b9b76a02b507986063f6253439a63332",
         "hash": "2f1bb5060d5222242a26cd8e8f0eae84fed3d5ea56ba6a9ea70c6ea1f4aec03b",
         "note": "同上。"
+      },
+      "watch": {
+        "date": "2026-09-23",
+        "decision": "n/a",
+        "gitRev": "4fb1d2ee161c05a897a1a0a2bb0625a547922479",
+        "hash": "",
+        "note": "Apple Watch 同步（WatchConnectivity）。这一端没有手表；Wear OS 未排期。"
       }
     },
     "cli": {
       "bridge": {
-        "date": "2026-09-09",
-        "decision": "n/a",
-        "hash": "",
-        "note": "CLI/ 尚未落地。目录出现的那次改动必须给 bridge 盖 reviewed。"
+        "date": "2026-09-13",
+        "decision": "reviewed",
+        "gitRev": "4fb1d2ee161c05a897a1a0a2bb0625a547922479",
+        "hash": "2522027207c62380634cbb3eda5ad819321239b319d280849df97a07f94f9a1a",
+        "note": "CLI/ 落地：独立 SwiftPM 包直接链 MeterBridge；catalog 回落 Bundle.module；ProductWorker/ProductInbox exclude；JNICopy 成员标 package。"
       },
       "dashboard": {
         "date": "2026-09-09",
@@ -155,6 +170,13 @@
         "decision": "n/a",
         "hash": "",
         "note": "CLI 无 GUI。"
+      },
+      "watch": {
+        "date": "2026-09-23",
+        "decision": "n/a",
+        "gitRev": "4fb1d2ee161c05a897a1a0a2bb0625a547922479",
+        "hash": "",
+        "note": "Apple Watch 同步（WatchConnectivity）。这一端没有手表；Wear OS 未排期。"
       }
     }
   },
@@ -168,6 +190,10 @@
           "Android/app/src/main/kotlin/com/zhechengqi/tollcat/MeterCoreNative.kt",
           "Android/app/src/main/kotlin/com/zhechengqi/tollcat/TollCatSession.kt",
           "Android/app/src/main/kotlin/com/zhechengqi/tollcat/dashboard/DashboardFilterState.kt"
+        ],
+        "cli": [
+          "CLI/Sources/TollcatCore/",
+          "CLI/README.md"
         ],
         "windows": [
           "Windows/app/Models/CatalogModels.cs",
@@ -290,6 +316,15 @@
         ]
       },
       "id": "shell"
+    },
+    {
+      "apple": "Packages/MeterKit/Sources/MeterFeatures/Watch",
+      "depth": "tree",
+      "hints": {
+        "android": [],
+        "windows": []
+      },
+      "id": "watch"
     }
   ]
 }

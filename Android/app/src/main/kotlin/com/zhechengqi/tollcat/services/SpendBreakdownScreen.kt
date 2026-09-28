@@ -43,7 +43,7 @@ import com.zhechengqi.tollcat.MoneyDisplay
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.SnapshotRow
 import com.zhechengqi.tollcat.TollCatTheme
-import com.zhechengqi.tollcat.dashboard.CompositionDonut
+import com.zhechengqi.tollcat.dashboard.CompositionSegmentBar
 import com.zhechengqi.tollcat.ui.AmountText
 import com.zhechengqi.tollcat.ui.Bento
 import com.zhechengqi.tollcat.ui.BentoGroup
@@ -253,15 +253,14 @@ private fun SpendBreakdownSummary(content: SpendBreakdownContent) {
             fraction = group.fraction.toFloat(),
         )
     }
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .semantics { contentDescription = content.spokenSummary },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+            .semantics(mergeDescendants = true) { contentDescription = content.spokenSummary },
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             AmountText(
                 text = content.totalCaption,
                 style = MaterialTheme.typography.displaySmallEmphasized,
@@ -275,7 +274,7 @@ private fun SpendBreakdownSummary(content: SpendBreakdownContent) {
             }
         }
         if (slices.isNotEmpty()) {
-            CompositionDonut(slices = slices, diameter = 96.dp, strokeWidth = 12.dp)
+            CompositionSegmentBar(slices = slices, height = 20.dp)
         }
     }
 }

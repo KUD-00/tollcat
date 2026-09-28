@@ -1,12 +1,16 @@
 package com.zhechengqi.tollcat.developer
 
 enum class GalleryItemID(val raw: String) {
+    DashboardPage("dashboardPage"),
+    Amounts("amounts"),
+    Attention("attention"),
+    Composition("composition"),
+    Comparison("comparison"),
+    Modules("modules"),
+    Chrome("chrome"),
     Empty("empty"),
     Errors("errors"),
-    Amounts("amounts"),
-    Composition("composition"),
     Charts("charts"),
-    Attention("attention"),
     Overflow("overflow"),
     Glyphs("glyphs"),
     Rows("rows"),
@@ -15,7 +19,6 @@ enum class GalleryItemID(val raw: String) {
     UsageGuides("usageGuides"),
     VerifyConnection("verifyConnection"),
     CredentialFields("credentialFields"),
-    Comparison("comparison"),
     Refresh("refresh"),
     Tips("tips"),
     MonthRange("monthRange"),
@@ -27,6 +30,7 @@ enum class GalleryItemID(val raw: String) {
 }
 
 enum class GallerySection {
+    NewDashboard,
     Empty,
     Errors,
     Boundaries,
@@ -39,13 +43,17 @@ enum class GallerySection {
 
 val GalleryItemID.section: GallerySection
     get() = when (this) {
-        GalleryItemID.Empty -> GallerySection.Empty
-        GalleryItemID.Errors -> GallerySection.Errors
+        GalleryItemID.DashboardPage,
         GalleryItemID.Amounts,
+        GalleryItemID.Attention,
         GalleryItemID.Composition,
         GalleryItemID.Comparison,
+        GalleryItemID.Modules,
+        GalleryItemID.Chrome,
+        -> GallerySection.NewDashboard
+        GalleryItemID.Empty -> GallerySection.Empty
+        GalleryItemID.Errors -> GallerySection.Errors
         GalleryItemID.Charts,
-        GalleryItemID.Attention,
         GalleryItemID.Overflow,
         -> GallerySection.Boundaries
         GalleryItemID.Glyphs,
@@ -63,9 +71,12 @@ val GalleryItemID.section: GallerySection
 
 val GalleryItemID.titleRes: Int
     get() = when (this) {
+        GalleryItemID.DashboardPage -> com.zhechengqi.tollcat.R.string.dev_gallery_page
+        GalleryItemID.Chrome -> com.zhechengqi.tollcat.R.string.dev_gallery_chrome
+        GalleryItemID.Modules -> com.zhechengqi.tollcat.R.string.dev_gallery_modules
         GalleryItemID.Empty -> com.zhechengqi.tollcat.R.string.dev_gallery_empty
         GalleryItemID.Errors -> com.zhechengqi.tollcat.R.string.dev_gallery_errors
-        GalleryItemID.Amounts -> com.zhechengqi.tollcat.R.string.dev_gallery_amounts
+        GalleryItemID.Amounts -> com.zhechengqi.tollcat.R.string.dev_gallery_hero
         GalleryItemID.Composition -> com.zhechengqi.tollcat.R.string.module_composition
         GalleryItemID.Charts -> com.zhechengqi.tollcat.R.string.dev_gallery_charts
         GalleryItemID.Attention -> com.zhechengqi.tollcat.R.string.dashboard_attention
@@ -85,6 +96,7 @@ val GalleryItemID.titleRes: Int
 
 val GallerySection.titleRes: Int
     get() = when (this) {
+        GallerySection.NewDashboard -> com.zhechengqi.tollcat.R.string.dev_gallery_new_dashboard
         GallerySection.Empty -> com.zhechengqi.tollcat.R.string.dev_gallery_empty
         GallerySection.Errors -> com.zhechengqi.tollcat.R.string.dev_gallery_errors
         GallerySection.Boundaries -> com.zhechengqi.tollcat.R.string.dev_gallery_boundaries

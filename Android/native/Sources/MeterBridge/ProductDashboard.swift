@@ -1,8 +1,17 @@
 import Foundation
 import MeterCore
+import MeterDashboard
 import MeterFormat
-import MeterProviders
 
+/// 仪表盘那一屏的 JSON。
+///
+/// **这里不折算。** 各模块怎么从账本算出来，全在 `MeterDashboard` 的
+/// `DashboardContentsBuilder`——iOS、Mac、widget 调的是同一个函数。这一层只做三件事：
+/// 把 Kotlin 递来的快照日志折成读模型、钉住语言、把算好的值写成字典。
+///
+/// 以前这里抄了一份 builder（MeterDashboard 那时还和 SwiftUI 视图住在一个 target 里，
+/// Android 链不到），抄的那份悄悄漂走：固定订阅只按月付算，年付的 ChatGPT Plus
+/// 在卡上变成了 $1.67 却看不出是年付。别再在这里写规则——缺什么，加到 builder 的值类型上。
 package enum ProductDashboard {
     package static func json(
         snapshotsJSON: String,
@@ -73,79 +82,77 @@ package enum ProductDashboard {
         filter: DashboardFilter = .unfiltered,
         layout: DashboardLayout = .default
     ) -> String {
+        // builder 里的 `L(…)` 和 `MeterDateFormat` 在这个作用域里按 localeTag 出字；
+        // Android 上没有 String Catalog，也没有可靠的 `Locale.current`。
+        PortableLocale.$languageTag.withValue(localeTag.isEmpty ? "zh-Hans" : localeTag) {
+            render(
+                snapshots: snapshots,
+                subscriptions: subscriptions,
+                now: now,
+                calendar: calendar,
+                currency: currency,
+                localeTag: localeTag,
+                filter: filter,
+                layout: layout
+            )
+        }
+    }
+
+    private static func render(
+        snapshots: [Snapshot],
+        subscriptions: [MonthlySubscription],
+        now: Date,
+        calendar: Calendar,
+        currency: String,
+        localeTag: String,
+        filter: DashboardFilter,
+        layout: DashboardLayout
+    ) -> String {
         let presentation = ProductRates.presentation(currency)
         let anchor = filter.anchor(now: now, calendar: calendar)
-        let monthTitle = MeterDateFormat.monthName(
-            now: anchor,
-            calendar: calendar,
-            locale: locale(localeTag)
-        )
+        let monthTitle = MeterDateFormat.monthName(now: anchor, calendar: calendar)
         guard !snapshots.isEmpty || !subscriptions.isEmpty else {
             return emptyJSON(monthTitle: monthTitle, localeTag: localeTag)
         }
 
-        let result = MonthToDateCalculator.compute(
-            snapshots: snapshots,
-            subscriptions: subscriptions,
-            now: now,
-            calendar: calendar,
-            filter: filter
-        )
-        let entries = compositionEntries(from: result)
-        let composition = compositionRows(entries: entries, presentation: presentation)
-        // 「即将扣款」暂时下架，开关和理由在 DashboardModuleThresholds。
-        let upcoming = filter.showsPresentTenseModules && DashboardModuleThresholds.showsUpcomingCharges
-            ? upcomingRows(
-                snapshots: filter.scope(snapshots),
-                subscriptions: filter.scope(subscriptions),
+        let view = ledger(snapshots: snapshots, subscriptions: subscriptions, now: now, calendar: calendar)
+        let connections = connections(in: view)
+        // 合计只走账本这一条路（widget 同款）。先算一遍拿「哪几家没刷上来」，
+        // builder 里再调同一个闭包——纯函数，两次结果一样。
+        let compute: MonthToDateCompute = { view, now, calendar, filter in
+            LedgerProjection.compute(
+                rollups: view.rollups,
+                subscriptions: view.subscriptions,
                 now: now,
                 calendar: calendar,
-                presentation: presentation,
-                localeTag: localeTag
+                filter: filter
             )
-            : []
-        let quota = filter.showsPresentTenseModules
-            ? quotaRows(from: result, localeTag: localeTag)
-            : []
-        let runways = filter.showsPresentTenseModules
-            ? PrepaidRunwayCalculator.compute(
-                snapshots: filter.scope(snapshots),
-                now: now,
-                calendar: calendar
-            )
-            : []
-        let anomalies = anomalyRows(
-            from: result,
-            calendar: calendar,
-            presentation: presentation,
-            localeTag: localeTag
-        )
-        let balanceAlerts = balanceAlertRows(
-            from: runways,
-            presentation: presentation,
-            localeTag: localeTag
-        )
-        let trend = trendRows(
-            snapshots: filter.scope(snapshots),
-            subscriptions: filter.scope(subscriptions),
+        }
+        let marks = providerMarks(in: compute(view, now, calendar, filter))
+        let (contents, runways) = DashboardContentsBuilder.make(
+            view: view,
+            filter: filter,
             now: now,
             calendar: calendar,
             presentation: presentation,
-            localeTag: localeTag
+            connections: connections,
+            providerMarks: marks,
+            layout: layout,
+            compute: compute
         )
+        guard let result = contents.monthToDate else {
+            return emptyJSON(monthTitle: monthTitle, localeTag: localeTag)
+        }
+
         let mood = CatMoodResolver.mood(
             for: result,
             hasAnyProvider: true,
             hasAnyReadableData: CatMoodResolver.hasReadableData(in: result),
             hasBalanceAlert: CatMoodResolver.hasBalanceAlert(in: runways),
             hasAnomaly: CatMoodResolver.hasAnomaly(in: result),
-            hasStaleData: result.facts.contains { $0.type == .fetchFailed }
+            hasStaleData: !marks.isEmpty
         )
-
-        // 估算名单保持账号粒度：压成 ProviderID 会把「这家的其中一份是估的」
-        // 说成「这家全是估的」。
-        let estimatedIDs: [String] = result.estimatedAccounts.map(\.rawValue.uuidString)
-
+        let leadAnomaly = contents.anomalyContent?.items.first
         let changePercent = result.changeRatio.map { Int(($0 * 100).rounded()) }
         let speech = ProductSpeech.line(
             ProductSpeech.Facts(
@@ -156,10 +163,9 @@ package enum ProductDashboard {
                 projectedText: result.projectedVariableUSD.formatted(using: presentation),
                 allowsProjection: filter.allowsProjection,
                 changePercent: changePercent,
-                leadAnomalyName: anomalies.first?["displayName"] as? String,
-                leadAnomalyPercent: (anomalies.first?["changeRatio"] as? Double)
-                    .map { Int(($0 * 100).rounded()) },
-                leadBalanceName: balanceAlerts.first?["displayName"] as? String
+                leadAnomalyName: leadAnomaly?.displayName,
+                leadAnomalyPercent: leadAnomaly.map { Int(($0.changeRatio * 100).rounded()) },
+                leadBalanceName: contents.balanceAlertContent?.items.first?.displayName
             ),
             localeTag: localeTag
         )
@@ -168,217 +174,64 @@ package enum ProductDashboard {
             "empty": false,
             "jniSchema": JNISchema.version,
             "monthTitle": monthTitle,
-            "periodCaption": periodCaption(
-                filter: filter,
-                now: now,
-                calendar: calendar,
-                localeTag: localeTag,
-                monthTitle: monthTitle
-            ),
+            "periodCaption": periodCaption(filter: filter, now: now, calendar: calendar, monthTitle: monthTitle),
             "allowsProjection": filter.allowsProjection,
             "formattedTotal": result.formattedTotal(using: presentation),
             "formattedVariable": result.variableUSD.formatted(using: presentation),
             "formattedProjected": result.projectedVariableUSD.formatted(using: presentation),
             "confidence": result.confidence.rawValue,
-            "estimatedAccountIDs": estimatedIDs,
-            "composition": composition,
-            "upcoming": upcoming,
-            "freeQuota": quota,
-            "anomalies": anomalies,
-            "balanceAlerts": balanceAlerts,
-            "trend": trend,
+            // 估算名单保持账号粒度：压成 ProviderID 会把「这家的其中一份是估的」
+            // 说成「这家全是估的」。
+            "estimatedAccountIDs": result.estimatedAccounts.map(\.rawValue.uuidString),
+            "composition": (contents.compositionContent?.segments ?? []).map { composition($0, presentation) },
+            "upcoming": (contents.upcomingChargesContent?.items ?? []).map { upcoming($0, presentation) },
+            "freeQuota": (contents.freeQuotaContent?.items ?? []).map(freeQuota),
+            "anomalies": (contents.anomalyContent?.items ?? []).map(anomaly),
+            "balanceAlerts": (contents.balanceAlertContent?.items ?? []).map(balanceAlert),
+            "trend": trend(contents.trendContent, calendar: calendar),
+            "heatmap": (contents.heatmapContent?.months ?? []).map(heatmap),
+            "categories": (contents.categoriesContent?.slices ?? []).map(category),
+            "superlatives": (contents.superlativesContent?.items ?? []).map(superlative),
+            "pinnedServices": (contents.servicesContent?.items ?? []).map(service),
+            "comparisonItems": (contents.comparisonContent?.items ?? []).map(comparisonItem),
             "catMood": mood.rawValue,
+            "catSpeech": speech,
             "currencyCode": presentation.currencyCode,
         ]
-        if !presentation.isUSD {
-            object["currencyNote"] = JNICopy.format("按 %@ 显示", localeTag, presentation.currencyCode)
-        }
+        object["currencyNote"] = contents.monthToDateContent?.currencyNote
+        object["staleCaption"] = contents.monthToDateContent?.staleCaption
         if result.subscriptionUSD > .zero {
             let formatted = result.subscriptionUSD.formatted(using: presentation)
             object["subscriptionFormatted"] = formatted
+            // Android 的顶栏能在「合计 / 按量」之间切，关掉订阅时也要告诉人订阅有多少、
+            // 没算进去；iOS 顶栏的那行只在算进时出现，所以这句是这一端自己的。
             object["subscriptionCaption"] = JNICopy.format(
                 filter.includesSubscriptions ? "本月订阅 %@ · 已计入" : "本月订阅 %@ · 未计入",
                 localeTag,
                 formatted
             )
         }
-        ProductDashboardModules.attach(
-            to: &object,
-            // 折叠只做一次，热力图 / 特别关心 / 最久没刷共用同一份读模型。
-            ledger: ledger(snapshots: filter.scope(snapshots), now: now, calendar: calendar),
-            subscriptions: subscriptions,
-            result: result,
-            composition: entries,
-            comparisons: comparisonEntries(from: result),
-            filter: filter,
-            layout: layout,
-            now: now,
-            calendar: calendar,
-            presentation: presentation,
-            localeTag: localeTag
-        )
-        object["catSpeech"] = speech
-        if let comparison = VariableComparison.make(from: result) {
-            let formatted = comparison.previous.formatted(using: presentation)
-            object["formattedComparison"] = formatted
-            if let window = result.comparisonWindow {
-                let monthName = monthSymbol(
-                    window.month(calendar: calendar),
-                    calendar: calendar,
-                    localeTag: localeTag
-                )
-                var caption = JNICopy.format(
-                    "对比 %@同期 %@", localeTag, monthName, formatted
-                )
-                if comparison.skippedCount > 0 {
-                    caption = [
-                        caption,
-                        JNICopy.format(
-                            "含还不能对比 %@",
-                            localeTag,
-                            comparison.skippedCurrent.formatted(using: presentation)
-                        ),
-                    ].joined(separator: " · ")
-                }
-                object["comparisonCaption"] = caption
-            }
-            if let ratio = comparison.ratio {
-                object["comparisonPercentText"] = signedPercent(ratio, localeTag: localeTag)
-                object["comparisonTone"] = ratio > 0 ? "up" : (ratio < 0 ? "down" : "flat")
-            } else {
-                object["comparisonPercentText"] = JNICopy.text("持平", localeTag)
-                object["comparisonTone"] = "flat"
-            }
+        if let comparison = contents.comparisonContent, comparison.tone != .unknown {
+            object["formattedComparison"] = comparison.previousText
+            object["comparisonCaption"] = comparison.caption
+            object["comparisonPercentText"] = comparison.percentText
+            object["comparisonTone"] = tone(comparison.tone)
         }
-        if let ratio = result.changeRatio {
-            object["changePercent"] = Int((ratio * 100).rounded())
+        if let changePercent {
+            object["changePercent"] = changePercent
         }
-        object["comparisonItems"] = comparisonItemRows(
-            from: result,
-            calendar: calendar,
-            presentation: presentation,
-            localeTag: localeTag
-        )
-        if result.facts.contains(where: { $0.type == .fetchFailed }) {
-            object["staleCaption"] = JNICopy.text("部分数据陈旧，仍显示上次成功的数字", localeTag)
-        }
+        object["budget"] = contents.budgetContent.map(budget)
+        object["subscriptionsModule"] = contents.subscriptionsContent.map(subscriptionsModule)
         return JNIJSON.stringify(object)
     }
 
-    /// 按 AccountID 出键（与 iOS `CompositionBuilder` 同粒）：
-    /// 同一家两份账号是两段，压成 ProviderID 会并成一家。
-    /// 构成的**值**。写字的那一半在 `compositionRows`；按类别那张图要的是这一半，
-    /// 拿格式化过的字符串再解析回数字是另一种漂移。
-    private static func compositionEntries(from monthToDate: MonthToDate) -> [CompositionEntry] {
-        var amounts: [AccountID: Money] = [:]
-        var providers: [AccountID: ProviderID] = [:]
-        var seen: [AccountID] = []
-        for fact in monthToDate.facts {
-            guard fact.type.contributesToTotal,
-                  let accountID = fact.accountID,
-                  let providerID = fact.providerID,
-                  let amount = fact.amountUSD,
-                  amount > .zero else { continue }
-            if amounts[accountID] == nil {
-                seen.append(accountID)
-                providers[accountID] = providerID
-            }
-            amounts[accountID, default: .zero] += amount
-        }
-        let ordered = seen.sorted { lhs, rhs in
-            let left = amounts[lhs] ?? .zero
-            let right = amounts[rhs] ?? .zero
-            if left != right { return left > right }
-            return lhs.rawValue.uuidString < rhs.rawValue.uuidString
-        }
-        let weights = ordered.map { amounts[$0]?.usd ?? 0 }
-        let percents = IntegerPercents.from(weights: weights)
-        let total = weights.reduce(0, +)
-        guard total > 0 else { return [] }
-        return zip(ordered, percents).compactMap { id, percent in
-            guard let amount = amounts[id], let providerID = providers[id] else { return nil }
-            let descriptor = ProviderCatalog.descriptor(id: providerID)
-            return CompositionEntry(
-                accountID: id,
-                providerID: providerID,
-                displayName: descriptor?.displayName ?? providerID.rawValue,
-                colorKey: descriptor?.colorKey ?? providerID.rawValue,
-                amount: amount,
-                percent: percent,
-                fraction: NSDecimalNumber(decimal: amount.usd / total).doubleValue
-            )
-        }
-    }
-
-    private static func compositionRows(
-        entries: [CompositionEntry],
-        presentation: MoneyPresentation
-    ) -> [[String: Any]] {
-        entries.map { entry in
-            [
-                "accountID": entry.accountID.rawValue.uuidString,
-                "providerID": entry.providerID.rawValue,
-                "displayName": entry.displayName,
-                "colorKey": entry.colorKey,
-                "amount": entry.amount.formatted(using: presentation),
-                "percent": entry.percent,
-                "fraction": entry.fraction,
-            ]
-        }
-    }
-
-    /// 对比详情按家行。金额和涨跌都来自 fact，不在 Kotlin 里再折一遍。
-    private static func comparisonItemRows(
-        from monthToDate: MonthToDate,
-        calendar: Calendar,
-        presentation: MoneyPresentation,
-        localeTag: String
-    ) -> [[String: Any]] {
-        monthToDate.facts.compactMap { fact -> [String: Any]? in
-            guard fact.type.contributesToTotal, let amount = fact.amountUSD, amount > .zero else {
-                return nil
-            }
-            let providerID = fact.providerID
-            let descriptor = providerID.flatMap { ProviderCatalog.descriptor(id: $0) }
-            var row: [String: Any] = [
-                "accountID": fact.accountID?.rawValue.uuidString ?? "",
-                "providerID": providerID?.rawValue ?? "",
-                "displayName": descriptor?.displayName ?? providerID?.rawValue ?? "",
-                "colorKey": descriptor?.colorKey ?? providerID?.rawValue ?? "",
-                "currentText": amount.formatted(using: presentation),
-                "isComparable": fact.comparisonUSD != nil,
-            ]
-            if let previous = fact.comparisonUSD {
-                row["previousText"] = previous.formatted(using: presentation)
-            }
-            if let ratio = fact.changeRatio {
-                row["signedPercent"] = signedPercent(ratio, localeTag: localeTag)
-                row["changeRatio"] = ratio
-            }
-            return row
-        }
-    }
-
-    /// 每个账号和上月同期的涨跌。**没有阈值**——「涨得最多」要在全部里挑，
-    /// 而不是先按异常阈值筛一遍再挑（那是 `anomalyRows` 的事）。
-    private static func comparisonEntries(from monthToDate: MonthToDate) -> [ComparisonEntry] {
-        monthToDate.facts.compactMap { fact in
-            guard fact.type.contributesToTotal, let providerID = fact.providerID else { return nil }
-            let descriptor = ProviderCatalog.descriptor(id: providerID)
-            return ComparisonEntry(
-                accountID: fact.accountID,
-                providerID: providerID,
-                displayName: descriptor?.displayName ?? providerID.rawValue,
-                colorKey: descriptor?.colorKey ?? providerID.rawValue,
-                changeRatio: fact.changeRatio
-            )
-        }
-    }
+    // MARK: - 读模型
 
     /// 这一端手上是整条快照日志（Kotlin 从 SQLite 递过来的），折成读模型只做一次。
     /// 「哪条读数算数」仍然只有 `LedgerFolder` 一个出处。
     private static func ledger(
         snapshots: [Snapshot],
+        subscriptions: [MonthlySubscription],
         now: Date,
         calendar: Calendar
     ) -> LedgerView {
@@ -395,184 +248,237 @@ package enum ProductDashboard {
         }
         return LedgerView(
             rollups: rollups,
-            latest: Array(AccountLatest.reduceAll(snapshots: snapshots, calendar: calendar).values)
+            latest: Array(AccountLatest.reduceAll(snapshots: snapshots, calendar: calendar).values),
+            subscriptions: subscriptions
         )
     }
 
-    private static func upcomingRows(
-        snapshots: [Snapshot],
-        subscriptions: [MonthlySubscription],
-        now: Date,
-        calendar: Calendar,
-        presentation: MoneyPresentation,
-        localeTag: String
-    ) -> [[String: Any]] {
-        let charges = UpcomingChargeCalculator.charges(
-            snapshots: snapshots,
-            subscriptions: subscriptions,
-            now: now,
-            calendar: calendar,
-            withinDays: DashboardModuleThresholds.upcomingChargeDays
-        )
-        return charges.map { charge in
-            let descriptor = charge.providerID.flatMap { ProviderCatalog.descriptor(id: $0) }
-            let name: String
-            if !charge.name.isEmpty {
-                name = charge.name
-            } else {
-                name = descriptor?.displayName ?? charge.providerID?.rawValue ?? JNICopy.text("固定订阅", localeTag)
+    /// builder 要的接入表。这一端没有接入记录（昵称、归档都在 Kotlin 的库里），
+    /// 从账本里每个账号最近一次读数拼一份：有读数就算开着，最后成功的时刻就是那条读数。
+    private static func connections(in view: LedgerView) -> [ProviderConnectionState] {
+        view.latest
+            .sorted { $0.accountID.rawValue.uuidString < $1.accountID.rawValue.uuidString }
+            .enumerated()
+            .map { index, latest in
+                ProviderConnectionState(
+                    accountID: latest.accountID,
+                    providerID: latest.providerID,
+                    isEnabled: true,
+                    sortIndex: index,
+                    lastSuccessfulRefreshAt: latest.fetchedAt,
+                    credentialReference: "",
+                    includeInGlobalRefresh: true
+                )
             }
-            return [
-                "name": name,
-                "accountID": charge.accountID?.rawValue.uuidString ?? "",
-                "providerID": charge.providerID?.rawValue ?? "",
-                "colorKey": descriptor?.colorKey ?? charge.providerID?.rawValue ?? "",
-                "amount": charge.amount.formatted(using: presentation),
-                "dateCaption": dateCaption(charge.chargeDate, now: now, calendar: calendar, localeTag: localeTag),
-            ] as [String: Any]
-        }
     }
 
-    private static func quotaRows(from monthToDate: MonthToDate, localeTag: String) -> [[String: Any]] {
-        monthToDate.facts.compactMap { fact -> [String: Any]? in
-            guard
-                fact.type == .freeQuota,
-                let providerID = fact.providerID,
-                let ratio = fact.freeQuotaUsedRatio,
-                ratio >= DashboardModuleThresholds.freeQuotaUsedRatio
-            else {
-                return nil
+    /// 没刷上来的那几份：折算里出现了取数失败的 fact。
+    private static func providerMarks(in result: MonthToDate) -> [AccountID: ProviderDataMark] {
+        var marks: [AccountID: ProviderDataMark] = [:]
+        for fact in result.facts where fact.type == .fetchFailed {
+            if let accountID = fact.accountID {
+                marks[accountID] = .stale
             }
-            let descriptor = ProviderCatalog.descriptor(id: providerID)
-            let percent = Int((ratio * 100).rounded())
-            return [
-                "accountID": fact.accountID?.rawValue.uuidString ?? "",
-                "providerID": providerID.rawValue,
-                "displayName": descriptor?.displayName ?? providerID.rawValue,
-                "colorKey": descriptor?.colorKey ?? providerID.rawValue,
-                "usedPercent": percent,
-                "caption": JNICopy.format("用了 %lld%%", localeTag, String(percent)),
-            ]
         }
-        .sorted { lhs, rhs in
-            let left = lhs["usedPercent"] as? Int ?? 0
-            let right = rhs["usedPercent"] as? Int ?? 0
-            return left > right
-        }
+        return marks
     }
 
-    /// 单家环比阈值和 `CatMoodResolver.shockedChangeRatio` 同一条线，不另写 0.5。
-    private static func anomalyRows(
-        from monthToDate: MonthToDate,
-        calendar: Calendar,
-        presentation: MoneyPresentation,
-        localeTag: String
-    ) -> [[String: Any]] {
-        guard let window = monthToDate.comparisonWindow else { return [] }
-        let monthName = monthSymbol(window.month(calendar: calendar), calendar: calendar, localeTag: localeTag)
-        let items: [(ratio: Double, name: String, row: [String: Any])] = monthToDate.facts.compactMap { fact in
-            guard
-                fact.type.contributesToTotal,
-                let providerID = fact.providerID,
-                let ratio = fact.changeRatio,
-                ratio >= CatMoodResolver.shockedChangeRatio,
-                let comparison = fact.comparisonUSD
-            else {
-                return nil
-            }
-            let descriptor = ProviderCatalog.descriptor(id: providerID)
-            let displayName = descriptor?.displayName ?? providerID.rawValue
-            return (
-                ratio,
-                displayName,
-                [
-                    "accountID": fact.accountID?.rawValue.uuidString ?? "",
-                    "providerID": providerID.rawValue,
-                    "displayName": displayName,
-                    "signedPercent": signedPercent(ratio, localeTag: localeTag),
-                    "caption": JNICopy.format("对比 %@同期 %@", localeTag, monthName, comparison.formatted(using: presentation)),
-                    "changeRatio": ratio,
-                ]
-            )
-        }
-        return items
-            .sorted { lhs, rhs in
-                if lhs.ratio != rhs.ratio { return lhs.ratio > rhs.ratio }
-                return lhs.name < rhs.name
-            }
-            .map(\.row)
+    // MARK: - 值 → 字典
+
+    private static func composition(_ segment: CompositionSegment, _ presentation: MoneyPresentation) -> [String: Any] {
+        [
+            "accountID": segment.accountID?.rawValue.uuidString ?? "",
+            "providerID": segment.providerID?.rawValue ?? "",
+            "displayName": segment.displayName,
+            "colorKey": segment.colorKey,
+            "amount": segment.amount.formatted(using: presentation),
+            "percent": segment.percent,
+            "fraction": segment.fraction,
+        ]
     }
 
-    private static func balanceAlertRows(
-        from runways: [PrepaidRunway],
-        presentation: MoneyPresentation,
-        localeTag: String
-    ) -> [[String: Any]] {
-        let items: [(days: Int, name: String, row: [String: Any])] = runways.compactMap { runway in
-            guard runway.daysRemaining <= CatMoodResolver.prepaidAlertDays else { return nil }
-            let descriptor = ProviderCatalog.descriptor(id: runway.providerID)
-            let displayName = descriptor?.displayName ?? runway.providerID.rawValue
-            let balance = runway.balanceUSD.formatted(using: presentation)
-            return (
-                runway.daysRemaining,
-                displayName,
-                [
-                    "accountID": runway.accountID.rawValue.uuidString,
-                    "providerID": runway.providerID.rawValue,
-                    "displayName": displayName,
-                    "balance": balance,
-                    "daysRemaining": runway.daysRemaining,
-                    "caption": JNICopy.format("%@ 余额 %@ · 按当前速度还能用 %lld 天", localeTag, displayName, balance, String(runway.daysRemaining)),
-                ]
-            )
-        }
-        return items
-            .sorted { lhs, rhs in
-                if lhs.days != rhs.days { return lhs.days < rhs.days }
-                return lhs.name < rhs.name
-            }
-            .map(\.row)
+    private static func upcoming(_ item: UpcomingChargeItem, _ presentation: MoneyPresentation) -> [String: Any] {
+        [
+            "name": item.displayName,
+            "accountID": item.accountID?.rawValue.uuidString ?? "",
+            "providerID": item.providerID?.rawValue ?? "",
+            "colorKey": item.colorKey ?? item.providerID?.rawValue ?? "",
+            "amount": item.amount.formatted(using: presentation),
+            "dateCaption": item.dateCaption,
+        ]
     }
 
-    private static func trendRows(
-        snapshots: [Snapshot],
-        subscriptions: [MonthlySubscription],
-        now: Date,
-        calendar: Calendar,
-        presentation: MoneyPresentation,
-        localeTag: String
-    ) -> [[String: Any]] {
-        let history = MonthSpendHistoryCalculator.compute(
-            snapshots: snapshots,
-            subscriptions: subscriptions,
-            now: now,
-            calendar: calendar
-        )
-        let peak = history.map(\.variableUSD).max() ?? .zero
-        guard peak > .zero else { return [] }
-        return history.map { point in
-            let month = calendar.component(.month, from: point.monthStart)
-            let fraction = NSDecimalNumber(decimal: point.variableUSD.usd / peak.usd).doubleValue
-            return [
-                "month": shortMonthSymbol(month, calendar: calendar, localeTag: localeTag),
-                "amount": point.variableUSD.formatted(using: presentation),
-                "fraction": fraction,
+    private static func freeQuota(_ item: FreeQuotaItem) -> [String: Any] {
+        [
+            "accountID": item.accountID.rawValue.uuidString,
+            "providerID": item.providerID.rawValue,
+            "displayName": item.displayName,
+            "colorKey": item.colorKey,
+            "usedPercent": Int((item.usedRatio * 100).rounded()),
+            "caption": item.caption,
+        ]
+    }
+
+    private static func anomaly(_ item: AnomalyItem) -> [String: Any] {
+        [
+            "accountID": item.accountID.rawValue.uuidString,
+            "providerID": item.providerID.rawValue,
+            "displayName": item.displayName,
+            "signedPercent": item.signedPercent,
+            "caption": item.caption,
+            "changeRatio": item.changeRatio,
+        ]
+    }
+
+    private static func balanceAlert(_ item: BalanceAlertItem) -> [String: Any] {
+        [
+            "accountID": item.accountID.rawValue.uuidString,
+            "providerID": item.providerID.rawValue,
+            "displayName": item.displayName,
+            "balance": item.balanceUSD.formatted(using: item.presentation),
+            "daysRemaining": item.daysRemaining,
+            "caption": item.caption,
+        ]
+    }
+
+    /// 柱高按这组里最高的那根归一，横轴写短月名（zh「8月」/ en "Aug"）。
+    private static func trend(_ content: TrendModuleContent?, calendar: Calendar) -> [[String: Any]] {
+        guard let bars = content?.bars, let peak = bars.map(\.amount).max(), peak > 0 else { return [] }
+        return bars.map { bar in
+            [
+                "month": shortMonthSymbol(calendar.component(.month, from: bar.date), calendar: calendar),
+                "amount": bar.amountText,
+                "fraction": bar.amount / peak,
             ]
         }
     }
 
+    private static func heatmap(_ month: HeatmapMonth) -> [String: Any] {
+        var row: [String: Any] = [
+            "monthStartMillis": Int(ProductClock.millis(month.monthStart)),
+            "title": month.title,
+            "monthTitle": month.monthTitle,
+            "values": month.values.map { value -> Any in value ?? NSNull() },
+            "leadingEmptyDays": month.leadingEmptyDays,
+            "totalText": month.totalText,
+            "dayLabels": month.dayLabels,
+        ]
+        row["peakCaption"] = month.peakCaption
+        return row
+    }
+
+    private static func category(_ slice: CategorySlice) -> [String: Any] {
+        [
+            "category": slice.category.rawValue,
+            "amountText": slice.amountText,
+            "percent": slice.percent,
+            "fraction": slice.fraction,
+            "colorKey": slice.colorKey,
+            "memberNames": slice.memberNames,
+        ]
+    }
+
+    private static func budget(_ content: BudgetModuleContent) -> [String: Any] {
+        [
+            "spentText": content.spentText,
+            "budgetText": content.budgetText,
+            "remainingText": content.remainingText,
+            "overText": content.overText,
+            "fraction": content.fraction,
+            "usedPercent": content.usedPercent,
+            "isOver": content.isOver,
+            "isClose": content.isClose,
+        ]
+    }
+
+    private static func superlative(_ item: SuperlativeItem) -> [String: Any] {
+        [
+            "kind": item.kind.rawValue,
+            "displayName": item.displayName,
+            "value": item.value,
+            "colorKey": item.colorKey,
+            "accountID": item.accountID?.rawValue.uuidString ?? "",
+            "providerID": item.providerID?.rawValue ?? "",
+        ]
+    }
+
+    private static func service(_ item: ServiceCardItem) -> [String: Any] {
+        var row: [String: Any] = [
+            "accountID": item.accountID.rawValue.uuidString,
+            "providerID": item.providerID.rawValue,
+            "displayName": item.displayName,
+            "colorKey": item.colorKey,
+            "amountText": item.amountText,
+            "spark": item.spark,
+            "changeIsUp": item.changeIsUp,
+        ]
+        row["changeText"] = item.changeText
+        return row
+    }
+
+    private static func comparisonItem(_ item: ComparisonItem) -> [String: Any] {
+        var row: [String: Any] = [
+            "accountID": item.accountID?.rawValue.uuidString ?? "",
+            "providerID": item.providerID?.rawValue ?? "",
+            "displayName": item.displayName,
+            "colorKey": item.colorKey,
+            "currentText": item.currentUSD.formatted(using: item.presentation),
+            "isComparable": item.isComparable,
+        ]
+        row["previousText"] = item.previousUSD?.formatted(using: item.presentation)
+        if let ratio = item.changeRatio {
+            row["signedPercent"] = item.trailingText
+            row["changeRatio"] = ratio
+        }
+        return row
+    }
+
+    private static func subscriptionsModule(_ content: SubscriptionsModuleContent) -> [String: Any] {
+        var object: [String: Any] = [
+            "monthlyTotalText": content.monthlyTotalText,
+            "headlineCaption": content.headlineCaption,
+            "countCaption": content.countCaption,
+            "items": content.items.map { item -> [String: Any] in
+                var row: [String: Any] = [
+                    "id": item.id,
+                    "name": item.name,
+                    "amountText": item.amountText,
+                    "periodCaption": item.periodCaption,
+                    "accountID": item.accountID?.rawValue.uuidString ?? "",
+                    "providerID": item.providerID?.rawValue ?? "",
+                    "quantity": item.quantity,
+                ]
+                row["colorKey"] = item.colorKey
+                return row
+            },
+        ]
+        object["nextChargeCaption"] = content.nextChargeCaption
+        return object
+    }
+
+    private static func tone(_ tone: ComparisonModuleContent.Tone) -> String {
+        switch tone {
+        case .up: "up"
+        case .down: "down"
+        case .flat: "flat"
+        case .unknown: "unknown"
+        }
+    }
+
+    // MARK: - 只有这一端要的字
+
+    /// 顶栏的期间标题：单月是月名，多月是起讫月。iOS 的顶栏标题是导航栏给的，
+    /// 没有对应的值，所以这一句留在桥上（只是排版，不涉及钱）。
     private static func periodCaption(
         filter: DashboardFilter,
         now: Date,
         calendar: Calendar,
-        localeTag: String,
         monthTitle: String
     ) -> String {
-        let locale = locale(localeTag)
         switch filter.period.normalized {
-        case .months(_, 1):
+        case .months(_, 1), .allTime:
             return monthTitle
-        case let .months(back, count):
+        case .months(_, let count):
             let newest = filter.period.anchor(now: now, calendar: calendar)
             guard
                 let newestStart = calendar.date(from: calendar.dateComponents([.year, .month], from: newest)),
@@ -580,21 +486,13 @@ package enum ProductDashboard {
             else {
                 return monthTitle
             }
-            _ = back
-            return MeterDateFormat.monthRange(
-                from: oldestStart,
-                to: newestStart,
-                calendar: calendar,
-                locale: locale
-            )
+            return MeterDateFormat.monthRange(from: oldestStart, to: newestStart, calendar: calendar)
         case .yearToDate:
             let year = calendar.component(.year, from: now)
             guard let start = calendar.date(from: DateComponents(year: year, month: 1, day: 1)) else {
                 return monthTitle
             }
-            return MeterDateFormat.monthRange(from: start, to: now, calendar: calendar, locale: locale)
-        case .allTime:
-            return monthTitle
+            return MeterDateFormat.monthRange(from: start, to: now, calendar: calendar)
         }
     }
 
@@ -624,47 +522,18 @@ package enum ProductDashboard {
         ])
     }
 
-    static func signedPercent(_ ratio: Double, localeTag: String) -> String {
-        let percent = Int((ratio * 100).rounded())
-        if percent > 0 { return "+\(percent)%" }
-        if percent < 0 { return "\(percent)%" }
-        return JNICopy.text("持平", localeTag)
-    }
-
     package static func locale(_ localeTag: String) -> Locale {
         Locale(identifier: localeTag.isEmpty ? "zh-Hans" : localeTag)
     }
 
-    /// 独立式全月名（zh「一月」/ en "January"），跟 locale，不再钉死中文表。
-    private static func monthSymbol(_ month: Int, calendar: Calendar, localeTag: String) -> String {
+    /// 短月名，跟着 `PortableLocale` 钉住的语言。
+    private static func shortMonthSymbol(_ month: Int, calendar: Calendar) -> String {
         let formatter = DateFormatter()
         formatter.calendar = calendar
         formatter.timeZone = calendar.timeZone
-        formatter.locale = locale(localeTag)
-        let symbols = formatter.standaloneMonthSymbols ?? []
-        guard symbols.indices.contains(month - 1) else { return "\(month)" }
-        return symbols[month - 1]
-    }
-
-    /// 短月名（zh「8月」/ en "Aug"），给趋势条的横轴。
-    private static func shortMonthSymbol(_ month: Int, calendar: Calendar, localeTag: String) -> String {
-        let formatter = DateFormatter()
-        formatter.calendar = calendar
-        formatter.timeZone = calendar.timeZone
-        formatter.locale = locale(localeTag)
+        formatter.locale = PortableLocale.formatting
         let symbols = formatter.shortStandaloneMonthSymbols ?? []
         guard symbols.indices.contains(month - 1) else { return "\(month)" }
         return symbols[month - 1]
-    }
-
-    private static func dateCaption(_ date: Date, now: Date, calendar: Calendar, localeTag: String) -> String {
-        if calendar.isDate(date, inSameDayAs: now) {
-            return JNICopy.text("今天", localeTag)
-        }
-        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now),
-           calendar.isDate(date, inSameDayAs: tomorrow) {
-            return JNICopy.text("明天", localeTag)
-        }
-        return MeterDateFormat.monthAndDay(date, calendar: calendar, locale: locale(localeTag))
     }
 }

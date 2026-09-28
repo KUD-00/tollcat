@@ -1863,6 +1863,7 @@
       }
     },
     "partial" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3316,6 +3317,7 @@
       }
     },
     "余额" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6485,6 +6487,7 @@
       }
     },
     "在空、一个点和一条折线之间切换" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6501,6 +6504,7 @@
       }
     },
     "在空、一天和整月之间切换，看柱形图怎么过渡" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9327,6 +9331,7 @@
       }
     },
     "换一组余额" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9359,6 +9364,7 @@
       }
     },
     "换一组每日花费" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -11966,6 +11972,7 @@
       }
     },
     "每日花费" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -15363,6 +15370,7 @@
       }
     },
     "负数" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -17772,6 +17780,7 @@
       }
     },
     "部分数据陈旧，仍显示上次成功的数字" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

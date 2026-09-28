@@ -1,5 +1,6 @@
 import CoreImage
 import Foundation
+import MeterDashboard
 import SwiftUI
 import Testing
 import MeterCore

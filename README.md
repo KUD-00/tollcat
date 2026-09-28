@@ -52,6 +52,7 @@ SwiftUI, iOS 26+ and macOS 26+, iPhone, iPad, and Mac. Free, with optional tips.
 - `Packages/MeterKit/` — all the Swift code, split into modules. The dependency contract lives in [ARCHITECTURE.md](ARCHITECTURE.md). Two hard lines: the widget doesn't link Providers, so it can't make requests of its own; Providers and Tips never link each other, so billing credentials can't reach the tip worker.
 - `Android/` — an Android version in development. Credentials live in the on-device Keystore the same way. Not done yet — stay tuned, or come lend a paw.
 - `Windows/` — a WinUI 3 shell over the same Swift core, cross-compiled to a DLL. Written, never yet run on Windows 11.
+- `CLI/` — `tollcat`, a terminal command over the same Swift core. This is the Linux version. See [CLI/README.md](CLI/README.md).
 - `shared/` — cross-platform sources of truth (JSON + generators). Edit here and regenerate; files with a `GENERATED` header are outputs.
 - `site/` — the [tollcat.app](https://tollcat.app) landing page, a static site.
 - `worker/` — the project's only server, see below.

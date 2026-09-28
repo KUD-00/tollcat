@@ -1,8 +1,7 @@
 # CLI 版实装 SPEC
 
-状态:**待执行**。前置依赖一条:MeterBridge 的访问级别修复(`package` 要标到成员
-函数上,见 Windows 实装 review 的结论)必须先落地——CLI 直接链接 MeterBridge,
-桥编不过 CLI 就不存在。
+状态:**源码已铺齐**。`CLI/` 是独立 SwiftPM 包，直接链接 MeterBridge；JNICopy 成员已标 `package`。
+P0 本机 `swift test --package-path CLI` 应绿。对 ≥2 家真实 provider 出数、Linux 静态二进制、Homebrew tap 的真实 sha256 仍待发版流水线。
 执行前先读:`AGENTS.md`、`ARCHITECTURE.md`、`BRAND.md`、`docs/windows/SPEC.md`
 (桥的形状在那边定义)。「决策记录」是定案,「未定项」之外不开新的选型辩论。
 

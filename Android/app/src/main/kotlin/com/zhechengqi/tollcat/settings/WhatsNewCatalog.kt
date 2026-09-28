@@ -89,7 +89,7 @@ object WhatsNewCatalog {
                     id = "subscriptionLine",
                     symbol = null,
                     title = WhatsNewText(zh = "订阅金额搬到日期上面", en = "The subscription amount now sits above the date", ja = "サブスクの金額は日付の上に"),
-                    body = WhatsNewText(zh = "算进固定订阅的时候，大数字底下多一行「（订阅 $X）」，告诉你总数里有多少是订阅。关掉订阅这一行就不出现，不再写「已计入」「未计入」。", en = "With subscriptions included, a line like “(Subscriptions $20)” appears under the big number so you can see how much of the total is subscriptions. Turn them off and the line goes away. No more “included” or “not included”.", ja = "サブスクリプションを含める設定にすると、大きな数字の下に「（サブスク $20）」のような一行が出て、合計のうちいくらがサブスクかがわかります。含めない設定ではこの行は出ません。「計上済み」「未計上」という表記はなくしました。"),
+                    body = WhatsNewText(zh = "算进固定订阅的时候，大数字底下多一行「（订阅 \$X）」，告诉你总数里有多少是订阅。关掉订阅这一行就不出现，不再写「已计入」「未计入」。", en = "With subscriptions included, a line like “(Subscriptions \$20)” appears under the big number so you can see how much of the total is subscriptions. Turn them off and the line goes away. No more “included” or “not included”.", ja = "サブスクリプションを含める設定にすると、大きな数字の下に「（サブスク \$20）」のような一行が出て、合計のうちいくらがサブスクかがわかります。含めない設定ではこの行は出ません。「計上済み」「未計上」という表記はなくしました。"),
                 ),
                 WhatsNewItem(
                     id = "guidesRewritten",

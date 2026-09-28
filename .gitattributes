@@ -11,3 +11,4 @@
 # Android native 构建摆出来的副本，收拾它只会让下一次构建又不一致。
 Packages/MeterKit/Sources/**/Resources/*.xcstrings filter=xcstrings
 App/Resources/*.xcstrings filter=xcstrings
+Watch/Resources/*.xcstrings filter=xcstrings

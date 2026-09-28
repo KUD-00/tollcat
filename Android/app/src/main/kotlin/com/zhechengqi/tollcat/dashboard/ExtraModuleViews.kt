@@ -49,7 +49,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.zhechengqi.tollcat.BudgetRow
 import com.zhechengqi.tollcat.CategorySliceRow
 import com.zhechengqi.tollcat.CompositionRow
@@ -67,12 +69,14 @@ import com.zhechengqi.tollcat.settings.SettingsScaffold
 import com.zhechengqi.tollcat.ui.AmountText
 import com.zhechengqi.tollcat.ui.LocalTollCatColors
 import com.zhechengqi.tollcat.ui.MeterSpacing
+import com.zhechengqi.tollcat.ui.heroAmountTextStyle
 import com.zhechengqi.tollcat.ui.symbols.MaterialSymbol
 import com.zhechengqi.tollcat.ui.symbols.SymbolIcon
 import kotlin.math.abs
 
 private const val HeatmapPeakDayLimit = 5
 private const val SubscriptionCardRowLimit = 3
+private val HeatmapCardCell = 18.dp
 
 @Composable
 fun HeatmapModuleView(
@@ -105,63 +109,88 @@ fun HeatmapModuleView(
     ) {
         Column(Modifier.padding(MeterSpacing.lg), verticalArrangement = Arrangement.spacedBy(MeterSpacing.sm)) {
             ModuleHeader(stringResource(R.string.module_heatmap))
-            Text(month.monthTitle, style = MaterialTheme.typography.titleLarge)
-            HeatmapGrid(month)
-            Text(month.totalText, style = MaterialTheme.typography.bodyLarge)
-            if (month.peakCaption.isNotBlank()) {
-                Text(
-                    month.peakCaption,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            // 格子只有五六周宽，铺满整行会两边空着：格子靠左，月份和数字排在右边。
+            Row(
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(MeterSpacing.lg),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                HeatmapGrid(month, cell = HeatmapCardCell)
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(MeterSpacing.xs),
+                ) {
+                    Text(month.monthTitle, style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        month.totalText,
+                        style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"),
+                        fontWeight = FontWeight.Bold,
+                    )
+                    if (month.peakCaption.isNotBlank()) {
+                        Text(
+                            month.peakCaption,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun HeatmapGrid(month: HeatmapMonthRow, modifier: Modifier = Modifier) {
+fun HeatmapGrid(month: HeatmapMonthRow, modifier: Modifier = Modifier, cell: Dp? = null) {
+    val weeks = ((month.leadingEmptyDays + month.values.size + 6) / 7).coerceAtLeast(1)
+    val gap = 3.dp
+    if (cell != null) {
+        HeatmapCanvas(month, weeks, cell, gap, modifier)
+        return
+    }
+    BoxWithConstraints(modifier.fillMaxWidth()) {
+        val fitted = ((maxWidth - gap * (weeks - 1).coerceAtLeast(0)) / weeks).coerceIn(8.dp, 18.dp)
+        HeatmapCanvas(month, weeks, fitted, gap, Modifier)
+    }
+}
+
+@Composable
+private fun HeatmapCanvas(month: HeatmapMonthRow, weeks: Int, cell: Dp, gap: Dp, modifier: Modifier) {
     val peak = month.values.filterNotNull().maxOrNull()?.takeIf { it > 0 } ?: 1.0
     val color = MaterialTheme.colorScheme.primary
     val empty = MaterialTheme.colorScheme.surfaceVariant
     // 未来日淡淡画出来，整月的形状才在；透明格会把月末挖掉。
     val future = empty.copy(alpha = 0.4f)
-    val weeks = ((month.leadingEmptyDays + month.values.size + 6) / 7).coerceAtLeast(1)
-    BoxWithConstraints(modifier.fillMaxWidth()) {
-        val gap = 3.dp
-        val cell = ((maxWidth - gap * (weeks - 1).coerceAtLeast(0)) / weeks).coerceIn(8.dp, 18.dp)
-        Canvas(
-            Modifier
-                .height(cell * 7 + gap * 6)
-                .width(cell * weeks + gap * (weeks - 1)),
-        ) {
-            val cellPx = cell.toPx()
-            val gapPx = gap.toPx()
-            month.values.forEachIndexed { index, value ->
-                val slot = month.leadingEmptyDays + index
-                val week = slot / 7
-                val day = slot % 7
-                val fill = when {
-                    value == null -> future
-                    value <= 0.0 -> empty
-                    else -> {
-                        val ratio = value / peak
-                        val level = when {
-                            ratio > 0.75 -> 1f
-                            ratio > 0.5 -> 0.75f
-                            ratio > 0.25 -> 0.5f
-                            else -> 0.3f
-                        }
-                        color.copy(alpha = level)
+    Canvas(
+        modifier
+            .height(cell * 7 + gap * 6)
+            .width(cell * weeks + gap * (weeks - 1)),
+    ) {
+        val cellPx = cell.toPx()
+        val gapPx = gap.toPx()
+        month.values.forEachIndexed { index, value ->
+            val slot = month.leadingEmptyDays + index
+            val week = slot / 7
+            val day = slot % 7
+            val fill = when {
+                value == null -> future
+                value <= 0.0 -> empty
+                else -> {
+                    val ratio = value / peak
+                    val level = when {
+                        ratio > 0.75 -> 1f
+                        ratio > 0.5 -> 0.75f
+                        ratio > 0.25 -> 0.5f
+                        else -> 0.3f
                     }
+                    color.copy(alpha = level)
                 }
-                drawRoundRect(
-                    color = fill,
-                    topLeft = Offset(week * (cellPx + gapPx), day * (cellPx + gapPx)),
-                    size = Size(cellPx, cellPx),
-                    cornerRadius = CornerRadius(3.dp.toPx()),
-                )
             }
+            drawRoundRect(
+                color = fill,
+                topLeft = Offset(week * (cellPx + gapPx), day * (cellPx + gapPx)),
+                size = Size(cellPx, cellPx),
+                cornerRadius = CornerRadius(3.dp.toPx()),
+            )
         }
     }
 }
@@ -174,63 +203,15 @@ fun CategoriesModuleView(
     shape: Shape = MaterialTheme.shapes.extraLarge,
 ) {
     if (slices.isEmpty()) return
-    val rows = categoryDonutRows(slices)
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        shape = shape,
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onOpen),
-    ) {
-        Column(Modifier.padding(MeterSpacing.lg), verticalArrangement = Arrangement.spacedBy(MeterSpacing.sm)) {
-            ModuleHeader(stringResource(R.string.module_categories))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MeterSpacing.md),
-            ) {
-                CompositionDonut(slices = rows, diameter = MeterSpacing.donut)
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(MeterSpacing.xs),
-                ) {
-                    rows.forEachIndexed { index, row ->
-                        CategoryLegendRow(row = row, index = index)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun CategoryLegendRow(row: CompositionRow, index: Int) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MeterSpacing.xs),
-    ) {
-        Box(
-            Modifier
-                .size(MeterSpacing.compositionSwatch)
-                .clip(CircleShape)
-                .background(CompositionTones.color(index, isOther = row.providerId == "other")),
-        )
-        Text(
-            row.displayName,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 1,
-            modifier = Modifier.weight(1f),
-        )
-        if (row.amount.isNotBlank()) {
-            Text(
-                row.amount,
-                style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-            )
-        }
-    }
+    // 和「构成」同一张横向粗条卡；条头放类别图标。一类不是一家，行本身不可点，整卡进详情。
+    CompositionBarsCard(
+        rows = categoryDonutRows(slices),
+        onOpenRow = null,
+        onOpenAll = onOpen,
+        title = stringResource(R.string.module_categories),
+        leading = { row, tone -> CategoryGlyph(category = row.providerId, container = tone.content, content = tone.container) },
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -253,21 +234,10 @@ fun BudgetModuleView(
             Text(stringResource(R.string.module_budget), style = MaterialTheme.typography.titleLargeEmphasized)
             Text(
                 "${budget.usedPercent}%",
-                style = MaterialTheme.typography.displaySmallEmphasized.copy(fontFeatureSettings = "tnum"),
+                style = heroAmountTextStyle(48.sp),
                 color = percentColor,
-                fontWeight = FontWeight.SemiBold,
             )
-            BudgetBlocks(
-                fraction = budget.fraction,
-                isOver = budget.isOver,
-                isClose = budget.isClose,
-            )
-            Text(
-                "${budget.spentText} / ${budget.budgetText}",
-                style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-            )
+            BudgetBar(budget = budget, modifier = Modifier.padding(top = MeterSpacing.xs))
         }
     }
 }
@@ -295,8 +265,8 @@ fun SuperlativesModuleView(
                 DashboardInsightRow(
                     title = item.displayName,
                     subtitle = superlativeKind(item.kind),
-                    trailingText = superlativeValue(item),
-                    spokenLabel = "${superlativeKind(item.kind)} ${item.displayName} ${superlativeValue(item)}",
+                    trailingText = item.value,
+                    spokenLabel = "${superlativeKind(item.kind)} ${item.displayName} ${item.value}",
                     glyphKey = item.colorKey.ifBlank { item.providerId },
                     onClick = dashboardOpenAction(item.accountId, item.providerId, onOpen),
                 )
@@ -398,7 +368,17 @@ fun SubscriptionsModuleCard(
     ) {
         Column(Modifier.padding(MeterSpacing.lg), verticalArrangement = Arrangement.spacedBy(MeterSpacing.sm)) {
             ModuleHeader(stringResource(R.string.module_subscriptions))
-            Text(module.monthlyTotalText, style = MaterialTheme.typography.headlineSmallEmphasized)
+            Column(verticalArrangement = Arrangement.spacedBy(MeterSpacing.xxs)) {
+                Text(module.monthlyTotalText, style = heroAmountTextStyle(40.sp))
+                // 大数字是折算后的每月额，年付按 12 摊；不写这一句，$20 的年付和 $1.67 看着就对不上。
+                if (module.countCaption.isNotBlank()) {
+                    Text(
+                        module.countCaption,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             module.items.take(SubscriptionCardRowLimit).forEach { item ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -415,11 +395,19 @@ fun SubscriptionsModuleCard(
                         maxLines = 1,
                         modifier = Modifier.weight(1f),
                     )
-                    Text(
-                        item.amountText,
-                        style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            item.amountText,
+                            style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
+                        )
+                        if (item.periodCaption.isNotBlank()) {
+                            Text(
+                                item.periodCaption,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -568,9 +556,7 @@ fun CategoriesDetailView(slices: List<CategorySliceRow>, onBack: () -> Unit) {
                 .padding(MeterSpacing.md),
             verticalArrangement = Arrangement.spacedBy(MeterSpacing.md),
         ) {
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                CompositionDonut(slices = rows)
-            }
+            CompositionSegmentBar(slices = rows, height = 32.dp)
             slices.forEachIndexed { index, slice ->
                 val title = stringResource(categoryTitleRes(slice.category))
                 Column(verticalArrangement = Arrangement.spacedBy(MeterSpacing.xxs)) {
@@ -579,11 +565,11 @@ fun CategoriesDetailView(slices: List<CategorySliceRow>, onBack: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(MeterSpacing.xs),
                     ) {
-                        Box(
-                            Modifier
-                                .size(MeterSpacing.compositionSwatch)
-                                .clip(CircleShape)
-                                .background(CompositionTones.color(index)),
+                        CategoryGlyph(
+                            category = slice.category,
+                            container = CompositionTones.color(index),
+                            content = MaterialTheme.colorScheme.surface,
+                            size = 28.dp,
                         )
                         Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                         if (slice.amountText.isNotBlank()) {
@@ -622,7 +608,7 @@ private fun ModuleHeader(title: String) {
             modifier = Modifier.weight(1f),
         )
         SymbolIcon(
-            MaterialSymbol.KeyboardArrowRight,
+            MaterialSymbol.ArrowForward,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -638,16 +624,6 @@ private fun superlativeKind(kind: String): String = stringResource(
     },
 )
 
-@Composable
-private fun superlativeValue(item: SuperlativeRow): String {
-    if (item.kind != "stalest") return item.value
-    val days = item.value.toIntOrNull() ?: return item.value
-    return if (days <= 0) {
-        stringResource(R.string.relative_today)
-    } else {
-        stringResource(R.string.settings_reminder_notice_days, days)
-    }
-}
 
 @Composable
 private fun categoryDonutRows(slices: List<CategorySliceRow>): List<CompositionRow> {

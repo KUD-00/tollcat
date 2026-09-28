@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.CompositionRow
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.TollCatTheme
@@ -71,14 +72,12 @@ fun CompositionDetailView(
             verticalArrangement = Arrangement.spacedBy(Bento.gap),
         ) {
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = MeterSpacing.md),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CompositionDonut(slices = slices)
-                }
+                CompositionSegmentBar(
+                    slices = slices,
+                    height = 56.dp,
+                    showsGlyphs = true,
+                    modifier = Modifier.padding(vertical = MeterSpacing.md),
+                )
             }
             itemsIndexed(rows, key = { index, row -> "${row.accountId}-${row.providerId}-$index" }) { index, row ->
                 val hint = stringResource(R.string.dashboard_view_provider, row.displayName)
