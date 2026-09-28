@@ -410,6 +410,22 @@ jobs:
           cd Android
           ./gradlew --no-daemon :app:bundleRelease
 
+      # A sideloadable build for testers: signed with the runner's throwaway
+      # debug key, so it cannot upgrade a Play install (uninstall first).
+      - name: Build debug APK
+        run: |
+          set -euo pipefail
+          cd Android
+          ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: tollcat-debug-apk
+          path: Android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14
+          if-no-files-found: error
+
   site:
     name: Site build
     runs-on: ubuntu-latest
