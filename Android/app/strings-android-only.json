@@ -598,5 +598,70 @@
     "en": "This month’s total, on the home screen.",
     "ja": "ホーム画面で今月の合計を見られます。",
     "zh": "主屏上就能看见这个月的合计。"
+  },
+  "dashboard_card_anomaly": {
+    "en": "%1$s vs. last month",
+    "ja": "%1$s・先月同期比",
+    "zh": "%1$s 比上月同期"
+  },
+  "dashboard_card_balance": {
+    "en": "%1$s balance left",
+    "ja": "%1$s の残高の見込み",
+    "zh": "%1$s 余额还够用"
+  },
+  "dashboard_card_quota": {
+    "en": "%1$s free tier",
+    "ja": "%1$s の無料枠",
+    "zh": "%1$s 免费额度"
+  },
+  "dashboard_fab_menu": {
+    "en": "Add and edit",
+    "ja": "追加と編集",
+    "zh": "添加和编辑"
+  },
+  "dashboard_hero_now": {
+    "en": "So far",
+    "ja": "今日まで",
+    "zh": "到今天"
+  },
+  "dashboard_hero_projected": {
+    "en": "By month end",
+    "ja": "月末の見込み",
+    "zh": "月底大约"
+  },
+  "dashboard_hero_today": {
+    "en": "Today, %1$s",
+    "ja": "今日 %1$s",
+    "zh": "今天 %1$s"
+  },
+  "dashboard_urgent_anomaly": {
+    "en": "%1$s is up %2$s from this time last month",
+    "ja": "%1$s は先月の同じ時期より %2$s 多く使っています",
+    "zh": "%1$s 比上个月这时候多花了 %2$s"
+  },
+  "dashboard_urgent_balance": {
+    "en": "%1$s balance lasts about %2$d more days",
+    "ja": "%1$s の残高はあと %2$d 日ほど持ちます",
+    "zh": "%1$s 的余额大约还够用 %2$d 天"
+  },
+  "dashboard_urgent_quota": {
+    "en": "%1$s has used %2$d%% of its free tier",
+    "ja": "%1$s の無料枠を %2$d%% 使いました",
+    "zh": "%1$s 的免费额度用了 %2$d%%"
+  },
+  "dashboard_budget_marker": {
+    "en": "Budget %1$s",
+    "ja": "予算 %1$s",
+    "zh": "预算 %1$s"
+  },
+  "dashboard_budget_spent": {
+    "en": "Spent %1$s",
+    "ja": "使用済み %1$s",
+    "zh": "已花 %1$s"
+  },
+  "dashboard_budget_remaining": {
+    "en": "%1$s left",
+    "ja": "残り %1$s",
+    "zh": "还剩 %1$s"
   }
 }

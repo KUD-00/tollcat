@@ -4,6 +4,7 @@
 
 import SwiftUI
 import WidgetKit
+import MeterDashboard
 import MeterModules
 
 /// 一块模块一个 widget kind：图库里一行一块，能搜到名字，加完就是那一块。
@@ -23,6 +24,11 @@ struct TollCatWidgetBundle: WidgetBundle {
         HeatmapWidget()
         CategoriesWidget()
         BudgetWidget()
+        // 锁屏那几格不是仪表盘模块，不进 widgets.json：清单在 `GlanceWidgetKind`，
+        // 壳在 `GlanceWidgets.swift`。Mac 没有锁屏，Mac 的 widget 扩展编同一个目录但不登记它们。
+        #if os(iOS)
+        GlanceWidgetBundle().body
+        #endif
     }
 }
 

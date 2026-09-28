@@ -1863,6 +1863,7 @@
       }
     },
     "partial" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3316,6 +3317,7 @@
       }
     },
     "余额" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6485,6 +6487,7 @@
       }
     },
     "在空、一个点和一条折线之间切换" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6501,6 +6504,7 @@
       }
     },
     "在空、一天和整月之间切换，看柱形图怎么过渡" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9327,6 +9331,7 @@
       }
     },
     "换一组余额" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9359,6 +9364,7 @@
       }
     },
     "换一组每日花费" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -11966,6 +11972,7 @@
       }
     },
     "每日花费" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -12269,6 +12276,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新できる接続がありません"
+          }
+        }
+      }
+    },
+    "没有完成" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Didn’t finish"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了できませんでした"
           }
         }
       }
@@ -15363,6 +15386,7 @@
       }
     },
     "负数" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -17320,6 +17344,22 @@
         }
       }
     },
+    "这次没能联系上信箱，所以什么都没改。联网后再试一次。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t reach the inbox, so nothing was changed. Try again when you’re online."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検針ポストに接続できなかったため、何も変更していません。オンラインになってからもう一度お試しください。"
+          }
+        }
+      }
+    },
     "这次测试没有发出 HTTP 请求。" : {
       "localizations" : {
         "en" : {
@@ -17772,6 +17812,7 @@
       }
     },
     "部分数据陈旧，仍显示上次成功的数字" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

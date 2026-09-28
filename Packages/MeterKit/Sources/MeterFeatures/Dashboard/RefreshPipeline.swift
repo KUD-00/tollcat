@@ -1,4 +1,5 @@
 import Foundation
+import MeterDashboard
 import Observation
 import SwiftData
 import MeterCore

@@ -1,9 +1,12 @@
 package com.zhechengqi.tollcat.settings
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
+import android.os.PersistableBundle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +39,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.AccountExtras
+import com.zhechengqi.tollcat.InboxMailboxStore
 import com.zhechengqi.tollcat.MeterCoreNative
 import com.zhechengqi.tollcat.MoneyDisplay
 import com.zhechengqi.tollcat.R
@@ -238,13 +242,23 @@ fun InboxSettingsDestination(
                 TextButton(
                     onClick = {
                         confirmingDelete = false
+                        // 远端没删掉就不抹本地：抹了就再也列不出、吊销不了已经签出去的投递 key。
+                        // Unauthorized 说明读钥已失效、信箱已经不在了，才可以一并抹掉。
                         scope.launch {
-                            withContext(Dispatchers.Default) {
+                            val result = withContext(Dispatchers.Default) {
                                 runCatching { InboxClient.delete(readKey) }
                             }
-                            persist("", "")
-                            ingestSecret = null
-                            keys = emptyList()
+                            val gone = result.isSuccess ||
+                                (result.exceptionOrNull() as? InboxException)?.failure == InboxFailure.Unauthorized
+                            if (gone) {
+                                persist("", "")
+                                ingestSecret = null
+                                keys = emptyList()
+                                failure = null
+                            } else {
+                                failure = (result.exceptionOrNull() as? InboxException)?.failure
+                                    ?: InboxFailure.Unreachable
+                            }
                         }
                     },
                 ) {
@@ -360,9 +374,24 @@ private fun inboxFailureText(failure: InboxFailure): String {
     )
 }
 
+/**
+ * 这里复制的只有读钥和刚签的投递 secret，都是活凭据：标成敏感，Android 13+ 的
+ * 剪贴板预览不显示明文，输入法与剪贴板管理器也按敏感内容处理。
+ */
 private fun copy(context: Context, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    clipboard.setPrimaryClip(ClipData.newPlainText("inbox", text))
+    val clip = ClipData.newPlainText("inbox", text)
+    clip.description.extras = PersistableBundle().apply {
+        putBoolean(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ClipDescription.EXTRA_IS_SENSITIVE
+            } else {
+                "android.content.extra.IS_SENSITIVE"
+            },
+            true,
+        )
+    }
+    clipboard.setPrimaryClip(clip)
 }
 
 /** 刚签出来的 secret 只显示这一次。大号等宽，点整块复制。 */

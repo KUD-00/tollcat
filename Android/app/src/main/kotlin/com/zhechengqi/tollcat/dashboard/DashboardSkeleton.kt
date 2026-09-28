@@ -1,6 +1,7 @@
 package com.zhechengqi.tollcat.dashboard
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,8 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -17,12 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.TollCatTheme
-import com.zhechengqi.tollcat.ui.Bento
 import com.zhechengqi.tollcat.ui.SkeletonBox
 
 /**
- * 已有服务但首笔账单还没回来时的仪表盘骨架：按 bento 版式占位
- * （hero → 瓷砖行 → 构成卡），稳住布局不让内容 pop in。
+ * 已有服务但首笔账单还没回来时的骨架：照着新版式占位（顶栏 → 纸 → 注意横幅与两张小卡 → 构成），
+ * 数据到了由 fade-through 盖上去，布局不跳。
  */
 @Composable
 fun DashboardSkeleton(modifier: Modifier = Modifier) {
@@ -30,39 +35,46 @@ fun DashboardSkeleton(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
             .semantics { contentDescription = spoken },
-        verticalArrangement = Arrangement.spacedBy(Bento.gap),
     ) {
         SkeletonBox(
-            shape = Bento.top,
+            shape = RectangleShape,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(208.dp),
+                .height(272.dp),
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(Bento.gap)) {
+        Column(
+            modifier = Modifier
+                .pullUp(DashboardSheetOverlap)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = DashboardSheetOverlap, topEnd = DashboardSheetOverlap))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 12.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             SkeletonBox(
-                shape = Bento.middle,
-                modifier = Modifier
-                    .weight(1.7f)
-                    .height(148.dp),
+                shape = RoundedCornerShape(28.dp, 28.dp, 8.dp, 8.dp),
+                modifier = Modifier.fillMaxWidth().height(84.dp),
                 delayMillis = 120,
             )
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                SkeletonBox(
+                    shape = RoundedCornerShape(8.dp, 8.dp, 8.dp, 28.dp),
+                    modifier = Modifier.width(164.dp).height(150.dp),
+                    delayMillis = 200,
+                )
+                SkeletonBox(
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.width(164.dp).height(150.dp),
+                    delayMillis = 240,
+                )
+            }
             SkeletonBox(
-                shape = Bento.middle,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(148.dp),
-                delayMillis = 200,
+                shape = RoundedCornerShape(28.dp),
+                modifier = Modifier.fillMaxWidth().height(260.dp),
+                delayMillis = 300,
             )
         }
-        SkeletonBox(
-            shape = Bento.bottom,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(168.dp),
-            delayMillis = 280,
-        )
     }
 }
 

@@ -3,6 +3,10 @@ import MeterCore
 
 /// 明细和钱包同一套路：`Decimal` 编成字符串，别让 JSON 数字改掉分位。
 enum SpendLineCodec {
+    /// 写出端是 NSDecimalNumber.stringValue，恒为点号小数。读也钉死 POSIX：默认 locale
+    /// 在德语、法语等把点当千分位的设备上，会把存好的 "12.34" 读成 1234 或直接失败。
+    private static let posix = Locale(identifier: "en_US_POSIX")
+
     struct Entry: Codable {
         var category: String
         var label: String
@@ -36,7 +40,7 @@ enum SpendLineCodec {
         do {
             let entries = try JSONDecoder().decode([Entry].self, from: data)
             let lines = try entries.map { entry -> SpendLine in
-                guard let amount = Decimal(string: entry.amount) else {
+                guard let amount = Decimal(string: entry.amount, locale: Self.posix) else {
                     throw PersistenceError.corruptSpendLines
                 }
                 return SpendLine(
@@ -45,13 +49,13 @@ enum SpendLineCodec {
                     scope: entry.scope,
                     amountUSD: Money(usd: amount),
                     listUSD: try entry.list.map { raw in
-                        guard let value = Decimal(string: raw) else {
+                        guard let value = Decimal(string: raw, locale: Self.posix) else {
                             throw PersistenceError.corruptSpendLines
                         }
                         return Money(usd: value)
                     },
                     quantity: try entry.quantity.map { raw in
-                        guard let value = Decimal(string: raw) else {
+                        guard let value = Decimal(string: raw, locale: Self.posix) else {
                             throw PersistenceError.corruptSpendLines
                         }
                         return value

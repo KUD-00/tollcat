@@ -40,7 +40,7 @@ from pathlib import Path
 # 只管人写的那几份。构建产物里到处都是同名文件：`.build` / `.derived` 下的
 # 副本，以及 `Android/app/src/main/assets/swiftpm/` 里那两份——后者虽然进了
 # 仓库，却是 Android native 构建摆出来的，收拾它只会让下一次构建又不一致。
-CATALOG_ROOTS = ("Packages/MeterKit/Sources", "App/Resources")
+CATALOG_ROOTS = ("Packages/MeterKit/Sources", "App/Resources", "Watch/Resources")
 
 
 def catalogs(root: Path) -> list[Path]:

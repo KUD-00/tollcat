@@ -75,8 +75,11 @@ public struct SubscriptionPlan: Hashable, Sendable, Codable {
     private static func decodeDecimal(
         from container: KeyedDecodingContainer<CodingKeys>
     ) throws -> Decimal {
+        // 目录里的价格由 NSDecimalNumber.stringValue 写出，恒为点号小数。默认 locale 解析时，
+        // 德语等把点当千分位的设备会把 "9.99" 读成 999。
         if let string = try? container.decode(String.self, forKey: .amountUSD),
-           let decimal = Decimal(string: string) {
+           let decimal = Decimal(string: string, locale: Locale(identifier: "en_US_POSIX")),
+           !decimal.isNaN {
             return decimal
         }
         if let decimal = try? container.decode(Decimal.self, forKey: .amountUSD) {

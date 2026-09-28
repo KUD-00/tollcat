@@ -47,9 +47,14 @@ internal sealed class WindowsCredentialStore : ICredentialStore
     private static string FileFor(string reference)
         => Path.Combine(Folder, Convert.ToHexString(Encoding.UTF8.GetBytes(reference)) + ".bin");
 
+    /// 先写临时文件再整份替换：写到一半崩溃留下的半截 .bin 会挡在旧条目前面，
+    /// 让迁移永远走不到。
     public void Save(string secret, string reference)
     {
-        File.WriteAllBytes(FileFor(reference), Protect(Encoding.UTF8.GetBytes(secret)));
+        var file = FileFor(reference);
+        var temporary = file + ".tmp";
+        File.WriteAllBytes(temporary, Protect(Encoding.UTF8.GetBytes(secret)));
+        File.Move(temporary, file, overwrite: true);
     }
 
     public string? Read(string reference)
@@ -59,12 +64,16 @@ internal sealed class WindowsCredentialStore : ICredentialStore
         {
             try
             {
-                return Encoding.UTF8.GetString(Unprotect(File.ReadAllBytes(file)));
+                var secret = Encoding.UTF8.GetString(Unprotect(File.ReadAllBytes(file)));
+                // 迁移时 CredDeleteW 失败留下的旧条目，每次读都再清一次，直到删掉。
+                DeleteLegacy(reference);
+                return secret;
             }
             catch (Exception)
             {
-                // 密文解不开（换机、包身份变了）等同没有这条凭据。
-                return null;
+                // 密文解不开（换机、包身份变了、半截文件）：这份没用了，删掉再看旧条目。
+                // 直接返回 null 会让凭据管理器里那份用户级可读的副本永远不被迁走。
+                File.Delete(file);
             }
         }
 
@@ -91,7 +100,8 @@ internal sealed class WindowsCredentialStore : ICredentialStore
     {
         if (Directory.Exists(Folder))
         {
-            foreach (var file in Directory.EnumerateFiles(Folder, "*.bin"))
+            // 连同 Save 崩溃留下的 .bin.tmp 一起清：那也是密文。
+            foreach (var file in Directory.EnumerateFiles(Folder, "*.bin*"))
             {
                 File.Delete(file);
             }
@@ -140,8 +150,12 @@ internal sealed class WindowsCredentialStore : ICredentialStore
         }
     }
 
-    private static void DeleteLegacy(string reference)
-        => CredDeleteW(LegacyPrefix + reference, CredTypeGeneric, 0);
+    private const int ErrorNotFound = 1168;
+
+    /// 没有这条也算删掉；别的失败返回 false，调用方下次读到时会再试。
+    private static bool DeleteLegacy(string reference)
+        => CredDeleteW(LegacyPrefix + reference, CredTypeGeneric, 0)
+           || Marshal.GetLastWin32Error() == ErrorNotFound;
 
     /// CredEnumerateW 的 Filter 支持 <c>TollCat/*</c>——旧注释说「没有按前缀批量删的
     /// API」是不对的，孤儿条目就是这么留下来的。

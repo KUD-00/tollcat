@@ -62,7 +62,9 @@ public struct RemoteBillingProvider: BillingProvider, Sendable {
             if Self.payrollFundingTypes.contains(docType) {
                 // Still allow fee lines via breakdown; do not take whole-document total.
             }
-            let stamp = Self.stamp(doc, calendar: calendar) ?? current.start
+            // 没有可解析日期的单据不知道属于哪个月，宁可不计也不塞进本月——
+            // 塞进来它会每次取数都算作本月花费，永远不会滚进历史。
+            guard let stamp = Self.stamp(doc, calendar: calendar) else { continue }
             let currency = (doc.billing_document_currency ?? doc.currency)?
                 .trimmingCharacters(in: .whitespacesAndNewlines)
                 .uppercased()
@@ -102,10 +104,12 @@ public struct RemoteBillingProvider: BillingProvider, Sendable {
                 let lineCurrency = (item.invoice_currency ?? currency)?
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .uppercased()
-                try? currencies.observe(lineCurrency, providerID: .remote)
                 let cents = item.invoice_amount?.value ?? 0
                 let amount = cents / 100
                 guard amount != 0 else { continue }
+                // 和整单费用一样遇到第二种币就拒：吞掉的话这行的外币数字会被
+                // 当成已登记币种的金额加进合计，再按那个币的汇率换，数量级都可能错。
+                try currencies.observe(lineCurrency, providerID: .remote)
                 let label = [
                     item.type,
                     item.description,
@@ -135,22 +139,18 @@ public struct RemoteBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .remote
-        )
-        return Snapshot(
+        // 合计、日线、明细都按原币拼好，收尾统一乘同一个汇率——
+        // 明细若留原币却标成美元，非美元户的逐行金额会差出一个汇率。
+        return try Snapshot(
             providerID: .remote,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     /// Whole-document totals are platform/service fees (not payroll funding).

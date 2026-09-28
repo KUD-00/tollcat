@@ -1,5 +1,6 @@
 import Foundation
 import MeterCore
+import MeterDashboard
 import MeterFormat
 import MeterProviders
 import MeterModules

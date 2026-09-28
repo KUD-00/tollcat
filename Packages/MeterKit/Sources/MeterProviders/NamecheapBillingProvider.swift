@@ -41,7 +41,9 @@ public struct NamecheapBillingProvider: BillingProvider, Sendable {
         guard let text = String(data: data, encoding: .utf8) else {
             throw ProviderError.malformedResponse(providerID: .namecheap)
         }
-        guard let available = Self.attribute(named: "AvailableBalance", in: text).flatMap({ Decimal(string: $0) }) else {
+        // Namecheap 一律回美式小数点。不钉 POSIX 的话德法荷区域会把 "12.50" 的点当千分位，读成 1250。
+        guard let available = Self.attribute(named: "AvailableBalance", in: text)
+            .flatMap({ Decimal(string: $0, locale: Locale(identifier: "en_US_POSIX")) }) else {
             throw ProviderError.malformedResponse(providerID: .namecheap)
         }
         let currency = Self.attribute(named: "Currency", in: text)

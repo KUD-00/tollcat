@@ -62,16 +62,27 @@ public struct TierPointBillingProvider: BillingProvider, Sendable {
             let stamp = month.start
             let ym = Self.yearMonth(stamp, calendar: calendar)
             var monthTotal: Decimal = 0
+            let isCurrent = month.start == current.start
             for sku in ["Consumption", "MRR"] {
-                guard let report = try? await loadReport(
-                    crmId: crmId, month: ym, skuType: sku, headers: headers
-                ) else { continue }
+                let report: UsageReport
+                if isCurrent {
+                    // 本月的错误必须抛出去：吞掉的话，令牌过期、crmId 填错都会被报成本月 $0。
+                    report = try await loadReport(
+                        crmId: crmId, month: ym, skuType: sku, headers: headers
+                    )
+                } else {
+                    // 往月只是历史图，某个月读不到跳过即可，不影响本月数字。
+                    guard let past = try? await loadReport(
+                        crmId: crmId, month: ym, skuType: sku, headers: headers
+                    ) else { continue }
+                    report = past
+                }
                 for row in report.usageOverview ?? [] {
                     let amount = row.totalCost?.value ?? 0
                     guard amount != 0 else { continue }
                     try currencies.observe(row.currency ?? report.currency, providerID: .tierpoint)
                     monthTotal += amount
-                    if month.start == current.start {
+                    if isCurrent {
                         let label = row.sku ?? row.name ?? row.description ?? sku
                         lines.add(
                             SpendLine(
@@ -83,7 +94,7 @@ public struct TierPointBillingProvider: BillingProvider, Sendable {
                     }
                 }
             }
-            if month.start == current.start {
+            if isCurrent {
                 currentTotal = monthTotal
             } else if monthTotal != 0 {
                 daily.addPastMonth(

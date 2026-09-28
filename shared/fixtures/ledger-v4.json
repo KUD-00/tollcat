@@ -1,0 +1,30 @@
+{
+  "schema": 4,
+  "snapshots": [
+    {
+      "providerId": "openai",
+      "accountId": "11111111-1111-1111-1111-111111111111",
+      "kind": "usage",
+      "source": "api",
+      "currentSpendUsd": "7.62",
+      "periodStartMillis": 1704067200000,
+      "periodEndMillis": 1706745599000,
+      "fetchedAtMillis": 1706740000000
+    }
+  ],
+  "memberships": [
+    {
+      "providerId": "openai",
+      "sortIndex": 0
+    }
+  ],
+  "accounts": [
+    {
+      "accountId": "11111111-1111-1111-1111-111111111111",
+      "providerId": "openai",
+      "credentialReference": "acct.11111111-1111-1111-1111-111111111111",
+      "sortIndex": 0
+    }
+  ],
+  "subscriptions": []
+}

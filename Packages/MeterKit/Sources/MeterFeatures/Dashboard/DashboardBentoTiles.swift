@@ -1,3 +1,4 @@
+import MeterDashboard
 import SwiftUI
 import MeterDesign
 import MeterModules
@@ -102,13 +103,13 @@ private enum DashboardBentoPreview {
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!
         let lastMonth = Date(timeIntervalSince1970: 1_787_616_000)
         let start = calendar.date(byAdding: .month, value: -5, to: lastMonth) ?? lastMonth
-        let points: [PlotPoint] = [12, 18, 9, 22, 15, 21].enumerated().compactMap { index, amount in
+        let bars: [TrendBar] = [12, 18, 9, 22, 15, 21].enumerated().compactMap { index, amount in
             calendar.date(byAdding: .month, value: index, to: start).map {
-                PlotPoint(date: $0, amount: Double(amount))
+                TrendBar(date: $0, amount: Double(amount), amountText: "$\(amount).00")
             }
         }
         return TrendModuleContent(
-            points: points,
+            bars: bars,
             xStart: start,
             xEnd: CompactMonthBarChart.domainEnd(afterLastMonthStart: lastMonth, calendar: calendar),
             highlight: lastMonth,

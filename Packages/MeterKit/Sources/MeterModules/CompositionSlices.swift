@@ -1,5 +1,6 @@
 import Foundation
 import MeterCore
+import MeterDashboard
 import MeterDesign
 import SwiftUI
 import MeterFormat

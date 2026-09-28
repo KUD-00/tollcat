@@ -111,16 +111,16 @@ FILTER_ALLOWED = (
     # 开场预览按新用户默认口径（仅从量）摆数字。
     "/Sources/MeterFeatures/Setup/OnboardingDemoContent.swift",
     "/Sources/MeterFeatures/Dashboard/DashboardModel.swift",
-    "/Sources/MeterModules/DashboardContents.swift",
+    "/Sources/MeterDashboard/DashboardContents.swift",
     "/Sources/MeterFeatures/Dashboard/DashboardView.swift",
     "/Sources/MeterFeatures/Dashboard/DashboardFilterModel.swift",
     "/Sources/MeterFeatures/Dashboard/DashboardFilterSheet.swift",
-    "/Sources/MeterModules/DashboardFilterSummary.swift",
-    "/Sources/MeterModules/MonthToDateContentBuilder.swift",
+    "/Sources/MeterDashboard/DashboardFilterSummary.swift",
+    "/Sources/MeterDashboard/MonthToDateContentBuilder.swift",
     "/Sources/MeterFeatures/Share/ShareCardBuilder.swift",
     "/Sources/MeterFeatures/Share/ShareCardModel.swift",
     "/Sources/MeterFeatures/Dashboard/CatSpeechFacts.swift",
-    "/Sources/MeterModules/TrendBuilder.swift",
+    "/Sources/MeterDashboard/TrendBuilder.swift",
     # 组件画廊里的月格拖选样品：只读 DashboardFilterSummary 的期间标题，
     # 不构造也不应用取景框。DEBUG-only，不进正式包。
     "/Sources/MeterFeatures/Developer/Gallery/GalleryMonthRangeView.swift",
@@ -143,10 +143,13 @@ COPY_TERM_SKIP_NAMES = {
 COPY_TERM_FOLDERS = (
     "App",
     "Widget",
+    "Watch",
+    "WatchWidget",
     "Packages/MeterKit/Sources",
     "Packages/MeterKit/Tests",
     "docs",
     "scripts",
+    "CLI",
 )
 COPY_TERM_SUFFIXES = {".swift", ".xcstrings", ".md", ".py", ".sh"}
 
@@ -1450,14 +1453,20 @@ PACKAGE_TARGET_DEPS = {
     "MeterInbox": frozenset({"MeterCore"}),
     "MeterFeedback": frozenset(),
     "MeterUsage": frozenset(),
+    # 手表壳只链这一个。零依赖就是「账本和凭据上不了手表」的编译期证明。
+    "MeterGlance": frozenset(),
+    # 仪表盘的折算（builder + 值）。Android / Windows / CLI 的桥软链这个目录直接编，
+    # 所以只准认这两个——多一条边，桥就得跟着链一个编不过的 target。
+    "MeterDashboard": frozenset({"MeterCore", "MeterFormat"}),
     # 仪表盘模块的视图层。依赖表就是 widget 的安全说明书：
     # 加一条边就等于把那个 target 拖进 widget 扩展。
-    "MeterModules": frozenset({"MeterCore", "MeterDesign", "MeterFormat"}),
+    "MeterModules": frozenset({"MeterCore", "MeterDesign", "MeterFormat", "MeterDashboard", "MeterGlance"}),
     "MeterFeatures": frozenset(
         {
             "MeterCore",
             "MeterDesign",
             "MeterFormat",
+            "MeterDashboard",
             "MeterModules",
             "MeterProviders",
             "MeterPersistence",
@@ -1465,6 +1474,7 @@ PACKAGE_TARGET_DEPS = {
             "MeterInbox",
             "MeterFeedback",
             "MeterUsage",
+            "MeterGlance",
         }
     ),
 }
@@ -1507,7 +1517,7 @@ def check_widget_module_list(root: Path, errors: list[str]) -> None:
     module_ids = re.findall(
         r"^    case (\w+)$",
         (
-            root / "Packages/MeterKit/Sources/MeterModules/DashboardModuleID.swift"
+            root / "Packages/MeterKit/Sources/MeterDashboard/DashboardModuleID.swift"
         ).read_text(encoding="utf-8"),
         re.M,
     )
@@ -1603,6 +1613,80 @@ def check_package_graph(root: Path, errors: list[str]) -> None:
     if text is not None and ".package(" in text:
         errors.append("Android/native/Package.swift 引入了第三方包")
 
+    cli = root / "CLI" / "Package.swift"
+    text = gate_text(root, cli, errors)
+    if text is not None and ".package(" in text:
+        errors.append("CLI/Package.swift 引入了第三方包")
+
+
+DASHBOARD_ALLOWED_IMPORTS = frozenset({"Foundation", "MeterCore", "MeterFormat"})
+# Android 的 Foundation 没有、或者只在 Apple 平台有意义的东西。
+# 两处例外都在 `#if canImport(Darwin)` 里：`StaleSinceText.swift` 用系统的相对时间，
+# 生成的 `MeterDashboardCopy.swift` 在 Apple 平台把 String Catalog 的包交给 `PortableCatalog`。
+DASHBOARD_FORBIDDEN_TOKENS = (
+    "LocalizedStringResource",
+    "RelativeDateTimeFormatter",
+    "String(localized:",
+    "Bundle.module",
+)
+DASHBOARD_TOKEN_EXEMPT = frozenset({"StaleSinceText.swift", "MeterDashboardCopy.swift"})
+# 桥里出现这些，就是又在抄 builder：规则的调用点只该在 MeterDashboard 里。
+BRIDGE_FORBIDDEN_RULES = (
+    "SuperlativeSelection.",
+    "HeatmapMonths.make",
+    "CategoryShares.make",
+    "BudgetGauge.make",
+    "IntegerPercents.from",
+    "UpcomingChargeCalculator.",
+    "PrepaidRunwayCalculator.",
+    "MonthSpendHistoryCalculator.",
+)
+
+
+def check_dashboard_portable(root: Path, errors: list[str]) -> None:
+    """MeterDashboard 四个平台同一份，桥里不许再抄一份。
+
+    Android / Windows / CLI 把 `MeterDashboard` 目录软链进各自的包直接编，所以这里
+    一 import SwiftUI / MeterDesign、一用 Android 没有的 Foundation 类型，桥就编不过。
+    上一次编不过的结局是桥里抄了一份 builder，抄的那份悄悄漂走（年付订阅没摊）。
+    和 `ArchitectureGuardrailTests.dashboardTargetStaysPortable` 同一条判据。
+    """
+    folder = root / "Packages" / "MeterKit" / "Sources" / "MeterDashboard"
+    files = swift_files(folder)
+    if not files:
+        errors.append("找不到 Packages/MeterKit/Sources/MeterDashboard")
+        return
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        for match in re.finditer(r"^\s*import (\w+)", text, re.M):
+            if match.group(1) not in DASHBOARD_ALLOWED_IMPORTS:
+                errors.append(
+                    f"MeterDashboard/{path.name} import {match.group(1)}："
+                    "这一层要编进 Android / Windows / CLI 的桥，只准认 MeterCore / MeterFormat"
+                )
+        if path.name in DASHBOARD_TOKEN_EXEMPT:
+            continue
+        masked = mask_comments_and_strings(text)
+        for token in DASHBOARD_FORBIDDEN_TOKENS:
+            if token in masked:
+                errors.append(
+                    f"MeterDashboard/{path.name} 用了 {token}：Android 上编不过。"
+                    "文案走 L(PortableText)，见 MeterFormat/PortableText.swift"
+                )
+    for package in ("Android/native", "Windows/native", "CLI"):
+        link = root / package / "Sources" / "MeterDashboard"
+        if not link.is_symlink():
+            errors.append(f"{package}/Sources/MeterDashboard 应该是指向 Packages/MeterKit 的软链")
+    bridge = root / "Android" / "native" / "Sources" / "MeterBridge"
+    for path in swift_files(bridge):
+        masked = mask_comments_and_strings(path.read_text(encoding="utf-8"))
+        for token in BRIDGE_FORBIDDEN_RULES:
+            if token in masked:
+                errors.append(
+                    f"MeterBridge/{path.name} 调了 {token}：这是在桥里重写 builder。"
+                    "缺什么值就加到 MeterDashboard 的值类型上"
+                )
+
 
 def check_outbound_scope(root: Path, errors: list[str]) -> None:
     """关于页列的是「这个壳会连的」，不是「声明过的」。
@@ -1655,7 +1739,38 @@ def check_project_yml_linkage(root: Path, errors: list[str]) -> None:
         if "import MeterProviders" in swift.read_text(encoding="utf-8"):
             errors.append(f"Widget/{swift.name} import MeterProviders")
 
+    check_watch_linkage(root, text, errors)
     check_xcode_specs(root, errors)
+
+
+WATCH_TARGETS = {"TollCatWatch": "Watch", "TollCatWatchWidget": "WatchWidget"}
+
+
+def check_watch_linkage(root: Path, project_text: str, errors: list[str]) -> None:
+    """手表壳只链 MeterGlance，MeterGlance 自己不 import 任何 Meter 模块。
+
+    手表上看到的每一个数都是 iPhone 推过去的。依赖表是这件事的证明：
+    只要手表链上 MeterPersistence / MeterProviders，凭据和账本就有了上手表的路，
+    而且不会有任何编译错误提醒你。
+    """
+    for target, folder in WATCH_TARGETS.items():
+        block = re.search(
+            rf"^  {target}:\n(.*?)(?=^  [A-Za-z]|^schemes:|\Z)", project_text, re.M | re.S
+        )
+        if block is None:
+            errors.append(f"project.yml 读不出 {target}")
+            continue
+        products = re.findall(r"products:\s*\[([^\]]*)\]", block.group(1))
+        linked = {p.strip() for group in products for p in group.split(",") if p.strip()}
+        if linked != {"MeterGlance"}:
+            errors.append(f"{target} 链了 {sorted(linked)}：手表壳只准链 MeterGlance")
+        for swift in swift_files(root / folder):
+            for module in re.findall(r"^import (Meter\w+)", swift.read_text(encoding="utf-8"), re.M):
+                if module != "MeterGlance":
+                    errors.append(f"{folder}/{swift.name} import {module}：手表壳只准认 MeterGlance")
+    for swift in swift_files(root / "Packages" / "MeterKit" / "Sources" / "MeterGlance"):
+        for module in re.findall(r"^import (Meter\w+)", swift.read_text(encoding="utf-8"), re.M):
+            errors.append(f"MeterGlance/{swift.name} import {module}：MeterGlance 是零依赖叶子")
 
 
 def check_mac_app_store_target(root: Path, mac_text: str, errors: list[str]) -> None:
@@ -2256,6 +2371,7 @@ def check_plain_http(root: Path, errors: list[str]) -> None:
         root / "Android" / "app" / "src" / "main",
         root / "Android" / "native" / "Sources",
         root / "Windows",
+        root / "CLI",
     )
     for folder in folders:
         if not folder.is_dir():
@@ -2271,6 +2387,46 @@ def check_plain_http(root: Path, errors: list[str]) -> None:
             for index, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
                 if "http://" in line and "xmlns" not in line:
                     errors.append(f"{rel(root, path)}:{index} 明文 http://")
+
+
+def check_cli_invariants(root: Path, errors: list[str]) -> None:
+    """CLI 皮不许自己发 HTTP，账本 schema 跟 Windows 对齐，桥不链 ProductWorker。"""
+    package = root / "CLI" / "Package.swift"
+    text = gate_text(root, package, errors)
+    if text is not None:
+        if "ProductWorker.swift" not in text or "exclude:" not in text:
+            errors.append("CLI MeterBridge 必须 exclude ProductWorker.swift")
+        if "ProductInbox.swift" not in text:
+            errors.append("CLI MeterBridge 必须 exclude ProductInbox.swift")
+
+    windows = root / "Windows" / "app" / "Data" / "JsonLedgerStore.cs"
+    windows_text = gate_text(root, windows, errors)
+    cli_schema = root / "CLI" / "Sources" / "TollcatCore" / "LedgerSchema.swift"
+    cli_text = gate_text(root, cli_schema, errors)
+    if windows_text is not None and cli_text is not None:
+        win_match = re.search(r"private const int Version = (\d+)", windows_text)
+        cli_match = re.search(r"static let version = (\d+)", cli_text)
+        if not win_match or not cli_match:
+            errors.append("读不出 Windows / CLI 账本 schema 版本")
+        elif win_match.group(1) != cli_match.group(1):
+            errors.append(
+                f"账本 schema 分叉：Windows Version={win_match.group(1)} "
+                f"CLI version={cli_match.group(1)}"
+            )
+
+    for folder in (
+        root / "CLI" / "Sources" / "TollcatCore",
+        root / "CLI" / "Sources" / "tollcat",
+    ):
+        if not folder.is_dir():
+            continue
+        for path in swift_files(folder):
+            text = path.read_text(encoding="utf-8")
+            relative = rel(root, path)
+            if "import FoundationNetworking" in text:
+                errors.append(f"{relative} 禁 import FoundationNetworking")
+            if "ProductWorker" in text or "ProductInbox" in text:
+                errors.append(f"{relative} 不得引用 ProductWorker / ProductInbox")
 
 
 def main() -> int:
@@ -2303,6 +2459,7 @@ def main() -> int:
     check_module_width_source(root, errors)
     check_widget_module_list(root, errors)
     check_package_graph(root, errors)
+    check_dashboard_portable(root, errors)
     check_outbound_scope(root, errors)
     check_project_yml_linkage(root, errors)
     check_keychain_and_transfer(root, errors)
@@ -2315,6 +2472,7 @@ def main() -> int:
     check_kotlin_has_no_http(root, errors)
     check_worker_boundaries(root, errors)
     check_plain_http(root, errors)
+    check_cli_invariants(root, errors)
 
     if errors:
         print(f"check-source-invariants: {len(errors)} 处越界:", file=sys.stderr)

@@ -77,7 +77,6 @@
     <string name="superlative_share">占比最大</string>
     <string name="superlative_rise">涨得最多</string>
     <string name="superlative_stale">最久没刷新</string>
-    <string name="relative_today">今天</string>
     <string name="dashboard_edit_showing">显示中</string>
     <string name="dashboard_edit_more">更多模块</string>
     <string name="dashboard_edit_reorder">拖动排序。本月合计和构成始终在最上面，没数据的模块会自动不显示。</string>
@@ -94,4 +93,20 @@
     <string name="module_categories_summary">按 AI 推理、托管、数据库这样的类别分。</string>
     <string name="module_superlatives_summary">涨得最多、占比最大、最久没刷新的那家。</string>
     <string name="module_budget_summary">本月花了预算的几成。</string>
+    <string name="dashboard_hero_now">到今天</string>
+    <string name="dashboard_hero_projected">月底大约</string>
+    <string name="dashboard_hero_today">今天 %1$s</string>
+    <string name="dashboard_urgent_anomaly">%1$s 比上个月这时候多花了 %2$s</string>
+    <string name="dashboard_urgent_balance">%1$s 的余额大约还够用 %2$d 天</string>
+    <string name="dashboard_urgent_quota">%1$s 的免费额度用了 %2$d%%</string>
+    <string name="dashboard_card_anomaly">%1$s 比上月同期</string>
+    <string name="dashboard_card_balance">%1$s 余额还够用</string>
+    <string name="dashboard_card_quota">%1$s 免费额度</string>
+    <string name="dashboard_card_days">%1$d 天</string>
+    <string name="dashboard_fab_menu">添加和编辑</string>
+    <string name="dashboard_add_subscription">加一笔固定订阅</string>
+    <string name="dashboard_fab_close">收起</string>
+    <string name="dashboard_budget_marker">预算 %1$s</string>
+    <string name="dashboard_budget_spent">已花 %1$s</string>
+    <string name="dashboard_budget_remaining">还剩 %1$s</string>
 </resources>

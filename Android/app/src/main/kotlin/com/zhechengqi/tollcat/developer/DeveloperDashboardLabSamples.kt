@@ -24,19 +24,18 @@ import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.DashboardSnapshot
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.TollCatTheme
-import com.zhechengqi.tollcat.dashboard.AnomalyModuleView
-import com.zhechengqi.tollcat.dashboard.BalanceAlertModuleView
+import com.zhechengqi.tollcat.dashboard.AttentionSummary
 import com.zhechengqi.tollcat.dashboard.BudgetModuleView
+import com.zhechengqi.tollcat.dashboard.CompositionBarsCard
+import com.zhechengqi.tollcat.dashboard.DashboardAttentionSection
+import com.zhechengqi.tollcat.dashboard.DashboardHeroHeader
+import com.zhechengqi.tollcat.dashboard.dashboardHeroState
 import com.zhechengqi.tollcat.dashboard.CategoriesModuleView
-import com.zhechengqi.tollcat.dashboard.CompositionModuleView
 import com.zhechengqi.tollcat.dashboard.DashboardModules
-import com.zhechengqi.tollcat.dashboard.FreeQuotaModuleView
 import com.zhechengqi.tollcat.dashboard.HeatmapModuleView
-import com.zhechengqi.tollcat.dashboard.MonthToDateModuleView
 import com.zhechengqi.tollcat.dashboard.PinnedServicesModuleView
 import com.zhechengqi.tollcat.dashboard.SubscriptionsModuleCard
 import com.zhechengqi.tollcat.dashboard.SuperlativesModuleView
-import com.zhechengqi.tollcat.dashboard.UpcomingChargesModuleView
 import com.zhechengqi.tollcat.ui.Bento
 
 /** 一块模块在各壳里的样子。尺寸全部是常数，不量窗口。 */
@@ -158,46 +157,30 @@ private fun LabModuleView(
     shape: Shape,
 ) {
     when (id) {
-        DashboardLabModules.MONTH_TO_DATE -> MonthToDateModuleView(
-            amountText = dashboard.formattedVariable.ifBlank { dashboard.formattedTotal },
-            monthTitle = dashboard.periodCaption.ifBlank { dashboard.monthTitle },
-            projectedCaption = if (dashboard.allowsProjection) {
-                stringResource(R.string.projected_caption, dashboard.formattedProjected)
-            } else {
-                null
-            },
-            subscriptionCaption = dashboard.subscriptionFormatted?.let { raw ->
-                stringResource(R.string.subscription_caption, raw)
-            },
-            currencyNote = dashboard.currencyNote,
-            filterNote = null,
-            shape = shape,
+        DashboardLabModules.MONTH_TO_DATE -> DashboardHeroHeader(
+            state = dashboardHeroState(
+                dashboard = dashboard,
+                filterNote = null,
+                includesSubscriptions = false,
+                canToggleScope = false,
+                nowMillis = System.currentTimeMillis(),
+            ),
+            fullBleed = false,
         )
-        DashboardModules.COMPOSITION -> CompositionModuleView(
+        DashboardModules.COMPOSITION -> CompositionBarsCard(
             rows = dashboard.composition,
+            onOpenRow = {},
+            onOpenAll = {},
+        )
+        DashboardModules.ANOMALY,
+        DashboardModules.BALANCE,
+        DashboardModules.QUOTA,
+        -> DashboardAttentionSection(
+            summary = AttentionSummary.from(dashboard, listOf(id)),
             onOpen = {},
-            shape = shape,
         )
-        DashboardModules.ANOMALY -> AnomalyModuleView(
-            items = dashboard.anomalies,
-            onOpenProvider = {},
-            shape = shape,
-        )
-        DashboardModules.BALANCE -> BalanceAlertModuleView(
-            items = dashboard.balanceAlerts,
-            onOpenProvider = {},
-            shape = shape,
-        )
-        DashboardModules.UPCOMING -> UpcomingChargesModuleView(
-            items = dashboard.upcoming,
-            onOpenProvider = {},
-            shape = shape,
-        )
-        DashboardModules.QUOTA -> FreeQuotaModuleView(
-            items = dashboard.freeQuota,
-            onOpenProvider = {},
-            shape = shape,
-        )
+        // 即将扣款已下架：旧版式里存着也不再画。
+        DashboardModules.UPCOMING -> Unit
         DashboardModules.SERVICES -> PinnedServicesModuleView(
             items = dashboard.pinnedServices,
             onOpen = {},

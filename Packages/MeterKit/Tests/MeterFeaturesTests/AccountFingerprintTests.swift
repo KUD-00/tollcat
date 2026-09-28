@@ -65,6 +65,35 @@ struct AccountFingerprintTests {
         #expect(mixed == lower)
     }
 
+    @Test("值里夹换行拼不出别人的指纹")
+    func newlineInValueDoesNotForgeAnotherIdentity() {
+        let victim = AccountFingerprint.hash(
+            providerID: .cloudflare,
+            fields: [
+                CredentialField.accountID.rawValue: "y",
+                CredentialField.email.rawValue: "x",
+            ]
+        )
+        let forged = AccountFingerprint.hash(
+            providerID: .cloudflare,
+            fields: [CredentialField.accountID.rawValue: "y\nemail=x"]
+        )
+        let forgedCRLF = AccountFingerprint.hash(
+            providerID: .cloudflare,
+            fields: [CredentialField.accountID.rawValue: "y\r\nemail=x"]
+        )
+        #expect(victim != nil)
+        #expect(forged != nil)
+        #expect(victim != forged)
+        #expect(victim != forgedCRLF)
+        #expect(forged != forgedCRLF)
+        // 不含换行的输入仍是旧编码，已落盘的指纹继续可比。
+        #expect(AccountFingerprint.canonicalString(fields: [
+            CredentialField.accountID.rawValue: "y",
+            CredentialField.email.rawValue: "x",
+        ]) == "accountID=y\nemail=x")
+    }
+
     @Test("导入的指纹原样比对，不重算")
     func importedFingerprintIsComparedAsStored() {
         let stored = "deadbeef-imported-not-recomputed"

@@ -32,14 +32,30 @@ package enum ProductInbox {
         )
     }
 
+    /// keyID 只能是一个路径段，字符集与 Worker 路由一致（`[A-Za-z0-9_-]{1,64}`）。
+    /// 按 urlPathAllowed 编码不转义 `/`：`..` 会把带读钥的 DELETE 改写到 `/v1/inbox`，
+    /// 等于把整个信箱删掉。不合规的直接拒绝，不发请求。
     package static func revokeKeyJson(readKey: String, keyID: String) -> String {
-        let encoded = keyID.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? keyID
-        return request(
-            url: URL(string: "https://api.tollcat.app/v1/inbox/ingest-keys/\(encoded)")!,
-            method: "DELETE",
-            bearer: readKey,
-            body: nil
-        )
+        guard isIngestKeyID(keyID),
+              let url = URL(string: "https://api.tollcat.app/v1/inbox/ingest-keys/\(keyID)")
+        else {
+            return JNIJSON.stringify(["ok": false, "error": "invalid key id"])
+        }
+        return request(url: url, method: "DELETE", bearer: readKey, body: nil)
+    }
+
+    static func isIngestKeyID(_ keyID: String) -> Bool {
+        (1...64).contains(keyID.utf8.count) && keyID.utf8.allSatisfy { byte in
+            switch byte {
+            case UInt8(ascii: "A")...UInt8(ascii: "Z"),
+                 UInt8(ascii: "a")...UInt8(ascii: "z"),
+                 UInt8(ascii: "0")...UInt8(ascii: "9"),
+                 UInt8(ascii: "_"), UInt8(ascii: "-"):
+                return true
+            default:
+                return false
+            }
+        }
     }
 
     private static func request(url: URL, method: String, bearer: String?, body: String?) -> String {

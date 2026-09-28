@@ -6,7 +6,7 @@
     "deploy": "wrangler deploy",
     "types": "wrangler types",
     "typecheck": "wrangler types && tsc --noEmit -p tsconfig.json",
-    "test": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test tests/http.test.ts"
+    "test": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test tests/http.test.ts tests/tipProof.test.ts"
   },
   "devDependencies": {
     "typescript": "^5.9.2",

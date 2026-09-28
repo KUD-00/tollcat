@@ -112,9 +112,10 @@ fun ManualUsageEntrySheet(
             )
             PrimaryButton(
                 onClick = {
-                    parsed?.let { onSave("%.2f".format(it), periodMillis) }
+                    // 落盘一律用小数点：按默认 locale 格式化会在德语等环境存成 "12,34"。
+                    parsed?.let { onSave(String.format(Locale.US, "%.2f", it), periodMillis) }
                 },
-                enabled = parsed != null && parsed >= 0,
+                enabled = parsed != null && parsed >= 0 && parsed <= MAX_MANUAL_USD,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.services_save))
@@ -175,3 +176,6 @@ private fun addMonths(millis: Long, months: Int): Long {
 private fun yearOf(millis: Long): Int {
     return Calendar.getInstance().apply { timeInMillis = millis }.get(Calendar.YEAR)
 }
+
+/** 手填的月用量上限。超长粘贴会溢出成 Infinity，Infinity >= 0 以前照样能存。 */
+private const val MAX_MANUAL_USD = 1_000_000_000.0

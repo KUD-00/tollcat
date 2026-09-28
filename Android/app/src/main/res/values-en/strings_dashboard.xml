@@ -80,7 +80,6 @@
     <string name="superlative_share">Biggest share</string>
     <string name="superlative_rise">Biggest rise</string>
     <string name="superlative_stale">Longest since refresh</string>
-    <string name="relative_today">Today</string>
     <string name="dashboard_edit_showing">Showing</string>
     <string name="dashboard_edit_more">More modules</string>
     <string name="dashboard_edit_reorder">Drag to reorder. Month to Date and Breakdown always stay on top, and modules without data hide themselves.</string>
@@ -97,4 +96,20 @@
     <string name="module_categories_summary">Split by category: AI inference, hosting, databases and so on.</string>
     <string name="module_superlatives_summary">The biggest rise, the biggest share, the longest since a refresh.</string>
     <string name="module_budget_summary">How much of this month’s budget is used.</string>
+    <string name="dashboard_hero_now">So far</string>
+    <string name="dashboard_hero_projected">By month end</string>
+    <string name="dashboard_hero_today">Today, %1$s</string>
+    <string name="dashboard_urgent_anomaly">%1$s is up %2$s from this time last month</string>
+    <string name="dashboard_urgent_balance">%1$s balance lasts about %2$d more days</string>
+    <string name="dashboard_urgent_quota">%1$s has used %2$d%% of its free tier</string>
+    <string name="dashboard_card_anomaly">%1$s vs. last month</string>
+    <string name="dashboard_card_balance">%1$s balance left</string>
+    <string name="dashboard_card_quota">%1$s free tier</string>
+    <string name="dashboard_card_days">%1$d days</string>
+    <string name="dashboard_fab_menu">Add and edit</string>
+    <string name="dashboard_add_subscription">Add a fixed subscription</string>
+    <string name="dashboard_fab_close">Collapse</string>
+    <string name="dashboard_budget_marker">Budget %1$s</string>
+    <string name="dashboard_budget_spent">Spent %1$s</string>
+    <string name="dashboard_budget_remaining">%1$s left</string>
 </resources>

@@ -68,9 +68,25 @@ public struct HTTPExchange: Identifiable, Sendable, Hashable {
             lines.append("Authorization: Bearer ***")
         }
         if let error {
-            lines.append(String(describing: error))
+            lines.append(errorSummary(error))
         }
         return lines.joined(separator: "\n")
+    }
+
+    /// `String(describing:)` 对 URLError / NSError 会带出 userInfo 里的
+    /// `NSErrorFailingURLStringKey`——那是原始 URL，query 里的 key 没打码，
+    /// 上面辛苦打码的 URL 在这一行又原样漏出去。只留域和码。
+    private static func errorSummary(_ error: Error) -> String {
+        if let urlError = error as? URLError {
+            return "URLError \(urlError.code.rawValue)"
+        }
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain || nsError.userInfo[NSURLErrorFailingURLStringErrorKey] != nil
+            || nsError.userInfo[NSURLErrorFailingURLErrorKey] != nil
+        {
+            return "\(nsError.domain) \(nsError.code)"
+        }
+        return String(describing: error)
     }
 
     /// 正文里按字段名打码的键。Azure / Atlas / IBM 换 token 的响应体带

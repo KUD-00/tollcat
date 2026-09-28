@@ -17,4 +17,7 @@
     <Compile Include="..\app\Rendering\SvgPathTokenizer.cs" Link="SvgPathTokenizer.cs" />
     <Compile Include="..\app\Rendering\CatMotion.cs" Link="CatMotion.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shared\fixtures\ledger-v4.json" CopyToOutputDirectory="PreserveNewest" Link="ledger-v4.json" />
+  </ItemGroup>
 </Project>

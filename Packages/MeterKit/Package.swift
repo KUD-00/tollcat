@@ -7,7 +7,8 @@ import PackageDescription
 let package = Package(
     name: "MeterKit",
     defaultLocalization: "zh-Hans",
-    platforms: [.iOS(.v26), .macOS(.v26)],
+    // watchOS 只为手表壳：它只链 MeterGlance（零依赖），其余 target 从来不在手表上编。
+    platforms: [.iOS(.v26), .macOS(.v26), .watchOS(.v26)],
     products: [
         .library(name: "MeterCore", targets: ["MeterCore"]),
         .library(name: "MeterDesign", targets: ["MeterDesign"]),
@@ -18,6 +19,8 @@ let package = Package(
         .library(name: "MeterInbox", targets: ["MeterInbox"]),
         .library(name: "MeterFeedback", targets: ["MeterFeedback"]),
         .library(name: "MeterUsage", targets: ["MeterUsage"]),
+        .library(name: "MeterGlance", targets: ["MeterGlance"]),
+        .library(name: "MeterDashboard", targets: ["MeterDashboard"]),
         .library(name: "MeterModules", targets: ["MeterModules"]),
         .library(name: "MeterFeatures", targets: ["MeterFeatures"]),
     ],
@@ -77,18 +80,43 @@ let package = Package(
         // 匿名页面计数。零依赖叶子：不认识 provider、不认识金额、不落库。
         .target(name: "MeterUsage"),
 
-        // 仪表盘模块的视图层：模块本身 + 它们读的那些值。
+        // 「一眼」：手表表盘、智能叠放、iPhone 锁屏那几格，和手表 App 那一屏。
+        //
+        // **零依赖**，和 MeterFeedback 同一个理由：手表壳只链这一个，所以
+        // 「凭据、账本、厂商适配器被带上手表」在编译期就不可能发生。
+        // 它收的是 iPhone 已经折好、排好字的一份 `Glance`，自己不折算、不格式化金额。
+        .target(
+            name: "MeterGlance",
+            resources: [.process("Resources")]
+        ),
+
+        // 仪表盘的折算：账本 → 各模块要画的值（builder + 值类型），全是纯函数。
+        //
+        // 单独一个 target 是为了 **四个平台共用同一份**。Android / Windows / CLI 的桥
+        // 把这个目录软链进各自的包，直接调这里的 builder——以前桥里抄了一份，
+        // 抄的那份悄悄漂走（订阅只算月付、年付不摊）。所以这里不许出现 SwiftUI、
+        // MeterDesign、`LocalizedStringResource` 这些 Android 上编不过的东西，
+        // 文案走 MeterFormat 的 `PortableText`，`check-source-invariants.py` 按这条扫。
+        .target(
+            name: "MeterDashboard",
+            dependencies: ["MeterCore", "MeterFormat"],
+            resources: [.process("Resources")]
+        ),
+
+        // 仪表盘模块的视图层：模块本身。
         //
         // 单独一个 target 是为了 **widget 链得到**。Widget 不能链 MeterFeatures
         // （那会把三十多家账单适配器一起拖进扩展，SPEC 第 09 节也不许 widget 自己调 API），
-        // 但模块视图本身只认「已经折算好的值」。所以视图和值在这里，
-        // 「怎么把账本折算成这些值」（各家 builder、DashboardModel）留在 MeterFeatures。
+        // 但模块视图本身只认「已经折算好的值」。值和 builder 在 MeterDashboard，
+        // 取数、落库、DashboardModel 留在 MeterFeatures。
         //
-        // 依赖只到 MeterCore / MeterDesign / MeterFormat：
+        // 依赖只到 MeterCore / MeterDesign / MeterFormat / MeterDashboard / MeterGlance：
         // 这张依赖表就是「widget 会链进什么」的安全说明书，别往里加。
         .target(
             name: "MeterModules",
-            dependencies: ["MeterCore", "MeterDesign", "MeterFormat"],
+            // MeterGlance 是零依赖叶子：这条边只让 widget 多链一份值类型和几块锁屏视图，
+            // 不会顺带拖进别的东西。`GlanceBuilder`（仪表内容 → 一眼）住在这边。
+            dependencies: ["MeterCore", "MeterDesign", "MeterFormat", "MeterDashboard", "MeterGlance"],
             resources: [.process("Resources")]
         ),
 
@@ -96,9 +124,9 @@ let package = Package(
         .target(
             name: "MeterFeatures",
             dependencies: [
-                "MeterCore", "MeterDesign", "MeterFormat", "MeterModules",
+                "MeterCore", "MeterDesign", "MeterFormat", "MeterDashboard", "MeterModules",
                 "MeterProviders", "MeterPersistence", "MeterTips", "MeterInbox",
-                "MeterFeedback", "MeterUsage",
+                "MeterFeedback", "MeterUsage", "MeterGlance",
             ],
             resources: [.process("Resources")]
         ),

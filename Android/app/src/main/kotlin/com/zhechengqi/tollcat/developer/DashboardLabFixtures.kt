@@ -20,11 +20,13 @@ import com.zhechengqi.tollcat.UpcomingRow
  * 只构造值对象，不碰 store。
  */
 object DashboardLabFixtures {
-    val contents: DashboardSnapshot = make()
-
-    init {
-        DashboardLabModules.defaultOrder.forEach { id ->
-            check(DashboardLabModules.has(contents, id)) { "lab fixture missing $id" }
+    // lazy：make() 读的是下面才声明的 private val；对象按声明顺序初始化，
+    // 在这一行（或 init 块里）直接调用时它们还是 null，打开实验室/画廊就崩。
+    val contents: DashboardSnapshot by lazy {
+        make().also { built ->
+            DashboardLabModules.defaultOrder.forEach { id ->
+                check(DashboardLabModules.has(built, id)) { "lab fixture missing $id" }
+            }
         }
     }
 
@@ -86,7 +88,7 @@ object DashboardLabFixtures {
         superlatives = listOf(
             SuperlativeRow("biggestRise", "AWS", "+62%", "aws", "", "aws"),
             SuperlativeRow("biggestShare", "Cloudflare", "45%", "cloudflare", "", "cloudflare"),
-            SuperlativeRow("stalest", "Neon", "3", "neon", "", "neon"),
+            SuperlativeRow("stalest", "Neon", "3 天前", "neon", "", "neon"),
         ),
         pinnedServices = services,
         subscriptions = subscriptions,

@@ -12,6 +12,7 @@ struct InboxHandoffStepView: View {
     /// 同 `SetupCredentialsStepView.onClose`。
     var onClose: (() -> Void)? = nil
     @State private var isPromptExpanded = false
+    @State private var actionFailed = false
     @FocusState private var focusedNickname: NicknameField?
 
     private enum NicknameField: Hashable {
@@ -35,6 +36,7 @@ struct InboxHandoffStepView: View {
                 nicknameSection
             }
         }
+        .actionFailedAlert(isPresented: $actionFailed)
         .formStyle(.grouped)
         .meterGroupedRowButtons()
         .meterGroupedSectionCard()
@@ -45,7 +47,12 @@ struct InboxHandoffStepView: View {
         .meterPrimaryActionBar(ignoresKeyboard: true) {
             Button {
                 Task {
-                    try? await model.connect()
+                    do {
+                        try await model.connect()
+                    } catch {
+                        actionFailed = true
+                        return
+                    }
                     if model.saveToken > 0 {
                         onSaved()
                     }

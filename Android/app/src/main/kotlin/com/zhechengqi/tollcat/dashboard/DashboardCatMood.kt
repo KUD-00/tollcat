@@ -3,6 +3,7 @@ package com.zhechengqi.tollcat.dashboard
 import androidx.annotation.StringRes
 import com.zhechengqi.tollcat.DashboardSnapshot
 import com.zhechengqi.tollcat.R
+import com.zhechengqi.tollcat.ui.cat.CatMood
 
 enum class DashboardCatMood(val raw: String, @StringRes val labelRes: Int) {
     Normal("normal", R.string.dashboard_cat_mood_normal),
@@ -25,3 +26,15 @@ enum class DashboardCatMood(val raw: String, @StringRes val labelRes: Int) {
         }
     }
 }
+
+/** 域内表情 → 画猫的表情。1:1 对应，猫包不认识账单。 */
+internal val DashboardCatMood.art: CatMood
+    get() = when (this) {
+        DashboardCatMood.Normal -> CatMood.Normal
+        DashboardCatMood.Sleeping -> CatMood.Sleeping
+        DashboardCatMood.Saved -> CatMood.Saved
+        DashboardCatMood.Alert -> CatMood.Alert
+        DashboardCatMood.Shocked -> CatMood.Shocked
+        DashboardCatMood.Awkward -> CatMood.Awkward
+        DashboardCatMood.Dead -> CatMood.Dead
+    }

@@ -34,10 +34,19 @@ if bad:
 PY
 }
 
+# Commits already on main before this gate caught squash-merge bodies. main is
+# linear and force-push is off, so they can never be rewritten; without this list
+# `--history` stays red forever. Exact SHAs only — never add a commit that can
+# still be amended.
+HISTORY_EXEMPT=(
+  93747b16ddf2064e9826754fa792d6ed8b847b6a
+)
+
 if [[ "${1:-}" == "--history" ]]; then
   status=0
   tmp="$(mktemp)"; trap 'rm -f "$tmp"' EXIT
   while read -r sha; do
+    [[ " ${HISTORY_EXEMPT[*]} " == *" $sha "* ]] && continue
     git log -1 --format=%B "$sha" > "$tmp"
     if ! check_file "$(git log -1 --format=%h "$sha")" "$tmp"; then
       status=1

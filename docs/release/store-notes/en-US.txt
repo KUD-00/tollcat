@@ -1,10 +1,12 @@
-TollCat comes to the Mac
+TollCat 1.3: on Android, and on your wrist
 
-· The Mac app is here
-  The same app as on iPhone, with the same setup guides and the same numbers. Your credentials still never leave the machine you typed them into.
-· Right there in the menu bar
-  The cat sits in the menu bar, and clicking it shows what this month has cost so far. Prefer the amount always on show? Settings has three styles to choose from.
-· Closing the window does not quit it
-  Close the window and it tucks itself into the menu bar instead of quitting. You can also have it start with the Mac, so the number is already waiting for you in the morning.
-· It updates itself
-  The copy you download from the site keeps an eye out for new versions on its own, so you never have to come back just to install one.
+· On your wrist, too
+  The iPhone app now comes with an Apple Watch app and watch face complications, so one look at your wrist tells you what this month has cost so far. You can put one on the Lock Screen as well.
+· TollCat on Android
+  The same calculations and the same setup guides as on iPhone, with the dashboard rebuilt in Material 3. Your credentials stay in this phone’s Android Keystore.
+· Itemized lines in other currencies are converted too
+  For services billed in euros, yen or other currencies, the itemized lines used to show the original amount labelled as dollars. They now use the same exchange rate as the total.
+· A failed update no longer shows $0
+  A few services reported $0 for the month when a credential had expired or their API returned an error. They now tell you the update failed and keep the last number.
+· A security review
+  This release went through a security review. Removing a service now revokes its inbox ingest key before clearing local records, and if you’re offline you’ll be told, instead of a working key being left behind.

@@ -37,7 +37,8 @@ concurrency:
 jobs:
   api:
     name: toll-api
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.api }}
+    # 生产 Cloudflare token 只给 main：workflow_dispatch 能选任意分支，别的分支能换掉 wrangler 入口。
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || inputs.api) }}
     runs-on: ubuntu-latest
     # Merge means deploy: this environment has no required reviewers; it only holds the token.
     environment: api
@@ -77,7 +78,8 @@ jobs:
 
   site:
     name: tollcat.app
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.site }}
+    # 生产 Cloudflare token 只给 main：workflow_dispatch 能选任意分支，别的分支能换掉 wrangler 入口。
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || inputs.site) }}
     runs-on: ubuntu-latest
     environment: api
     defaults:

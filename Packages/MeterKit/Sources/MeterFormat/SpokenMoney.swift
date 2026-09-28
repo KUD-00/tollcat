@@ -1,8 +1,6 @@
 import Foundation
 import MeterCore
 
-// Android 的 swift-foundation 没有 LocalizedStringResource，这个文件不进 .so。
-#if !os(Android)
 /// VoiceOver 要读「47 美元 20 美分」，不能把 "$47.20" 念成一串符号。
 public enum SpokenMoney {
     public static func label(
@@ -44,30 +42,30 @@ public enum SpokenMoney {
         let name = DisplayCurrencyCopy.localizedName(for: presentation.currencyCode)
         let isNegative = presentation.amount(from: money) < 0
         if isNegative {
-            return String(localized: L("负 \(amount) \(name)"))
+            return L("负 \(amount) \(name)")
         }
-        return String(localized: L("\(amount) \(name)"))
+        return L("\(amount) \(name)")
     }
 
     private static func zero(isNegative: Bool) -> String {
         if isNegative {
-            return String(localized: L("负 0 美元"))
+            return L("负 0 美元")
         }
-        return String(localized: L("0 美元"))
+        return L("0 美元")
     }
 
     private static func centsOnly(_ cents: Int, isNegative: Bool) -> String {
         if isNegative {
-            return String(localized: L("负 \(cents) 美分"))
+            return L("负 \(cents) 美分")
         }
-        return String(localized: L("\(cents) 美分"))
+        return L("\(cents) 美分")
     }
 
     private static func dollarsOnly(_ dollars: Int, isNegative: Bool) -> String {
         if isNegative {
-            return String(localized: L("负 \(dollars) 美元"))
+            return L("负 \(dollars) 美元")
         }
-        return String(localized: L("\(dollars) 美元"))
+        return L("\(dollars) 美元")
     }
 
     private static func dollarsAndCents(
@@ -76,9 +74,8 @@ public enum SpokenMoney {
         isNegative: Bool
     ) -> String {
         if isNegative {
-            return String(localized: L("负 \(dollars) 美元 \(cents) 美分"))
+            return L("负 \(dollars) 美元 \(cents) 美分")
         }
-        return String(localized: L("\(dollars) 美元 \(cents) 美分"))
+        return L("\(dollars) 美元 \(cents) 美分")
     }
 }
-#endif

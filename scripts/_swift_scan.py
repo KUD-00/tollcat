@@ -49,7 +49,7 @@ def gate_text(root: Path, path: Path, errors: list[str]) -> str | None:
 
 def scan_app_widget_sources(root: Path) -> list[Path]:
     files: list[Path] = []
-    for folder in ("App", "Mac", "Widget", "Packages/MeterKit/Sources"):
+    for folder in ("App", "Mac", "Widget", "Watch", "WatchWidget", "Packages/MeterKit/Sources"):
         files.extend(swift_files(root / folder))
     return files
 

@@ -1,4 +1,5 @@
 import Foundation
+import MeterDashboard
 import Observation
 import SwiftData
 import SwiftUI
@@ -618,6 +619,15 @@ public final class DashboardModel {
         return (try? StoredCredentialFields.decode(raw)) ?? [:]
     }
 
+    /// 查重专用：读不到 / 解不开抛出来，不折成空表。空表在 `secretsCollide` 里等于「没有重叠」，
+    /// 钥匙串一锁就会放第二份同账号进来、本月花费翻倍。条目本来就不存在（信箱、手填）才是空表。
+    private func storedFieldsForCollisionCheck(_ state: ProviderConnectionState) throws -> [String: String] {
+        guard let raw = try credentials.read(reference: state.credentialReference) else {
+            return [:]
+        }
+        return try StoredCredentialFields.decode(raw)
+    }
+
     func connectionStates() -> [ProviderConnectionState] {
         connections
     }
@@ -648,16 +658,30 @@ public final class DashboardModel {
         didWrite()
     }
 
+    /// 吊销是提交的一部分，不是尽力而为：任何一把没吊销成功就抛，调用方随之放弃本地归档 / 清空。
+    /// 本地记录是这把 key 最后一份 id，先删了它，服务端那把就再也没人能收回，
+    /// 泄露出去的投递 key 会一直能往信箱里写。已经吊销掉的那几把下次重试会走 404，按成功算。
     private func revokeInboxKeys(providerID: ProviderID) async throws {
         let states = connections.filter { $0.providerID == providerID }
         for state in states {
             if let keyID = state.inboxIngestKeyID, !keyID.isEmpty {
-                do {
-                    try await inbox.revokeKey(id: keyID)
-                } catch {
-                    TollCatLog.event("inbox", "revoke ingest key failed \(keyID) \(error)")
-                }
+                try await revokeIngestKey(id: keyID)
             }
+        }
+    }
+
+    /// 吊销一把投递 key。服务端 404 = 这个信箱里已经没有这把（早先吊销过，或上次其实成功了只是回包丢了），
+    /// 按已吊销算——否则重试永远卡在这一步。401 = 读 key 已被拒，信箱本身已经删了
+    /// （Worker 删信箱时连同全部投递 key 一起删），同样没有要吊销的；
+    /// 不放行的话读 key 坏掉的用户永远删不掉这些连接。其它失败（断网、5xx）原样抛给调用方。
+    func revokeIngestKey(id: String) async throws {
+        do {
+            try await inbox.revokeKey(id: id)
+        } catch let error as InboxError where error.httpStatus == 404 || error.httpStatus == 401 {
+            TollCatLog.event("inbox", "ingest key already gone \(id)")
+        } catch {
+            TollCatLog.event("inbox", "revoke ingest key failed \(id) \(error)")
+            throw error
         }
     }
 
@@ -714,7 +738,17 @@ public final class DashboardModel {
             return others.first { $0.remoteIdentityFingerprint == fingerprint }
         }
         for other in others {
-            let stored = storedFields(for: other.accountID)
+            let stored: [String: String]
+            do {
+                stored = try storedFieldsForCollisionCheck(other)
+            } catch {
+                // 读不出就当可能重复（fail closed）：宁可让用户等钥匙串解锁后再存一次，
+                // 也不要两份同账号一起进本月合计。已结束的接入不计入本月，不因它挡人。
+                guard other.isLive else { continue }
+                // 只记错误类型：解码错误的描述可能带出凭据片段，而这条日志是 public 的。
+                TollCatLog.event("setup", "collision check could not read stored credential \(type(of: error))")
+                return other
+            }
             if AccountFingerprint.secretsCollide(fields, stored) {
                 return other
             }
@@ -726,12 +760,9 @@ public final class DashboardModel {
     /// 删行会让它的快照变成孤儿，过去几个月的数字跟着塌。
     func removeConnection(accountID: AccountID) async throws {
         guard let state = connections.first(where: { $0.accountID == accountID }) else { return }
+        // 吊销失败就不归档：归档会丢掉这把 key 的 id，之后再也收不回来。
         if let keyID = state.inboxIngestKeyID, !keyID.isEmpty {
-            do {
-                try await inbox.revokeKey(id: keyID)
-            } catch {
-                TollCatLog.event("inbox", "revoke ingest key failed \(keyID) \(error)")
-            }
+            try await revokeIngestKey(id: keyID)
         }
         try store.archiveConnectionRecord(accountID: accountID, at: clock.now, calendar: clock.calendar)
         didWrite()

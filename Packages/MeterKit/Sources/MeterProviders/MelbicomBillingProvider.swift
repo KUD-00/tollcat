@@ -64,11 +64,13 @@ public struct MelbicomBillingProvider: BillingProvider, Sendable {
             if status == "cancelled" || status == "refunded" { continue }
             let amount = inv.total?.value ?? 0
             guard amount != 0 else { continue }
+            // 两个日期都读不出来的发票宁可不记：拿月初兜底会让它必中本月，把旧账算成这个月的钱。
+            guard let stamp = inv.date.flatMap({ BillingDateParser.parse($0, calendar: calendar) })
+                ?? inv.createdAt.flatMap({ BillingDateParser.parse($0, calendar: calendar) }) else {
+                continue
+            }
             let currency = inv.currency?.trimmingCharacters(in: .whitespacesAndNewlines)
             try currencies.observe((currency?.isEmpty == false) ? currency! : "USD", providerID: .melbicom)
-            let stamp = inv.date.flatMap { BillingDateParser.parse($0, calendar: calendar) }
-                ?? inv.createdAt.flatMap { BillingDateParser.parse($0, calendar: calendar) }
-                ?? current.start
             let label = inv.invoicenum ?? inv.id.map(String.init) ?? "invoice"
             if current.contains(stamp) {
                 currentTotal += amount

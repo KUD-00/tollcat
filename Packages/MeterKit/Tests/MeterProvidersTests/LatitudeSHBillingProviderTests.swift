@@ -12,6 +12,7 @@ struct LatitudeSHBillingProviderTests {
     @Test("周期 usage price cents 换算，忽略 credit balance")
     func sumsPeriodUsagePrice() async throws {
         let client = LiveProviderHarness.stub([
+            projectsResponse(currency: "USD"),
             (
                 LatitudeSHBillingProvider.usageURL(projectID: projectID),
                 LiveProviderHarness.json([
@@ -40,8 +41,40 @@ struct LatitudeSHBillingProviderTests {
         LiveProviderHarness.expectHostsDeclared(client)
     }
 
+    @Test("限定 projectID 时仍按团队币种换算")
+    func scopedProjectUsesTeamCurrency() async throws {
+        let client = LiveProviderHarness.stub([
+            projectsResponse(currency: "GBP"),
+            (
+                LatitudeSHBillingProvider.usageURL(projectID: projectID),
+                LiveProviderHarness.json([
+                    "data": [
+                        "attributes": [
+                            "period": [
+                                "start": "2026-08-01T00:00:00Z",
+                                "end": "2026-09-01T00:00:00Z",
+                            ],
+                            "price": 10000,
+                        ],
+                    ]
+                ] as [String: Any])
+            ),
+        ])
+        let snapshot = try await LatitudeSHBillingProvider(
+            httpClient: client,
+            now: { now },
+            calendar: calendar,
+            rateSource: SharedExchangeRates(ExchangeRates(usdPerUnit: ["GBP": Decimal(string: "1.25")!]))
+        ).fetch(credential: credential)
+        // 100.00 GBP × 1.25 = 125.00 USD，明细行同一个汇率
+        #expect(snapshot.currentSpendUSD == Money(usd: Decimal(string: "125")!))
+        #expect(snapshot.converted?.currency == "GBP")
+        #expect(snapshot.lines?.first?.amountUSD == Money(usd: Decimal(string: "125")!))
+    }
+
     @Test("401 / 403")
     func statusMapping() async {
+        // 项目列表拿不到时照旧按 ID 取，认证错误由 usage 那一跳报出来。
         let url = LatitudeSHBillingProvider.usageURL(projectID: projectID)
         await LiveProviderHarness.expectStatus(401, code: .unauthorized, key: .invalidCredentials) { status in
             try await provider(
@@ -53,6 +86,23 @@ struct LatitudeSHBillingProviderTests {
                 LiveProviderHarness.stub([(url, LiveProviderHarness.emptyJSON(status: status))])
             ).fetch(credential: credential)
         }
+    }
+
+    private func projectsResponse(currency: String) -> (URL, StubHTTPResponse) {
+        (
+            LatitudeSHBillingProvider.projectsURL,
+            LiveProviderHarness.json([
+                "data": [
+                    [
+                        "id": projectID,
+                        "attributes": [
+                            "name": "Demo",
+                            "team": ["currency": ["code": currency]],
+                        ],
+                    ],
+                ]
+            ] as [String: Any])
+        )
     }
 
     private var credential: Credential {

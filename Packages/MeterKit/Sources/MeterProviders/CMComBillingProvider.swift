@@ -53,11 +53,18 @@ public struct CMComBillingProvider: BillingProvider, Sendable {
             headers: headers
         )
         let summary = payload.summary
-        let amount = summary?.localPrice?.value
-            ?? summary?.totalPrice?.value
-            ?? 0
-        let currency = summary?.localCurrency
-            ?? summary?.priceCurrency
+        // 金额和币种必须成对取：本地价缺了本地币种时再去配 priceCurrency，
+        // 就是拿一种钱的数字贴另一种钱的标签。
+        let amount: Decimal
+        let currency: String?
+        if let local = summary?.localPrice?.value,
+           let localCurrency = BillingCurrency.normalize(summary?.localCurrency) {
+            amount = local
+            currency = localCurrency
+        } else {
+            amount = summary?.totalPrice?.value ?? 0
+            currency = summary?.priceCurrency
+        }
         try currencies.observe(currency, providerID: .cmcom)
         if amount != 0 {
             lines.add(
@@ -69,21 +76,16 @@ public struct CMComBillingProvider: BillingProvider, Sendable {
             )
         }
 
-        let converted = try currencies.convert(
-            amount,
-            rates: rateSource.current,
-            providerID: .cmcom
-        )
-        return Snapshot(
+        // 合计和明细行按原币拼好再统一换，明细行才不会拿 EUR 冒充 USD。
+        return try Snapshot(
             providerID: .cmcom,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: amount),
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadTransactions(

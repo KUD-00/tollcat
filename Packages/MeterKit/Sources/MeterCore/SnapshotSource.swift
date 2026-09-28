@@ -14,10 +14,14 @@ public enum SnapshotSource: String, Hashable, Sendable, Codable, CaseIterable {
     /// 用户在详情里填的某个月花费。合同和信箱相同，只是输入面在 App 里。
     case manual
 
-    /// JSON 容错入口（Android JNI 解 snapshot JSON 用）：字段缺失或不认识时按 `api` 读。
+    /// JSON 容错入口（Android JNI 解 snapshot JSON 用）。
+    ///
+    /// 字段缺失（没有 source 列之前落的旧行）按 `api` 读。**不认识的值**不能也按 `api`：
+    /// 那是唯一会声称「和官方后台一致」的来源，伪造或未来的来源串就这样被抬成官方数据。
+    /// 按 `inbox` 读——不是 App 自己取的，不对账。
     public static func fromStored(_ raw: String?) -> SnapshotSource {
-        guard let raw, let value = SnapshotSource(rawValue: raw) else { return .api }
-        return value
+        guard let raw, !raw.isEmpty else { return .api }
+        return SnapshotSource(rawValue: raw) ?? .inbox
     }
 
     /// 能不能声称和官方后台对得上。详情页那句话按它选。

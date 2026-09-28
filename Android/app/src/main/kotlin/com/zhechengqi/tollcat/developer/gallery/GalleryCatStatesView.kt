@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -28,11 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.TollCatTheme
-import com.zhechengqi.tollcat.dashboard.ComparisonContent
 import com.zhechengqi.tollcat.dashboard.DashboardCatMood
-import com.zhechengqi.tollcat.dashboard.DashboardCatStage
 import com.zhechengqi.tollcat.dashboard.art
-import com.zhechengqi.tollcat.developer.GalleryFixtures
 import com.zhechengqi.tollcat.ui.cat.CatView
 import kotlin.math.abs
 
@@ -40,19 +38,6 @@ import kotlin.math.abs
 @Composable
 fun GalleryCatStatesView(onBack: () -> Unit, modifier: Modifier = Modifier) {
     val studio = remember { GalleryCatStudio() }
-    val composition = GalleryFixtures.specComposition
-    val trend = GalleryFixtures.trend
-    val comparison = ComparisonContent(
-        percentText = "+62%",
-        caption = stringResource(R.string.dev_row_percent_sub),
-        spokenLabel = "+62%",
-        currentWeight = 1f,
-        previousWeight = 1f / 1.62f,
-        currentLabel = stringResource(R.string.hero_label),
-        previousLabel = stringResource(R.string.hero_label),
-        tone = ComparisonContent.Tone.Up,
-    )
-    val empty = studio.mood == DashboardCatMood.Sleeping
     GalleryScaffold(title = stringResource(R.string.dev_gallery_cats), onBack = onBack, modifier = modifier) {
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             CatView(mood = studio.mood.art, size = studio.sizeDp.dp)
@@ -113,18 +98,20 @@ fun GalleryCatStatesView(onBack: () -> Unit, modifier: Modifier = Modifier) {
             Spacer(Modifier.height(8.dp))
         }
         Spacer(Modifier.height(8.dp))
-        DashboardCatStage(
-            composition = if (empty) emptyList() else composition,
-            comparison = if (studio.mood == DashboardCatMood.Shocked || studio.mood == DashboardCatMood.Dead) {
-                comparison
-            } else {
-                null
-            },
-            trend = if (empty) emptyList() else trend,
-            mood = studio.mood,
-            speech = speechFor(studio.mood),
-            onOpenComposition = {},
-        )
+        // 仪表盘主页暂时不放猫；台词照样在这里看，等猫回来时直接用。
+        Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            CatView(mood = studio.mood.art, size = 72.dp, isAnimated = false)
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                shape = RoundedCornerShape(topStart = 4.dp, topEnd = 20.dp, bottomStart = 20.dp, bottomEnd = 20.dp),
+            ) {
+                Text(
+                    speechFor(studio.mood),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                )
+            }
+        }
     }
 }
 

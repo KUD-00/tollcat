@@ -8,6 +8,7 @@ struct CredentialManagementSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var setup: SetupPresentation?
     @State private var accountPendingDeletion: AccountID?
+    @State private var actionFailed = false
 
     private enum SetupPresentation: Identifiable {
         case rotate(AccountID)
@@ -55,6 +56,7 @@ struct CredentialManagementSheet: View {
                 }
             }
         }
+        .actionFailedAlert(isPresented: $actionFailed)
         .formStyle(.grouped)
         .meterGroupedRowButtons()
         .meterGroupedSectionCard()
@@ -150,7 +152,12 @@ struct CredentialManagementSheet: View {
         guard let accountID = accountPendingDeletion else { return }
         accountPendingDeletion = nil
         Task {
-            await model.deleteUsageAccount(accountID)
+            do {
+                try await model.deleteUsageAccount(accountID)
+            } catch {
+                actionFailed = true
+                return
+            }
             if model.usageAccounts.isEmpty {
                 dismiss()
             }

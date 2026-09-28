@@ -275,6 +275,11 @@ def main() -> None:
     shutil.copy2(OUT / "AppIcon.png", appicon / "AppIcon.png")
     shutil.copy2(OUT / "AppIcon-dark.png", appicon / "AppIcon-dark.png")
     shutil.copy2(OUT / "AppIcon-tinted.png", appicon / "AppIcon-tinted.png")
+    # 手表同一张 1024：系统裁成圆，$ 和眼睛都在圆里。手表只有这一个槽位。
+    shutil.copy2(
+        OUT / "AppIcon.png",
+        ROOT / "Watch/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+    )
     # Mac 槽位和 iOS 1024 同一张。asset catalog 里 idiom=mac 512@2x 指向它。
     # 分享卡不自己画一只猫冒充图标：用同一张位图，改了图标这里跟着变。
     shutil.copy2(

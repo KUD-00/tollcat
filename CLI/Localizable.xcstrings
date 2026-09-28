@@ -1,0 +1,405 @@
+{
+  "sourceLanguage": "zh-Hans",
+  "strings": {
+    "本月至今": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Month to date"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今月の累計"
+          }
+        }
+      }
+    },
+    "预计月底": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projected"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月末見込み"
+          }
+        }
+      }
+    },
+    "还没有接入任何服务。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No services connected."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接続しているサービスはない。"
+          }
+        }
+      }
+    },
+    "用法：": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usage:"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使い方："
+          }
+        }
+      }
+    },
+    "用法:\n  tollcat                 本月合计\n  tollcat --oneline       一行，给状态栏\n  tollcat --json          机器可读\n  tollcat add <服务>      写入凭据\n  tollcat remove <服务>   移除\n  tollcat refresh         强制拉新\n  tollcat providers       支持的服务\n  tollcat --version\n\n旗标:\n  --no-color              关闭颜色（也认 NO_COLOR）\n  --locale <tag>          覆盖 LANG\n  --max-age <分钟>        账本缓存时长，默认 30，0 表示总是拉新": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usage:\n  tollcat                 this month's total\n  tollcat --oneline       one line, for a status bar\n  tollcat --json          machine-readable\n  tollcat add <service>   save credentials\n  tollcat remove <service>\n  tollcat refresh         fetch now\n  tollcat providers       supported services\n  tollcat --version\n\nFlags:\n  --no-color              no color (also honors NO_COLOR)\n  --locale <tag>          override LANG\n  --max-age <minutes>     ledger cache, default 30, 0 = always fetch"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使い方:\n  tollcat                 今月の合計\n  tollcat --oneline       1行。ステータスバー用\n  tollcat --json          機械可読\n  tollcat add <サービス>  認証情報を保存\n  tollcat remove <サービス>\n  tollcat refresh         今すぐ取得\n  tollcat providers       対応サービス\n  tollcat --version\n\nフラグ:\n  --no-color              色を消す（NO_COLOR も見る）\n  --locale <tag>          LANG を上書き\n  --max-age <分>          台帳キャッシュ。既定 30。0 で毎回取得"
+          }
+        }
+      }
+    },
+    "未知服务：%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown service: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知のサービス：%@"
+          }
+        }
+      }
+    },
+    "这家服务不接入。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This service isn't supported."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このサービスは対象外。"
+          }
+        }
+      }
+    },
+    "CLI 读不了这家：没有公开的账单接口。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CLI can't read this one: no public billing API."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CLI では読めない。公開の請求 API がない。"
+          }
+        }
+      }
+    },
+    "教程：%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guide: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手順：%@"
+          }
+        }
+      }
+    },
+    "要花钱取数，默认刷新会跳过。接入测试仍会打一次。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This one costs money to refresh, so the default refresh skips it. A connection test still hits the API once."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取得にお金がかかるので、通常の更新では飛ばす。接続テストでは一度だけ打つ。"
+          }
+        }
+      }
+    },
+    "已接入 %@。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ を接続した。"
+          }
+        }
+      }
+    },
+    "已移除 %@。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removed %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ を削除した。"
+          }
+        }
+      }
+    },
+    "部分刷新失败。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some refreshes failed."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一部の更新に失敗した。"
+          }
+        }
+      }
+    },
+    "未知旗标：%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown flag: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知のフラグ：%@"
+          }
+        }
+      }
+    },
+    "未知命令：%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown command: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知のコマンド：%@"
+          }
+        }
+      }
+    },
+    "用法错误。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usage error."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使い方が違う。"
+          }
+        }
+      }
+    },
+    "非交互环境请设置环境变量 TOLLCAT_<服务>_<字段>。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In a non-interactive session, set TOLLCAT_<SERVICE>_<FIELD>."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "対話できない環境では、環境変数 TOLLCAT_<サービス>_<フィールド> を設定して。"
+          }
+        }
+      }
+    },
+    "缺必填字段：%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missing required field: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "必須項目が足りない：%@"
+          }
+        }
+      }
+    },
+    "取数失败：%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fetch failed: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取得に失敗：%@"
+          }
+        }
+      }
+    },
+    "没有接入 %@。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ isn't connected."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ は接続されていない。"
+          }
+        }
+      }
+    },
+    "%@ ↗ 预计 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ↗ projected %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ↗ 見込み %@"
+          }
+        }
+      }
+    },
+    "%@ ↘ 预计 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ↘ projected %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ↘ 見込み %@"
+          }
+        }
+      }
+    },
+    "%@ · 预计 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · projected %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 見込み %@"
+          }
+        }
+      }
+    },
+    "Secret Service 不可用。凭据请用环境变量 TOLLCAT_<服务>_<字段>。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secret Service isn't available. Set credentials with TOLLCAT_<SERVICE>_<FIELD>."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secret Service が使えない。認証情報は環境変数 TOLLCAT_<サービス>_<フィールド> で渡して。"
+          }
+        }
+      }
+    },
+    "%@ 的凭据没能从钥匙环删除，已保留接入。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't delete the %@ credential from the keyring, so the service is still connected."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ の認証情報をキーリングから削除できなかったため、接続はそのままにした。"
+          }
+        }
+      }
+    }
+  }
+}

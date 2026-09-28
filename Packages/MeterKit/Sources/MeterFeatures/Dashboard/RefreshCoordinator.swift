@@ -26,7 +26,14 @@ final class RefreshCoordinator {
 
     private(set) var isRefreshing = false
     /// 付费账号刷新、以及 `refresh(accountID:)` 的那一行。
-    private(set) var refreshingAccountIDs: Set<AccountID> = []
+    ///
+    /// 由 `accountLockOwners` 推出来，不单独存：以前是一个裸 `Set`，全局那条的
+    /// `subtract(involved)` 会把后来单账号那条刚插进去的 id 一起删掉，锁提前松开。
+    var refreshingAccountIDs: Set<AccountID> { Set(accountLockOwners.keys) }
+
+    /// 每个被锁住的账号归哪一次加锁。释放时只删令牌对得上的——
+    /// 谁拿的锁谁放，别人的收尾碰不到它。
+    private var accountLockOwners: [AccountID: UUID] = [:]
 
     private let inboxClient: InboxClient
     private let credentials: any CredentialStore
@@ -46,10 +53,12 @@ final class RefreshCoordinator {
     ///
     /// 不并进 `run`：回填的失败语义和刷新不同（不标 stale、不改横幅、不算 tally），
     /// 硬塞进同一条管线只会让那条管线多两个分支。共用的是**锁**，不是流程。
+    ///
+    /// 全局刷新进行中也算占用：全局那条正在拉这家（付费的家用户勾了进全局时尤其），
+    /// 这时再开一条回填，就是同一家两条请求在飞、两条快照落盘。
     func withAccountLock<T>(_ id: AccountID, _ body: () async -> T) async -> T? {
-        guard !refreshingAccountIDs.contains(id) else { return nil }
-        refreshingAccountIDs.insert(id)
-        defer { refreshingAccountIDs.remove(id) }
+        guard let token = acquireAccountLock(id) else { return nil }
+        defer { releaseAccountLocks([id], token: token) }
         return await body()
     }
 
@@ -61,23 +70,29 @@ final class RefreshCoordinator {
         consume: @MainActor (BillingRefreshOutcome) async -> Void
     ) async -> RunResult {
         let involved = Set(jobs.map(\.id) + inboxTargets.map(\.accountID))
+        // 两种锁必须互斥，判据也必须是同一个：以前全局只看 `isRefreshing`、
+        // 单账号只看集合，回填 / 单行刷新占着 A 时全局照样开跑，同一家两条在飞。
+        // 整批被拒而不是跳过被占的那家：跳过会让横幅按「少刷了几家」去报成功。
+        let heldIDs: Set<AccountID>
+        let token: UUID
         switch lock {
         case .global:
-            guard !isRefreshing else { return .lockBusy }
+            guard !isRefreshing, involved.isDisjoint(with: accountLockOwners.keys) else {
+                return .lockBusy
+            }
             isRefreshing = true
-            refreshingAccountIDs.formUnion(involved)
+            token = claimAccountLocks(involved)
+            heldIDs = involved
         case .account(let id):
-            guard !refreshingAccountIDs.contains(id) else { return .lockBusy }
-            refreshingAccountIDs.insert(id)
+            guard let claimed = acquireAccountLock(id) else { return .lockBusy }
+            token = claimed
+            heldIDs = [id]
         }
         defer {
-            switch lock {
-            case .global:
+            if case .global = lock {
                 isRefreshing = false
-                refreshingAccountIDs.subtract(involved)
-            case .account(let id):
-                refreshingAccountIDs.remove(id)
             }
+            releaseAccountLocks(heldIDs, token: token)
         }
 
         guard !jobs.isEmpty || !inboxTargets.isEmpty else {
@@ -105,6 +120,29 @@ final class RefreshCoordinator {
             await consume(outcome)
         }
         return .ran
+    }
+
+    // MARK: - 账号锁
+
+    /// 单账号加锁：全局在跑或这家已被占，一律算忙。
+    private func acquireAccountLock(_ id: AccountID) -> UUID? {
+        guard !isRefreshing, accountLockOwners[id] == nil else { return nil }
+        return claimAccountLocks([id])
+    }
+
+    /// 调用方已确认这些 id 都空着；这里只负责盖同一个令牌。
+    private func claimAccountLocks(_ ids: Set<AccountID>) -> UUID {
+        let token = UUID()
+        for id in ids {
+            accountLockOwners[id] = token
+        }
+        return token
+    }
+
+    private func releaseAccountLocks(_ ids: Set<AccountID>, token: UUID) {
+        for id in ids where accountLockOwners[id] == token {
+            accountLockOwners[id] = nil
+        }
     }
 
     /// 全局刷新收谁：`costsMoneyToRefresh` 的家默认不进，除非用户显式勾了。

@@ -6,12 +6,11 @@ import MeterCore
 /// 文档：https://docs.typebot.com/api-reference/billing/list-invoices
 /// 源码：`packages/billing/src/api/handleListInvoices.ts` — `amount` = Stripe `invoice.subtotal`（最小货币单位）。
 /// 认证：`Authorization: Bearer <API token>`。Host：`app.typebot.io`（OpenAPI 亦列 `app.typebot.com`）。
-/// 金额：`amount/100` + `currency`；日期：`date`（Stripe `paid_at` Unix 秒）。
+/// 金额：`amount` 按 Stripe 的币种小数位折主单位 + `currency`；日期：`date`（Stripe `paid_at` Unix 秒）。
 /// 凭据：`apiToken`/`apiKey` + `accountID`（workspaceId）。
 public struct TypebotBillingProvider: BillingProvider, Sendable {
     public static var descriptor: ProviderDescriptor { ProviderCatalog.typebot }
     public static let apiHost = "app.typebot.io"
-    static let centsPerUnit = Decimal(100)
 
     public var httpClient: any HTTPClient
     public var now: @Sendable () -> Date
@@ -60,16 +59,14 @@ public struct TypebotBillingProvider: BillingProvider, Sendable {
         for inv in invoices {
             let cents = inv.amount?.value ?? 0
             guard cents != 0 else { continue }
-            let amount = cents / Self.centsPerUnit
+            // 没有 paid_at 的是没付的草稿/未结发票：塞进本月会每次取数都算成本月花费，
+            // 永远滚不进历史，所以直接不计。
+            guard let paid = inv.date?.value else { continue }
+            let amount = Self.majorUnits(cents, currency: inv.currency)
             try currencies.observe(inv.currency, providerID: .typebot)
-            let stamp: Date
-            if let paid = inv.date?.value {
-                let seconds = NSDecimalNumber(decimal: paid).doubleValue
-                // Stripe paid_at 为秒；防御性兼容毫秒。
-                stamp = Date(timeIntervalSince1970: seconds > 1_000_000_000_000 ? seconds / 1000 : seconds)
-            } else {
-                stamp = current.start
-            }
+            let seconds = NSDecimalNumber(decimal: paid).doubleValue
+            // Stripe paid_at 为秒；防御性兼容毫秒。
+            let stamp = Date(timeIntervalSince1970: seconds > 1_000_000_000_000 ? seconds / 1000 : seconds)
             let label = inv.id ?? "invoice"
             if current.contains(stamp) {
                 currentTotal += amount
@@ -91,22 +88,32 @@ public struct TypebotBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .typebot
-        )
-        return Snapshot(
+        // 合计、日线、明细都按原币拼好，收尾统一乘同一个汇率——
+        // 明细若留原币却标成美元，非美元户的逐行金额会差出一个汇率。
+        return try Snapshot(
             providerID: .typebot,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
+    }
+
+    /// Stripe 的最小单位不是一律「分」：零小数币（JPY、KRW…）本身就是主单位，
+    /// 三位小数币（KWD、BHD…）是千分之一。一律除 100 会把日元户少算百倍。
+    static func majorUnits(_ minor: Decimal, currency: String?) -> Decimal {
+        let code = (currency ?? "").trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        let zeroDecimal: Set<String> = [
+            "BIF", "CLP", "DJF", "GNF", "JPY", "KMF", "KRW", "MGA",
+            "PYG", "RWF", "UGX", "VND", "VUV", "XAF", "XOF", "XPF",
+        ]
+        let threeDecimal: Set<String> = ["BHD", "JOD", "KWD", "OMR", "TND"]
+        if zeroDecimal.contains(code) { return minor }
+        if threeDecimal.contains(code) { return minor / 1000 }
+        return minor / 100
     }
 
     private func loadInvoices(

@@ -82,4 +82,69 @@ struct InboxHandoffModelTests {
         #expect(state.credentialReference.hasPrefix("credential."))
         #expect(UUID(uuidString: String(state.credentialReference.dropFirst("credential.".count))) != nil)
     }
+
+    @Test("挂到已有账号时旧 key 吊销失败：不 attach、不报成功，重试成功后才换上新 key")
+    func rotateRequiresOldKeyRevoked() async throws {
+        let transport = ScriptedInboxTransport()
+        let dashboard = try DashboardModelIngestKeyRevokeTests.makeDashboard(transport: transport)
+        let accountID = try DashboardModelIngestKeyRevokeTests.seedInboxAccount(on: dashboard, keyID: "key_old")
+        let model = InboxHandoffModel(providerID: .render, dashboard: dashboard, attachingAccountID: accountID)
+        await model.prepare()
+        #expect(model.phase == .issued)
+        let newKey = try #require(model.issuedKey)
+
+        transport.setRevokeStatus(503)
+        await #expect(throws: InboxError.self) { try await model.connect() }
+        #expect(model.saveToken == 0)
+        #expect(model.issuedKey == newKey)
+        #expect(dashboard.connectionStates().first { $0.accountID == accountID }?.inboxIngestKeyID == "key_old")
+
+        transport.setRevokeStatus(200)
+        try await model.connect()
+        #expect(model.saveToken == 1)
+        #expect(transport.revokedIDs == ["key_old"])
+        #expect(dashboard.connectionStates().first { $0.accountID == accountID }?.inboxIngestKeyID == newKey.id)
+    }
+
+    @Test("取消时吊销失败：本地不忘这把 key，下次取消接着吊销")
+    func discardKeepsKeyUntilRevoked() async throws {
+        let transport = ScriptedInboxTransport()
+        let dashboard = try DashboardModelIngestKeyRevokeTests.makeDashboard(transport: transport)
+        let model = InboxHandoffModel(providerID: .render, dashboard: dashboard)
+        await model.prepare()
+        let key = try #require(model.issuedKey)
+
+        transport.setRevokeStatus(503)
+        await model.discardIfUnconnected()
+        #expect(model.issuedKey == key)
+        #expect(model.phase == .issued)
+
+        transport.setRevokeStatus(200)
+        await model.discardIfUnconnected()
+        #expect(model.issuedKey == nil)
+        #expect(model.phase == .idle)
+        #expect(transport.revokedIDs == [key.id])
+    }
+
+    @Test("签 key 途中取消：回来的 key 立刻吊销，页面不推进到已签发")
+    func discardDuringMintRevokesLateKey() async throws {
+        let transport = ScriptedInboxTransport()
+        transport.setMintGated(true)
+        let dashboard = try DashboardModelIngestKeyRevokeTests.makeDashboard(transport: transport)
+        let model = InboxHandoffModel(providerID: .render, dashboard: dashboard)
+        let preparing = Task { await model.prepare() }
+        while transport.mintRequests == 0 {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        #expect(model.phase == .provisioning)
+
+        await model.discardIfUnconnected()
+        transport.setMintGated(false)
+        await preparing.value
+
+        #expect(model.phase != .issued)
+        #expect(model.issuedKey == nil)
+        #expect(!model.canConnect)
+        #expect(transport.revokedIDs == ["key_new_1"])
+    }
 }

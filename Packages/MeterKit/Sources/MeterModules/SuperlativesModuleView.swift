@@ -1,3 +1,4 @@
+import MeterDashboard
 import SwiftUI
 import MeterCore
 import MeterDesign
@@ -29,7 +30,7 @@ public struct SuperlativesModuleView: View {
         DashboardInsightRow(
             colorKey: item.colorKey,
             title: item.displayName,
-            subtitle: String(localized: item.title),
+            subtitle: item.title,
             trailingText: item.value,
             trailingColor: item.kind == .biggestRise ? MeterColor.warn : Color.meterSecondaryLabel,
             spokenLabel: item.spokenLabel,

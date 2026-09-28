@@ -3,6 +3,7 @@ package com.zhechengqi.tollcat.settings
 import android.content.Context
 import android.net.Uri
 import com.zhechengqi.tollcat.AccountRow
+import com.zhechengqi.tollcat.InboxMailboxStore
 import com.zhechengqi.tollcat.dashboard.DashboardModules
 import com.zhechengqi.tollcat.CredentialStore
 import com.zhechengqi.tollcat.LedgerStore

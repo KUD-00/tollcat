@@ -4,6 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialShapes
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,16 +16,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.TollCatTheme
-import com.zhechengqi.tollcat.ui.CatNestGlyph
 import com.zhechengqi.tollcat.ui.EmptyState
+import com.zhechengqi.tollcat.ui.EmptyStateGlyph
 import com.zhechengqi.tollcat.ui.MeterSpacing
 import com.zhechengqi.tollcat.ui.PersistenceNoticeList
 import com.zhechengqi.tollcat.ui.PersistenceStatus
 import com.zhechengqi.tollcat.ui.UITestId
-import com.zhechengqi.tollcat.ui.cat.CatMood
+import com.zhechengqi.tollcat.ui.symbols.MaterialSymbol
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DashboardEmptyView(
     onAdd: () -> Unit,
@@ -30,7 +36,6 @@ fun DashboardEmptyView(
     persistenceStatus: PersistenceStatus = PersistenceStatus(),
     onDismissDemo: (() -> Unit)? = null,
 ) {
-    val sleepingSpoken = stringResource(R.string.dashboard_cat_mood_sleeping)
     val addSpoken = stringResource(R.string.dashboard_empty_action)
     Box(
         modifier = modifier.testTag(UITestId.DASHBOARD_EMPTY),
@@ -57,10 +62,15 @@ fun DashboardEmptyView(
                 actionLabel = stringResource(R.string.dashboard_empty_action),
                 onAction = onAdd,
                 actionModifier = Modifier.semantics { contentDescription = addSpoken },
+                // 主页暂时不放猫：拱形窝换成形状库里的 Arch + 仪表图标，版式不变。
                 glyph = {
-                    CatNestGlyph(
-                        mood = CatMood.Sleeping,
-                        spokenDescription = sleepingSpoken,
+                    EmptyStateGlyph(
+                        symbol = MaterialSymbol.Speed,
+                        shape = MaterialShapes.Arch.toShape(),
+                        size = 168.dp,
+                        iconSize = 64.dp,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 },
             )

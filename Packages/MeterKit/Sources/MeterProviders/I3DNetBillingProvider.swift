@@ -92,22 +92,17 @@ public struct I3DNetBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .i3dnet
-        )
-        return Snapshot(
+        // 合计、日线、明细行都按原币拼好再统一换，三者用同一个汇率才对得上。
+        return try Snapshot(
             providerID: .i3dnet,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadInvoices(headers: [String: String]) async throws -> [Invoice] {

@@ -29,10 +29,10 @@ on:
         type: boolean
         default: false
 
+# 默认只读，各 job 按需再给：以前三项写权限对所有 job 生效，没有审批闸的 preflight
+# 会在带写 token 的情况下跑 tag 指向的任意提交里的脚本（能改 Release 资产、以 bot 身份推 tag、签 OIDC）。
 permissions:
-  contents: write
-  id-token: write
-  attestations: write
+  contents: read
 
 # One tag = one train = one GitHub Release (draft). Which platforms ride it is
 # decided by the dispatch inputs; a tag push defaults to iOS + Mac both riding.
@@ -60,10 +60,14 @@ env:
 jobs:
   preflight:
     name: Tag matches shared/version.json
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       # The version has one authority, shared/version.json; project.yml / gradle /
       # csproj / appxmanifest / winget are all generated from it (generate-shared
@@ -82,6 +86,10 @@ jobs:
 
   ios:
     name: Archive iOS and upload to App Store Connect
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.ios }}
     needs: preflight
     runs-on: macos-26
@@ -101,6 +109,12 @@ jobs:
           sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
           sw_vers
+
+      # 手表 App 嵌在 iPhone 包里：没装 watchOS 平台，xcodebuild 连 iOS 模拟器都不肯编
+      # （"This scheme builds an embedded Apple Watch app. watchOS … must be installed"）。
+      # runner 镜像一般自带；没有才下（几 GB）。
+      - name: Ensure watchOS platform
+        run: xcrun simctl list runtimes | grep -q watchOS || xcodebuild -downloadPlatform watchOS
 
       - name: Install xcodegen
         run: brew install xcodegen
@@ -244,6 +258,10 @@ jobs:
 
   mac:
     name: Archive Mac, notarize, sign for Sparkle
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.mac }}
     needs: preflight
     runs-on: macos-26
@@ -455,6 +473,10 @@ jobs:
 
   mac_appstore:
     name: Archive Mac App Store build and upload to App Store Connect
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     # Opt-in only — see the note at the top of this file. `inputs.mac_appstore`
     # is null on a tag push, so this never rides one.
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.mac_appstore }}
@@ -725,6 +747,10 @@ jobs:
 
   android:
     name: Android AAB (Swift cross-compile + gradle)
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     # Runs only when the dispatch checked android: Android rides the train in
     # waves, not on every departure. Never run with real credentials yet; a human
     # must watch the first run — see docs/RELEASE.md.
@@ -734,6 +760,7 @@ jobs:
     environment: google-play
     env:
       SWIFT_VERSION: 6.3.3
+      ANDROID_SDK_CHECKSUM: d160cc3206dd1886dae3fef2337af5e25ec034692cd0ec225721c56cc69da7f5
       NDK_VERSION: 27.3.13750724
       ARTIFACTS: ${{ github.workspace }}/artifacts-android
     steps:
@@ -756,21 +783,34 @@ jobs:
       - name: Install Swift and the Android SDK bundle
         run: |
           set -euo pipefail
+          # swiftly exits 1 after installing the toolchain when this is missing;
+          # the ubuntu-24.04 runner image stopped shipping it.
+          sudo apt-get update -q
+          sudo apt-get install -y -q libcurl4-openssl-dev
           curl -fsSL "https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz" | tar -xz -C "$RUNNER_TEMP"
           "$RUNNER_TEMP/swiftly" init --assume-yes --skip-install --quiet-shell-followup
           . "$HOME/.local/share/swiftly/env.sh"
           swiftly install "$SWIFT_VERSION" --use
           swift --version
-          swift sdk install "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
+          # Remote bundles need --checksum. Value from swift.org/api/v1/install/releases.json
+          # (6.3.3 → "Android SDK"); bump it together with SWIFT_VERSION.
+          swift sdk install --checksum "${ANDROID_SDK_CHECKSUM}" \
+            "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
           echo "$HOME/.local/share/swiftly/bin" >> "$GITHUB_PATH"
 
       - name: Cross-compile MeterCore and stage jniLibs
-        env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/${{ env.NDK_VERSION }}
         run: |
           set -euo pipefail
+          # ANDROID_HOME is the runner's shell variable, not part of the workflow
+          # env context, so reading it through the env expression gave an empty prefix.
+          export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/$NDK_VERSION"
           . "$HOME/.local/share/swiftly/env.sh"
-          export SDK_BUNDLE="$HOME/.swiftpm/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android"
+          # Where swift sdk install puts bundles moved between toolchains
+          # (~/.swiftpm vs the XDG config dir); find it instead of assuming.
+          SDK_BUNDLE="$(find "$HOME" -type d -path "*/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android" -print -quit)"
+          [[ -n "$SDK_BUNDLE" ]] || { echo "Android Swift SDK bundle not found under $HOME" >&2; exit 1; }
+          echo "SDK_BUNDLE=$SDK_BUNDLE"
+          export SDK_BUNDLE
           bash scripts/android-run.sh --build-only
 
       # versionCode = run number + offset, the same rule as the iOS/Mac build
@@ -816,6 +856,8 @@ jobs:
 
   publish:
     name: Publish GitHub Release
+    permissions:
+      contents: write
     needs: [ios, mac, mac_appstore, windows, android]
     # Unchecked platforms are skipped, which counts as passing; checked ones must
     # succeed; at least one of the three Apple jobs must actually have ridden.

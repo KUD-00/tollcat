@@ -63,10 +63,22 @@ object AccountExtras {
         return next
     }
 
+    /**
+     * `key=value` 用 NUL 连起来只在值里没有 NUL、键里没有 `=` 时才无歧义：否则
+     * `{a: "b\u0000c=d"}` 和 `{a: "b", c: "d"}` 算出同一个指纹。真实凭据不会带这些字符，
+     * 所以常规输入仍用原编码，已存的指纹继续可比；碰到它们才换成带长度前缀的编码
+     * （以 `v2` + NUL 开头，原编码第一个 NUL 前必有 `=`，两种编码不会撞）。
+     */
     fun fingerprintOf(fields: Map<String, String>): String {
-        val joined = fields.entries.sortedBy { it.key }.joinToString("\u0000") { "${it.key}=${it.value.trim()}" }
+        val rows = fields.entries.sortedBy { it.key }.map { it.key to it.value.trim() }
+        val ambiguous = rows.any { (key, value) -> '\u0000' in key || '=' in key || '\u0000' in value }
+        val joined = if (ambiguous) {
+            "v2\u0000" + rows.joinToString("") { (key, value) -> "${key.length}:$key${value.length}:$value" }
+        } else {
+            rows.joinToString("\u0000") { (key, value) -> "$key=$value" }
+        }
         val digest = java.security.MessageDigest.getInstance("SHA-256")
-        return digest.digest(joined.toByteArray()).joinToString("") { byte -> "%02x".format(byte) }
+        return digest.digest(joined.toByteArray(Charsets.UTF_8)).joinToString("") { byte -> "%02x".format(byte) }
     }
 
     private fun extras(account: AccountRow): JSONObject? {

@@ -41,6 +41,12 @@ final class SetupWizardModel {
     var debugExchanges: [HTTPExchange] { capturedExchanges }
     #endif
     private(set) var verifiedSnapshot: Snapshot?
+    /// `verifiedSnapshot` 是拿哪一份字段测出来的。测试开始时冻结，保存只写这一份。
+    ///
+    /// 测试连接要 await 网络，期间主线程会让出去，用户可以接着改字段。以前保存写的是
+    /// 活的 `fieldValues`：填 A、点测试、趁请求在飞改成 B、再点保存，Keychain 里
+    /// 存的是从没测过的 B，快照和金额却来自 A。
+    private(set) var testedFieldValues: [String: String]?
     private(set) var guide: SetupGuide
     private(set) var notices: [Notice] = []
     private(set) var catalog: Catalog
@@ -102,6 +108,9 @@ final class SetupWizardModel {
         guard let verifiedSnapshot, verifiedSnapshot.hasBillableMetrics else {
             return false
         }
+        // 表单和测过的那份对不上就不许存：不经 `updateField` 直接改 `fieldValues`
+        // 的路径（预填、外部赋值）不会清掉测通，只能在这里兜住。
+        guard let testedFieldValues, testedFieldValues == fieldValues else { return false }
         if showsNicknameFields, trimmedNewNickname.isEmpty {
             return false
         }
@@ -259,6 +268,7 @@ final class SetupWizardModel {
             needsRetest = true
         }
         verifiedSnapshot = nil
+        testedFieldValues = nil
         outcome = nil
         capturedExchanges = []
         saveFailureCaption = nil
@@ -281,12 +291,23 @@ final class SetupWizardModel {
         guard !isTesting else { return }
         isTesting = true
         verifiedSnapshot = nil
+        testedFieldValues = nil
         outcome = nil
         capturedExchanges = []
         defer { isTesting = false }
 
+        // 发出去的凭据在这里定死。await 回来时表单要是变了，这次结果属于一份
+        // 已经不在表单里的凭据，整条丢掉：不亮测通、不记往返，界面回到「测试连接」。
+        let frozenFields = fieldValues
+        let credential = makeCredential(from: frozenFields)
+        func isStillCurrent() -> Bool { fieldValues == frozenFields }
+
         let inspector = InspectingHTTPClient(wrapping: dashboard.httpClient)
-        defer { capturedExchanges = inspector.exchanges }
+        defer {
+            if isStillCurrent() {
+                capturedExchanges = inspector.exchanges
+            }
+        }
         let clock = dashboard.clock
         // 为了记下这次往返会再组装一份 provider，必须带上同一张汇率表。
         // 默认 `SharedExchangeRates()` 只认美元，国内站人民币会误报「币种不在表里」。
@@ -311,8 +332,10 @@ final class SetupWizardModel {
             return
         }
         do {
-            let snapshot = try await provider.fetch(credential: makeCredential())
+            let snapshot = try await provider.fetch(credential: credential)
+            guard isStillCurrent() else { return }
             verifiedSnapshot = snapshot.hasBillableMetrics ? snapshot : nil
+            testedFieldValues = verifiedSnapshot == nil ? nil : frozenFields
             publish(
                 SetupVerifyFormatter.outcome(
                     snapshot: snapshot,
@@ -324,6 +347,7 @@ final class SetupWizardModel {
             )
             evaluateFingerprint()
         } catch {
+            guard isStillCurrent() else { return }
             verifiedSnapshot = nil
             publish(
                 SetupVerifyFormatter.outcome(
@@ -340,11 +364,13 @@ final class SetupWizardModel {
     func save() {
         saveFailureCaption = nil
         evaluateFingerprint()
-        guard canSave, let verified = verifiedSnapshot else { return }
+        // `canSave` 已保证 `testedFieldValues == fieldValues`；这里仍然只写测过的那份，
+        // 不让「存什么」依赖那条判断没被改坏。
+        guard canSave, let verified = verifiedSnapshot, let fields = testedFieldValues else { return }
         isSaving = true
         defer { isSaving = false }
-        let fingerprint = AccountFingerprint.hash(providerID: providerID, fields: fieldValues)
-        let hint = AccountFingerprint.identityHint(from: fieldValues)
+        let fingerprint = AccountFingerprint.hash(providerID: providerID, fields: fields)
+        let hint = AccountFingerprint.identityHint(from: fields)
         do {
             switch mode {
             case .create:
@@ -358,7 +384,7 @@ final class SetupWizardModel {
                     nickname: showsNicknameFields ? trimmedNewNickname : nil,
                     identityHint: hint,
                     remoteIdentityFingerprint: fingerprint,
-                    fields: fieldValues,
+                    fields: fields,
                     snapshots: [stamped],
                     mode: .create
                 )
@@ -379,7 +405,7 @@ final class SetupWizardModel {
                     nickname: nil,
                     identityHint: hint,
                     remoteIdentityFingerprint: fingerprint,
-                    fields: fieldValues,
+                    fields: fields,
                     snapshots: [stamped],
                     mode: .rotate
                 )
@@ -398,9 +424,12 @@ final class SetupWizardModel {
         }
     }
 
+    /// 身份比对用测过的那份凭据：换远程账号的判断要看真正打到对方接口上的是谁，
+    /// 而不是 await 回来之后表单里碰巧是什么。
     private func evaluateFingerprint() {
         fingerprintCollisionReason = nil
-        let fingerprint = AccountFingerprint.hash(providerID: providerID, fields: fieldValues)
+        let identityFields = testedFieldValues ?? fieldValues
+        let fingerprint = AccountFingerprint.hash(providerID: providerID, fields: identityFields)
         if case .rotate(let accountID, _) = mode {
             let old = dashboard.connectionStates().first { $0.accountID == accountID }?
                 .remoteIdentityFingerprint
@@ -412,7 +441,7 @@ final class SetupWizardModel {
         if let hit = dashboard.collidingConnection(
             providerID: providerID,
             fingerprint: fingerprint,
-            fields: fieldValues,
+            fields: identityFields,
             excluding: rotatingAccountID
         ) {
             let vendor = displayName
@@ -453,8 +482,8 @@ final class SetupWizardModel {
         fieldValues[key, default: ""].trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    private func makeCredential() -> Credential {
-        let raw = (try? StoredCredentialFields.encode(fieldValues)) ?? "{}"
+    private func makeCredential(from fields: [String: String]) -> Credential {
+        let raw = (try? StoredCredentialFields.encode(fields)) ?? "{}"
         return (try? StoredCredentialFields.credential(providerID: providerID, raw: raw))
             ?? Credential(providerID: providerID, fields: [:])
     }
@@ -465,7 +494,11 @@ final class SetupWizardModel {
         needsRetest = false
         switch raw {
         case "success":
-            fieldValues = SetupFieldPreviewValue.dictionary(for: guide.fields)
+            // 表单已经填满就按表单里的这份算测通（单测靠它钉住具体凭据），
+            // 空着才铺占位值（验收截图从空表单进来）。
+            if !allFieldsFilled {
+                fieldValues = SetupFieldPreviewValue.dictionary(for: guide.fields)
+            }
             let calendar = dashboard.clock.calendar
             let now = dashboard.clock.now
             let start = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) ?? now
@@ -480,6 +513,7 @@ final class SetupWizardModel {
                 dailyUSD: [:]
             )
             verifiedSnapshot = snapshot
+            testedFieldValues = fieldValues
             publish(
                 SetupVerifyFormatter.outcome(
                     snapshot: snapshot,
@@ -536,6 +570,7 @@ final class SetupWizardModel {
         model.outcome = outcome
         if case .success = outcome {
             model.fieldValues = SetupFieldPreviewValue.dictionary(for: model.guide.fields)
+            model.testedFieldValues = model.fieldValues
             model.verifiedSnapshot = Snapshot(
                 providerID: providerID,
                 kind: .usage,

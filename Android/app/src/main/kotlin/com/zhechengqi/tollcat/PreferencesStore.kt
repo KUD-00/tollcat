@@ -194,16 +194,21 @@ class PreferencesStore(context: Context) {
 
     // 信箱的 mailbox + readKey 已经搬进 AndroidKeystoreCredentialStore（见
     // InboxMailboxStore）。readKey 能读走全部读数、删信箱、再签发投递 key，
-    // 不该和外观、预算一起明文躺在这份 XML 里。下面两个只读属性仅供一次性搬迁，
-    // 不要新增写入点。
-    val legacyInboxMailbox: String
-        get() = prefs.getString(INBOX_MAILBOX, "") ?: ""
-
-    val legacyInboxReadKey: String
-        get() = prefs.getString(INBOX_READ_KEY, "") ?: ""
+    // 不该和外观、预算一起明文躺在这份 XML 里。只留一个搬迁入口，读到就交给
+    // [store] 写进凭据店、随即同步抹掉明文；不提供只读不抹的读法，也不要新增写入点。
+    // [store] 抛了就保留明文，下次再搬——抹掉之前没存好等于把信箱弄丢。
+    fun migrateLegacyInbox(store: (mailbox: String, readKey: String) -> Unit): Boolean {
+        if (!prefs.contains(INBOX_MAILBOX) && !prefs.contains(INBOX_READ_KEY)) return false
+        val mailbox = prefs.getString(INBOX_MAILBOX, "") ?: ""
+        val readKey = prefs.getString(INBOX_READ_KEY, "") ?: ""
+        val complete = mailbox.isNotBlank() && readKey.isNotBlank()
+        if (complete) store(mailbox, readKey)
+        clearLegacyInbox()
+        return complete
+    }
 
     fun clearLegacyInbox() {
-        prefs.edit().remove(INBOX_MAILBOX).remove(INBOX_READ_KEY).apply()
+        prefs.edit().remove(INBOX_MAILBOX).remove(INBOX_READ_KEY).commit()
     }
 
     fun setIncludeInGlobalRefresh(accountId: String, include: Boolean) {

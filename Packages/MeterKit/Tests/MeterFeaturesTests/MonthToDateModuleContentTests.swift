@@ -1,4 +1,5 @@
 import Foundation
+import MeterDashboard
 import Testing
 import MeterCore
 @testable import MeterFeatures

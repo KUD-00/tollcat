@@ -91,8 +91,12 @@ public struct Active24BillingProvider: BillingProvider, Sendable {
                 for row in rows {
                     let amount = row.price?.value ?? 0
                     guard amount != 0 else { continue }
+                    // 明细行币种和付款不一致就丢掉这一行：付款合计的汇率换不了另一种钱，
+                    // 也不能让明细行反过来改掉换算用的币种。没写币种的行跟着付款走。
+                    if let rowCurrency = BillingCurrency.normalize(row.currency), rowCurrency != currencies.code {
+                        continue
+                    }
                     gotDetail = true
-                    try? currencies.observe(row.currency, providerID: .active24)
                     let label = row.description?.trimmed
                         ?? row.domain?.trimmed
                         ?? row.vs?.trimmed
@@ -111,18 +115,17 @@ public struct Active24BillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(currentTotal, rates: rateSource.current, providerID: .active24)
-        return Snapshot(
+        // 合计、日线、明细行都按原币（通常 CZK）拼好再统一换，三者用同一个汇率才对得上。
+        return try Snapshot(
             providerID: .active24,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadPayments(headers: [String: String]) async throws -> [Payment] {

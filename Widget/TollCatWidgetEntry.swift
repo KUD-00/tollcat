@@ -1,8 +1,12 @@
 import Foundation
+import MeterDashboard
 import SwiftData
 import WidgetKit
 import MeterCore
 import MeterFormat
+#if os(iOS)
+import MeterGlance
+#endif
 import MeterModules
 import MeterPersistence
 
@@ -105,14 +109,46 @@ enum TollCatWidgetLoader {
                 date: now,
                 module: module,
                 contents: DashboardContents(),
-                presentation: MoneyPresentation(
-                    currencyCode: store.displayCurrency,
-                    rates: catalogResolver.current().exchangeRates
-                ),
+                presentation: presentation(for: store),
                 isEmpty: false
             )
         }
         return makeEntry(module: module, from: store, now: now, calendar: calendar)
+    }
+
+    #if os(iOS)
+    /// 锁屏那几格要的一眼。和上面那格主屏 widget 读同一份库、走同一次折算，
+    /// 只是最后多一步折成 `Glance`——手表那边收到的是 iPhone App 用同样几步折出来的一份
+    /// （`WatchGlanceSource`），三处说的是同一个数。
+    static func glance(now: Date, calendar: Calendar, container: ModelContainer? = container) -> Glance? {
+        guard let container,
+              let store = try? SharedStoreReader.load(from: container, calendar: calendar, now: now)
+        else {
+            return nil
+        }
+        let presentation = presentation(for: store)
+        let canSpeak = !store.isEmpty && store.canSpeak(for: now, calendar: calendar)
+        let contents = canSpeak
+            ? contents(from: store, presentation: presentation, now: now, calendar: calendar)
+            : DashboardContents()
+        return GlanceBuilder.make(
+            contents: contents,
+            isEmpty: store.isEmpty,
+            canSpeak: canSpeak,
+            budgetUSD: store.layout.monthlyBudgetUSD,
+            lastRefreshAt: store.lastSuccessfulRefreshAt,
+            presentation: presentation,
+            now: now,
+            calendar: calendar
+        )
+    }
+    #endif
+
+    private static func presentation(for store: SharedStoreContents) -> MoneyPresentation {
+        MoneyPresentation(
+            currencyCode: store.displayCurrency,
+            rates: catalogResolver.current().exchangeRates
+        )
     }
 
     /// 下个月 1 号零点。跨月是时间线里唯一一件系统该自己来的事。
@@ -135,36 +171,33 @@ enum TollCatWidgetLoader {
         now: Date,
         calendar: Calendar
     ) -> TollCatWidgetEntry {
-        let rates = catalogResolver.current().exchangeRates
-        let presentation = MoneyPresentation(currencyCode: store.displayCurrency, rates: rates)
-        let (contents, _) = DashboardContentsBuilder.make(
+        let presentation = presentation(for: store)
+        return TollCatWidgetEntry(
+            date: now,
+            module: module,
+            contents: contents(from: store, presentation: presentation, now: now, calendar: calendar),
+            presentation: presentation,
+            isEmpty: false
+        )
+    }
+
+    private static func contents(
+        from store: SharedStoreContents,
+        presentation: MoneyPresentation,
+        now: Date,
+        calendar: Calendar
+    ) -> DashboardContents {
+        // 取景框只跟订阅口径，构造收在 `SharedStoreContents.widgetFilter`：
+        // Widget 永远是「本月 · 全部账号」。其余入参由 `widget(...)` 钉死，
+        // 锁屏、手表走的是同一个入口。
+        DashboardContentsBuilder.widget(
             view: store.view,
-            // 取景框只跟订阅口径，构造收在 `SharedStoreContents.widgetFilter`：
-            // Widget 永远是「本月 · 全部账号」。
             filter: store.widgetFilter,
             now: now,
             calendar: calendar,
             presentation: presentation,
             connections: store.connections,
-            // 数据精度记号是 provider 详情页的事，主屏上不摆。
-            providerMarks: [:],
-            layout: store.layout,
-            compute: { view, now, calendar, filter in
-                LedgerProjection.compute(
-                    rollups: view.rollups,
-                    subscriptions: view.subscriptions,
-                    now: now,
-                    calendar: calendar,
-                    filter: filter
-                )
-            }
-        )
-        return TollCatWidgetEntry(
-            date: now,
-            module: module,
-            contents: contents,
-            presentation: presentation,
-            isEmpty: false
+            layout: store.layout
         )
     }
 }

@@ -68,16 +68,21 @@ struct ArchitectureGuardrailTests {
         }
     }
 
-    /// 这张依赖表就是 widget 的安全说明书：MeterModules 一旦长出第四条边，
+    /// 这张依赖表就是 widget 的安全说明书：MeterModules 一旦长出新的边，
     /// widget 想复用模块视图就得把那条边一起链进扩展。
-    @Test("MeterModules 只依赖 MeterCore / MeterDesign / MeterFormat")
+    ///
+    /// MeterGlance 是零依赖叶子（下面那条测试守着它），链进 widget 的只是
+    /// 一份值类型和几块锁屏视图——`GlanceBuilder` 得住在这边才读得到仪表内容。
+    /// MeterDashboard 是模块读的那些值和算它们的 builder，它自己只认 MeterCore / MeterFormat。
+    @Test("MeterModules 只依赖 MeterCore / MeterDesign / MeterFormat / MeterDashboard / MeterGlance")
     func moduleTargetStaysThin() throws {
         let files = try GuardrailSourceScan.swiftFiles(
             under: ["Packages/MeterKit/Sources/MeterModules"]
         )
         let allowed: Set<String> = [
             "import Foundation", "import SwiftUI", "import CoreGraphics",
-            "import MeterCore", "import MeterDesign", "import MeterFormat",
+            "import MeterCore", "import MeterDesign", "import MeterFormat", "import MeterDashboard",
+            "import MeterGlance",
         ]
         for file in files {
             let text = try String(contentsOf: file, encoding: .utf8)
@@ -85,6 +90,59 @@ struct ArchitectureGuardrailTests {
                 let stripped = line.trimmingCharacters(in: .whitespaces)
                 guard stripped.hasPrefix("import ") else { continue }
                 #expect(allowed.contains(stripped), "\(file.lastPathComponent) \(stripped)")
+            }
+        }
+    }
+
+    /// MeterDashboard 的源码被 Android / Windows / CLI 的桥软链进去直接编。
+    /// 这里一出现 SwiftUI、MeterDesign 或 Android 的 Foundation 没有的类型，
+    /// 桥就编不过——而上一次编不过的结果，是桥里抄了一份 builder、抄的那份漂走了。
+    /// 和 `check-source-invariants.py` 的 `check_dashboard_portable` 同一条判据。
+    @Test("MeterDashboard 只依赖 MeterCore / MeterFormat，四个平台都能编")
+    func dashboardTargetStaysPortable() throws {
+        let files = try GuardrailSourceScan.swiftFiles(
+            under: ["Packages/MeterKit/Sources/MeterDashboard"]
+        )
+        #expect(!files.isEmpty)
+        let allowed: Set<String> = ["import Foundation", "import MeterCore", "import MeterFormat"]
+        for file in files {
+            let text = try String(contentsOf: file, encoding: .utf8)
+            for line in text.split(separator: "\n") {
+                let stripped = line.trimmingCharacters(in: .whitespaces)
+                guard stripped.hasPrefix("import ") else { continue }
+                #expect(allowed.contains(stripped), "\(file.lastPathComponent) \(stripped)")
+            }
+            // 两处例外都在 `#if canImport(Darwin)` 里：`StaleSinceText` 用系统的相对时间，
+            // 生成的 `MeterDashboardCopy` 在 Apple 平台把 String Catalog 的包交给 `PortableCatalog`。
+            guard !["StaleSinceText.swift", "MeterDashboardCopy.swift"].contains(file.lastPathComponent) else {
+                continue
+            }
+            let masked = GuardrailSourceScan.maskCommentsAndStrings(text)
+            for token in ["LocalizedStringResource", "RelativeDateTimeFormatter", "String(localized:", "Bundle.module"] {
+                #expect(!masked.contains(token), "\(file.lastPathComponent) \(token)")
+            }
+        }
+    }
+
+    /// 手表上看到的每一个数都是 iPhone 推过去的。依赖表是这件事的证明：
+    /// MeterGlance 一 import 别的 Meter 模块，手表壳就跟着链上它，凭据和账本就有了上手表的路。
+    /// 和 `check-source-invariants.py` 的 `check_watch_linkage` 同一条判据。
+    @Test("MeterGlance 和手表壳不认识别的 Meter 模块")
+    func watchSideStaysLeaf() throws {
+        let glance = try GuardrailSourceScan.swiftFiles(under: ["Packages/MeterKit/Sources/MeterGlance"])
+        #expect(!glance.isEmpty)
+        for file in glance {
+            let text = try String(contentsOf: file, encoding: .utf8)
+            for line in text.split(separator: "\n") where line.hasPrefix("import Meter") {
+                Issue.record("MeterGlance/\(file.lastPathComponent) \(line)")
+            }
+        }
+        let shells = try GuardrailSourceScan.swiftFiles(under: ["Watch", "WatchWidget"])
+        #expect(!shells.isEmpty)
+        for file in shells {
+            let text = try String(contentsOf: file, encoding: .utf8)
+            for line in text.split(separator: "\n") where line.hasPrefix("import Meter") && line != "import MeterGlance" {
+                Issue.record("\(file.lastPathComponent) \(line)：手表壳只准认 MeterGlance")
             }
         }
     }

@@ -1,3 +1,4 @@
+import MeterDashboard
 import SwiftUI
 import MeterCore
 import MeterDesign
@@ -41,7 +42,7 @@ public struct CategoriesModuleView: View {
                 if height.prefersCardMetrics, let top = content.slices.first {
                     DashboardCardHeadline(
                         value: "\(top.percent)%",
-                        caption: String(localized: L("\(String(localized: top.title)) 占最多")),
+                        caption: String(localized: L("\(top.title) 占最多")),
                         animationValue: Double(top.percent)
                     )
                 }
@@ -107,7 +108,7 @@ public struct CategoriesModuleView: View {
                 id: slice.category.rawValue,
                 color: color(at: index),
                 fraction: slice.fraction,
-                name: String(localized: slice.title),
+                name: slice.title,
                 amountText: slice.amountText,
                 mergedNames: slice.memberNames
             )

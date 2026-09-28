@@ -151,4 +151,9 @@
     <string name="dev_whats_new_quiet">判据不成立，线上这时候也不会弹。先把「看到哪一版」改老一点。</string>
     <string name="dev_whats_new_empty_catalog">这一端一条都没有。往 shared/changelog.json 加一条再来。</string>
     <string name="dev_whats_new_footer">这是唯一能验收正常路径的办法：把它改老，真判据就成立了。改完可以直接按上面那条「按真判据弹一次」，不用等冷启动。</string>
+    <string name="dev_gallery_new_dashboard" translatable="false">新仪表盘（M3 Expressive）</string>
+    <string name="dev_gallery_page" translatable="false">整页预览</string>
+    <string name="dev_gallery_hero" translatable="false">总数顶栏</string>
+    <string name="dev_gallery_chrome" translatable="false">底部操作：FAB 菜单与短导航栏</string>
+    <string name="dev_gallery_modules" translatable="false">可选模块：订阅 / 热力图 / 按类别 / 预算线</string>
 </resources>

@@ -21,9 +21,15 @@ let package = Package(
             dependencies: ["MeterCore"],
             resources: [.process("Resources")]
         ),
+        // 仪表盘的折算（各模块 builder）。和 iOS 同一份源码，不在桥里另抄。
+        .target(
+            name: "MeterDashboard",
+            dependencies: ["MeterCore", "MeterFormat"],
+            resources: [.process("Resources")]
+        ),
         .target(
             name: "MeterBridge",
-            dependencies: ["MeterCore", "MeterProviders", "MeterFormat"],
+            dependencies: ["MeterCore", "MeterProviders", "MeterFormat", "MeterDashboard"],
             resources: [.process("Resources")]
         ),
         .target(

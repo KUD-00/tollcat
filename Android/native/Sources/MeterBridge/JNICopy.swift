@@ -8,7 +8,7 @@ import Foundation
 /// `String(localized:)` 会静默回落源语言，所以把需要的键连三语译文一起编进动态库。
 package enum JNICopy {
     /// languageTag 前缀匹配；表里没有或语言对不上就回落中文源串。
-    static func text(_ key: String, _ localeTag: String) -> String {
+    package static func text(_ key: String, _ localeTag: String) -> String {
         guard let entry = table[key] else { return key }
         if localeTag.hasPrefix("en") { return entry.en }
         if localeTag.hasPrefix("ja") { return entry.ja }
@@ -16,7 +16,7 @@ package enum JNICopy {
     }
 
     /// %@ / %lld（含 %1$@ 位置式）按顺序或位置替换。实参先由调用方转成字符串。
-    static func format(_ key: String, _ localeTag: String, _ args: String...) -> String {
+    package static func format(_ key: String, _ localeTag: String, _ args: String...) -> String {
         let pattern = text(key, localeTag)
         var result = ""
         var next = 0
@@ -80,14 +80,6 @@ package enum JNICopy {
         "月费加超额": Entry(en: "Plan plus overage", ja: "定額＋超過"),
         "%@ · 刷新要花钱 约 $0.01": Entry(en: "%@ · Refresh costs about $0.01", ja: "%@ · 更新に約 $0.01"),
         "%@ · 读数信箱": Entry(en: "%@ · Reading inbox", ja: "%@ · 検針ポスト"),
-        "按 %@ 显示": Entry(en: "Shown in %@", ja: "%@ で表示"),
-        "用了 %lld%%": Entry(en: "%lld%% used", ja: "%lld%%使用"),
-        "对比 %@同期 %@": Entry(en: "vs %@ %@", ja: "%@の同期 %@"),
-        "含还不能对比 %@": Entry(en: "Includes %@ not yet comparable", ja: "まだ比べられない %@ を含む"),
-        "%@ 余额 %@ · 按当前速度还能用 %lld 天": Entry(en: "%1$@ balance %2$@ · %3$lld days left at the current pace", ja: "%1$@の残高 %2$@ · 今のペースであと %3$lld日"),
-        "持平": Entry(en: "Unchanged", ja: "横ばい"),
-        "今天": Entry(en: "Today", ja: "今日"),
-        "明天": Entry(en: "Tomorrow", ja: "明日"),
         "刚刚": Entry(en: "Just now", ja: "たった今"),
         "这回没读到账单。": Entry(en: "No bill came back this time.", ja: "今回は請求を読み取れませんでした。"),
         "还没有账单。": Entry(en: "No bills yet.", ja: "請求はまだない。"),
@@ -103,13 +95,32 @@ package enum JNICopy {
         "那个月合计 %@。": Entry(en: "That month came to %@.", ja: "その月は合計 %@。"),
         "本月至今 %@，预计月底 %@。": Entry(en: "%1$@ so far this month, %2$@ by month end.", ja: "今月ここまで %1$@、月末見込み %2$@。"),
         "还不能对比": Entry(en: "Not enough to compare", ja: "まだ比べられない"),
-        "花得最多：%@，%@": Entry(en: "Most expensive day: %1$@, %2$@", ja: "最も使った日：%1$@、%2$@"),
-        "每月": Entry(en: "Monthly", ja: "毎月"),
-        "每年": Entry(en: "Yearly", ja: "年ごと"),
-        "%lld 笔，折算每月。年付按 12 摊。": Entry(en: "%lld subscriptions, as a monthly figure. Annual plans are spread over 12 months.", ja: "%lld 件、月額換算。年払いは 12 で割っています。"),
-        "下一笔：%@，%@": Entry(en: "Next: %1$@, %2$@", ja: "次回：%1$@、%2$@"),
         "本月订阅 %@ · 已计入": Entry(en: "Subscriptions %@ · included", ja: "サブスク %@ · 計上済み"),
         "本月订阅 %@ · 未计入": Entry(en: "Subscriptions %@ · not included", ja: "サブスク %@ · 未計上"),
-        "部分数据陈旧，仍显示上次成功的数字": Entry(en: "Some data is stale. Showing the last successful numbers.", ja: "一部のデータが古い。前回成功した数字を表示している。"),
+        "本月至今": Entry(en: "Month to date", ja: "今月の累計"),
+        "预计月底": Entry(en: "Projected", ja: "月末見込み"),
+        "还没有接入任何服务。": Entry(en: "No services connected yet.", ja: "まだサービスを接続していません。"),
+        "用法：": Entry(en: "Usage:", ja: "使い方："),
+        "用法:\n  tollcat                 本月合计\n  tollcat --oneline       一行，给状态栏\n  tollcat --json          机器可读\n  tollcat add <服务>      写入凭据\n  tollcat remove <服务>   移除\n  tollcat refresh         强制拉新\n  tollcat providers       支持的服务\n  tollcat --version\n\n旗标:\n  --no-color              关闭颜色（也认 NO_COLOR）\n  --locale <tag>          覆盖 LANG\n  --max-age <分钟>        账本缓存时长，默认 30，0 表示总是拉新": Entry(en: "Usage:\n  tollcat                 this month's total\n  tollcat --oneline       one line, for a status bar\n  tollcat --json          machine-readable\n  tollcat add <service>   save credentials\n  tollcat remove <service>\n  tollcat refresh         fetch now\n  tollcat providers       supported services\n  tollcat --version\n\nFlags:\n  --no-color              no color (also honors NO_COLOR)\n  --locale <tag>          override LANG\n  --max-age <minutes>     ledger cache, default 30, 0 = always fetch", ja: "使い方:\n  tollcat                 今月の合計\n  tollcat --oneline       1行。ステータスバー用\n  tollcat --json          機械可読\n  tollcat add <サービス>  認証情報を保存\n  tollcat remove <サービス>\n  tollcat refresh         今すぐ取得\n  tollcat providers       対応サービス\n  tollcat --version\n\nフラグ:\n  --no-color              色を消す（NO_COLOR も見る）\n  --locale <tag>          LANG を上書き\n  --max-age <分>          台帳キャッシュ。既定 30。0 で毎回取得"),
+        "未知服务：%@": Entry(en: "Unknown service: %@", ja: "未知のサービス：%@"),
+        "这家服务不接入。": Entry(en: "This service isn't supported.", ja: "このサービスは対象外。"),
+        "CLI 读不了这家：没有公开的账单接口。": Entry(en: "The CLI can't read this one: no public billing API.", ja: "CLI では読めない。公開の請求 API がない。"),
+        "教程：%@": Entry(en: "Guide: %@", ja: "手順：%@"),
+        "要花钱取数，默认刷新会跳过。接入测试仍会打一次。": Entry(en: "This one costs money to refresh, so the default refresh skips it. A connection test still hits the API once.", ja: "取得にお金がかかるので、通常の更新では飛ばす。接続テストでは一度だけ打つ。"),
+        "已接入 %@。": Entry(en: "Connected %@.", ja: "%@ を接続した。"),
+        "已移除 %@。": Entry(en: "Removed %@.", ja: "%@ を削除した。"),
+        "部分刷新失败。": Entry(en: "Some refreshes failed.", ja: "一部の更新に失敗した。"),
+        "未知旗标：%@": Entry(en: "Unknown flag: %@", ja: "未知のフラグ：%@"),
+        "未知命令：%@": Entry(en: "Unknown command: %@", ja: "未知のコマンド：%@"),
+        "用法错误。": Entry(en: "Usage error.", ja: "使い方が違う。"),
+        "非交互环境请设置环境变量 TOLLCAT_<服务>_<字段>。": Entry(en: "In a non-interactive session, set TOLLCAT_<SERVICE>_<FIELD>.", ja: "対話できない環境では、環境変数 TOLLCAT_<サービス>_<フィールド> を設定して。"),
+        "缺必填字段：%@": Entry(en: "Missing required field: %@", ja: "必須項目が足りない：%@"),
+        "取数失败：%@": Entry(en: "Fetch failed: %@", ja: "取得に失敗：%@"),
+        "没有接入 %@。": Entry(en: "%@ isn't connected.", ja: "%@ は接続されていない。"),
+        "%@ ↗ 预计 %@": Entry(en: "%@ ↗ projected %@", ja: "%@ ↗ 見込み %@"),
+        "%@ ↘ 预计 %@": Entry(en: "%@ ↘ projected %@", ja: "%@ ↘ 見込み %@"),
+        "%@ · 预计 %@": Entry(en: "%@ · projected %@", ja: "%@ · 見込み %@"),
+        "Secret Service 不可用。凭据请用环境变量 TOLLCAT_<服务>_<字段>。": Entry(en: "Secret Service isn't available. Set credentials with TOLLCAT_<SERVICE>_<FIELD>.", ja: "Secret Service が使えない。認証情報は環境変数 TOLLCAT_<サービス>_<フィールド> で渡して。"),
+        "%@ 的凭据没能从钥匙环删除，已保留接入。": Entry(en: "Couldn't delete the %@ credential from the keyring, so the service is still connected.", ja: "%@ の認証情報をキーリングから削除できなかったため、接続はそのままにした。"),
     ]
 }

@@ -1,7 +1,7 @@
 import Foundation
 import MeterCore
 
-/// Azion Billing GraphQL：`paymentsClientDebt` / `balanceFinancialEntry` 的 `amount` + `currency`。
+/// Azion Billing GraphQL：`paymentsClientDebt` 的 `amount` + `currency`。
 ///
 /// 文档：`POST https://api.azion.com/v4/billing/graphql`
 /// 认证：`Authorization: Token <personal token>`。
@@ -74,40 +74,19 @@ public struct AzionBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        if debts.isEmpty {
-            let entries = try await loadEntries(headers: headers)
-            for entry in entries {
-                let type = entry.entryType?.lowercased() ?? ""
-                guard type.contains("debit") || type.isEmpty else { continue }
-                try currencies.observe(entry.currency, providerID: .azion)
-                let amount = entry.amount?.value ?? 0
-                guard amount != 0 else { continue }
-                currentTotal += amount
-                let label = entry.description?.trimmed
-                    ?? entry.entryType?.trimmed
-                    ?? "entry"
-                lines.add(
-                    SpendLine(
-                        category: "entry",
-                        label: label,
-                        amountUSD: Money(usd: amount)
-                    )
-                )
-            }
-        }
-
-        let converted = try currencies.convert(currentTotal, rates: rateSource.current, providerID: .azion)
-        return Snapshot(
+        // 以前债务为空时会退回 `balanceFinancialEntry`，但那张表查不到日期，
+        // 最多 200 条历史流水会整批算成本月花费。无法按月归属的数不进本月总数；
+        // 没有债务就如实报本月没有待付。
+        return try Snapshot(
             providerID: .azion,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadDebts(headers: [String: String]) async throws -> [Debt] {
@@ -120,18 +99,6 @@ public struct AzionBillingProvider: BillingProvider, Sendable {
             providerID: .azion
         )
         return payload.paymentsClientDebt ?? []
-    }
-
-    private func loadEntries(headers: [String: String]) async throws -> [Entry] {
-        let payload = try await ProviderGraphQL.query(
-            EntryData.self,
-            url: Self.graphqlURL,
-            query: Self.entryQuery,
-            headers: headers,
-            client: httpClient,
-            providerID: .azion
-        )
-        return payload.balanceFinancialEntry ?? []
     }
 
     static let graphqlURL = ProviderURL.https(
@@ -147,17 +114,6 @@ public struct AzionBillingProvider: BillingProvider, Sendable {
         created
         startDate
         endDate
-      }
-    }
-    """
-
-    static let entryQuery = """
-    query {
-      balanceFinancialEntry(limit: 200) {
-        entryType
-        description
-        amount
-        currency
       }
     }
     """
@@ -189,23 +145,12 @@ public struct AzionBillingProvider: BillingProvider, Sendable {
         var paymentsClientDebt: [Debt]?
     }
 
-    struct EntryData: Decodable, Sendable {
-        var balanceFinancialEntry: [Entry]?
-    }
-
     struct Debt: Decodable, Sendable {
         var amount: FlexibleDecimal?
         var currency: String?
         var created: String?
         var startDate: String?
         var endDate: String?
-    }
-
-    struct Entry: Decodable, Sendable {
-        var entryType: String?
-        var description: String?
-        var amount: FlexibleDecimal?
-        var currency: String?
     }
 }
 

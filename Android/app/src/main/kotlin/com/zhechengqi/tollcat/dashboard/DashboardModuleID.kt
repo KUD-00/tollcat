@@ -2,19 +2,6 @@ package com.zhechengqi.tollcat.dashboard
 
 import com.zhechengqi.tollcat.R
 
-enum class DashboardModuleID {
-    MonthToDate,
-    Composition,
-    Anomaly,
-    BalanceAlert,
-    UpcomingCharges,
-    FreeQuota,
-    MonthlyHighlights,
-    ;
-
-    val isPinned: Boolean get() = this == MonthToDate
-}
-
 /** 和 iOS `DashboardModuleID.rawValue` 同一组 id。版式只存字符串。 */
 object DashboardModules {
     const val COMPOSITION = "composition"

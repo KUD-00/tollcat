@@ -48,12 +48,26 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
         let current = CalendarMonthWindow.current(now: now, calendar: calendar)
         var currencies = CurrencyAccumulator()
         try currencies.observe("USD", providerID: .xai)
-        var daily = DailySpendAccumulator()
+        // 日线只认一个来源：有用量日线就全用它，否则才退回账单/预览的整额。
+        // 两边都往同一个累加器里加，本月日线会是合计的两倍左右，图和总数对不上。
+        var billedDaily = DailySpendAccumulator()
+        var usageDaily = DailySpendAccumulator()
         var lines = SpendLineAccumulator()
         var currentTotal: Decimal = 0
+        // 三路都失败时要报错而不是交一个 $0：key 被吊销、网络断了看起来都像「这月没花钱」，
+        // 预算提醒会因此静默放行。只要有一路成功，缺的那路才当「没有这类数据」。
+        var anySourceSucceeded = false
+        var lastError: (any Error)?
 
         // 1) Current-cycle postpaid preview
-        if let preview = try? await loadPostpaidPreview(teamID: teamID, headers: headers) {
+        var preview: Preview?
+        do {
+            preview = try await loadPostpaidPreview(teamID: teamID, headers: headers)
+            anySourceSucceeded = true
+        } catch {
+            lastError = error
+        }
+        if let preview {
             let cents = Self.cents(
                 preview.coreInvoice?.amountAfterVat
                     ?? preview.coreInvoice?.totalWithCorr?.val
@@ -61,7 +75,7 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
             )
             if cents != 0 {
                 currentTotal = cents / 100
-                daily.add(day: current.start, amount: Money(usd: currentTotal))
+                billedDaily.add(day: current.start, amount: Money(usd: currentTotal))
                 for row in preview.coreInvoice?.lines ?? [] {
                     let amount = Self.cents(row.amount) / 100
                     guard amount != 0 else { continue }
@@ -77,7 +91,13 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
         }
 
         // 2) Invoices (current month + optional history)
-        let invoices = (try? await loadInvoices(teamID: teamID, headers: headers)) ?? []
+        var invoices: [Invoice] = []
+        do {
+            invoices = try await loadInvoices(teamID: teamID, headers: headers)
+            anySourceSucceeded = true
+        } catch {
+            lastError = error
+        }
         for inv in invoices {
             let status = (inv.invoiceStatus ?? "").uppercased()
             if status == "INVALID" || status == "WILL_NEVER_BE_CHARGED" { continue }
@@ -85,10 +105,11 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
             guard amount != 0 else { continue }
             let stamp = Self.invoiceStamp(inv, calendar: calendar) ?? current.start
             if current.contains(stamp) || Self.isCurrentCycle(inv, current: current) {
-                if currentTotal == 0 {
-                    currentTotal += amount
-                    daily.add(day: stamp, amount: Money(usd: amount))
-                }
+                // 明细跟着合计走：合计只取了一张（或已由预览给出），
+                // 别的发票的明细再加进来就和合计对不上、和预览明细重复。
+                guard currentTotal == 0 else { continue }
+                currentTotal += amount
+                billedDaily.add(day: stamp, amount: Money(usd: amount))
                 for row in inv.lines ?? [] {
                     let lineAmt = Self.cents(row.amount) / 100
                     guard lineAmt != 0 else { continue }
@@ -101,7 +122,7 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
                     )
                 }
             } else if horizon == .availableHistory {
-                daily.addPastMonth(
+                billedDaily.addPastMonth(
                     start: stamp,
                     amount: Money(usd: amount),
                     current: current,
@@ -110,27 +131,32 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        // 3) Usage analytics USD (fills daily if still empty / supplements)
-        if let usageDaily = try? await loadUsageUSD(
-            teamID: teamID,
-            headers: headers,
-            window: horizon == .availableHistory
-                ? CalendarMonthWindow.spanning(
-                    for: horizon,
-                    lookbackMonths: max(Self.descriptor.historyLookbackMonths, 1),
-                    now: now,
-                    calendar: calendar
-                )
-                : current
-        ) {
-            var usageSum: Decimal = 0
-            for (day, amount) in usageDaily {
+        // 3) Usage analytics USD (daily series; headline only when 1/2 gave nothing)
+        var usageByDay: [Date: Decimal]?
+        do {
+            usageByDay = try await loadUsageUSD(
+                teamID: teamID,
+                headers: headers,
+                window: horizon == .availableHistory
+                    ? CalendarMonthWindow.spanning(
+                        for: horizon,
+                        lookbackMonths: max(Self.descriptor.historyLookbackMonths, 1),
+                        now: now,
+                        calendar: calendar
+                    )
+                    : current
+            )
+            anySourceSucceeded = true
+        } catch {
+            lastError = error
+        }
+        if let usageByDay {
+            for (day, amount) in usageByDay {
                 guard amount != 0 else { continue }
-                usageSum += amount
                 if current.contains(day) {
-                    daily.add(day: day, amount: Money(usd: amount))
+                    usageDaily.add(day: day, amount: Money(usd: amount))
                 } else if horizon == .availableHistory {
-                    daily.addPastMonth(
+                    usageDaily.addPastMonth(
                         start: day,
                         amount: Money(usd: amount),
                         current: current,
@@ -139,12 +165,17 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
                 }
             }
             if currentTotal == 0 {
-                currentTotal = usageDaily
+                currentTotal = usageByDay
                     .filter { current.contains($0.key) }
                     .reduce(Decimal(0)) { $0 + $1.value }
             }
         }
 
+        if !anySourceSucceeded, let lastError {
+            throw lastError
+        }
+
+        let daily = usageDaily.snapshotDaily == nil ? billedDaily : usageDaily
         if currentTotal == 0, daily.total(in: current, calendar: calendar) != .zero {
             currentTotal = daily.total(in: current, calendar: calendar).usd
         }
@@ -245,7 +276,7 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
             for point in series.dataPoints ?? [] {
                 let day = point.timestamp.flatMap { BillingDateParser.parse($0, calendar: calendar) }
                     ?? window.start
-                let value = point.values?.first.map { Decimal($0) } ?? 0
+                let value = point.values?.first?.value ?? 0
                 out[calendar.startOfDay(for: day), default: 0] += value
             }
         }
@@ -316,6 +347,7 @@ public struct XAIBillingProvider: BillingProvider, Sendable {
 
     struct Point: Decodable, Sendable {
         var timestamp: String?
-        var values: [Double]?
+        // 金额不经 Double：二进制浮点存不准分位，逐日累加后会和按字符串解的发票金额对不上。
+        var values: [FlexibleDecimal]?
     }
 }

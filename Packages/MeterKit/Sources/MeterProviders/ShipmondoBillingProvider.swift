@@ -100,8 +100,12 @@ public struct ShipmondoBillingProvider: BillingProvider, Sendable {
                     .uppercased()
                 guard let currency, !currency.isEmpty else { continue }
                 try currencies.observe(currency, providerID: .shipmondo)
-                let stamp = entry.createdAt.flatMap { BillingDateParser.parse($0, calendar: calendar) }
-                    ?? current.start
+                // 只取本月时请求已用 created_at_min/max 限定在本月，没日期也能记进本月；
+                // 多月回溯时没日期就分不清属于哪个月，宁可不记，也不把历史扣费算成本月。
+                let parsed = entry.createdAt.flatMap { BillingDateParser.parse($0, calendar: calendar) }
+                guard let stamp = parsed ?? (horizon == .currentMonth ? current.start : nil) else {
+                    continue
+                }
                 let label = entry.description
                     ?? entry.referenceId.map { "\($0)" }
                     ?? entry.id.map { "\($0)" }
@@ -129,22 +133,17 @@ public struct ShipmondoBillingProvider: BillingProvider, Sendable {
             page += 1
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .shipmondo
-        )
-        return Snapshot(
+        // 明细行也是账户原币，得和合计、日线走同一个汇率，不能直接标成美元。
+        return try Snapshot(
             providerID: .shipmondo,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadEntries(

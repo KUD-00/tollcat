@@ -103,22 +103,17 @@ public struct PaystackBillingProvider: BillingProvider, Sendable {
             page += 1
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .paystack
-        )
-        return Snapshot(
+        // 明细行也是本币（常见奈拉），得和合计、日线走同一个汇率，不能直接标成美元。
+        return try Snapshot(
             providerID: .paystack,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadPage(

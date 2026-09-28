@@ -54,7 +54,7 @@ done < <(
   # 任何一次工具升级带进一个含 URL 字面量的文件都会变成无关红灯。
   # cors.ts 豁免：里面的 https:// 是 CORS 允许的「来访 origin」，
   # 不是出站目标，进 OutboundHosts（关于页）反而是误报成出站。
-  find "$root/App" "$root/Widget" "$root/Packages" "$root/worker" "$root/site" "$root/Android" "$root/Windows" "$root/Mac" \
+  find "$root/App" "$root/Widget" "$root/Packages" "$root/worker" "$root/site" "$root/Android" "$root/Windows" "$root/Mac" "$root/CLI" \
     \( -name '*.swift' -o -name '*.ts' -o -name '*.js' -o -name '*.kt' -o -name '*.cs' \) \
     ! -path '*/.build/*' \
     ! -path '*/build/*' \

@@ -25,12 +25,16 @@ struct LocalizationCoverageTests {
     private static let catalogs = [
         "MeterCore",         // 没有目录，下面会跳过
         "MeterDesign",
+        "MeterFormat",
         "MeterProviders",
         "MeterPersistence",
         "MeterTips",
         "MeterInbox",        // 叶子模块，现在没有目录
         "MeterFeedback",     // 同上
         "MeterUsage",        // 同上
+        "MeterGlance",
+        "MeterDashboard",
+        "MeterModules",
         "MeterFeatures",
     ]
 
@@ -219,7 +223,9 @@ struct LocalizationCoverageTests {
             for file in Self.swiftFiles(in: moduleRoot) {
                 let text = try String(contentsOf: file, encoding: .utf8)
                 let relative = String(file.path.dropFirst(sourcesRoot.path.count + 1))
-                for call in Self.extractLCalls(from: text) {
+                // `LR(` 是 MeterFormat 里还要 `LocalizedStringResource` 的那几处；
+                // `L(` 在那里已经是四个平台都能编的 `PortableText`，键的写法一样。
+                for call in Self.extractLCalls(from: text) + Self.extractLCalls(from: text, marker: "LR(") {
                     checked += 1
                     let catalogKey: String?
                     if call.interpolated {
@@ -371,11 +377,11 @@ struct LocalizationCoverageTests {
         var interpolated: Bool
     }
 
-    private static func extractLCalls(from text: String) -> [SourceCall] {
+    private static func extractLCalls(from text: String, marker: String = "L(") -> [SourceCall] {
         var calls: [SourceCall] = []
         var searchStart = text.startIndex
         while searchStart < text.endIndex,
-              let range = text[searchStart...].range(of: "L(") {
+              let range = text[searchStart...].range(of: marker) {
             let start = range.lowerBound
             if start > text.startIndex {
                 let previous = text[text.index(before: start)]
@@ -530,6 +536,8 @@ struct LocalizationCoverageTests {
         let folders = [
             "App",
             "Widget",
+            "Watch",
+            "WatchWidget",
             "Packages/MeterKit/Sources",
             "Packages/MeterKit/Tests",
             "docs",

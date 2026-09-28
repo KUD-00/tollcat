@@ -83,6 +83,8 @@ class TollCatSession(
     fun nowMillis(): Long = clockOverrideMillis ?: System.currentTimeMillis()
 
     fun bootstrap() {
+        // 旧版本明文留在 preferences 里的信箱读钥，启动就搬走，别等到用户点开信箱。
+        runCatching { InboxMailboxStore.migrateFromPreferences(credentials, preferences) }
         MoneyDisplay.currency = displayCurrency
         val nextCatalog = runCatching { Catalog.parse(MeterCoreNative.catalogJson(MoneyDisplay.localeTag())) }
             .getOrElse { Catalog(emptyList(), listOf("USD")) }

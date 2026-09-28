@@ -24,6 +24,8 @@ env:
 jobs:
   testflight:
     name: Archive iOS and upload to TestFlight
+    # workflow_dispatch 可以选任意分支：只有 main 才能拿到签名证书和 App Store Connect 密钥。
+    if: github.ref == 'refs/heads/main'
     runs-on: macos-26
     # Secrets live only in this environment; ci.yml can read none of them.
     environment: app-store
@@ -38,6 +40,12 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
+
+      # 手表 App 嵌在 iPhone 包里：没装 watchOS 平台，xcodebuild 连 iOS 模拟器都不肯编
+      # （"This scheme builds an embedded Apple Watch app. watchOS … must be installed"）。
+      # runner 镜像一般自带；没有才下（几 GB）。
+      - name: Ensure watchOS platform
+        run: xcrun simctl list runtimes | grep -q watchOS || xcodebuild -downloadPlatform watchOS
 
       - name: Install xcodegen
         run: brew install xcodegen

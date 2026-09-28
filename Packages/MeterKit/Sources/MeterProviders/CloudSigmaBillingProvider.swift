@@ -139,7 +139,10 @@ public struct CloudSigmaBillingProvider: BillingProvider, Sendable {
                 host = String(host[..<slash])
             }
         }
-        guard host.contains("cloudsigma") else {
+        // 子串匹配会放行 `cloudsigma.evil.com`、`evilcloudsigma.com`，凭据的 Basic 头就发到别人家。
+        // 只认出站清单里明列的 cloudsigma 主机，整名相等。
+        host = host.lowercased()
+        guard host.hasSuffix(".cloudsigma.com"), OutboundHosts.allowedHosts.contains(host) else {
             throw ProviderError.missingCredential(providerID: .cloudsigma)
         }
         return host

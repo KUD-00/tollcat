@@ -1,4 +1,5 @@
 import Foundation
+import MeterDashboard
 
 /// 模块在页面上的分区。第一块永远是本月合计（英雄区），其余按版式顺序排；
 /// 手机上相邻的「需要注意」模块并成同一节，卡上各自成卡。

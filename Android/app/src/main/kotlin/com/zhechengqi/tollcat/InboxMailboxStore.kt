@@ -43,14 +43,11 @@ object InboxMailboxStore {
      * 返回搬迁后的值（没有旧值时返回 null）。
      */
     fun migrateFromPreferences(credentials: CredentialStore, preferences: PreferencesStore): Mailbox? {
-        val mailbox = preferences.legacyInboxMailbox
-        val readKey = preferences.legacyInboxReadKey
-        if (mailbox.isBlank() || readKey.isBlank()) {
-            preferences.clearLegacyInbox()
-            return null
+        var moved: Mailbox? = null
+        preferences.migrateLegacyInbox { mailbox, readKey ->
+            save(credentials, mailbox, readKey)
+            moved = Mailbox(mailbox, readKey)
         }
-        save(credentials, mailbox, readKey)
-        preferences.clearLegacyInbox()
-        return Mailbox(mailbox, readKey)
+        return moved
     }
 }

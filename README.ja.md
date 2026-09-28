@@ -52,6 +52,7 @@ SwiftUI、iOS 26+ / macOS 26+、iPhone、iPad、Mac。無料、任意のチッ�
 - `Packages/MeterKit/` — Swift コードのすべて。依存方向の契約は [ARCHITECTURE.md](ARCHITECTURE.md) にあります。譲れない線は二つ：ウィジェットは Providers をリンクせず、自分ではリクエストを送れません。Providers と Tips は互いにリンクせず、請求の認証情報はチップ用 Worker に届きません。
 - `Android/` — 開発中の Android 版。認証情報は同じように端末の Keystore にだけ置きます。まだ開発中です。お楽しみに！猫の手も借りたいので、待ちきれない方はぜひ。
 - `Windows/` — WinUI 3 の外側に、DLL へクロスコンパイルした同じ Swift のコア。コードはありますが、Windows 11 で動かしたことはまだありません。
+- `CLI/` — 同じ Swift コアの上に乗った端末コマンド `tollcat`。Linux 版はこれです。[CLI/README.md](CLI/README.md) を見てください。
 - `shared/` — クロスプラットフォームの事実源（JSON + ジェネレーター）。ここを編集して再生成します。`GENERATED` ヘッダー付きのファイルは出力物です。
 - `site/` — [tollcat.app](https://tollcat.app) のランディングページ。静的サイトです。
 - `worker/` — このプロジェクト唯一のサーバー。次のセクションへ。

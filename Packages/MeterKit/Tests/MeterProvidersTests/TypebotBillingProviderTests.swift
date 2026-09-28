@@ -39,6 +39,31 @@ struct TypebotBillingProviderTests {
         #expect(request.url?.absoluteString.contains("workspaceId=\(workspace)") == true)
     }
 
+    @Test("零小数币不除 100；三位小数币除 1000")
+    func stripeCurrencyExponent() {
+        #expect(TypebotBillingProvider.majorUnits(10_000, currency: "jpy") == 10_000)
+        #expect(TypebotBillingProvider.majorUnits(12_340, currency: "KWD") == Decimal(string: "12.34")!)
+        #expect(TypebotBillingProvider.majorUnits(3_900, currency: "usd") == 39)
+    }
+
+    @Test("没有 paid_at 的发票不计入本月")
+    func skipsInvoiceWithoutPaidAt() async throws {
+        let url = TypebotBillingProvider.invoicesURL(workspaceID: workspace)
+        let client = LiveProviderHarness.stub([
+            (
+                url,
+                LiveProviderHarness.json([
+                    "invoices": [
+                        ["id": "INV-OPEN", "amount": 3900, "currency": "usd"]
+                    ]
+                ] as [String: Any])
+            ),
+        ])
+        let snapshot = try await provider(client).fetch(credential: credential)
+        #expect(snapshot.currentSpendUSD == .zero)
+        #expect(snapshot.lines == nil)
+    }
+
     @Test("401 / 403")
     func statusMapping() async {
         let url = TypebotBillingProvider.invoicesURL(workspaceID: workspace)

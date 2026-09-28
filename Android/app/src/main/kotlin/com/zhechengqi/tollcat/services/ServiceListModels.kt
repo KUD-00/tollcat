@@ -403,8 +403,20 @@ private fun quotaForAccounts(rows: List<FreeQuotaRow>, accountIds: Set<String>):
 /** 金额格式化在共享层（币种符号、位数、千分位、显示币种折算都在 Swift 侧）。 */
 internal fun formatMoney(raw: String): String = com.zhechengqi.tollcat.MoneyDisplay.formatUsd(raw)
 
+/**
+ * 逗号默认是千分位（`1,234.56`）。只有「数字,一到两位数字」才当小数逗号：
+ * 德语、法语等键盘敲出来的 `10,50`，以及早先按默认 locale 存下的 `12,34`，
+ * 以前被去掉逗号读成 1050 / 1234。千分位后面恒为三位，两者不会混。
+ */
 internal fun parseAmount(raw: String?): Double? {
     raw ?: return null
-    val numeric = raw.replace(Regex("[^0-9.\\-]"), "")
-    return numeric.toDoubleOrNull()
+    val numeric = raw.replace(Regex("[^0-9.,\\-]"), "")
+    val normalized = if (DECIMAL_COMMA.matches(numeric)) {
+        numeric.replace(',', '.')
+    } else {
+        numeric.replace(",", "")
+    }
+    return normalized.toDoubleOrNull()?.takeIf { it.isFinite() }
 }
+
+private val DECIMAL_COMMA = Regex("^-?\\d+,\\d{1,2}$")

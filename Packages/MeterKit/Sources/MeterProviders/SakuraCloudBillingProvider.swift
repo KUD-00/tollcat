@@ -68,8 +68,13 @@ public struct SakuraCloudBillingProvider: BillingProvider, Sendable {
             url: url, headers: headers, client: httpClient, providerID: .sakuracloud
         )
         let payload = try ProviderHTTP.decode(BillList.self, from: data, providerID: .sakuracloud)
+        // さくら的应用层错误走 HTTP 200 + `is_ok: false`，不带 Bills。
+        // 当空列表读会把权限不足、契约 ID 填错报成本月 ¥0。
+        guard payload.is_ok != false, let bills = payload.Bills else {
+            throw ProviderError.malformedResponse(providerID: .sakuracloud)
+        }
 
-        for bill in payload.Bills ?? [] {
+        for bill in bills {
             let amount = bill.Amount?.value ?? 0
             guard amount != 0 else { continue }
             let stamp = bill.Date.flatMap { BillingDateParser.parse($0, calendar: calendar) }
@@ -95,22 +100,17 @@ public struct SakuraCloudBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .sakuracloud
-        )
-        return Snapshot(
+        // 明细行也是日元，得和合计、日线走同一个汇率，不能直接标成美元。
+        return try Snapshot(
             providerID: .sakuracloud,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     struct BillList: Decodable, Sendable {

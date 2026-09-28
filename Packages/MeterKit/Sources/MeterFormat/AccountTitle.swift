@@ -1,8 +1,6 @@
 import Foundation
 import MeterCore
 
-// 用到 `LocalizedStringResource`，和这个 target 里别的文案文件一样不进 Android 的 .so。
-#if !os(Android)
 
 public struct AccountTitleContext: Equatable, Sendable {
     public var visual: String
@@ -40,7 +38,7 @@ public enum AccountTitle {
 
         var spoken = visual
         if siblingCount > 1 {
-            let spokenNick = nickname ?? String(localized: L("账号 1"))
+            let spokenNick = nickname ?? L("账号 1")
             spoken = "\(providerDisplayName) · \(spokenNick)"
             let sameNickname = siblings.filter { trimmed($0.nickname) == nickname }
             if sameNickname.count > 1, let hint {
@@ -62,4 +60,3 @@ public enum AccountTitle {
         return value.isEmpty ? nil : value
     }
 }
-#endif

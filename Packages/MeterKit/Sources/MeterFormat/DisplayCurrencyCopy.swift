@@ -1,11 +1,9 @@
 import Foundation
 import MeterCore
 
-// Android 的 swift-foundation 没有 LocalizedStringResource，这个文件不进 .so。
-#if !os(Android)
 /// 设置选项和 VoiceOver 用的币种名。代码本身不进 catalog。
 public enum DisplayCurrencyCopy {
-    public static func name(for code: String) -> LocalizedStringResource? {
+    public static func name(for code: String) -> String? {
         switch ExchangeRates.normalized(code) {
         case ExchangeRates.usdCode: return L("美元")
         case "CNY": return L("人民币")
@@ -25,10 +23,7 @@ public enum DisplayCurrencyCopy {
     }
 
     public static func localizedName(for code: String) -> String {
-        if let name = name(for: code) {
-            return String(localized: name)
-        }
-        return ExchangeRates.normalized(code)
+        name(for: code) ?? ExchangeRates.normalized(code)
     }
 
     public static func pickerLabel(for code: String) -> String {
@@ -36,7 +31,6 @@ public enum DisplayCurrencyCopy {
     }
 
     public static func shownAs(_ code: String) -> String {
-        String(localized: L("按 \(localizedName(for: code)) 显示"))
+        L("按 \(localizedName(for: code)) 显示")
     }
 }
-#endif

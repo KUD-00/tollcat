@@ -1222,6 +1222,59 @@ def verify_cat(cat: dict) -> None:
 
 
 # ---------------------------------------------------------------------------
+# 可移植 target 的 Localizable.xcstrings → <Target>Copy.swift（PortableCatalog 的译文表）
+#
+# 这些 target（MeterFormat、MeterDashboard）要在 Android / Windows / Linux 上编译，那边的
+# SwiftPM 不编 String Catalog。桥设了 `PortableLocale.languageTag` 时查这张表——和 Apple
+# 平台读的是同一份 catalog，只是换了个载体，不会出现两份译文各改各的。
+
+PORTABLE_COPY_TARGETS = ("MeterFormat", "MeterDashboard")
+
+
+def gen_portable_copy(target: str) -> str:
+    relative = f"Packages/MeterKit/Sources/{target}/Resources/Localizable.xcstrings"
+    data = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+    rows: list[tuple[str, str, str]] = []
+    for key, entry in sorted(data.get("strings", {}).items()):
+        if entry.get("extractionState") == "stale" or entry.get("shouldTranslate") is False:
+            continue
+        locs = entry.get("localizations") or {}
+        values = {}
+        for lang in ("en", "ja"):
+            unit = (locs.get(lang) or {}).get("stringUnit") or {}
+            if unit.get("value"):
+                values[lang] = unit["value"]
+        if len(values) == 2:
+            rows.append((key, values["en"], values["ja"]))
+
+    def swift_str(s: str) -> str:
+        return '"' + s.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
+
+    lines = [swift_header(relative), ""]
+    lines.append("import Foundation")
+    if target != "MeterFormat":
+        lines.append("import MeterFormat")
+    lines.append("")
+    lines.append(f"/// {target} 的文案出处（见 `PortableCatalog`）：键是中文源串，值是 en / ja。")
+    lines.append("/// 桥上设了 `PortableLocale.languageTag` 时查这张表；Apple 平台不设时走 String Catalog。")
+    lines.append(f"enum {target}Copy {{")
+    lines.append("    static let catalog: PortableCatalog = {")
+    lines.append("        #if canImport(Darwin)")
+    lines.append("        PortableCatalog(table: table, bundleURL: { Bundle.module.bundleURL })")
+    lines.append("        #else")
+    lines.append("        PortableCatalog(table: table)")
+    lines.append("        #endif")
+    lines.append("    }()")
+    lines.append("")
+    lines.append("    private static let table: [String: PortableTranslation] = [")
+    for key, en, ja in rows:
+        lines.append(f"        {swift_str(key)}: PortableTranslation(en: {swift_str(en)}, ja: {swift_str(ja)}),")
+    lines.append("    ]")
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+# ---------------------------------------------------------------------------
 # jni-copy.json + Localizable.xcstrings → JNICopy.swift（编进 Android .so 的三语文案表）
 
 XCSTRINGS_FOR_JNI = (
@@ -1229,8 +1282,10 @@ XCSTRINGS_FOR_JNI = (
     "Packages/MeterKit/Sources/MeterDesign/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterFormat/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterModules/Resources/Localizable.xcstrings",
+    "Packages/MeterKit/Sources/MeterDashboard/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterPersistence/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterProviders/Resources/Localizable.xcstrings",
+    "CLI/Localizable.xcstrings",
 )
 
 
@@ -1267,7 +1322,7 @@ def gen_jni_copy() -> str:
     lines.append("/// `String(localized:)` 会静默回落源语言，所以把需要的键连三语译文一起编进动态库。")
     lines.append("package enum JNICopy {")
     lines.append("    /// languageTag 前缀匹配；表里没有或语言对不上就回落中文源串。")
-    lines.append("    static func text(_ key: String, _ localeTag: String) -> String {")
+    lines.append("    package static func text(_ key: String, _ localeTag: String) -> String {")
     lines.append("        guard let entry = table[key] else { return key }")
     lines.append("        if localeTag.hasPrefix(\"en\") { return entry.en }")
     lines.append("        if localeTag.hasPrefix(\"ja\") { return entry.ja }")
@@ -1275,7 +1330,7 @@ def gen_jni_copy() -> str:
     lines.append("    }")
     lines.append("")
     lines.append("    /// %@ / %lld（含 %1$@ 位置式）按顺序或位置替换。实参先由调用方转成字符串。")
-    lines.append("    static func format(_ key: String, _ localeTag: String, _ args: String...) -> String {")
+    lines.append("    package static func format(_ key: String, _ localeTag: String, _ args: String...) -> String {")
     lines.append("        let pattern = text(key, localeTag)")
     lines.append("        var result = \"\"")
     lines.append("        var next = 0")
@@ -2178,7 +2233,7 @@ def load_widgets() -> dict:
 
 
 def dashboard_module_ids() -> list[str]:
-    path = ROOT / "Packages/MeterKit/Sources/MeterModules/DashboardModuleID.swift"
+    path = ROOT / "Packages/MeterKit/Sources/MeterDashboard/DashboardModuleID.swift"
     ids = re.findall(r"^    case (\w+)$", path.read_text(encoding="utf-8"), re.M)
     if len(ids) < 5:
         raise SystemExit(f"DashboardModuleID.swift: 只解析到 {len(ids)} 块模块，像是解析坏了")
@@ -2239,6 +2294,7 @@ def gen_swift_module_widget_sizes(doc: dict) -> str:
         swift_header("shared/widgets.json"),
         "",
         "import CoreGraphics",
+        "import MeterDashboard",
         "",
         doc_comment(
             [
@@ -2356,6 +2412,7 @@ def gen_swift_widget_bundle(doc: dict) -> str:
         "",
         "import SwiftUI",
         "import WidgetKit",
+        "import MeterDashboard",
         "import MeterModules",
         "",
         doc_comment(
@@ -2376,6 +2433,11 @@ def gen_swift_widget_bundle(doc: dict) -> str:
     for module in with_widgets:
         lines.append(f"        {module['id'][0].upper()}{module['id'][1:]}Widget()")
     lines += [
+        "        // 锁屏那几格不是仪表盘模块，不进 widgets.json：清单在 `GlanceWidgetKind`，",
+        "        // 壳在 `GlanceWidgets.swift`。Mac 没有锁屏，Mac 的 widget 扩展编同一个目录但不登记它们。",
+        "        #if os(iOS)",
+        "        GlanceWidgetBundle().body",
+        "        #endif",
         "    }",
         "}",
     ]
@@ -2485,6 +2547,26 @@ def patch_winget_version(version: str) -> str:
         rf"\g<1>{version}",
         3,
         " PackageVersion",
+    )
+
+
+def gen_cli_version(version: str) -> str:
+    return (
+        swift_header("shared/version.json")
+        + "\n"
+        + "enum CLIVersion {\n"
+        + f'    static let marketing = "{version}"\n'
+        + "}\n"
+    )
+
+
+def patch_homebrew_version(version: str) -> str:
+    return _patch_one(
+        ROOT / "CLI/packaging/homebrew/tollcat.rb",
+        r'^(  version ")[^"]+(")',
+        rf"\g<1>{version}\g<2>",
+        1,
+        " version",
     )
 
 
@@ -3060,9 +3142,15 @@ def gen_swift_whats_new(doc: dict) -> str:
     return "\n".join(lines)
 
 
+def _kotlin_string(text: str) -> str:
+    # Kotlin 字符串里 `$` 是模板：「（订阅 $X）」会被当成变量 X 编译失败，必须转义。
+    escaped = text.replace("\\", "\\\\").replace('"', '\\"').replace("$", "\\$")
+    return f'"{escaped}"'
+
+
 def _kotlin_text(node: dict, key: str) -> str:
     values = ", ".join(
-        f"{lang} = {_swift_string(changelog_text(node, key, lang))}" for lang in CHANGELOG_LANGS
+        f"{lang} = {_kotlin_string(changelog_text(node, key, lang))}" for lang in CHANGELOG_LANGS
     )
     return f"WhatsNewText({values})"
 
@@ -3114,19 +3202,19 @@ def gen_kotlin_whats_new(doc: dict) -> str:
 
     lines.append("    val entries: List<WhatsNewEntry> = listOf(")
     for entry in doc["entries"]:
-        platforms = ", ".join(_swift_string(name) for name in changelog_ordered_platforms(entry))
+        platforms = ", ".join(_kotlin_string(name) for name in changelog_ordered_platforms(entry))
         hero = entry.get("hero")
         if hero is None:
             hero_literal = "null"
         elif hero["kind"] == "cat":
-            hero_literal = f"WhatsNewHero.Cat({_swift_string(hero['mood'])})"
+            hero_literal = f"WhatsNewHero.Cat({_kotlin_string(hero['mood'])})"
         elif hero["kind"] == "glyph":
-            hero_literal = f"WhatsNewHero.Glyph({_swift_string(hero['provider'])})"
+            hero_literal = f"WhatsNewHero.Glyph({_kotlin_string(hero['provider'])})"
         else:
-            hero_literal = f"WhatsNewHero.Shot({_swift_string(hero['name'])})"
+            hero_literal = f"WhatsNewHero.Shot({_kotlin_string(hero['name'])})"
         lines += [
             "        WhatsNewEntry(",
-            f"            version = {_swift_string(entry['version'])},",
+            f"            version = {_kotlin_string(entry['version'])},",
             f"            platforms = setOf({platforms}),",
             f"            showsDrawer = {'true' if changelog_shows_drawer(entry) else 'false'},",
             f"            hero = {hero_literal},",
@@ -3137,8 +3225,8 @@ def gen_kotlin_whats_new(doc: dict) -> str:
             symbol = (item.get("symbol") or {}).get("android")
             lines += [
                 "                WhatsNewItem(",
-                f"                    id = {_swift_string(item['id'])},",
-                f"                    symbol = {_swift_string(symbol) if symbol else 'null'},",
+                f"                    id = {_kotlin_string(item['id'])},",
+                f"                    symbol = {_kotlin_string(symbol) if symbol else 'null'},",
                 f"                    title = {_kotlin_text(item, 'title')},",
                 f"                    body = {_kotlin_text(item, 'body')},",
                 "                ),",
@@ -3263,6 +3351,9 @@ def outputs() -> dict[Path, str]:
         gen_kotlin_cat_artwork(cat)
     )
     result[ROOT / "Android/native/Sources/MeterBridge/JNICopy.swift"] = gen_jni_copy()
+    for target in PORTABLE_COPY_TARGETS:
+        if (ROOT / f"Packages/MeterKit/Sources/{target}").is_dir():
+            result[ROOT / f"Packages/MeterKit/Sources/{target}/{target}Copy.swift"] = gen_portable_copy(target)
     # Android / Windows 的桥资源要一份真文件：SwiftPM 会把 symlink 原样拷进
     # build 产物，到那儿就是断链。内容和 MeterPersistence 那份的一致性由本闸保证。
     # 工作树里仍是 symlink（check_catalog_sync 认），write_text 会写到目标文件。
@@ -3357,6 +3448,8 @@ def outputs() -> dict[Path, str]:
     result[ROOT / "Windows/app/Package.appxmanifest"] = patch_appxmanifest_version(version)
     result[ROOT / "Windows/app/Packaging/TollCat.appinstaller"] = patch_appinstaller_version(version)
     result[ROOT / "Windows/winget/com.zhechengqi.tollcat.yaml"] = patch_winget_version(version)
+    result[ROOT / "CLI/Sources/TollcatCore/CLIVersion.swift"] = gen_cli_version(version)
+    result[ROOT / "CLI/packaging/homebrew/tollcat.rb"] = patch_homebrew_version(version)
     result[ROOT / "site/src/scripts/contact-form.js"] = patch_site_contact_form(contract)
     result[ROOT / "site/src/views/Contact.astro"] = patch_site_contact_view(contract)
     return result

@@ -30,4 +30,24 @@ object CompositionTones {
         )
         return tones[index.mod(tones.size)]
     }
+
+    /**
+     * 大面积填色（构成粗条、树图、形状拼贴）用成对的 container/content：
+     * 字要压在色块上，只有 M3 的 on- 配对有对比度保障，半透明档不行。
+     */
+    @Composable
+    fun fill(index: Int, isOther: Boolean = false): TonePair =
+        fill(MaterialTheme.colorScheme, index, isOther)
+
+    fun fill(scheme: ColorScheme, index: Int, isOther: Boolean = false): TonePair {
+        if (isOther) return TonePair(scheme.surfaceContainerHighest, scheme.onSurfaceVariant)
+        val pairs = listOf(
+            TonePair(scheme.primary, scheme.onPrimary),
+            TonePair(scheme.tertiary, scheme.onTertiary),
+            TonePair(scheme.secondary, scheme.onSecondary),
+            TonePair(scheme.primaryContainer, scheme.onPrimaryContainer),
+            TonePair(scheme.tertiaryContainer, scheme.onTertiaryContainer),
+        )
+        return pairs[index.mod(pairs.size)]
+    }
 }

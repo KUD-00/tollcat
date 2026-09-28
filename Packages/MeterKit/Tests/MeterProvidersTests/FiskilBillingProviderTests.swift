@@ -71,6 +71,26 @@ struct FiskilBillingProviderTests {
         LiveProviderHarness.expectHostsDeclared(client)
     }
 
+    @Test("没有发票列表的对象是畸形响应，不是 $0")
+    func errorObjectIsMalformed() async {
+        let invoicesURL = ProviderURL.https(
+            host: FiskilBillingProvider.apiHost,
+            path: "/v1/energy/invoice",
+            query: [
+                URLQueryItem(name: "end_user_id", value: endUser),
+                URLQueryItem(name: "page[size]", value: "100"),
+            ]
+        )
+        let client = LiveProviderHarness.stub([
+            (FiskilBillingProvider.tokenURL, LiveProviderHarness.json(["token": bearer])),
+            (invoicesURL, LiveProviderHarness.json(["error": "unauthorized"])),
+        ])
+        let error = await #expect(throws: ProviderError.self) {
+            try await provider(client).fetch(credential: credential)
+        }
+        #expect(error?.code == .malformedResponse)
+    }
+
     @Test("401 / 403")
     func statusMapping() async {
         await LiveProviderHarness.expectStatus(401, code: .unauthorized, key: .invalidCredentials) { status in

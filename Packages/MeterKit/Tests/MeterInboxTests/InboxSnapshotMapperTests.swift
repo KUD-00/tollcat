@@ -75,7 +75,7 @@ struct InboxSnapshotMapperTests {
     func legacyRowsReadAsAPI() {
         #expect(SnapshotSource.fromStored(nil) == .api)
         #expect(SnapshotSource.fromStored("") == .api)
-        #expect(SnapshotSource.fromStored("未来的新来源") == .api)
+        #expect(SnapshotSource.fromStored("未来的新来源") == .inbox)
         #expect(SnapshotSource.fromStored("inbox") == .inbox)
         #expect(SnapshotSource.fromStored("manual") == .manual)
         #expect(!SnapshotSource.manual.reconcilesWithVendorConsole)

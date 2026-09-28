@@ -43,7 +43,9 @@ MODULES = (
     "MeterProviders",
     "MeterPersistence",
     "MeterTips",
+    "MeterDashboard",
     "MeterModules",
+    "MeterGlance",
     "MeterFeatures",
 )
 
@@ -365,7 +367,10 @@ def check_source_calls(
     normalized_to_key = {replace_format(key): key for key in strings}
     checked = 0
     for relative, text in files:
-        for raw, interpolated in extract_calls(text, "L("):
+        # `LR(` 是 MeterFormat 里还要 `LocalizedStringResource` 的那几处（widget 的 Text）；
+        # `L(` 在那里已经换成了四个平台都能编的 `PortableText`，键的写法一样。
+        calls = extract_calls(text, "L(") + extract_calls(text, "LR(")
+        for raw, interpolated in calls:
             checked += 1
             if interpolated:
                 catalog_key = normalized_to_key.get(raw)
@@ -461,6 +466,44 @@ def main() -> int:
     app_catalog_path = root / "App" / "Resources" / "Localizable.xcstrings"
     if app_catalog_path.exists():
         catalog_checked += check_catalog_entries("App", load_catalog(app_catalog_path), gaps)
+
+    # 手表壳同理：只有显示名，为的是让主 bundle 带上 en/ja.lproj。表盘上的字在 MeterGlance。
+    watch_catalog_path = root / "Watch" / "Resources" / "Localizable.xcstrings"
+    if watch_catalog_path.exists():
+        catalog_checked += check_catalog_entries("Watch", load_catalog(watch_catalog_path), gaps)
+
+    cli_catalog_path = root / "CLI" / "Localizable.xcstrings"
+    if cli_catalog_path.is_file():
+        cli_catalog = load_catalog(cli_catalog_path)
+        if cli_catalog.get("sourceLanguage") != "zh-Hans":
+            gaps.append(
+                f"[CLI] 源语言是 {cli_catalog.get('sourceLanguage')!r}，不是 zh-Hans"
+            )
+        catalog_checked += check_catalog_entries("CLI", cli_catalog, gaps)
+        check_placeholders("CLI", cli_catalog, placeholders)
+        cli_files = [
+            (str(path.relative_to(root / "CLI")), path.read_text(encoding="utf-8"))
+            for path in swift_files(root / "CLI" / "Sources")
+        ]
+        strings = cli_catalog.get("strings") or {}
+        normalized_to_key = {replace_format(key): key for key in strings}
+        for relative, text in cli_files:
+            for marker in ("JNICopy.text(", "JNICopy.format("):
+                for raw, interpolated in extract_calls(text, marker):
+                    source_checked += 1
+                    if interpolated:
+                        catalog_key = normalized_to_key.get(raw)
+                    else:
+                        catalog_key = raw if raw in strings else None
+                    if catalog_key is None:
+                        gaps.append(f"[CLI] {relative} 没有目录条目：{raw}")
+                        continue
+                    entry = strings.get(catalog_key) or {}
+                    if entry.get("shouldTranslate") is False:
+                        continue
+                    for language in LANGUAGES:
+                        if not string_unit_value(entry, language):
+                            gaps.append(f"[CLI][{language}] {relative}：{catalog_key}")
 
     infoplist_checked = check_infoplist_usage_descriptions(root, gaps)
     catalog_checked += infoplist_checked

@@ -166,6 +166,12 @@ jobs:
           swift build --package-path Android/native --target MeterBridge \
             -Xswiftc -target -Xswiftc arm64-apple-macosx26.0
 
+      # 手表 App 嵌在 iPhone 包里：没装 watchOS 平台，xcodebuild 连 iOS 模拟器都不肯编
+      # （"This scheme builds an embedded Apple Watch app. watchOS … must be installed"）。
+      # runner 镜像一般自带；没有才下（几 GB）。
+      - name: Ensure watchOS platform
+        run: xcrun simctl list runtimes | grep -q watchOS || xcodebuild -downloadPlatform watchOS
+
       - name: Install xcodegen
         run: brew install xcodegen
 
@@ -237,6 +243,12 @@ jobs:
           sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
 
+      # 手表 App 嵌在 iPhone 包里：没装 watchOS 平台，xcodebuild 连 iOS 模拟器都不肯编
+      # （"This scheme builds an embedded Apple Watch app. watchOS … must be installed"）。
+      # runner 镜像一般自带；没有才下（几 GB）。
+      - name: Ensure watchOS platform
+        run: xcrun simctl list runtimes | grep -q watchOS || xcodebuild -downloadPlatform watchOS
+
       - name: Install xcodegen
         run: brew install xcodegen
 
@@ -292,6 +304,25 @@ jobs:
       - name: Test HTTP guards
         run: npm test
 
+  cli:
+    name: CLI
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Test
+        run: swift test --package-path CLI
+
+      - name: Build
+        run: swift build --package-path CLI -c release
+
   windows:
     name: Windows unit tests
     runs-on: windows-latest
@@ -313,6 +344,71 @@ jobs:
 
       - name: Test ledger / path / cat motion
         run: dotnet test Windows/tests/TollCat.Tests.csproj --nologo
+
+  # Android used to be compiled only by release.yml, so a Kotlin or JNI break
+  # surfaced at tag time. Same steps as the release job, minus signing and secrets.
+  android:
+    name: Android build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SWIFT_VERSION: 6.3.3
+      ANDROID_SDK_CHECKSUM: d160cc3206dd1886dae3fef2337af5e25ec034692cd0ec225721c56cc69da7f5
+      NDK_VERSION: 27.3.13750724
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install NDK
+        run: |
+          set -euo pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;${NDK_VERSION}"
+
+      - name: Install Swift and the Android SDK bundle
+        run: |
+          set -euo pipefail
+          # swiftly exits 1 after installing the toolchain when this is missing;
+          # the ubuntu-24.04 runner image stopped shipping it.
+          sudo apt-get update -q
+          sudo apt-get install -y -q libcurl4-openssl-dev
+          curl -fsSL "https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz" | tar -xz -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/swiftly" init --assume-yes --skip-install --quiet-shell-followup
+          . "$HOME/.local/share/swiftly/env.sh"
+          swiftly install "$SWIFT_VERSION" --use
+          swift --version
+          # Remote bundles need --checksum. Value from swift.org/api/v1/install/releases.json
+          # (6.3.3 → "Android SDK"); bump it together with SWIFT_VERSION.
+          swift sdk install --checksum "${ANDROID_SDK_CHECKSUM}" \
+            "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
+          echo "$HOME/.local/share/swiftly/bin" >> "$GITHUB_PATH"
+
+      - name: Cross-compile MeterCore and stage jniLibs
+        run: |
+          set -euo pipefail
+          # ANDROID_HOME is the runner's shell variable, not part of the workflow
+          # env context, so reading it through the env expression gave an empty prefix.
+          export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/$NDK_VERSION"
+          . "$HOME/.local/share/swiftly/env.sh"
+          # Where swift sdk install puts bundles moved between toolchains
+          # (~/.swiftpm vs the XDG config dir); find it instead of assuming.
+          SDK_BUNDLE="$(find "$HOME" -type d -path "*/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android" -print -quit)"
+          [[ -n "$SDK_BUNDLE" ]] || { echo "Android Swift SDK bundle not found under $HOME" >&2; exit 1; }
+          echo "SDK_BUNDLE=$SDK_BUNDLE"
+          export SDK_BUNDLE
+          bash scripts/android-run.sh --build-only
+
+      - name: Build release AAB (unsigned)
+        run: |
+          set -euo pipefail
+          cd Android
+          ./gradlew --no-daemon :app:bundleRelease
 
   site:
     name: Site build

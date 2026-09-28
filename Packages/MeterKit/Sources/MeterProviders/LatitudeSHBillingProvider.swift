@@ -56,9 +56,13 @@ public struct LatitudeSHBillingProvider: BillingProvider, Sendable {
         var currentTotal: Decimal = 0
         _ = horizon
 
+        // 只看单个项目时也尽量从项目列表拿团队币种：凭 ID 拼一个没币种的项目，
+        // 下面会按美元记账，雷亚尔 / 英镑团队的花费就直接当美元报了。
+        // 列表拿不到（key 只授权了这一个项目、或它不在第一页）就照旧按 ID 取，不能因此取不了数。
         let projects: [Project]
         if let only = try? RequiredCredential.value(.projectID, in: credential, providerID: .latitudesh) {
-            projects = [Project(id: only, currencyCode: nil, name: only)]
+            let listed = (try? await loadProjects(headers: headers))?.first { $0.id == only }
+            projects = [listed ?? Project(id: only, currencyCode: nil, name: only)]
         } else {
             projects = try await loadProjects(headers: headers)
         }
@@ -96,22 +100,17 @@ public struct LatitudeSHBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .latitudesh
-        )
-        return Snapshot(
+        // 明细行也是团队原币，得和合计、日线走同一个汇率，不能直接标成美元。
+        return try Snapshot(
             providerID: .latitudesh,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadProjects(headers: [String: String]) async throws -> [Project] {

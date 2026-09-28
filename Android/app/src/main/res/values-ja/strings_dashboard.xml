@@ -80,7 +80,6 @@
     <string name="superlative_share">最大の割合</string>
     <string name="superlative_rise">最も増えた</string>
     <string name="superlative_stale">最も更新が古い</string>
-    <string name="relative_today">今日</string>
     <string name="dashboard_edit_showing">表示中</string>
     <string name="dashboard_edit_more">その他のモジュール</string>
     <string name="dashboard_edit_reorder">ドラッグで並べ替え。今月の合計と内訳は常に一番上、データのないモジュールは自動的に隠れます。</string>
@@ -97,4 +96,20 @@
     <string name="module_categories_summary">AI 推論、ホスティング、データベースなどのカテゴリ別。</string>
     <string name="module_superlatives_summary">最も増えた、最大の割合、最も更新が古いサービス。</string>
     <string name="module_budget_summary">今月の予算をどれだけ使ったか。</string>
+    <string name="dashboard_hero_now">今日まで</string>
+    <string name="dashboard_hero_projected">月末の見込み</string>
+    <string name="dashboard_hero_today">今日 %1$s</string>
+    <string name="dashboard_urgent_anomaly">%1$s は先月の同じ時期より %2$s 多く使っています</string>
+    <string name="dashboard_urgent_balance">%1$s の残高はあと %2$d 日ほど持ちます</string>
+    <string name="dashboard_urgent_quota">%1$s の無料枠を %2$d%% 使いました</string>
+    <string name="dashboard_card_anomaly">%1$s・先月同期比</string>
+    <string name="dashboard_card_balance">%1$s の残高の見込み</string>
+    <string name="dashboard_card_quota">%1$s の無料枠</string>
+    <string name="dashboard_card_days">%1$d日</string>
+    <string name="dashboard_fab_menu">追加と編集</string>
+    <string name="dashboard_add_subscription">定額サブスクリプションを追加</string>
+    <string name="dashboard_fab_close">折りたたむ</string>
+    <string name="dashboard_budget_marker">予算 %1$s</string>
+    <string name="dashboard_budget_spent">使用済み %1$s</string>
+    <string name="dashboard_budget_remaining">残り %1$s</string>
 </resources>

@@ -64,12 +64,14 @@ public struct QdrantBillingProvider: BillingProvider, Sendable {
         var daily = DailySpendAccumulator()
         var lines = SpendLineAccumulator()
 
+        var foldedPastMeterings = false
         if horizon == .availableHistory {
             for summary in monthly {
                 guard let y = summary.year, let m = summary.month else { continue }
                 guard !(y == year && m == month) else { continue }
                 try currencies.observe(summary.currency, providerID: .qdrant)
                 guard let start = Self.monthStart(year: y, month: m, calendar: calendar) else { continue }
+                foldedPastMeterings = true
                 daily.addPastMonth(
                     start: start,
                     amount: Self.money(millicents: summary.amountMillicents),
@@ -123,7 +125,9 @@ public struct QdrantBillingProvider: BillingProvider, Sendable {
         if currentMillicents == nil {
             // 计量尚无当月行时回退草稿发票。
             let invoices = try await loadInvoices(accountID: accountID, headers: headers)
-            if horizon == .availableHistory {
+            // 往月计量已经进了日线时不再叠发票：两者是同一笔钱的两种口径，
+            // 月初当月计量还没出来的那几天会把历史整整算两遍。
+            if horizon == .availableHistory, !foldedPastMeterings {
                 for invoice in invoices where invoice.status != Self.draftStatus {
                     let start = invoice.createdAt.flatMap { BillingDateParser.parse($0, calendar: calendar) }
                     guard let start else { continue }
@@ -142,7 +146,8 @@ public struct QdrantBillingProvider: BillingProvider, Sendable {
 
         guard let millicents = currentMillicents else {
             // 周期刚开始还没计量/草稿。返回没有读数的快照，不要写成 $0。
-            return Snapshot(
+            // 日线里可能已经有往月原币金额，照样要换成美元，不然 EUR 会冒充 USD。
+            return try Snapshot(
                 providerID: .qdrant,
                 kind: .usage,
                 fetchedAt: now,
@@ -150,22 +155,20 @@ public struct QdrantBillingProvider: BillingProvider, Sendable {
                 periodEnd: window.endInclusive,
                 dailyUSD: daily.snapshotDaily,
                 lines: lines.snapshot
-            )
+            ).convertedToUSD(using: currencies, rates: rateSource.current)
         }
 
-        let raw = Self.decimal(millicents: millicents)
-        let converted = try currencies.convert(raw, rates: rateSource.current, providerID: .qdrant)
-        return Snapshot(
+        // 合计、日线、明细行都按原币拼好再统一换，三者用同一个汇率才对得上。
+        return try Snapshot(
             providerID: .qdrant,
             kind: .usage,
             fetchedAt: now,
             periodStart: window.start,
             periodEnd: window.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: Self.decimal(millicents: millicents)),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadFirstAccountID(headers: [String: String]) async throws -> String {

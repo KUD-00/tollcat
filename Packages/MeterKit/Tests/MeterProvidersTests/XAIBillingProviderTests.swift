@@ -30,6 +30,41 @@ struct XAIBillingProviderTests {
         LiveProviderHarness.expectHostsDeclared(client)
     }
 
+    @Test("预览给合计、用量给日线，本月日线不重复叠加")
+    func dailyComesFromUsageOnly() async throws {
+        let client = LiveProviderHarness.stub([
+            (previewURL, LiveProviderHarness.json([
+                "coreInvoice": ["amountAfterVat": "1234"],
+            ] as [String: Any])),
+            (invoicesURL, LiveProviderHarness.json(["invoices": [] as [Any]])),
+            (usageURL, LiveProviderHarness.json([
+                "timeSeries": [
+                    ["dataPoints": [
+                        ["timestamp": "2026-08-02T12:00:00Z", "values": [5]],
+                        ["timestamp": "2026-08-03T12:00:00Z", "values": [7.34]],
+                    ]],
+                ],
+            ] as [String: Any])),
+        ])
+        let snapshot = try await provider(client).fetch(credential: credential)
+        #expect(snapshot.currentSpendUSD == Money(usd: Decimal(string: "12.34")!))
+        let dailySum = snapshot.dailyUSD?.values.reduce(Decimal(0)) { $0 + $1.usd }
+        #expect(dailySum == Decimal(string: "12.34")!)
+    }
+
+    @Test("三路都失败时报错，不交 $0")
+    func allSourcesFailingThrows() async {
+        let client = LiveProviderHarness.stub([
+            (previewURL, LiveProviderHarness.emptyJSON(status: 401)),
+            (invoicesURL, LiveProviderHarness.emptyJSON(status: 401)),
+            (usageURL, LiveProviderHarness.emptyJSON(status: 401)),
+        ])
+        let error = await #expect(throws: ProviderError.self) {
+            try await provider(client).fetch(credential: credential)
+        }
+        #expect(error?.code == .unauthorized)
+    }
+
     @Test("缺 Team ID")
     func missingTeam() async {
         let error = await #expect(throws: ProviderError.self) {

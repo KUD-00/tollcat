@@ -1,15 +1,17 @@
-### TollCat 上 Mac 了
+### TollCat 1.3：上了 Android，也上了手表
 
-- **Mac 版来了** — 和 iPhone 上是同一个 App，同一份接入说明，同一套数字。凭据仍然只待在你输入它的那台机器上。
-- **菜单栏上就能看见** — 猫蹲在菜单栏里，点开就是这个月到现在花了多少。想让金额一直露在外面也行，设置里三种样式随便挑。
-- **关掉窗口它还在** — 窗口关了只是收进菜单栏，不退出。也可以设成开机就启动，早上打开电脑，数字已经在那儿了。
-- **自己更新** — 从官网直接下载的这一版会自己留意有没有新版本，装的时候不用再跑一趟网站。
+- **手表上也能看** — iPhone 版带上了 Apple Watch App 和表盘上的小组件，抬手就能看到这个月到现在花了多少。锁屏上也能放一个。
+- **Android 版来了** — 和 iPhone 上是同一套算法、同一份接入说明，仪表盘按 Material 3 重新做了一遍。凭据只存在这台手机的 Android Keystore 里。
+- **外币账单的明细也换算了** — 用欧元、日元等币种结账的服务，明细行以前把原币的数字直接标成美元。现在明细和总数用同一个汇率换算。
+- **读不到账单时不再显示 $0** — 有几家服务在凭据失效或接口出错时，会把这个月报成 $0。现在会如实告诉你这次没读到，数字停在上一次。
+- **做了一轮安全检查** — 删除一个服务时，会先吊销它在信箱里的投递 key，再清掉本地记录。断网删不掉会告诉你，不会悄悄留下一把还能用的 key。
 
-### TollCat comes to the Mac
+### TollCat 1.3: on Android, and on your wrist
 
-- **The Mac app is here** — The same app as on iPhone, with the same setup guides and the same numbers. Your credentials still never leave the machine you typed them into.
-- **Right there in the menu bar** — The cat sits in the menu bar, and clicking it shows what this month has cost so far. Prefer the amount always on show? Settings has three styles to choose from.
-- **Closing the window does not quit it** — Close the window and it tucks itself into the menu bar instead of quitting. You can also have it start with the Mac, so the number is already waiting for you in the morning.
-- **It updates itself** — The copy you download from the site keeps an eye out for new versions on its own, so you never have to come back just to install one.
+- **On your wrist, too** — The iPhone app now comes with an Apple Watch app and watch face complications, so one look at your wrist tells you what this month has cost so far. You can put one on the Lock Screen as well.
+- **TollCat on Android** — The same calculations and the same setup guides as on iPhone, with the dashboard rebuilt in Material 3. Your credentials stay in this phone’s Android Keystore.
+- **Itemized lines in other currencies are converted too** — For services billed in euros, yen or other currencies, the itemized lines used to show the original amount labelled as dollars. They now use the same exchange rate as the total.
+- **A failed update no longer shows $0** — A few services reported $0 for the month when a credential had expired or their API returned an error. They now tell you the update failed and keep the last number.
+- **A security review** — This release went through a security review. Removing a service now revokes its inbox ingest key before clearing local records, and if you’re offline you’ll be told, instead of a working key being left behind.
 
-Shipping to: Mac
+Shipping to: iPhone · iPad · Mac · Android

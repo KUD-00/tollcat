@@ -74,6 +74,8 @@ struct NomosBillingProviderTests {
         // 100 EUR * 1.10 = 110 USD
         #expect(snapshot.currentSpendUSD == Money(usd: Decimal(string: "110")!))
         #expect(snapshot.converted?.currency == "EUR")
+        // 明细和合计同一个汇率：不能把 100 欧原样当 100 美元
+        #expect(snapshot.lines?.map(\.amountUSD) == [Money(usd: Decimal(string: "110")!)])
         #expect(client.leakedSecrets([clientSecret, bearer]).isEmpty)
         LiveProviderHarness.expectHostsDeclared(client)
     }

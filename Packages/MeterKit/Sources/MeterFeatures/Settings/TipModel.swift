@@ -89,7 +89,10 @@ final class TipModel {
 
     func observeTransactions() async {
         for await transaction in listener.updates() {
-            ingest(transaction, showComposer: true)
+            // 写进本地库才 finish；写失败就留着，下次启动 StoreKit 会重放。
+            if ingest(transaction, showComposer: true) {
+                await listener.finish(transactionID: transaction.id)
+            }
             await retryUnsentMessages()
         }
     }
@@ -151,13 +154,15 @@ final class TipModel {
         }
     }
 
-    private func ingest(_ transaction: TipTransaction, showComposer: Bool) {
+    /// 返回这笔是否已经落盘。
+    @discardableResult
+    private func ingest(_ transaction: TipTransaction, showComposer: Bool) -> Bool {
         let context = ModelContext(container)
         let existed = (try? TipRecord.fetch(
             transactionID: transaction.id,
             from: context
         )) != nil
-        _ = try? TipRecord.upsert(
+        let saved = (try? TipRecord.upsert(
             transactionID: transaction.id,
             productID: transaction.productID,
             displayPrice: transaction.displayPrice,
@@ -165,7 +170,7 @@ final class TipModel {
             jws: transaction.jws,
             appVersion: appVersion,
             in: context
-        )
+        )) != nil
         reloadHistory()
         thanksVisible = true
         thanksTreat = TipProductID(rawValue: transaction.productID)
@@ -178,6 +183,7 @@ final class TipModel {
             draftName = ""
             draftMessage = ""
         }
+        return saved
     }
 
     private func applyDraft(to transactionID: String) {
