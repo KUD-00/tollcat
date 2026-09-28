@@ -35,6 +35,8 @@ enum BillingPeriodResolver: Sendable {
             guard end > start else { return (fallback.start, fallback.endInclusive) }
             return (start, calendar.date(byAdding: .day, value: -1, to: end) ?? end)
         case .exclusiveWhenMonthStart:
+            // 倒置区间放行出去，下游 `>= start && <= end` 一天都匹配不上，整张发票就丢了。
+            guard end >= start else { return (fallback.start, fallback.endInclusive) }
             if calendar.component(.day, from: end) == 1, end > start {
                 let inclusive = calendar.date(byAdding: .day, value: -1, to: end)
                 return (start, inclusive ?? fallback.endInclusive)

@@ -51,7 +51,15 @@ public struct ProdigiBillingProvider: BillingProvider, Sendable {
             let orders = payload.orders ?? []
             for order in orders {
                 for charge in order.charges ?? [] {
-                    guard let amount = charge.totalCost?.amount?.value else { continue }
+                    guard let raw = charge.totalCost?.amount?.value else { continue }
+                    let type = (charge.type ?? "")
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .lowercased()
+                    // 报价只是询价，没真扣钱；同一把 key 就能造，计进来合计会被随手撑大。
+                    if type == "quote" { continue }
+                    // 退款不管厂商给正数还是负数都只能冲减，否则正数退款会被当成花费再加一遍。
+                    // 缺 type 的照常计入：订单接口不保证每条 charge 都带类型，拒掉会把真实扣费清零。
+                    let amount = type == "refund" ? -abs(raw) : raw
                     try currencies.observe(charge.totalCost?.currency, providerID: .prodigi)
                     total += amount
                 }

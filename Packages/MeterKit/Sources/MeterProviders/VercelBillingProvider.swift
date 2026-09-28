@@ -8,7 +8,8 @@ import MeterCore
 /// 日期：必填 `from` / `to`（ISO 8601 UTC，`to` 是开区间）。日粒度，最长一年。
 /// 响应：JSONL，一行一条 charge。
 ///
-/// Hobby 没有发票，这条接口回 404 `costs_not_found`。当成用量 $0，不是连接失败。
+/// Hobby 没有发票，这条接口回 404 `costs_not_found`。当成用量 $0，不是连接失败；
+/// 别的 404（teamId 错、路径变了）照样报错，不能装成 $0。
 /// 公开接口没有免费额度比例，不编 `freeQuotaUsedRatio`。
 /// 没填 teamId 时用 `/v2/user.defaultTeamId`；Team 范围的 token 这份 user 往往是 limited。
 public struct VercelBillingProvider: BillingProvider, Sendable {
@@ -65,16 +66,8 @@ public struct VercelBillingProvider: BillingProvider, Sendable {
         }
 
         let url = Self.chargesURL(from: fetchWindow.start, to: fetchWindow.nextStart, teamID: teamID)
-        let data: Data
-        do {
-            data = try await ProviderHTTP.get(
-                url: url,
-                headers: headers,
-                client: httpClient,
-                providerID: .vercel
-            )
-        } catch let error as ProviderError where error.code == .billingAPIUnavailable {
-            // Hobby 没有 costs 对象。Pro 空账期是 200 空 JSONL，走下面那条。
+        // Hobby 没有 costs 对象。Pro 空账期是 200 空 JSONL，走下面那条。
+        guard let data = try await loadCharges(url: url, headers: headers) else {
             return Self.zeroUsageSnapshot(now: now, window: current)
         }
 
@@ -141,6 +134,38 @@ public struct VercelBillingProvider: BillingProvider, Sendable {
         )
     }
 
+    /// 返回 nil 表示「Hobby 没有 costs」，只认 404 且正文 `costs_not_found`。
+    ///
+    /// 不走 `ProviderHTTP.get`：它把所有 404 都映射成同一个错误、正文丢掉，
+    /// 区分不了 Hobby 和 teamId 错 / 路径错。那些 404 当 $0 会把整队的花费藏起来，
+    /// 看着像「这个月没花钱」，所以只放行能证明是 Hobby 的那一种。
+    private func loadCharges(url: URL, headers: [String: String]) async throws -> Data? {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        for (field, value) in headers {
+            request.setValue(value, forHTTPHeaderField: field)
+        }
+        let data: Data
+        let response: HTTPURLResponse
+        do {
+            (data, response) = try await httpClient.send(request)
+        } catch let error as ProviderError {
+            throw error
+        } catch {
+            throw ProviderError.networkFailure(providerID: .vercel)
+        }
+        if response.statusCode == 404,
+           let body = try? JSONDecoder().decode(ErrorEnvelope.self, from: data),
+           body.error?.code == "costs_not_found" {
+            return nil
+        }
+        if let mapped = ProviderError.fromHTTPStatus(response.statusCode, providerID: .vercel) {
+            throw mapped
+        }
+        return data
+    }
+
     private func loadDefaultTeamID(headers: [String: String]) async throws -> String? {
         let data = try await ProviderHTTP.get(
             url: Self.userURL,
@@ -164,6 +189,14 @@ public struct VercelBillingProvider: BillingProvider, Sendable {
             items.append(URLQueryItem(name: "teamId", value: teamID))
         }
         return ProviderURL.https(host: "api.vercel.com", path: "/v1/billing/charges", query: items)
+    }
+
+    struct ErrorEnvelope: Decodable, Sendable {
+        var error: ErrorBody?
+    }
+
+    struct ErrorBody: Decodable, Sendable {
+        var code: String?
     }
 
     struct UserEnvelope: Decodable, Sendable {

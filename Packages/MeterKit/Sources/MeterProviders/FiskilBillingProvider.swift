@@ -92,22 +92,17 @@ public struct FiskilBillingProvider: BillingProvider, Sendable {
             cursor = next
         } while pages < Self.maxPages
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .fiskil
-        )
-        return Snapshot(
+        // 先按原币拼快照再统一换：只换合计和日线的话，明细行会把澳元当美元展示。
+        return try Snapshot(
             providerID: .fiskil,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func accessToken(credential: Credential) async throws -> String {
@@ -160,7 +155,11 @@ public struct FiskilBillingProvider: BillingProvider, Sendable {
             providerID: .fiskil
         )
         if let env = try? ProviderHTTP.decode(Envelope.self, from: data, providerID: .fiskil) {
-            let items = env.invoices ?? env.data ?? []
+            // Envelope 的字段全是可选的，`{"error": ...}` 这类错误体也能解出来。
+            // 两个列表键都没有就不是发票页，当空页会把故障报成 $0。
+            guard let items = env.invoices ?? env.data else {
+                throw ProviderError.malformedResponse(providerID: .fiskil)
+            }
             let next = env.links?.next
                 ?? env.meta?.next_cursor
                 ?? env.next_page

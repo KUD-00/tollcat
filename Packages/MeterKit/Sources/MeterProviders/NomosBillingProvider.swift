@@ -92,22 +92,18 @@ public struct NomosBillingProvider: BillingProvider, Sendable {
             cursor = next
         } while pages < Self.maxPages
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .nomos
-        )
-        return Snapshot(
+        // 合计、日线、明细都按原币拼好，收尾统一乘同一个汇率——
+        // 明细若留原币却标成美元，非美元户的逐行金额会差出一个汇率。
+        return try Snapshot(
             providerID: .nomos,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func accessToken(credential: Credential) async throws -> String {

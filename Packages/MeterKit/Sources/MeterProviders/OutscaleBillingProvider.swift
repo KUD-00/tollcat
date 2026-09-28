@@ -11,6 +11,20 @@ import MeterCore
 public struct OutscaleBillingProvider: BillingProvider, Sendable {
     public static var descriptor: ProviderDescriptor { ProviderCatalog.outscale }
     static let defaultRegion = "eu-west-2"
+
+    /// region 会拼进出站主机名 `api.<region>.outscale.com`，也进 SigV4 的签名范围。
+    /// 不校验的话 `x.evil.com#` 之类的值能把带签名的请求改投到别的主机；
+    /// 只放行拼出来正好是出站清单里一台 outscale 主机的 region。
+    static func resolveRegion(_ raw: String?) throws -> String {
+        let region = (raw?.isEmpty == false) ? raw!.lowercased() : defaultRegion
+        let charset = region.unicodeScalars.allSatisfy {
+            ("a"..."z").contains($0) || ("0"..."9").contains($0) || $0 == "-"
+        }
+        guard charset, OutboundHosts.allowedHosts.contains("api.\(region).outscale.com") else {
+            throw ProviderError.missingCredential(providerID: .outscale)
+        }
+        return region
+    }
     /// JS SDK / curl 对 OUTSCALE API 使用的 SigV4 service 名。
     static let signingService = "api"
 
@@ -44,7 +58,7 @@ public struct OutscaleBillingProvider: BillingProvider, Sendable {
         let secretKey = try RequiredCredential.value(.secretAccessKey, in: credential, providerID: .outscale)
         let regionRaw = credential.value(for: .accountID)?
             .trimmingCharacters(in: .whitespacesAndNewlines)
-        let region = (regionRaw?.isEmpty == false) ? regionRaw! : Self.defaultRegion
+        let region = try Self.resolveRegion(regionRaw)
         let current = CalendarMonthWindow.current(now: now, calendar: calendar)
         let months = CalendarMonthWindow.months(
             for: horizon,

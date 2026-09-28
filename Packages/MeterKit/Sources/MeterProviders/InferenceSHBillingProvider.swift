@@ -61,9 +61,15 @@ public struct InferenceSHBillingProvider: BillingProvider, Sendable {
         var lines = SpendLineAccumulator()
         var currentTotal: Decimal = 0
 
-        for bucket in payload.timeseries ?? [] {
-            let stamp = bucket.date.flatMap { BillingDateParser.parse($0, calendar: calendar) }
-                ?? current.start
+        // 本月花费只能从日桶里按日期挑出来，连日桶都没有就算不出本月，报错而不是报 0。
+        guard let series = payload.timeseries else {
+            throw ProviderError.malformedResponse(providerID: .inferencesh)
+        }
+        // `range=30d` 跨月，没日期的日桶分不清属于哪个月，不能默认记进本月。
+        for bucket in series {
+            guard let stamp = bucket.date.flatMap({ BillingDateParser.parse($0, calendar: calendar) }) else {
+                continue
+            }
             let micros = (bucket.per_app ?? [:]).values.reduce(Decimal(0)) { partial, value in
                 partial + value.value
             }
@@ -75,10 +81,8 @@ public struct InferenceSHBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        if currentTotal == 0, let micros = payload.total_cost?.value, micros > 0 {
-            // 无日桶时用区间合计；`range=30d` 可能跨月，只在缺日粒度时回落。
-            currentTotal = micros / Self.microcentsPerUSD
-        }
+        // 不拿 `total_cost` 兜底：它是滚动 30 天的合计，月初本月还没花钱时
+        // 会把上个月的花费整笔报成本月。
 
         for item in payload.per_model ?? [] {
             let micros = item.cost?.value ?? 0

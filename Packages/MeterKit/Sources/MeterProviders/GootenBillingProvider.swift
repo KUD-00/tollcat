@@ -38,7 +38,12 @@ public struct GootenBillingProvider: BillingProvider, Sendable {
         var total = Decimal(0)
 
         let searchData = try await ProviderHTTP.get(
-            url: Self.ordersSearchURL(recipeID: recipeID, billingKey: billingKey, window: window),
+            url: Self.ordersSearchURL(
+                recipeID: recipeID,
+                billingKey: billingKey,
+                window: window,
+                calendar: calendar
+            ),
             headers: [:],
             client: httpClient,
             providerID: .gooten
@@ -75,10 +80,14 @@ public struct GootenBillingProvider: BillingProvider, Sendable {
     static func ordersSearchURL(
         recipeID: String,
         billingKey: String,
-        window: CalendarMonthWindow
+        window: CalendarMonthWindow,
+        calendar: Calendar
     ) -> URL {
         let fmt = ISO8601DateFormatter()
         fmt.formatOptions = [.withFullDate]
+        // 月窗是按 calendar 的本地零点切的；按默认 GMT 写日期，东八区的「1 号零点」
+        // 会写成上月最后一天，查询窗口整体错开一天，和快照标的账期对不上。
+        fmt.timeZone = calendar.timeZone
         return ProviderURL.https(
             host: "api.print.io",
             path: "/api/v/5/source/api/orders",

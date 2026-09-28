@@ -15,7 +15,8 @@ struct GootenBillingProviderTests {
         let search = GootenBillingProvider.ordersSearchURL(
             recipeID: recipe,
             billingKey: billingKey,
-            window: window
+            window: window,
+            calendar: calendar
         )
         let bill1 = GootenBillingProvider.billingURL(
             orderID: "ord-1",
@@ -41,6 +42,24 @@ struct GootenBillingProviderTests {
         #expect(snapshot.kind == .usage)
         #expect(snapshot.currentSpendUSD == Money(usd: Decimal(string: "50.00")!))
         LiveProviderHarness.expectHostsDeclared(client)
+    }
+
+    @Test("查询日期按账期日历写，东边时区的 1 号不会退成上月最后一天")
+    func searchDatesFollowCalendarTimeZone() throws {
+        var tokyo = Calendar(identifier: .gregorian)
+        tokyo.timeZone = try #require(TimeZone(identifier: "Asia/Tokyo"))
+        let window = CalendarMonthWindow.current(now: now, calendar: tokyo)
+        let url = GootenBillingProvider.ordersSearchURL(
+            recipeID: recipe,
+            billingKey: billingKey,
+            window: window,
+            calendar: tokyo
+        )
+        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        let from = items.first { $0.name == "fromDate" }?.value
+        let to = items.first { $0.name == "toDate" }?.value
+        #expect(from?.hasSuffix("-01") == true)
+        #expect(to?.hasSuffix("-01") == true)
     }
 
     private var credential: Credential {

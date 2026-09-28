@@ -154,8 +154,11 @@ public struct MemsetBillingProvider: BillingProvider, Sendable {
         if let list = try? ProviderHTTP.decode([Invoice].self, from: data, providerID: .memset) {
             return list
         }
-        if let wrapped = try? ProviderHTTP.decode(ResultWrap.self, from: data, providerID: .memset) {
-            return wrapped.result ?? wrapped.invoices ?? []
+        // 两个字段都缺时多半是错误体（比如凭据失效）。当成空列表会报一个假 $0，
+        // 用户分不出「这个月没花钱」和「根本没取到」。
+        if let wrapped = try? ProviderHTTP.decode(ResultWrap.self, from: data, providerID: .memset),
+           let invoices = wrapped.result ?? wrapped.invoices {
+            return invoices
         }
         throw ProviderError.malformedResponse(providerID: .memset)
     }

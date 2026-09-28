@@ -61,9 +61,11 @@ public struct QoveryBillingProvider: BillingProvider, Sendable {
         for inv in invoices {
             let amount = inv.total?.value ?? 0
             guard amount != 0 else { continue }
+            // 没有可读日期的发票宁可不记：拿月初兜底会让它必中本月，把旧账算成这个月的钱。
+            guard let stamp = inv.created_at.flatMap({ BillingDateParser.parse($0, calendar: calendar) }) else {
+                continue
+            }
             try currencies.observe(inv.currency_code, providerID: .qovery)
-            let stamp = inv.created_at.flatMap { BillingDateParser.parse($0, calendar: calendar) }
-                ?? current.start
             let label = inv.id ?? "invoice"
             if current.contains(stamp) {
                 currentTotal += amount
@@ -85,22 +87,17 @@ public struct QoveryBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .qovery
-        )
-        return Snapshot(
+        // 合计、日线、明细行都按原币拼好再统一换，三者用同一个汇率才对得上。
+        return try Snapshot(
             providerID: .qovery,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadInvoices(

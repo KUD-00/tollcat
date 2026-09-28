@@ -98,22 +98,17 @@ public struct SoracomBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .soracom
-        )
-        return Snapshot(
+        // 明细行也是账单原币（日元 / 欧元），得和合计、日线走同一个汇率，不能直接标成美元。
+        return try Snapshot(
             providerID: .soracom,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func resolveAuth(credential: Credential) async throws -> (String, String) {

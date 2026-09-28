@@ -81,22 +81,18 @@ public struct GridscaleBillingProvider: BillingProvider, Sendable {
             daily.add(day: current.start, amount: Money(usd: currentTotal))
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .gridscale
-        )
-        return Snapshot(
+        // 合计、日线、明细都按原币拼好，收尾统一乘同一个汇率——
+        // 明细若留原币却标成美元，非美元户的逐行金额会差出一个汇率。
+        return try Snapshot(
             providerID: .gridscale,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     private func loadResources(path: String, headers: [String: String]) async throws -> [Resource] {
@@ -109,10 +105,11 @@ public struct GridscaleBillingProvider: BillingProvider, Sendable {
                 client: httpClient,
                 providerID: .gridscale
             )
-        } catch {
-            // Optional collections may 404; auth failures surface on /objects/servers first.
-            if path != Self.resourcePaths[0] { return [] }
-            throw error
+        } catch let error as ProviderError
+            where error.code == .billingAPIUnavailable && path != Self.resourcePaths[0] {
+            // 只有「这类资源在该账户下不存在」的 404 才当空集合；
+            // 超时、限流、5xx 也吞掉的话，这类资源的钱会静默从合计里消失。
+            return []
         }
         if let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
             // Shape A: { "servers": { "uuid": { ... } } }

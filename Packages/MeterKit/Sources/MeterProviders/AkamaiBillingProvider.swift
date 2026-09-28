@@ -101,7 +101,8 @@ public struct AkamaiBillingProvider: BillingProvider, Sendable {
                 continue
             }
             if data.isEmpty { continue }
-            let invoices = (try? ProviderHTTP.decode([Invoice].self, from: data, providerID: .akamai)) ?? []
+            // 解不开就报格式错：吞成空数组会让这个月静默显示 0，比报错更误导
+            let invoices = try ProviderHTTP.decode([Invoice].self, from: data, providerID: .akamai)
             var monthTotal = Decimal(0)
             for inv in invoices {
                 let amount = inv.invoiceTotal?.value ?? 0
@@ -134,22 +135,18 @@ public struct AkamaiBillingProvider: BillingProvider, Sendable {
             }
         }
 
-        let converted = try currencies.convert(
-            currentTotal,
-            rates: rateSource.current,
-            providerID: .akamai
-        )
-        return Snapshot(
+        // 合计、日线、明细都按原币拼好，收尾统一乘同一个汇率——
+        // 明细若留原币却标成美元，非美元户的逐行金额会差出一个汇率。
+        return try Snapshot(
             providerID: .akamai,
             kind: .usage,
             fetchedAt: now,
             periodStart: current.start,
             periodEnd: current.endInclusive,
-            currentSpendUSD: converted.money,
-            dailyUSD: currencies.scaled(daily.snapshotDaily, by: converted.usdPerUnit),
-            converted: currencies.needsConversionNote ? converted : nil,
+            currentSpendUSD: Money(usd: currentTotal),
+            dailyUSD: daily.snapshotDaily,
             lines: lines.snapshot
-        )
+        ).convertedToUSD(using: currencies, rates: rateSource.current)
     }
 
     static func monthString(window: CalendarMonthWindow, calendar: Calendar) -> String {

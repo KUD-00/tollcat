@@ -60,6 +60,9 @@ struct ConoHaBillingProviderTests {
         #expect(snapshot.kind == .usage)
         // 1500 JPY * 0.0067 ≈ 10.05 — use exact rate below
         #expect(snapshot.currentSpendUSD == Money(usd: Decimal(string: "10.05")!))
+        // 明细行和合计走同一个汇率，不能把 JPY 原值贴上 USD 标签。
+        let lineUSD = (snapshot.lines ?? []).map(\.amountUSD.usd).sorted()
+        #expect(lineUSD == [Decimal(string: "2.68")!, Decimal(string: "7.37")!])
         #expect(client.leakedSecrets([password, token]).isEmpty)
         LiveProviderHarness.expectHostsDeclared(client)
         let auth = try #require(client.requests.first)

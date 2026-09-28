@@ -102,6 +102,16 @@ struct VercelBillingProviderTests {
         #expect(client.leakedSecrets([secret]).isEmpty)
     }
 
+    @Test("不是 costs_not_found 的 404 要报错，不能装成 $0")
+    func otherNotFoundIsAnError() async {
+        let body = Data(#"{"error":{"code":"not_found","message":"Team not found"}}"#.utf8)
+        let client = stubCharges(body, status: 404)
+        let error = await #expect(throws: ProviderError.self) {
+            try await provider(client).fetch(credential: credential)
+        }
+        #expect(error?.code == .billingAPIUnavailable)
+    }
+
     @Test("401 / 403 / 429 / 5xx")
     func statusMapping() async {
         await expectStatus(401, code: .unauthorized, key: .invalidCredentials)
