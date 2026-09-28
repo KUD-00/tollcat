@@ -2,5 +2,5 @@
 // 不要手改：改 shared/version.json 后重跑生成器。
 
 enum CLIVersion {
-    static let marketing = "1.2.0"
+    static let marketing = "1.3.0"
 }

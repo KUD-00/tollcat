@@ -1,7 +1,7 @@
 class Tollcat < Formula
   desc "Your cloud bills, in your pocket"
   homepage "https://tollcat.app"
-  version "1.2.0"
+  version "1.3.0"
   license "MIT"
 
   on_macos do
