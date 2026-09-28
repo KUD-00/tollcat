@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -14,8 +15,12 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +69,11 @@ fun SetupCredentialsStep(
                     values[field.key] = it
                     onEdited()
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = if (field.isSecret) {
+                    Modifier.fillMaxWidth().semantics { contentType = ContentType.Password }
+                } else {
+                    Modifier.fillMaxWidth()
+                },
                 label = { Text(field.label) },
                 supportingText = {
                     when {
@@ -78,6 +87,13 @@ fun SetupCredentialsStep(
                     PasswordVisualTransformation()
                 } else {
                     VisualTransformation.None
+                },
+                // 只遮住显示不够：普通文本输入类型下，输入法会把敲进去的 token 记进词库、
+                // 候选栏，云输入法还会上传。密钥字段声明为密码类型并关掉纠错联想。
+                keyboardOptions = if (field.isSecret) {
+                    KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false)
+                } else {
+                    KeyboardOptions.Default
                 },
                 trailingIcon = {
                     TextButton(

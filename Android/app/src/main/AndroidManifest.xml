@@ -36,17 +36,24 @@
                     android:host="dashboard"
                     android:scheme="tollcat" />
             </intent-filter>
+            <!-- 不写 scheme 时系统忽略 pathPattern，等于接下所有 octet-stream。
+                 写明 content + host 让 pathPattern 生效；多一条是给文件名里带别的点的。 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:host="*" />
                 <data android:mimeType="application/octet-stream" />
                 <data android:pathPattern=".*\\.tollcat" />
+                <data android:pathPattern=".*\\..*\\.tollcat" />
             </intent-filter>
         </activity>
+        <!-- 必须 exported 给桌面宿主，但只让持 BIND_APPWIDGET 的系统发更新。 -->
         <receiver
             android:name=".widget.TollCatWidgetReceiver"
             android:exported="true"
-            android:label="@string/hero_label">
+            android:label="@string/hero_label"
+            android:permission="android.permission.BIND_APPWIDGET">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -57,9 +64,10 @@
         <receiver
             android:name=".settings.ReminderAlarmReceiver"
             android:exported="false" />
+        <!-- 开机与改时间是系统广播，不导出也收得到；导出了任何 app 都能伪造来反复唤醒。 -->
         <receiver
             android:name=".settings.ReminderBootReceiver"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />

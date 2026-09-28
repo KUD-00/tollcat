@@ -22,21 +22,34 @@ class AndroidKeystoreCredentialStore(context: Context) : CredentialStore {
             (appContext.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager).isDeviceSecure
         }.getOrDefault(false)
 
+    // 加密和写回必须和轮换互斥：旧密钥加的信封在轮换删钥之后落盘就成了砖。
+    @Synchronized
     override fun save(secret: String, reference: String) {
         prefs.edit().putString(reference, encrypt(secret)).apply()
     }
 
+    @Synchronized
     override fun read(reference: String): String? {
         val packed = prefs.getString(reference, null) ?: return null
         return decrypt(packed)
     }
 
+    @Synchronized
     override fun delete(reference: String) {
         prefs.edit().remove(reference).apply()
     }
 
+    /**
+     * 清空要连包裹密钥一起删：只清 prefs 的话，谁留了一份旧的 tollcat.credentials
+     * （拷贝、恢复）放回来，同一把密钥照样解得开。密钥没了，旧信封解密失败即拒。
+     */
+    @Synchronized
     override fun deleteAll() {
-        prefs.edit().clear().apply()
+        runCatching {
+            val store = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+            store.deleteEntry(currentAlias())
+        }
+        prefs.edit().clear().commit()
     }
 
     private fun encrypt(plain: String): String = encryptWith(secretKey(), plain)
@@ -79,61 +92,81 @@ class AndroidKeystoreCredentialStore(context: Context) : CredentialStore {
     ///
     /// 设备没有安全锁屏时两种绑定都立不起来，此时退回无绑定的密钥并把
     /// 这个值置为 false，让调用方能看见真实保证，而不是以为已经对齐 iOS。
-    @Volatile
-    var boundToUnlockedDevice: Boolean = true
-        private set
+    /// 读它会先把密钥建出来或读出来再答，不会在还没检查过的时候先报 true。
+    val boundToUnlockedDevice: Boolean
+        get() = runCatching { secretKey() }.isSuccess && bound
 
+    @Volatile
+    private var bound: Boolean = false
+
+    private fun currentAlias(): String = prefs.getString(ALIAS_FLAG, null) ?: ALIAS
+
+    @Synchronized
     private fun secretKey(): SecretKey {
         val store = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
-        (store.getEntry(ALIAS, null) as? KeyStore.SecretKeyEntry)?.secretKey?.let { existing ->
+        val alias = currentAlias()
+        (store.getEntry(alias, null) as? KeyStore.SecretKeyEntry)?.secretKey?.let { existing ->
             // 已有的那把是哪种规格建的，Keystore 不直接告诉我们，所以建的时候
             // 记一笔。没有这笔记录（旧版本装上来的）按未绑定算，宁可低报。
-            boundToUnlockedDevice = prefs.getBoolean(BOUND_FLAG, false)
+            bound = prefs.getBoolean(BOUND_FLAG, false)
             // 首次启动时设备还没设锁屏 → 当时只能建无绑定的密钥。用户后来设了 PIN，
             // 旧实现会一直用那把没有绑定的，等于这台机器上的保证永远升不回来。
             // 这里补一次轮换：换新别名重新加密全部信封，成功后删掉旧密钥。
-            if (!boundToUnlockedDevice && deviceIsSecure) {
-                rotateToBoundKey(store, existing)?.let { return it }
+            if (!bound && deviceIsSecure) {
+                rotateToBoundKey(store, alias, existing)?.let { return it }
             }
             return existing
         }
         // 先按能立起绑定的规格建；设备没有安全锁屏会抛，再退回无绑定的。
-        val key = runCatching { generateKey(bound = true) }
-            .getOrElse {
-                boundToUnlockedDevice = false
-                generateKey(bound = false)
-            }
-        prefs.edit().putBoolean(BOUND_FLAG, boundToUnlockedDevice).apply()
-        return key
+        val fresh = freshAlias()
+        val key = runCatching { generateKey(fresh, bound = true) }
+            .map { it to true }
+            .getOrElse { generateKey(fresh, bound = false) to false }
+        prefs.edit()
+            .putString(ALIAS_FLAG, fresh)
+            .putBoolean(BOUND_FLAG, key.second)
+            .commit()
+        bound = key.second
+        return key.first
     }
 
     /**
-     * 把全部信封从 [old] 解出来、建一把有绑定的新密钥、再逐条加密写回。
+     * 把全部信封从 [old] 解出来、在**新别名**下建一把有绑定的密钥、再逐条加密写回。
      *
-     * 只在**全部**信封都成功重加密之后才落盘并删旧密钥；中途任一条失败就整体放弃，
-     * 保持旧密钥与旧密文可用——宁可保证弱一点，也不能把用户的凭据弄成解不开的砖。
+     * 新旧密钥并存到切换落盘为止：重加密的信封连同新别名一起 `commit()` 成功之后
+     * 才删旧密钥。中途任何一步失败（建钥、加密、写盘、进程被杀）都只丢掉新密钥，
+     * 旧密钥与旧密文原样可用——宁可保证弱一点，也不能把用户的凭据弄成解不开的砖。
      */
-    private fun rotateToBoundKey(store: KeyStore, old: SecretKey): SecretKey? = runCatching {
-        val envelopes = prefs.all
-            .filterKeys { it != BOUND_FLAG }
-            .mapNotNull { (reference, packed) ->
-                (packed as? String)?.let { reference to decryptWith(old, it) }
-            }
-        store.deleteEntry(ALIAS)
-        val fresh = generateKey(bound = true)
-        val reencrypted = envelopes.associate { (reference, plain) -> reference to encryptWith(fresh, plain) }
-        prefs.edit().apply {
-            for ((reference, packed) in reencrypted) putString(reference, packed)
-            putBoolean(BOUND_FLAG, true)
-        }.apply()
-        boundToUnlockedDevice = true
-        fresh
-    }.getOrNull()
+    private fun rotateToBoundKey(store: KeyStore, oldAlias: String, old: SecretKey): SecretKey? {
+        val newAlias = freshAlias()
+        return runCatching {
+            val envelopes = prefs.all
+                .filterKeys { it != BOUND_FLAG && it != ALIAS_FLAG }
+                .mapNotNull { (reference, packed) ->
+                    (packed as? String)?.let { reference to decryptWith(old, it) }
+                }
+            val fresh = generateKey(newAlias, bound = true)
+            val reencrypted = envelopes.associate { (reference, plain) -> reference to encryptWith(fresh, plain) }
+            val committed = prefs.edit().apply {
+                for ((reference, packed) in reencrypted) putString(reference, packed)
+                putString(ALIAS_FLAG, newAlias)
+                putBoolean(BOUND_FLAG, true)
+            }.commit()
+            check(committed)
+            runCatching { store.deleteEntry(oldAlias) }
+            bound = true
+            fresh
+        }.onFailure {
+            runCatching { store.deleteEntry(newAlias) }
+        }.getOrNull()
+    }
 
-    private fun generateKey(bound: Boolean): SecretKey {
+    private fun freshAlias(): String = "$ALIAS.${System.currentTimeMillis()}"
+
+    private fun generateKey(alias: String, bound: Boolean): SecretKey {
         val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
         val spec = KeyGenParameterSpec.Builder(
-            ALIAS,
+            alias,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
         )
             .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
@@ -157,6 +190,7 @@ class AndroidKeystoreCredentialStore(context: Context) : CredentialStore {
 
     private companion object {
         const val ANDROID_KEYSTORE = "AndroidKeyStore"
+        // 旧版本只用这一个固定别名；新建的密钥都在它后面加时间戳，当前用哪把记在 ALIAS_FLAG。
         const val ALIAS = "cat.toll.credentials"
         const val PREFS = "tollcat.credentials"
         const val TRANSFORMATION = "AES/GCM/NoPadding"
@@ -166,5 +200,6 @@ class AndroidKeystoreCredentialStore(context: Context) : CredentialStore {
         const val UNLOCK_VALIDITY_SECONDS = 600
         // 建密钥时记下它到底有没有立起解锁绑定，读回来才不会谎报保证。
         const val BOUND_FLAG = "credentials.boundToUnlockedDevice"
+        const val ALIAS_FLAG = "credentials.keyAlias"
     }
 }

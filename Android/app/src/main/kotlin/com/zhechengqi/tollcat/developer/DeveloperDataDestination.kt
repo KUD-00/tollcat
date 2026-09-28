@@ -121,7 +121,7 @@ fun DeveloperDataDestination(
                         val dump = session.storeDump()
                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         clipboard.setPrimaryClip(ClipData.newPlainText("tollcat-store", dump))
-                        android.util.Log.i("TollCat", dump)
+                        // 整份 store 不进 logcat：release 不剥 Log.i，拿得到 logcat 的都能读走。
                         caption = exported
                         error = null
                         DeveloperDebugLog.record("store", "exported ${session.ledger.snapshots().size} snapshots")
