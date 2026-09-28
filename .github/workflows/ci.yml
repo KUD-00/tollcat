@@ -373,6 +373,10 @@ jobs:
       - name: Install Swift and the Android SDK bundle
         run: |
           set -euo pipefail
+          # swiftly exits 1 after installing the toolchain when this is missing;
+          # the ubuntu-24.04 runner image stopped shipping it.
+          sudo apt-get update -q
+          sudo apt-get install -y -q libcurl4-openssl-dev
           curl -fsSL "https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz" | tar -xz -C "$RUNNER_TEMP"
           "$RUNNER_TEMP/swiftly" init --assume-yes --skip-install --quiet-shell-followup
           . "$HOME/.local/share/swiftly/env.sh"
