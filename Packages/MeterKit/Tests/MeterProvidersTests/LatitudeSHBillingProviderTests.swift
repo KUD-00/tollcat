@@ -74,7 +74,8 @@ struct LatitudeSHBillingProviderTests {
 
     @Test("401 / 403")
     func statusMapping() async {
-        let url = LatitudeSHBillingProvider.projectsURL
+        // 项目列表拿不到时照旧按 ID 取，认证错误由 usage 那一跳报出来。
+        let url = LatitudeSHBillingProvider.usageURL(projectID: projectID)
         await LiveProviderHarness.expectStatus(401, code: .unauthorized, key: .invalidCredentials) { status in
             try await provider(
                 LiveProviderHarness.stub([(url, LiveProviderHarness.emptyJSON(status: status))])

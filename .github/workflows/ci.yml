@@ -390,10 +390,11 @@ jobs:
           echo "$HOME/.local/share/swiftly/bin" >> "$GITHUB_PATH"
 
       - name: Cross-compile MeterCore and stage jniLibs
-        env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/${{ env.NDK_VERSION }}
         run: |
           set -euo pipefail
+          # ANDROID_HOME is the runner's shell variable, not part of the workflow
+          # env context, so reading it through the env expression gave an empty prefix.
+          export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/$NDK_VERSION"
           . "$HOME/.local/share/swiftly/env.sh"
           export SDK_BUNDLE="$HOME/.swiftpm/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android"
           bash scripts/android-run.sh --build-only
