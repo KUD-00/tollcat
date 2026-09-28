@@ -24,6 +24,8 @@ env:
 jobs:
   testflight:
     name: Archive iOS and upload to TestFlight
+    # workflow_dispatch 可以选任意分支：只有 main 才能拿到签名证书和 App Store Connect 密钥。
+    if: github.ref == 'refs/heads/main'
     runs-on: macos-26
     # Secrets live only in this environment; ci.yml can read none of them.
     environment: app-store

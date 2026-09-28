@@ -12,7 +12,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/site/src/assets/screenshots"
 APPSTORE_SHOTS="$ROOT/docs/appstore/screenshots"
-MAC_DERIVED="${MAC_DERIVED:-/tmp/dd-site-mac-screenshots}"
+# 不放 /tmp：那是共享目录，别人先建好同名目录，就能在构建后（或 SKIP_BUILD 时）换掉
+# 里面的 TollCat.app，下面 open 的就是他的程序。放仓库里已被 ignore 的 .derived/，并核对属主。
+MAC_DERIVED="${MAC_DERIVED:-$ROOT/.derived/site-mac-screenshots}"
+mkdir -p "$MAC_DERIVED"
+if [[ ! -O "$MAC_DERIVED" ]]; then
+    echo "MAC_DERIVED is not owned by you: $MAC_DERIVED" >&2
+    exit 1
+fi
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 ADB="${ADB:-$ANDROID_HOME/platform-tools/adb}"
 BUNDLE="com.zhechengqi.tollcat"

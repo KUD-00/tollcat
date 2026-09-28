@@ -345,6 +345,57 @@ jobs:
       - name: Test ledger / path / cat motion
         run: dotnet test Windows/tests/TollCat.Tests.csproj --nologo
 
+  # Android used to be compiled only by release.yml, so a Kotlin or JNI break
+  # surfaced at tag time. Same steps as the release job, minus signing and secrets.
+  android:
+    name: Android build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SWIFT_VERSION: 6.3.3
+      NDK_VERSION: 27.3.13750724
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install NDK
+        run: |
+          set -euo pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;${NDK_VERSION}"
+
+      - name: Install Swift and the Android SDK bundle
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz" | tar -xz -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/swiftly" init --assume-yes --skip-install --quiet-shell-followup
+          . "$HOME/.local/share/swiftly/env.sh"
+          swiftly install "$SWIFT_VERSION" --use
+          swift --version
+          swift sdk install "https://download.swift.org/swift-${SWIFT_VERSION}-release/android-sdk/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle.tar.gz"
+          echo "$HOME/.local/share/swiftly/bin" >> "$GITHUB_PATH"
+
+      - name: Cross-compile MeterCore and stage jniLibs
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/${{ env.NDK_VERSION }}
+        run: |
+          set -euo pipefail
+          . "$HOME/.local/share/swiftly/env.sh"
+          export SDK_BUNDLE="$HOME/.swiftpm/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android"
+          bash scripts/android-run.sh --build-only
+
+      - name: Build release AAB (unsigned)
+        run: |
+          set -euo pipefail
+          cd Android
+          ./gradlew --no-daemon :app:bundleRelease
+
   site:
     name: Site build
     runs-on: ubuntu-latest

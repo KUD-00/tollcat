@@ -29,10 +29,10 @@ on:
         type: boolean
         default: false
 
+# 默认只读，各 job 按需再给：以前三项写权限对所有 job 生效，没有审批闸的 preflight
+# 会在带写 token 的情况下跑 tag 指向的任意提交里的脚本（能改 Release 资产、以 bot 身份推 tag、签 OIDC）。
 permissions:
-  contents: write
-  id-token: write
-  attestations: write
+  contents: read
 
 # One tag = one train = one GitHub Release (draft). Which platforms ride it is
 # decided by the dispatch inputs; a tag push defaults to iOS + Mac both riding.
@@ -60,10 +60,14 @@ env:
 jobs:
   preflight:
     name: Tag matches shared/version.json
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       # The version has one authority, shared/version.json; project.yml / gradle /
       # csproj / appxmanifest / winget are all generated from it (generate-shared
@@ -82,6 +86,10 @@ jobs:
 
   ios:
     name: Archive iOS and upload to App Store Connect
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.ios }}
     needs: preflight
     runs-on: macos-26
@@ -250,6 +258,10 @@ jobs:
 
   mac:
     name: Archive Mac, notarize, sign for Sparkle
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.mac }}
     needs: preflight
     runs-on: macos-26
@@ -461,6 +473,10 @@ jobs:
 
   mac_appstore:
     name: Archive Mac App Store build and upload to App Store Connect
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     # Opt-in only — see the note at the top of this file. `inputs.mac_appstore`
     # is null on a tag push, so this never rides one.
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.mac_appstore }}
@@ -731,6 +747,10 @@ jobs:
 
   android:
     name: Android AAB (Swift cross-compile + gradle)
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     # Runs only when the dispatch checked android: Android rides the train in
     # waves, not on every departure. Never run with real credentials yet; a human
     # must watch the first run — see docs/RELEASE.md.
@@ -822,6 +842,8 @@ jobs:
 
   publish:
     name: Publish GitHub Release
+    permissions:
+      contents: write
     needs: [ios, mac, mac_appstore, windows, android]
     # Unchecked platforms are skipped, which counts as passing; checked ones must
     # succeed; at least one of the three Apple jobs must actually have ridden.

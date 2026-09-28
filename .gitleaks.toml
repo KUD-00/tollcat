@@ -16,10 +16,16 @@ useDefault = true
 
 # 过去的代码审计工具把每个文件的内容哈希写进 .atlas/*.json，40 位十六进制被当成
 # generic-api-key（旁边有 CloudflareBillingCycle.swift 字样的还被认成 cloudflare-api-key）。
-# 目录早已删除，只在历史扫描里出现。
+# 目录早已删除，只在历史扫描里出现（几条远端分支的历史还带着它）。
+# 只对那两条规则、只对纯十六进制哈希、只在 .atlas/ 下同时成立才放行：只按路径放行
+# 等于让 .atlas/ 里的任何真凭据跳过全部规则。
 [[allowlists]]
 description = "atlas 审计产物里的文件内容哈希"
+targetRules = ["generic-api-key", "cloudflare-api-key"]
+condition = "AND"
 paths = ['''^\.atlas/''']
+regexTarget = "secret"
+regexes = ['''^[0-9a-f]{40}$''', '''^[0-9a-f]{64}$''']
 
 # provider 里的 API 域名常量：apiHost = "api.example.com"。域名不是凭据。
 [[allowlists]]
