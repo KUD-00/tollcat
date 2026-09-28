@@ -696,6 +696,9 @@ jobs:
     environment: windows
     env:
       ARTIFACTS: ${{ github.workspace }}/artifacts-windows
+      # Python on the Windows runner defaults to cp1252; shared/version.json
+      # carries Chinese comments, so reading it failed the v1.3.0 train.
+      PYTHONUTF8: "1"
     steps:
       # Windows/ reuses the main repo's source via git symlinks; core.symlinks
       # must be on before checkout.
