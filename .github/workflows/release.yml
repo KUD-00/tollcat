@@ -805,7 +805,12 @@ jobs:
           # env context, so reading it through the env expression gave an empty prefix.
           export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/$NDK_VERSION"
           . "$HOME/.local/share/swiftly/env.sh"
-          export SDK_BUNDLE="$HOME/.swiftpm/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android"
+          # Where swift sdk install puts bundles moved between toolchains
+          # (~/.swiftpm vs the XDG config dir); find it instead of assuming.
+          SDK_BUNDLE="$(find "$HOME" -type d -path "*/swift-sdks/swift-${SWIFT_VERSION}-RELEASE_android.artifactbundle/swift-android" -print -quit)"
+          [[ -n "$SDK_BUNDLE" ]] || { echo "Android Swift SDK bundle not found under $HOME" >&2; exit 1; }
+          echo "SDK_BUNDLE=$SDK_BUNDLE"
+          export SDK_BUNDLE
           bash scripts/android-run.sh --build-only
 
       # versionCode = run number + offset, the same rule as the iOS/Mac build
