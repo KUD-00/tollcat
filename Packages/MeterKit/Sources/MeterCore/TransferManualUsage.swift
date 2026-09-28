@@ -48,7 +48,12 @@ public struct TransferManualUsage: Codable, Equatable, Sendable {
     }
 
     /// 解不出返回 nil，导入方整包拒绝——「读不懂」不能变成 $0 继续跑。
+    /// 写出端是 NSDecimalNumber.stringValue（点号小数），读也钉 POSIX：跟设备 locale 走会把
+    /// "10.50" 读成 1050。NaN 和负数也拒——前者会污染合计，手填的月花费不会是负的。
     public var money: Money? {
-        Decimal(string: amountUSD).map { Money(usd: $0) }
+        guard let value = Decimal(string: amountUSD, locale: Locale(identifier: "en_US_POSIX")),
+              !value.isNaN, value >= 0
+        else { return nil }
+        return Money(usd: value)
     }
 }

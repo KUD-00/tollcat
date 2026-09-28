@@ -70,7 +70,7 @@ struct CredentialManagementTests {
         try dashboard.applyManualUsage(providerID: .cloudflare, amount: Money(usd: 4), to: nil)
         let model = ProviderDetailModel(providerID: .cloudflare, dashboard: dashboard)
         let id = try #require(model.usageAccounts.first?.accountID)
-        await model.deleteUsageAccount(id)
+        try await model.deleteUsageAccount(id)
         #expect(model.usageAccounts.isEmpty)
         #expect(dashboard.memberships().contains { $0.providerID == .cloudflare })
     }

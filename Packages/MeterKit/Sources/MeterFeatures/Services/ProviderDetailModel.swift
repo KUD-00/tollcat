@@ -364,8 +364,9 @@ final class ProviderDetailModel {
         return false
     }
 
-    func deleteUsageAccount(_ accountID: AccountID) async {
-        try? await dashboard.removeConnection(accountID: accountID)
+    /// 投递 key 吊销不掉时 removeConnection 会整体放弃，错误交给界面去提示。
+    func deleteUsageAccount(_ accountID: AccountID) async throws {
+        try await dashboard.removeConnection(accountID: accountID)
     }
 
     /// 一份时跟详情用量节同一句；多份没昵称才写成「账号 1」。

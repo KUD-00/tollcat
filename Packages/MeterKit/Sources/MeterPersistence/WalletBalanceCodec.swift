@@ -3,6 +3,10 @@ import MeterCore
 
 /// 多币种钱包用字符串编 `Decimal`，避免 JSON 数字改分位。
 enum WalletBalanceCodec {
+    /// 写出端是 NSDecimalNumber.stringValue，恒为点号小数。读也钉死 POSIX：默认 locale
+    /// 在德语、法语等把点当千分位的设备上，会把存好的 "12.34" 读成 1234 或直接失败。
+    private static let posix = Locale(identifier: "en_US_POSIX")
+
     struct Entry: Codable {
         var currency: String
         var amount: String
@@ -29,9 +33,9 @@ enum WalletBalanceCodec {
             let entries = try JSONDecoder().decode([Entry].self, from: data)
             let wallets = try entries.map { entry -> ConvertedAmount in
                 guard
-                    let amount = Decimal(string: entry.amount),
-                    let usdPerUnit = Decimal(string: entry.usdPerUnit),
-                    let usd = Decimal(string: entry.usd)
+                    let amount = Decimal(string: entry.amount, locale: Self.posix),
+                    let usdPerUnit = Decimal(string: entry.usdPerUnit, locale: Self.posix),
+                    let usd = Decimal(string: entry.usd, locale: Self.posix)
                 else {
                     throw PersistenceError.corruptWalletBalances
                 }

@@ -35,13 +35,13 @@ public struct LiveCatalogTransport: CatalogTransport, Sendable {
 
     public func get(_ url: URL) async throws -> (Data, URL) {
         guard url.host == allowedHost else { throw CatalogError.hostMismatch }
-        let (data, response): (Data, URLResponse)
+        let (bytes, response): (URLSession.AsyncBytes, URLResponse)
         #if DEBUG
         let started = ContinuousClock.now
         let catalogLog = Logger(subsystem: "com.zhechengqi.tollcat", category: "catalog")
         #endif
         do {
-            (data, response) = try await session.data(from: url)
+            (bytes, response) = try await session.bytes(from: url)
         } catch {
             #if DEBUG
             catalogLog.error("catalog HTTP fail \(String(describing: error), privacy: .public)")
@@ -55,16 +55,32 @@ public struct LiveCatalogTransport: CatalogTransport, Sendable {
             #endif
             throw CatalogError.transportFailed
         }
+        if let finalHost = response.url?.host, finalHost != allowedHost {
+            throw CatalogError.hostMismatch
+        }
+        // 上限要卡在读的过程中：data(from:) 先把整个响应读进内存才比大小，
+        // 源站（或被允许的同主机跳转）回一个几 GB 的 body 就能把进程撑爆。
+        // Content-Length 由对方填，只能用来提前拒，不能代替边读边数。
+        if http.expectedContentLength > Int64(Self.maximumByteCount) {
+            throw CatalogError.tooLarge
+        }
+        var data = Data()
+        do {
+            for try await byte in bytes {
+                data.append(byte)
+                if data.count > Self.maximumByteCount {
+                    throw CatalogError.tooLarge
+                }
+            }
+        } catch let error as CatalogError {
+            throw error
+        } catch {
+            throw CatalogError.transportFailed
+        }
         #if DEBUG
         let elapsedMs = Int((ContinuousClock.now - started) / .milliseconds(1))
         catalogLog.info("catalog HTTP 200 \(elapsedMs, privacy: .public)ms \(data.count, privacy: .public)B")
         #endif
-        if let finalHost = response.url?.host, finalHost != allowedHost {
-            throw CatalogError.hostMismatch
-        }
-        if data.count > Self.maximumByteCount {
-            throw CatalogError.tooLarge
-        }
         if data.isEmpty {
             throw CatalogError.emptyResponse
         }

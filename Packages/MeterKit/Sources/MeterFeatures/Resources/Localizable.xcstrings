@@ -12280,6 +12280,22 @@
         }
       }
     },
+    "没有完成" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Didn’t finish"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了できませんでした"
+          }
+        }
+      }
+    },
     "没有接入免费额度类的服务。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -17324,6 +17340,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "今回は追加の履歴を取得できませんでした"
+          }
+        }
+      }
+    },
+    "这次没能联系上信箱，所以什么都没改。联网后再试一次。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t reach the inbox, so nothing was changed. Try again when you’re online."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検針ポストに接続できなかったため、何も変更していません。オンラインになってからもう一度お試しください。"
           }
         }
       }

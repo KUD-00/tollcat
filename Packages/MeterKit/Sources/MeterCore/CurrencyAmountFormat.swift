@@ -70,28 +70,32 @@ public enum CurrencyAmountFormat: Sendable {
         return negative ? "-\(body)" : body
     }
 
+    /// 全程在十进制数字串上切分：`intValue` 在 Apple 上是 32 位，两千多万（分）就回绕，
+    /// 屏幕和 VoiceOver 念出来的就是个错数。
     private static func digits(_ amount: Decimal, fractionDigits: Int) -> String {
-        if fractionDigits == 0 {
-            var whole = amount
-            var rounded = Decimal()
-            NSDecimalRound(&rounded, &whole, 0, .plain)
-            return thousandsSeparated(NSDecimalNumber(decimal: rounded).intValue)
-        }
         var scaled = amount
         for _ in 0..<fractionDigits {
             scaled *= 10
         }
         var rounded = Decimal()
         NSDecimalRound(&rounded, &scaled, 0, .plain)
-        let units = NSDecimalNumber(decimal: rounded).intValue
-        let base = Int(pow(10.0, Double(fractionDigits)))
-        let fraction = String(format: "%0\(fractionDigits)d", abs(units) % base)
-        return "\(thousandsSeparated(abs(units) / base)).\(fraction)"
+        var units = NSDecimalNumber(decimal: rounded).stringValue
+        if units.hasPrefix("-") {
+            units.removeFirst()
+        }
+        if units.isEmpty || !units.allSatisfy({ ("0"..."9").contains($0) }) {
+            units = "0"
+        }
+        guard fractionDigits > 0 else { return thousandsSeparated(units) }
+        if units.count <= fractionDigits {
+            units = String(repeating: "0", count: fractionDigits - units.count + 1) + units
+        }
+        let split = units.index(units.endIndex, offsetBy: -fractionDigits)
+        return "\(thousandsSeparated(String(units[..<split]))).\(units[split...])"
     }
 
     /// 自己插逗号，不跟系统 locale。
-    private static func thousandsSeparated(_ value: Int) -> String {
-        let digits = String(value)
+    private static func thousandsSeparated(_ digits: String) -> String {
         var grouped = ""
         grouped.reserveCapacity(digits.count + digits.count / 3)
         for (offset, character) in digits.enumerated() {

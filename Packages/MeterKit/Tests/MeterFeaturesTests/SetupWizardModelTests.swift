@@ -189,11 +189,12 @@ struct SetupWizardModelTests {
     func secondAccountDoesNotPrefillAndNeedsNickname() async throws {
         let first = SetupWizardModel(providerID: .cloudflare, dashboard: .previewEmpty)
         await first.prepare()
-        first.applyLaunchOutcome("success")
+        // 先填再测：保存只写测过的那份，测完再改字段就不许存了。
         first.fieldValues = [
             CredentialField.accountID.rawValue: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             CredentialField.apiToken.rawValue: "token-one",
         ]
+        first.applyLaunchOutcome("success")
         first.save()
         #expect(first.saveToken == 1)
 
@@ -248,21 +249,22 @@ struct SetupWizardModelTests {
     func rotateToDifferentRemoteIdentityIsRejected() async throws {
         let create = SetupWizardModel(providerID: .cloudflare, dashboard: .previewEmpty)
         await create.prepare()
-        create.applyLaunchOutcome("success")
         create.fieldValues = [
             CredentialField.accountID.rawValue: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             CredentialField.apiToken.rawValue: "token-one",
         ]
+        create.applyLaunchOutcome("success")
         create.save()
         let accountID = try #require(create.dashboard.connectionStates().first?.accountID)
 
         let rotate = SetupWizardModel(mode: .rotate(accountID, .cloudflare), dashboard: create.dashboard)
         await rotate.prepare()
-        rotate.applyLaunchOutcome("success")
+        // 身份比对看的是测过的那份凭据，所以换成 bbbb 之后再测。
         rotate.fieldValues = [
             CredentialField.accountID.rawValue: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
             CredentialField.apiToken.rawValue: "token-two",
         ]
+        rotate.applyLaunchOutcome("success")
         rotate.save()
         #expect(rotate.saveToken == 0)
         #expect(
@@ -391,6 +393,54 @@ struct SetupWizardModelTests {
             Issue.record("expected success, got \(String(describing: model.outcome))")
             return
         }
+    }
+
+    @Test("测试在飞时改了字段：这次结果作废，不能拿没测过的凭据去保存")
+    func editDuringInFlightTestDiscardsResult() async throws {
+        let harness = try MoonshotGatedHarness()
+        let model = SetupWizardModel(providerID: .moonshot, dashboard: harness.dashboard)
+        await model.prepare()
+        model.updateField("apiKey", value: "sk-kimi-TESTED-AAAA")
+
+        let test = Task { await model.testConnection() }
+        await harness.gate.waitForRequest()
+        // 请求已经带着 A 发出去了；主线程让出来的这段时间里用户改成 B。
+        model.updateField("apiKey", value: "sk-kimi-UNTESTED-BBBB")
+        await harness.gate.open()
+        await test.value
+
+        #expect(model.verifiedSnapshot == nil)
+        #expect(model.testedFieldValues == nil)
+        #expect(model.outcome == nil)
+        #expect(model.capturedExchanges.isEmpty)
+        #expect(!model.canSave)
+        #expect(!model.showsSavePrimaryAction)
+        model.save()
+        #expect(model.saveToken == 0)
+        #expect(model.dashboard.connectionStates().isEmpty)
+    }
+
+    @Test("测通之后保存写的正是测过的那份字段")
+    func saveWritesExactlyTheTestedFields() async throws {
+        let harness = try MoonshotGatedHarness()
+        await harness.gate.open()
+        let model = SetupWizardModel(providerID: .moonshot, dashboard: harness.dashboard)
+        await model.prepare()
+        model.updateField("apiKey", value: "sk-kimi-TESTED-AAAA")
+        await model.testConnection()
+        #expect(model.testedFieldValues == model.fieldValues)
+        #expect(model.canSave)
+
+        // 绕过 updateField 直接改表单（预填之类的路径）也不许存。
+        let tested = model.fieldValues
+        model.fieldValues["apiKey"] = "sk-kimi-UNTESTED-BBBB"
+        #expect(!model.canSave)
+        model.fieldValues = tested
+
+        model.save()
+        #expect(model.saveToken == 1)
+        let state = try #require(model.dashboard.connectionStates().first { $0.providerID == .moonshot })
+        #expect(model.dashboard.storedFields(for: state.accountID) == tested)
     }
 
     @Test("Keychain 失败写在按钮底下，不能静默")
@@ -599,6 +649,83 @@ struct SetupWizardModelTests {
         for (key, value) in SetupFieldPreviewValue.dictionary(for: model.guide.fields) {
             model.updateField(key, value: value)
         }
+    }
+}
+
+/// Moonshot 余额接口的罐装响应，外加一道闸：请求到了先停住，等测试放行才回。
+/// 用来把「请求在飞」这段窗口摊开，在中间改字段。
+@MainActor
+private struct MoonshotGatedHarness {
+    let gate: RequestGate
+    let dashboard: DashboardModel
+
+    init() throws {
+        let gate = RequestGate()
+        self.gate = gate
+        let rates = ExchangeRates(usdPerUnit: ["CNY": Decimal(string: "0.1404")!])
+        let rateSource = SharedExchangeRates(rates)
+        let body = Data(
+            """
+            {"code":0,"data":{"available_balance":15,"cash_balance":0,"voucher_balance":15},"scode":"0x0","status":true}
+            """.utf8
+        )
+        let httpClient = GatedHTTPClient(
+            inner: StubHTTPClient(responses: [
+                URL(string: "https://api.moonshot.cn/v1/users/me/balance")!: StubHTTPResponse(body: body),
+            ]),
+            gate: gate
+        )
+        let clock = MeterClock.design
+        dashboard = DashboardModel(
+            providers: ProviderAssembly.make(
+                now: { clock.now },
+                calendar: clock.calendar,
+                httpClient: httpClient,
+                rateSource: rateSource
+            ),
+            container: try PersistenceContainer.makeContainer(inMemory: true),
+            credentials: InMemoryCredentialStore(),
+            clock: clock,
+            catalogResolver: .bundledOnly(),
+            rateSource: rateSource,
+            httpClient: httpClient
+        )
+    }
+}
+
+private actor RequestGate {
+    private var requested = false
+    private var isOpen = false
+    private var requestWaiters: [CheckedContinuation<Void, Never>] = []
+    private var openWaiters: [CheckedContinuation<Void, Never>] = []
+
+    func arrive() async {
+        requested = true
+        requestWaiters.forEach { $0.resume() }
+        requestWaiters = []
+        guard !isOpen else { return }
+        await withCheckedContinuation { openWaiters.append($0) }
+    }
+
+    func waitForRequest() async {
+        guard !requested else { return }
+        await withCheckedContinuation { requestWaiters.append($0) }
+    }
+
+    func open() {
+        isOpen = true
+        openWaiters.forEach { $0.resume() }
+        openWaiters = []
+    }
+}
+
+private struct GatedHTTPClient: HTTPClient {
+    let inner: StubHTTPClient
+    let gate: RequestGate
+
+    func send(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+        await gate.arrive()
+        return try await inner.send(request)
     }
 }
 

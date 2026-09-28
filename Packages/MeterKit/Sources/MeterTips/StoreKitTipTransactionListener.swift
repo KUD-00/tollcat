@@ -10,6 +10,9 @@ public struct StoreKitTipTransactionListener: TipTransactionListening {
             let task = Task {
                 for await update in Transaction.updates {
                     guard case .verified(let transaction) = update else { continue }
+                    // updates 会推 App 的所有 StoreKit 交易。只认三档打赏；别的商品不 yield、
+                    // 也不 finish，留给它自己的处理方交付。
+                    guard TipProductID(rawValue: transaction.productID) != nil else { continue }
                     let displayPrice = await Self.displayPrice(for: transaction.productID)
                     continuation.yield(
                         TipTransaction(
@@ -20,11 +23,21 @@ public struct StoreKitTipTransactionListener: TipTransactionListening {
                             purchasedAt: transaction.purchaseDate
                         )
                     )
-                    await transaction.finish()
+                    // 不在这里 finish：yield 只是入队，不代表已经记下。见 `finish(transactionID:)`。
                 }
                 continuation.finish()
             }
             continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    public func finish(transactionID: String) async {
+        for await result in Transaction.unfinished {
+            guard case .verified(let transaction) = result,
+                  String(transaction.id) == transactionID
+            else { continue }
+            await transaction.finish()
+            return
         }
     }
 

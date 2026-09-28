@@ -13,6 +13,7 @@ struct ProviderDetailView: View {
     /// 连接参考 / 手填用量必须钉在 View 上，理由同上。
     @State private var isPresentingUsageSetup = false
     @State private var usageSetupAttachesExisting = false
+    @State private var actionFailed = false
     @State private var isPresentingTypedUsage = false
     @State private var editingSubscription: ManualSubscriptionItem?
     @State private var subscriptionPendingDeletion: PersistentIdentifier?
@@ -43,6 +44,7 @@ struct ProviderDetailView: View {
             endedUsageSection
             dangerSection
         }
+        .actionFailedAlert(isPresented: $actionFailed)
         .accessibilityIdentifier(UITestID.providerDetailList)
         .navigationDestination(isPresented: $isShowingBreakdown) {
             SpendBreakdownView(model: model)
@@ -708,7 +710,11 @@ struct ProviderDetailView: View {
     /// 结束之后这一页仍然有用（历史订阅、历史用量都在上面），所以不离开。
     private func endProvider() {
         Task {
-            try? await model.endProvider()
+            do {
+                try await model.endProvider()
+            } catch {
+                actionFailed = true
+            }
         }
     }
 
@@ -718,7 +724,7 @@ struct ProviderDetailView: View {
                 try await model.deleteConnection()
                 leaveDetail()
             } catch {
-                return
+                actionFailed = true
             }
         }
     }
