@@ -5,8 +5,10 @@ enum OnelineRenderer {
         if document.empty {
             return "—"
         }
-        let total = document.formattedVariable
-        let projected = document.formattedProjected
+        let total = document.formattedTotal
+        guard let projected = document.formattedProjected else {
+            return total
+        }
         switch document.comparisonTone {
         case "up":
             return JNICopy.format("%@ ↗ 预计 %@", localeTag, total, projected)

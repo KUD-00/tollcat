@@ -23,7 +23,6 @@ fun servicesUsageScreen(route: ServicesRoute): String {
         // 历史是服务页的一个子列表，不是单独一步漏斗，不另开一个屏幕名。
         ServicesRoute.Past -> UsageScreens.SERVICES
         is ServicesRoute.Detail -> UsageScreens.SERVICES_DETAIL
-        is ServicesRoute.Setup -> UsageScreens.SERVICES_SETUP
     }
 }
 

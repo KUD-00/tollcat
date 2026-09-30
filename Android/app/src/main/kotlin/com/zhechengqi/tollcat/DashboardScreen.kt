@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.rememberCoroutineScope
+import com.zhechengqi.tollcat.dashboard.DashboardModules
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
@@ -47,9 +49,10 @@ import com.zhechengqi.tollcat.dashboard.DashboardRoute
 import com.zhechengqi.tollcat.dashboard.DashboardSkeleton
 import com.zhechengqi.tollcat.dashboard.HeatmapDetailView
 import com.zhechengqi.tollcat.dashboard.SubscriptionsDetailView
-import com.zhechengqi.tollcat.dashboard.dashboardFilterNote
-import com.zhechengqi.tollcat.services.ProviderSubscriptionSheet
-import com.zhechengqi.tollcat.share.ShareCardBuilder
+import com.zhechengqi.tollcat.share.ShareCard
+import com.zhechengqi.tollcat.share.ShareCardRenderer
+import androidx.activity.compose.LocalActivity
+import kotlinx.coroutines.launch
 import com.zhechengqi.tollcat.share.ShareCardExporter
 import com.zhechengqi.tollcat.ui.FadeThroughContent
 import com.zhechengqi.tollcat.ui.HierarchicalContent
@@ -62,25 +65,28 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
     var route by rememberSaveable { mutableStateOf(DashboardRoute.Home) }
     var showFilter by remember { mutableStateOf(false) }
     var showEdit by remember { mutableStateOf(false) }
-    var addingSubscription by remember { mutableStateOf(false) }
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
     var heroBehindStatusBar by remember { mutableStateOf(true) }
     val accounts = DashboardFilterAccount.from(session)
-    val filterNote = dashboardFilterNote(session.filter, accounts)
-    val shareContent = ShareCardBuilder.content(
-        dashboard = dashboard,
-        filterNote = filterNote,
-        emptyTotal = stringResource(R.string.dashboard_empty_title),
-        projectedCaption = if (dashboard.allowsProjection) {
-            stringResource(R.string.projected_caption, dashboard.formattedProjected)
-        } else {
-            null
-        },
-        subscriptionCaption = dashboard.subscriptionCaption,
-        otherLabel = stringResource(R.string.dashboard_composition_other),
-        tagline = stringResource(R.string.share_card_tagline),
-    )
     val shareChooser = stringResource(R.string.action_share_to)
+    val activity = LocalActivity.current
+    val shareScope = rememberCoroutineScope()
+    // 照着仪表盘出图：同一份快照、同一摞模块（编辑面里的顺序），离屏渲成一帧。
+    val share: () -> Unit = share@{
+        val host = activity ?: return@share
+        val order = DashboardModules.resolvedOrder(
+            session.preferences.enabledModuleOrder(),
+            session.preferences.extraModules,
+        )
+        val now = session.nowMillis()
+        val snapshot = dashboard
+        shareScope.launch {
+            val bitmap = ShareCardRenderer.render(host) {
+                ShareCard(dashboard = snapshot, order = order, nowMillis = now)
+            }
+            ShareCardExporter.share(context, bitmap, shareChooser)
+        }
+    }
     // 筛选是重算：JNI 返回的构成已经带着取景框，这里不再二次过滤。
     val composition = dashboard.composition
     val persistenceStatus = session.persistenceStatus()
@@ -88,7 +94,8 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
 
     val phase = when {
         !dashboard.empty -> DashboardPhase.Populated
-        session.isRefreshing -> DashboardPhase.Loading
+        // 冷启动时第一份还没算出来：这时的「空」是还没读，不是没有账单。
+        !session.hasComputedDashboard || session.isRefreshing -> DashboardPhase.Loading
         else -> DashboardPhase.Empty
     }
     val showsHome = phase == DashboardPhase.Populated && route == DashboardRoute.Home
@@ -104,7 +111,6 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                     expanded = fabExpanded,
                     onExpandedChange = { fabExpanded = it },
                     onAddService = { session.openAdd() },
-                    onAddSubscription = { addingSubscription = true },
                     onEditDashboard = { showEdit = true },
                 )
             }
@@ -124,7 +130,7 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxSize(),
                 state = refreshState,
             ) {
-                // 空态三相：没服务→引导；有服务但首笔数据在路上→骨架；有数据→正文。
+                // 空态三相：没服务→引导；首份还没算出来或首笔数据在路上→骨架；有数据→正文。
                 // fade-through 让内容盖着骨架淡入（skeleton loader 定式的收尾）。
                 FadeThroughContent(
                     targetState = phase,
@@ -149,6 +155,7 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                             when (inner) {
                                 DashboardRoute.Composition -> CompositionDetailView(
                                     rows = composition,
+                                    slices = dashboard.compositionSlices,
                                     onBack = { route = DashboardRoute.Home },
                                     onOpenProvider = { session.openAccountOrProvider(it) },
                                 )
@@ -200,7 +207,7 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                                         )
                                     },
                                     onFilter = { showFilter = true },
-                                    onShare = { ShareCardExporter.share(context, shareContent, shareChooser) },
+                                    onShare = share,
                                     isRefreshing = session.isRefreshing,
                                     persistenceStatus = persistenceStatus,
                                     onDismissDemo = { session.dismissDemoBanner() },
@@ -272,19 +279,6 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                 showFilter = false
             },
             onDismiss = { showFilter = false },
-        )
-    }
-    if (addingSubscription) {
-        ProviderSubscriptionSheet(
-            providerId = null,
-            accountId = null,
-            editing = null,
-            onDismiss = { addingSubscription = false },
-            onSave = { row ->
-                session.saveSubscription(row)
-                addingSubscription = false
-            },
-            onDelete = null,
         )
     }
 }

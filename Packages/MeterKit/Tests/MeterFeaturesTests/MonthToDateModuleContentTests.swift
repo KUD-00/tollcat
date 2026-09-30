@@ -212,4 +212,38 @@ struct MonthToDateModuleContentTests {
         #expect(!period.hasPrefix("合计"))
         #expect(!period.contains("合计 ·"))
     }
+
+    @Test("首屏那一对数成对跟口径走：跟随端拿到的月底预计和大数字同一个口径")
+    func projectedAmountTextFollowsScope() {
+        func make(includesSubscriptions: Bool) -> MonthToDateModuleContent {
+            MonthToDateModuleContent.make(
+                from: MonthToDate(
+                    totalUSD: Money(roundedUSD: includesSubscriptions ? 67.20 : 47.20),
+                    projectedMonthEndUSD: Money(roundedUSD: includesSubscriptions ? 107.70 : 87.70),
+                    confidence: .exact,
+                    estimatedAccounts: [],
+                    facts: [],
+                    filter: DashboardFilter(includesSubscriptions: includesSubscriptions),
+                    variableUSD: Money(roundedUSD: 47.20),
+                    subscriptionUSD: Money(usd: 20),
+                    projectedVariableUSD: Money(roundedUSD: 87.70)
+                ),
+                estimatedNames: [],
+                staleCaption: nil,
+                now: MeterClock.design.now,
+                calendar: MeterClock.design.calendar
+            )
+        }
+        let total = make(includesSubscriptions: true)
+        #expect(total.amountText == "$67.20")
+        #expect(total.projectedAmountText == "$107.70")
+        #expect(total.subscriptionAmountText == "$20.00")
+
+        let usage = make(includesSubscriptions: false)
+        #expect(usage.amountText == "$47.20")
+        #expect(usage.projectedAmountText == "$87.70")
+        // 关掉订阅时订阅那行不出现：金额和括号那句同一个条件。
+        #expect(usage.subscriptionAmountText == nil)
+        #expect(usage.showsSubscriptionScope)
+    }
 }

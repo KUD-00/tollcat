@@ -191,7 +191,7 @@ private fun historyAmount(snapshot: SnapshotRow): String {
     snapshot.currentSpendUsd?.let { return formatMoney(it) }
     snapshot.committedMonthlyUsd?.let { return formatMoney(it) }
     snapshot.balanceUsd?.let { return formatMoney(it) }
-    snapshot.freeQuotaUsedRatio?.let { return "${(it * 100).toInt()}%" }
+    snapshot.freeQuotaUsedRatio?.let { return "${quotaUsedPercent(it)}%" }
     return "—"
 }
 

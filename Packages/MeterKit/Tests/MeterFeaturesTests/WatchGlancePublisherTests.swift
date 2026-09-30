@@ -24,6 +24,18 @@ struct WatchGlancePublisherTests {
         #expect(WatchGlancePublisher.changesTheFace(from: GlanceSamples.month, to: GlanceSamples.overBudget))
     }
 
+    /// 服务列表和详情只在手表 App 里，表盘上一格都不画它们。
+    @Test("只有手表 App 里的服务变了，不花额度")
+    func servicesOnlyChange() {
+        var next = GlanceSamples.month
+        if case var .month(month) = next.content {
+            month.services = []
+            next.content = .month(month)
+        }
+        #expect(next != GlanceSamples.month)
+        #expect(!WatchGlancePublisher.changesTheFace(from: GlanceSamples.month, to: next))
+    }
+
     /// 手表上那份已经在说「几小时前更新」了，新刷新的数得去把那句话换掉。
     @Test("手表那份已经旧了就推")
     func previousWentStale() throws {

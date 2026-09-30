@@ -21,6 +21,9 @@ enum OnboardingDemoContent {
 
     static let addPreviewIDs: [ProviderID] = [.aws, .cloudflare, .openai, .github]
 
+    /// 第 2 页示意里「这台设备直接去问」的那三家：和第 1 页构成里的前三名同一批。
+    static let sourcePreviewIDs: [ProviderID] = [.aws, .cloudflare, .openai]
+
     static func monthToDate() -> MonthToDate {
         let usageFacts: [Fact] = usage.map { id, amount in
             Fact(

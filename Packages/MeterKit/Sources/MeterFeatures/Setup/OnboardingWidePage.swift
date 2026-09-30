@@ -48,8 +48,8 @@ struct OnboardingWidePage<Stage: View>: View {
 
 #Preview("Light") {
     OnboardingWidePage(
-        title: L("这个月花了多少"),
-        bodyText: L("各家云和 AI 的账单收成一个数字。打开就能看见这个月已经花了多少。"),
+        title: OnboardingPage.number.title,
+        bodyText: OnboardingPage.number.body,
         spokenProgress: "1 / 4",
         previewWidth: MeterSpacing.onboardingPreviewWidth,
         minHeight: 520
@@ -63,13 +63,13 @@ struct OnboardingWidePage<Stage: View>: View {
 
 #Preview("Dark") {
     OnboardingWidePage(
-        title: L("不必打开也能看见"),
-        bodyText: L("通知里不放金额，也没有金额告警。把小组件放到主屏或锁屏，划过去就是这个月的数字。"),
-        spokenProgress: "3 / 4",
-        previewWidth: MeterSpacing.onboardingWidgetWidth,
+        title: OnboardingPage.source.title,
+        bodyText: OnboardingPage.source.body,
+        spokenProgress: "2 / 4",
+        previewWidth: MeterSpacing.onboardingPreviewWidth,
         minHeight: 520
     ) {
-        OnboardingWidgetPreview(presentation: .usd)
+        OnboardingSourcePreview(shell: .mac)
     }
     .frame(width: 1100, height: 640)
     .background(Color.meterGroupedBackground)

@@ -20,7 +20,9 @@ internal object Bento {
     /** 组内缝。16dp 是「一摞卡」，3dp 才是「一组」。 */
     val gap = 3.dp
 
-    private val outer = 28.dp
+    /** 一组的外角。单独一张卡（比如被拖起来的那一行）四角都用它。 */
+    val outerRadius = 28.dp
+    private val outer = outerRadius
     private val inner = 10.dp
 
     fun shape(

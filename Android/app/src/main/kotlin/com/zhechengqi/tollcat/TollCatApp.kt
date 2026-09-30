@@ -36,6 +36,7 @@ import com.zhechengqi.tollcat.services.PastServicesScreen
 import com.zhechengqi.tollcat.ui.FadeThroughContent
 import com.zhechengqi.tollcat.ui.HierarchicalContent
 import com.zhechengqi.tollcat.ui.OnboardingPreferences
+import com.zhechengqi.tollcat.setup.SetupWizard
 import com.zhechengqi.tollcat.ui.UITestId
 import com.zhechengqi.tollcat.settings.ReminderAlarmScheduler
 import com.zhechengqi.tollcat.settings.WhatsNewEntry
@@ -191,10 +192,17 @@ private fun ServicesHost(session: TollCatSession) {
             ServicesRoute.AddMore -> AddProviderScreen(session, browse = AddProviderBrowse.More)
             ServicesRoute.Past -> PastServicesScreen(session)
             is ServicesRoute.Detail -> ProviderDetailScreen(session, current.providerId)
-            is ServicesRoute.Setup -> SetupCredentialsScreen(
-                session,
-                current.providerId,
-                current.accountId,
+        }
+    }
+    session.setupTarget?.let { target ->
+        TrackScreen(UsageScreens.SERVICES_SETUP)
+        // key：换一家、换一份账号时整份向导状态重来，不沿用上一次填到一半的。
+        androidx.compose.runtime.key(target) {
+            SetupWizard(
+                session = session,
+                providerId = target.providerId,
+                accountId = target.accountId,
+                onClose = { session.closeSetup() },
             )
         }
     }
@@ -207,6 +215,5 @@ private fun ServicesRoute.encode(): String {
         ServicesRoute.AddMore -> "add-more"
         ServicesRoute.Past -> "past"
         is ServicesRoute.Detail -> "detail:$providerId"
-        is ServicesRoute.Setup -> "setup:$providerId:$accountId"
     }
 }

@@ -86,9 +86,9 @@ internal static class TrayService
 
     public static void UpdateIcon()
     {
-        var amount = Session.Current.Dashboard.Empty
+        var amount = Session.Current.TrayDashboard.Empty
             ? "—"
-            : Compact(Session.Current.Dashboard.FormattedVariable);
+            : Compact(Session.Current.TrayDashboard.FormattedTotal);
         var dark = Application.Current.RequestedTheme == ApplicationTheme.Dark;
         var next = TrayGlyph.Create(amount, dark);
         _data.hIcon = next;

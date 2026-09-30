@@ -27,6 +27,10 @@ public struct RootView: View {
     #if DEBUG
     @State private var forceGalleryItem = FeatureLaunchArguments.openGalleryItem
     #endif
+    #if os(iOS)
+    /// 冷启动过渡。演完置回 nil，之后再也不出现。
+    @State private var launchReveal = LaunchReveal.makeForFirstScene()
+    #endif
 
     public init(
         dashboardModel: DashboardModel,
@@ -84,6 +88,21 @@ public struct RootView: View {
                     }
             }
         }
+        #if os(iOS)
+        .environment(\.launchSwatchRegistry, launchReveal?.registry)
+        .overlay {
+            if let launchReveal {
+                LaunchRevealOverlay(reveal: launchReveal) { self.launchReveal = nil }
+            }
+        }
+        .onChange(of: launchRevealInputs, initial: true) { _, inputs in
+            launchReveal?.update(
+                showsDashboard: inputs.showsDashboard,
+                segments: inputs.segments,
+                presentation: dashboardModel.moneyPresentation
+            )
+        }
+        #endif
         .meterControlChrome()
         .environment(\.meterShell, shell)
         .environment(\.moneyPresentation, dashboardModel.moneyPresentation)
@@ -207,6 +226,15 @@ public struct RootView: View {
             }
         }
     }
+
+    #if os(iOS)
+    private var launchRevealInputs: LaunchRevealInputs {
+        LaunchRevealInputs(
+            showsDashboard: !showsOnboarding && selectedTab == .dashboard && !dashboardModel.isEmpty,
+            segments: dashboardModel.compositionContent?.segments ?? []
+        )
+    }
+    #endif
 
     private var shell: MeterShell {
         UsesPadChrome.shell(sizeClass: horizontalSizeClass, size: windowSize)

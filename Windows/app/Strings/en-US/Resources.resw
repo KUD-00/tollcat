@@ -19,14 +19,11 @@
   <data name="TabSettings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="HeroLabel" xml:space="preserve">
-    <value>Month to Date</value>
-  </data>
   <data name="ProjectedCaption" xml:space="preserve">
     <value>Projected {0} by month end</value>
   </data>
   <data name="SubscriptionCaption" xml:space="preserve">
-    <value>Subscriptions +{0}</value>
+    <value>Subscription {0}</value>
   </data>
   <data name="ModuleComposition" xml:space="preserve">
     <value>Breakdown</value>

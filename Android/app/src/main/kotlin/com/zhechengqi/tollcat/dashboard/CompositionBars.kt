@@ -2,11 +2,15 @@
 
 package com.zhechengqi.tollcat.dashboard
 
+import androidx.compose.foundation.layout.heightIn
+import com.zhechengqi.tollcat.ui.MeterSpacing
+import com.zhechengqi.tollcat.ui.LocalStaticRender
 import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.CompositionRow
 import com.zhechengqi.tollcat.R
+import com.zhechengqi.tollcat.launch.LocalLaunchSwatches
+import com.zhechengqi.tollcat.launch.launchSwatch
 import com.zhechengqi.tollcat.TollCatTheme
 import com.zhechengqi.tollcat.services.ServiceGlyph
 import com.zhechengqi.tollcat.ui.LocalReduceMotion
@@ -67,7 +73,9 @@ fun CompositionBarsCard(
     },
 ) {
     if (rows.isEmpty()) return
-    val slices = compositionSlices(rows, stringResource(R.string.dashboard_composition_other))
+    // 传进来的已经是最终的段：构成传共享层合并好的 `compositionSlices`，按类别传全部类别。
+    // 这里不再合并——合并要把金额加起来，而这一端手上只有写好的字。
+    val slices = rows
     val maxFraction = slices.maxOf { it.fraction }.coerceAtLeast(0.0001f)
     val progress = compositionEntrance(slices)
     Surface(
@@ -100,13 +108,19 @@ internal fun CompositionCardHeader(
     onOpenAll: () -> Unit,
     title: String = stringResource(R.string.module_composition),
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 4.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(start = 4.dp)
+            .heightIn(min = MeterSpacing.minTap),
+    ) {
         Text(
             title,
             style = MaterialTheme.typography.titleLargeEmphasized,
             modifier = Modifier.weight(1f),
         )
-        IconButton(onClick = onOpenAll, shapes = IconButtonDefaults.shapes()) {
+        // 渲成分享图时不画：图上点不了。
+        if (!LocalStaticRender.current) IconButton(onClick = onOpenAll, shapes = IconButtonDefaults.shapes()) {
             SymbolIcon(
                 MaterialSymbol.ArrowForward,
                 contentDescription = stringResource(R.string.dashboard_composition_hint),
@@ -154,7 +168,10 @@ private fun CompositionBarRow(
                     .padding(start = 10.dp),
             ) {
                 if (!isOther) {
-                    leading(row, tone)
+                    // 冷启动过渡里口袋的圆牌落在这块上。
+                    Box(Modifier.launchSwatch(LocalLaunchSwatches.current, row.id)) {
+                        leading(row, tone)
+                    }
                 }
                 if (nameFits) {
                     Text(row.displayName, style = nameStyle, color = tone.content, maxLines = 1)

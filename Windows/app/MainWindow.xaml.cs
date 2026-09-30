@@ -70,6 +70,6 @@ public sealed partial class MainWindow : Window
         var dash = Session.Current.Dashboard;
         Title = dash.Empty
             ? Copy.Get("AppDisplayName")
-            : $"{dash.FormattedVariable} · {Copy.Get("AppDisplayName")}";
+            : $"{dash.FormattedTotal} · {Copy.Get("AppDisplayName")}";
     }
 }

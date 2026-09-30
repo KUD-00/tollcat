@@ -4,7 +4,7 @@ import com.zhechengqi.tollcat.DashboardSnapshot
 
 /**
  * 对比瓷砖的视图状态。百分比文本、语气和带月名的 caption 由共享层给出
- * （和 iOS `ComparisonBuilder` 同一份口径），这里只算两根柱的相对高度。
+ * （和 iOS `ComparisonBuilder` 同一份口径），两根柱的数也是；这里只把它们缩成相对高度。
  */
 data class ComparisonContent(
     val percentText: String,
@@ -34,13 +34,10 @@ data class ComparisonContent(
                 "flat" -> Tone.Flat
                 else -> if (dashboard.formattedComparison == null) Tone.Unknown else Tone.Flat
             }
-            val changePercent = dashboard.changePercent
-            val previous = 1f
-            val current = if (changePercent != null) {
-                (1f + changePercent / 100f).coerceAtLeast(0f)
-            } else {
-                1f
-            }
+            // 两根柱按共享层给的两个数画（和 iOS `CompactComparisonBars` 同一对）。
+            // 以前从取整后的百分比倒推：上月是 0 时百分比为空，两根柱就画成一样高。
+            val current = (dashboard.comparisonCurrentValue ?: 0.0).toFloat().coerceAtLeast(0f)
+            val previous = (dashboard.comparisonPreviousValue ?: 0.0).toFloat().coerceAtLeast(0f)
             val max = maxOf(current, previous, 0.01f)
             return ComparisonContent(
                 percentText = percentText,

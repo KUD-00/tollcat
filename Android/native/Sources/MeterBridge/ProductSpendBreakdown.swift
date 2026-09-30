@@ -60,6 +60,8 @@ package enum ProductSpendBreakdown {
             "items": bucket.items.map { item($0, presentation: presentation) },
         ]
         if let share = shareCaption(bucket.share) { object["shareCaption"] = share }
+        // 条的读屏百分比和行上的「57%」同一个数（`SpendGrouping` 四舍五入过的），不要从 fraction 另算。
+        if case let .percent(value) = bucket.share { object["sharePercent"] = value }
         if let detail = quantityCaption(bucket.quantity, unit: bucket.unit) {
             object["detailCaption"] = detail
         }

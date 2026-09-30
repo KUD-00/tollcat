@@ -272,6 +272,11 @@ public enum FeatureLaunchArguments {
 
     /// 截图和跳到某一屏的验收钩子不要被未读指南挡住。
     /// `-open-usage-guide=` 是反例：那就是要弹这篇。
+    /// 冷启动过渡不演，直接进 App。截图和 UI 冒烟不想等那一秒。
+    static var skipLaunchReveal: Bool {
+        arguments.contains("-skip-launch-reveal")
+    }
+
     static var skipUsageGuideDrawer: Bool {
         if arguments.contains("-skip-usage-guide") { return true }
         if openUsageGuideDrawer != nil { return false }

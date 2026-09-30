@@ -129,38 +129,6 @@
         }
       }
     },
-    "%@ · 刷新要花钱 约 $0.01" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Refresh costs about $0.01"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 更新に約 $0.01"
-          }
-        }
-      }
-    },
-    "%@ · 读数信箱" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Reading inbox"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 検針ポスト"
-          }
-        }
-      }
-    },
     "%@ × %lld" : {
       "localizations" : {
         "en" : {
@@ -1782,6 +1750,22 @@
         }
       }
     },
+    "TollCat 把你在 AWS、Cloudflare、OpenAI 这些服务上的花费加在一起，告诉你这个月到现在花了多少，月底大概会到多少。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TollCat adds up what you spend on services like AWS, Cloudflare, and OpenAI, so you can see what this month has cost so far and roughly where it will end up."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS、Cloudflare、OpenAI などで使った金額を TollCat が足し合わせて、今月ここまでの合計と、月末にどのくらいになりそうかを表示します。"
+          }
+        }
+      }
+    },
     "Vercel 免费额度用了百分之 84" : {
       "localizations" : {
         "en" : {
@@ -2536,22 +2520,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "なし"
-          }
-        }
-      }
-    },
-    "不必打开也能看见" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "See it without opening the app"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "開かなくても見える"
           }
         }
       }
@@ -3624,22 +3592,6 @@
         }
       }
     },
-    "先加进列表就行，不必现在就有 API 密钥。只订了 ChatGPT Pro 也可以先加进来。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add it to the list first — you don’t need an API key yet. ChatGPT Pro alone is enough to add."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "まずはリストに入れる。APIキーは今なくていい。ChatGPT Pro だけでも追加できる。"
-          }
-        }
-      }
-    },
     "先去官网账单页核对。还不行就等 App 更新解析。" : {
       "localizations" : {
         "en" : {
@@ -3652,6 +3604,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "先に公式の請求ページで確認してください。それでもだめなら、App の解析更新を待ってください。"
+          }
+        }
+      }
+    },
+    "先把在用的服务加进列表，凭据可以之后再填。只付月费的服务，比如 ChatGPT Pro，填上月费就算数。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start by adding the services you use; credentials can come later. For a plan you only pay monthly, like ChatGPT Pro, entering the fee is enough."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まずは使っているサービスを一覧に追加しましょう。認証情報はあとからで大丈夫です。ChatGPT Pro のように月額だけのプランなら、月額を入れれば足ります。"
           }
         }
       }
@@ -3701,22 +3669,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無料枠 · %lld%%使用"
-          }
-        }
-      }
-    },
-    "免费额度内" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Free tier"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "無料枠内"
           }
         }
       }
@@ -5563,6 +5515,22 @@
         }
       }
     },
+    "只读" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read-only"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取り専用"
+          }
+        }
+      }
+    },
     "可选项" : {
       "localizations" : {
         "en" : {
@@ -5591,22 +5559,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "右耳"
-          }
-        }
-      }
-    },
-    "各家云和 AI 的账单收成一个数字。打开就能看见这个月已经花了多少。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bills from your cloud and AI services, in one number. Open the app and see what you’ve spent this month."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "クラウドとAIの請求を一つの数字に。開けば今月いくら使ったかわかる。"
           }
         }
       }
@@ -8779,6 +8731,22 @@
         }
       }
     },
+    "把各家云账单，装进口袋" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your cloud bills, in your pocket"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クラウドの請求を、ポケットに"
+          }
+        }
+      }
+    },
     "把各家云账单，装进口袋。" : {
       "localizations" : {
         "en" : {
@@ -9266,6 +9234,22 @@
         }
       }
     },
+    "按量已经翻倍了，得看看出了什么事。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage has more than doubled. Worth a look."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "従量が倍以上になった。何が起きたか見た方がいい。"
+          }
+        }
+      }
+    },
     "按量计费" : {
       "localizations" : {
         "en" : {
@@ -9294,6 +9278,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "従量は先月同期比%1$@、%2$@"
+          }
+        }
+      }
+    },
+    "按量较上月同期涨了 %lld%%。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage is up %lld%% versus last month."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "従量は先月同期比 %lld%% 増。"
           }
         }
       }
@@ -9766,6 +9766,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "終了にする"
+          }
+        }
+      }
+    },
+    "数字从哪来" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where the numbers come from"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数字の出どころ"
           }
         }
       }
@@ -10649,22 +10665,6 @@
         }
       }
     },
-    "月费加超额" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan plus overage"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "定額＋超過"
-          }
-        }
-      }
-    },
     "月预算" : {
       "localizations" : {
         "en" : {
@@ -11229,40 +11229,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "今月の予算をどれだけ使ったか。"
-          }
-        }
-      }
-    },
-    "本月订阅 %@ · 已计入" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscriptions %@ · included"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サブスク %@ · 計上済み"
-          }
-        }
-      }
-    },
-    "本月订阅 %@ · 未计入" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscriptions %@ · not included"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サブスク %@ · 未計上"
           }
         }
       }
@@ -11917,6 +11883,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "毎日"
+          }
+        }
+      }
+    },
+    "每家服务开一份只读凭据填进来。刷新时，这台设备直接向它的官方接口要账单，不经过 TollCat 的服务器，也不用注册账号。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You give each service its own read-only credential. When you refresh, this device asks that service’s official API for the bill directly. Nothing goes through a TollCat server, and there’s no account to sign up for."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サービスごとに読み取り専用の認証情報を入れます。更新すると、この端末が各サービスの公式 API に直接請求額を問い合わせます。TollCat のサーバーは経由せず、アカウント登録もいりません。"
           }
         }
       }
@@ -13458,22 +13440,6 @@
         }
       }
     },
-    "用量后付费" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pay-as-you-go"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "従量課金"
-          }
-        }
-      }
-    },
     "画廊" : {
       "localizations" : {
         "en" : {
@@ -13695,6 +13661,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドキュメントにあるキーの種類か、請求 API が有効になっているかを確認してください。"
+          }
+        }
+      }
+    },
+    "示例数字" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample numbers"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サンプルの数字"
           }
         }
       }
@@ -16926,22 +16908,6 @@
         }
       }
     },
-    "这个月花了多少" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How much this month"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今月いくら使った"
-          }
-        }
-      }
-    },
     "这个月还没开始计费。" : {
       "localizations" : {
         "en" : {
@@ -17019,6 +16985,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "この移行パッケージは旧バージョンです。書き出し側のデバイスで TollCat を更新してから、もう一度書き出してください。"
+          }
+        }
+      }
+    },
+    "这台设备" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This device"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この端末"
           }
         }
       }
@@ -17681,38 +17663,6 @@
         }
       }
     },
-    "通知里不放金额，也没有金额告警。把小组件放到主屏或锁屏，划过去就是这个月的数字。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "There are no amount-based push alerts. Put the widget on the Home Screen or Lock Screen — glance over, and that’s this month."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "金額のプッシュ通知はありません。ウィジェットをホーム画面かロック画面に置けば、見れば今月の数字です。"
-          }
-        }
-      }
-    },
-    "通知里不放金额，也没有金额告警。菜单栏和桌面小组件就能看见这个月的数字。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications never include an amount, and there are no spend alerts. The menu bar and Desktop widgets show this month’s total."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知に金額は出さず、金額のアラートもありません。メニューバーとデスクトップのウィジェットで今月の数字が見えます。"
-          }
-        }
-      }
-    },
     "通知预览：%@。%@" : {
       "localizations" : {
         "en" : {
@@ -18198,22 +18148,6 @@
         }
       }
     },
-    "预充值余额" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prepaid balance"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プリペイド残高"
-          }
-        }
-      }
-    },
     "预充值的余额还能用几天。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -18298,6 +18232,7 @@
       }
     },
     "预计 %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18553,22 +18488,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "（1 %1$@ = %2$@）"
-          }
-        }
-      }
-    },
-    "（按量 %@ + 订阅 %@）" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "(Usage %1$@ + subscription %2$@)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "（従量 %1$@ + サブスク %2$@）"
           }
         }
       }

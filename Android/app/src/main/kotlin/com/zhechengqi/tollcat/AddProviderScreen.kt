@@ -177,7 +177,7 @@ fun AddProviderScreen(
                                     )
                                 },
                                 supportingContent = {
-                                    Text(provider.summary.ifBlank { stringResource(kindCaption(provider.kind)) })
+                                    Text(provider.listingCaption)
                                 },
                                 modifier = Modifier
                                     .animateItem(fadeInSpec = itemFade, placementSpec = itemPlacement, fadeOutSpec = itemFade)
@@ -266,16 +266,7 @@ private fun matchesAddProviderQuery(provider: CatalogProvider, needle: String): 
     return provider.displayName.contains(needle, ignoreCase = true) ||
         provider.id.contains(needle, ignoreCase = true) ||
         provider.summary.contains(needle, ignoreCase = true) ||
+        provider.listingCaption.contains(needle, ignoreCase = true) ||
         // 中英别名来自编译期 descriptor（搜「克劳德」/「claude」都命中 Anthropic）。
         provider.searchKeywords.any { it.contains(needle, ignoreCase = true) }
-}
-
-private fun kindCaption(kind: String): Int {
-    return when (kind) {
-        "prepaid" -> R.string.kind_prepaid_title
-        "subscription" -> R.string.kind_subscription_title
-        "freeTier" -> R.string.kind_freetier_title
-        "planAndUsage" -> R.string.kind_plan_usage_title
-        else -> R.string.kind_usage_title
-    }
 }

@@ -17,6 +17,5 @@ internal object DashboardHeroPreview {
         showsScopeToggle = true,
         staleCaption = null,
         filterNote = null,
-        currencyNote = null,
     )
 }

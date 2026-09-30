@@ -1,0 +1,31 @@
+<!-- GENERATED — scripts/render-app-icon.py（猫的几何来自 shared/cat.json）。改脚本再跑，不要手改。 启动过渡的一层：database 圆牌（dark）。 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="151.8"
+    android:viewportHeight="151.8">
+    <path
+        android:pathData="M0 75.9 A75.9 75.9 0 1 0 151.8 75.9 A75.9 75.9 0 1 0 0 75.9 Z"
+        android:fillColor="#F2665A" />
+    <path
+        android:pathData="M54.72 52.08 L102.82 58.84 L97.08 99.72 L48.98 92.96 Z"
+        android:fillColor="#0B0B12" />
+    <path
+        android:pathData="M54.72 52.08 A24.29 8.5 8 1 0 102.82 58.84 A24.29 8.5 8 1 0 54.72 52.08 Z"
+        android:fillColor="#0B0B12" />
+    <path
+        android:pathData="M48.98 92.96 A24.29 8.5 8 1 0 97.08 99.72 A24.29 8.5 8 1 0 48.98 92.96 Z"
+        android:fillColor="#0B0B12" />
+    <path
+        android:pathData="M52.52 67.71 A24.29 8.5 8 0 0 100.63 74.47"
+        android:strokeColor="#F2665A"
+        android:strokeWidth="4.25"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M50.67 80.94 A24.29 8.5 8 0 0 98.77 87.7"
+        android:strokeColor="#F2665A"
+        android:strokeWidth="4.25"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

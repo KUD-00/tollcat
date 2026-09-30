@@ -285,6 +285,22 @@
         }
       }
     },
+    "余额 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balance %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残高 %@"
+          }
+        }
+      }
+    },
     "余额告急" : {
       "localizations" : {
         "en" : {
@@ -377,6 +393,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "数日後に何が引き落とされるか。"
+          }
+        }
+      }
+    },
+    "占本月 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of this month"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今月の %@"
           }
         }
       }
@@ -1062,6 +1094,22 @@
         }
       }
     },
+    "订阅 %@ 按月扣，不在柱上" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscription %@ is billed monthly, not shown in the bars"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプション %@ は月ごとの請求で、棒には入らない"
+          }
+        }
+      }
+    },
     "订阅 %@，已计入合计，可查看详情" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1112,6 +1160,22 @@
         }
       }
     },
+    "较上月同期 %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ vs same period last month"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先月同期比 %@"
+          }
+        }
+      }
+    },
     "近几个月" : {
       "localizations" : {
         "en" : {
@@ -1145,6 +1209,7 @@
       }
     },
     "还不能和上月同期对比" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1161,6 +1226,7 @@
       }
     },
     "还不能对比" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1221,6 +1287,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求はまだありません。アプリを開いて最初のサービスを連携してください。"
+          }
+        }
+      }
+    },
+    "还能用 %lld 天" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld days left"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あと %lld 日"
           }
         }
       }

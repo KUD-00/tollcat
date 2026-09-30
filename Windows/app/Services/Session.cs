@@ -14,6 +14,12 @@ internal sealed class Session
 
     public Catalog Catalog { get; private set; } = new([], ["USD"]);
     public DashboardSnapshot Dashboard { get; private set; } = DashboardSnapshot.Vacant;
+    /// <summary>
+    /// 托盘那一份：本月、全部账号，只跟订阅口径走——和 Mac 菜单栏、小组件同一个取景框。
+    /// 主窗口里的筛选（回看七月、排除某个账号）不带进托盘：托盘上没有地方写限定语，
+    /// 一个筛过的数挂在那儿会被当成本月合计。
+    /// </summary>
+    public DashboardSnapshot TrayDashboard { get; private set; } = DashboardSnapshot.Vacant;
     public DashboardFilterState Filter { get; private set; } = new();
     public bool IsRefreshing { get; private set; }
     public string? RefreshMessage { get; private set; }
@@ -226,12 +232,13 @@ internal sealed class Session
 
     public void Recompute()
     {
-        Dashboard = ComputeDashboard();
+        Dashboard = ComputeDashboard(Filter);
+        TrayDashboard = ComputeDashboard(new DashboardFilterState(IncludesSubscriptions: Filter.IncludesSubscriptions));
     }
 
     public long NowMillis() => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-    private DashboardSnapshot ComputeDashboard()
+    private DashboardSnapshot ComputeDashboard(DashboardFilterState filter)
     {
         var snapshots = new JsonArray();
         foreach (var row in Ledger.Snapshots()) snapshots.Add(SnapshotJson(row));
@@ -259,7 +266,7 @@ internal sealed class Session
                     NowMillis(),
                     DisplayCurrency,
                     LocaleTag.Current,
-                    Filter.ToJson())),
+                    filter.ToJson())),
             DashboardSnapshot.Vacant);
     }
 

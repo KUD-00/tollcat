@@ -3,12 +3,10 @@ package com.zhechengqi.tollcat.widget
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import com.zhechengqi.tollcat.CompositionRow
-import com.zhechengqi.tollcat.dashboard.CompositionTones
 
 /**
- * 小组件构成：5pt 条按厂商卷，超过 [CompositionTones.namedLimit] 家合成「其他」。
- * 仪表构成按账号切片；这里不能跟那份一对一行。
+ * 小组件构成条：画的是仪表盘同一份图例段（共享层合并好的前几名 + 其他），
+ * 和 iOS 小组件一样按账号切片。这里只画，不合并。
  */
 object WidgetComposition {
     data class Slice(
@@ -19,37 +17,6 @@ object WidgetComposition {
         val fraction: Float,
         val isOther: Boolean = false,
     )
-
-    fun vendorSlices(
-        rows: List<CompositionRow>,
-        otherLabel: String,
-        namedLimit: Int = CompositionTones.namedLimit,
-    ): List<Slice> {
-        val rolled = rows
-            .groupBy { it.providerId.ifBlank { it.displayName } }
-            .map { (id, group) ->
-                Slice(
-                    providerId = id,
-                    displayName = group.first().displayName,
-                    amount = if (group.size == 1) group.first().amount else "",
-                    percent = group.sumOf { it.percent }.coerceAtMost(100),
-                    fraction = group.sumOf { it.fraction.toDouble() }.toFloat(),
-                )
-            }
-            .sortedByDescending { it.fraction }
-        if (rolled.size <= namedLimit) return rolled
-        val named = rolled.take(namedLimit)
-        val rest = rolled.drop(namedLimit)
-        val other = Slice(
-            providerId = "other",
-            displayName = otherLabel,
-            amount = "",
-            percent = rest.sumOf { it.percent }.coerceAtMost(100),
-            fraction = rest.sumOf { it.fraction.toDouble() }.toFloat(),
-            isOther = true,
-        )
-        return named + other
-    }
 
     fun barBitmap(
         slices: List<Slice>,

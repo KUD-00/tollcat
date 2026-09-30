@@ -140,7 +140,7 @@ package enum ProductDashboard {
             layout: layout,
             compute: compute
         )
-        guard let result = contents.monthToDate else {
+        guard let result = contents.monthToDate, let headline = contents.monthToDateContent else {
             return emptyJSON(monthTitle: monthTitle, localeTag: localeTag)
         }
 
@@ -158,32 +158,50 @@ package enum ProductDashboard {
             ProductSpeech.Facts(
                 mood: mood,
                 hasAnyProvider: true,
-                // 从量口径：和首屏主角（formattedVariable）同一笔钱，iOS 同。
-                totalText: result.variableUSD.formatted(using: presentation),
-                projectedText: result.projectedVariableUSD.formatted(using: presentation),
+                // 和首屏主角同一笔钱、同一个口径（iOS `CatSpeechFacts` 同）。
+                totalText: headline.amountText,
+                projectedText: headline.projectedAmountText ?? "",
                 allowsProjection: filter.allowsProjection,
                 changePercent: changePercent,
                 leadAnomalyName: leadAnomaly?.displayName,
                 leadAnomalyPercent: leadAnomaly.map { Int(($0.changeRatio * 100).rounded()) },
-                leadBalanceName: contents.balanceAlertContent?.items.first?.displayName
+                leadBalanceName: contents.balanceAlertContent?.items.first?.displayName,
+                includesSubscriptions: filter.includesSubscriptions
             ),
             localeTag: localeTag
         )
 
+        let slices = CompositionSliceBuilder.make(
+            from: contents.compositionContent?.segments ?? [],
+            presentation: presentation
+        )
         var object: [String: Any] = [
             "empty": false,
             "jniSchema": JNISchema.version,
             "monthTitle": monthTitle,
-            "periodCaption": periodCaption(filter: filter, now: now, calendar: calendar, monthTitle: monthTitle),
+            // 期间标题和 iOS 分享卡 / 筛选条同一个函数：「有数据以来」「近 3 个月」不会被写成当月月名。
+            "periodCaption": DashboardFilterSummary.periodHeading(
+                period: filter.period,
+                window: result.window,
+                asOf: anchor,
+                calendar: calendar
+            ),
             "allowsProjection": filter.allowsProjection,
-            "formattedTotal": result.formattedTotal(using: presentation),
-            "formattedVariable": result.variableUSD.formatted(using: presentation),
-            "formattedProjected": result.projectedVariableUSD.formatted(using: presentation),
+            // 首屏那一对数直接取 iOS 首屏用的同一份 `MonthToDateModuleContent`，
+            // 口径（算没算订阅）已经跟着 filter 算好。各端照着画，不再自己挑字段拼。
+            "formattedTotal": headline.amountText,
             "confidence": result.confidence.rawValue,
             // 估算名单保持账号粒度：压成 ProviderID 会把「这家的其中一份是估的」
             // 说成「这家全是估的」。
             "estimatedAccountIDs": result.estimatedAccounts.map(\.rawValue.uuidString),
             "composition": (contents.compositionContent?.segments ?? []).map { composition($0, presentation) },
+            // 「前几名 + 其他」合并好的图例段。跟随端直接画，不再自己把金额字符串加起来。
+            "compositionSlices": slices.map { compositionSlice($0, presentation) },
+            // 冷启动过渡：口袋里每枚圆牌落到哪一段图例（段 id）。落点规则只在 LaunchTokenTargets 写一份。
+            "launchTargets": Dictionary(
+                uniqueKeysWithValues: LaunchTokenTargets.make(from: slices).map { ($0.key.rawValue, $0.value) }
+            ),
+            "vendorSpend": vendorSpend(result: result, connections: connections, presentation: presentation),
             "upcoming": (contents.upcomingChargesContent?.items ?? []).map { upcoming($0, presentation) },
             "freeQuota": (contents.freeQuotaContent?.items ?? []).map(freeQuota),
             "anomalies": (contents.anomalyContent?.items ?? []).map(anomaly),
@@ -198,21 +216,22 @@ package enum ProductDashboard {
             "catSpeech": speech,
             "currencyCode": presentation.currencyCode,
         ]
-        object["currencyNote"] = contents.monthToDateContent?.currencyNote
-        object["staleCaption"] = contents.monthToDateContent?.staleCaption
-        if result.subscriptionUSD > .zero {
-            let formatted = result.subscriptionUSD.formatted(using: presentation)
-            object["subscriptionFormatted"] = formatted
-            // Android 的顶栏能在「合计 / 按量」之间切，关掉订阅时也要告诉人订阅有多少、
-            // 没算进去；iOS 顶栏的那行只在算进时出现，所以这句是这一端自己的。
-            object["subscriptionCaption"] = JNICopy.format(
-                filter.includesSubscriptions ? "本月订阅 %@ · 已计入" : "本月订阅 %@ · 未计入",
-                localeTag,
-                formatted
-            )
-        }
+        // 回看过去的月份没有「月底」：这个键就不出现，不写一个空串让各端再猜。
+        object["formattedProjected"] = headline.projectedAmountText
+        object["currencyNote"] = headline.currencyNote
+        object["staleCaption"] = headline.staleCaption
+        object["filterNote"] = headline.filterNote
+        // 订阅那行和 iOS 首屏同一条规则：只在算进订阅时出现。多月取景框里它是这几个月的合计，
+        // 所以跟随端配的标签只能写「订阅」，不能写「本月订阅」。
+        object["subscriptionCaption"] = headline.subscriptionCaption
+        object["subscriptionAmountText"] = headline.subscriptionAmountText
+        object["showsSubscriptionScope"] = headline.showsSubscriptionScope
         if let comparison = contents.comparisonContent, comparison.tone != .unknown {
             object["formattedComparison"] = comparison.previousText
+            object["formattedComparisonCurrent"] = comparison.currentText
+            // 两根柱按这两个数画（已按显示币种），不要拿取整后的百分比倒推。
+            object["comparisonCurrentValue"] = comparison.current
+            object["comparisonPreviousValue"] = comparison.previous
             object["comparisonCaption"] = comparison.caption
             object["comparisonPercentText"] = comparison.percentText
             object["comparisonTone"] = tone(comparison.tone)
@@ -292,9 +311,57 @@ package enum ProductDashboard {
             "displayName": segment.displayName,
             "colorKey": segment.colorKey,
             "amount": segment.amount.formatted(using: presentation),
+            // 排序用的数（已按显示币种）。跟随端别把 `amount` 那串字解析回数字。
+            "amountValue": displayValue(segment.amount, presentation),
             "percent": segment.percent,
             "fraction": segment.fraction,
         ]
+    }
+
+    private static func displayValue(_ amount: Money, _ presentation: MoneyPresentation) -> Double {
+        NSDecimalNumber(decimal: presentation.amount(from: amount)).doubleValue
+    }
+
+    private static func compositionSlice(_ slice: CompositionSlice, _ presentation: MoneyPresentation) -> [String: Any] {
+        [
+            "id": slice.id,
+            "accountID": slice.accountID?.rawValue.uuidString ?? "",
+            "providerID": slice.providerID?.rawValue ?? "",
+            "displayName": slice.displayName,
+            "colorKey": slice.colorKey,
+            "amount": slice.amountText,
+            "amountValue": displayValue(slice.amount, presentation),
+            "percent": slice.percent,
+            "fraction": slice.fraction,
+            "isOther": slice.isOther,
+            "mergedNames": slice.mergedNames,
+        ]
+    }
+
+    /// 服务页每一行、详情页大数字那一家的钱：和 iOS `ServiceRowBuilder` / `ProviderDetailModel`
+    /// 同一份 `VendorSpend`。挂在厂商上的无主订阅也算进这家。
+    private static func vendorSpend(
+        result: MonthToDate,
+        connections: [ProviderConnectionState],
+        presentation: MoneyPresentation
+    ) -> [[String: Any]] {
+        let live = Dictionary(grouping: connections.filter(\.isLive), by: \.providerID)
+        let providers = Set(live.keys).union(result.facts.compactMap(\.providerID))
+        return providers.sorted { $0.rawValue < $1.rawValue }.compactMap { providerID in
+            let spend = VendorSpend.make(
+                providerID: providerID,
+                accounts: Set((live[providerID] ?? []).map(\.accountID)),
+                facts: result.facts
+            )
+            guard spend.contributingCount > 0 else { return nil }
+            var row: [String: Any] = [
+                "providerID": providerID.rawValue,
+                "totalText": spend.total.formatted(using: presentation),
+                "totalValue": displayValue(spend.total, presentation),
+            ]
+            row["compositionCaption"] = spend.compositionCaption(presentation: presentation)
+            return row
+        }
     }
 
     private static func upcoming(_ item: UpcomingChargeItem, _ presentation: MoneyPresentation) -> [String: Any] {
@@ -467,35 +534,6 @@ package enum ProductDashboard {
 
     // MARK: - 只有这一端要的字
 
-    /// 顶栏的期间标题：单月是月名，多月是起讫月。iOS 的顶栏标题是导航栏给的，
-    /// 没有对应的值，所以这一句留在桥上（只是排版，不涉及钱）。
-    private static func periodCaption(
-        filter: DashboardFilter,
-        now: Date,
-        calendar: Calendar,
-        monthTitle: String
-    ) -> String {
-        switch filter.period.normalized {
-        case .months(_, 1), .allTime:
-            return monthTitle
-        case .months(_, let count):
-            let newest = filter.period.anchor(now: now, calendar: calendar)
-            guard
-                let newestStart = calendar.date(from: calendar.dateComponents([.year, .month], from: newest)),
-                let oldestStart = calendar.date(byAdding: .month, value: -(count - 1), to: newestStart)
-            else {
-                return monthTitle
-            }
-            return MeterDateFormat.monthRange(from: oldestStart, to: newestStart, calendar: calendar)
-        case .yearToDate:
-            let year = calendar.component(.year, from: now)
-            guard let start = calendar.date(from: DateComponents(year: year, month: 1, day: 1)) else {
-                return monthTitle
-            }
-            return MeterDateFormat.monthRange(from: start, to: now, calendar: calendar)
-        }
-    }
-
     private static func emptyJSON(monthTitle: String, localeTag: String) -> String {
         JNIJSON.stringify([
             "empty": true,
@@ -511,7 +549,8 @@ package enum ProductDashboard {
                     changePercent: nil,
                     leadAnomalyName: nil,
                     leadAnomalyPercent: nil,
-                    leadBalanceName: nil
+                    leadBalanceName: nil,
+                    includesSubscriptions: true
                 ),
                 localeTag: localeTag
             ),

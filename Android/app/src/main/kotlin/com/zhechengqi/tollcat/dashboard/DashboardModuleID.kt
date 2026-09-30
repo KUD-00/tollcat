@@ -66,6 +66,10 @@ object DashboardModules {
         else -> R.string.dashboard_edit_reorder
     }
 
+    /** 这一刻仪表盘实际摆哪几块、什么顺序。仪表盘和分享卡都走这里，两边才是同一摞。 */
+    fun resolvedOrder(moduleOrder: List<String>, extraModules: Set<String>): List<String> =
+        moduleOrder.ifEmpty { normalized(defaultOn + extraModules) }
+
     fun normalized(order: List<String>): List<String> {
         val allowed = (editable + extras).toSet() - retired
         val seen = LinkedHashSet<String>()

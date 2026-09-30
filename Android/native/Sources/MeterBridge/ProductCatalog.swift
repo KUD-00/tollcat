@@ -1,5 +1,7 @@
 import Foundation
 import MeterCore
+import MeterDashboard
+import MeterFormat
 import MeterProviders
 
 package enum ProductCatalog {
@@ -60,9 +62,18 @@ package enum ProductCatalog {
     }
 
     package static func json(localeTag: String) -> String {
+        // 共享层的 `L(…)`（列表小字）按这里钉的语言出字；Android 上没有 String Catalog。
+        PortableLocale.$languageTag.withValue(localeTag.isEmpty ? "zh-Hans" : localeTag) {
+            render(localeTag: localeTag)
+        }
+    }
+
+    private static func render(localeTag: String) -> String {
         let language = CatalogLanguage.resolving(localeTag: localeTag)
+        // `bundled` 每次访问都现读一遍目录文件：只读一次，别在五百多家的循环里读五百多遍。
+        let catalog = bundled
         let providers = ProviderCatalog.all.map { descriptor -> [String: Any] in
-            let guide = bundled?.guides[descriptor.id]?.localized(for: language)
+            let guide = catalog?.guides[descriptor.id]?.localized(for: language)
             return [
                 "id": descriptor.id.rawValue,
                 "displayName": descriptor.displayName,
@@ -76,7 +87,14 @@ package enum ProductCatalog {
                 "costsMoneyToRefresh": descriptor.costsMoneyToRefresh,
                 "supportsInbox": descriptor.supportsInboxIngest,
                 "hasLiveFetch": ProviderAssembly.liveRESTProviderIDs.contains(descriptor.id),
-                "summary": summary(for: descriptor, localeTag: localeTag),
+                // 两句话，别混：`summary` 是服务介绍（确认抽屉读），`listingCaption` 是添加列表
+                // 那一行的计费方式小字（和 iOS `ProviderListingCopy.caption` 同一个函数）。
+                "summary": guide?.summary ?? "",
+                "listingCaption": ProviderListingCaption.make(
+                    kind: descriptor.kind,
+                    costsMoneyToRefresh: descriptor.costsMoneyToRefresh,
+                    supportsInbox: descriptor.supportsInboxIngest
+                ),
                 "searchKeywords": descriptor.searchKeywords,
                 "accessStatus": descriptor.accessStatus.rawValue,
                 "declineReason": descriptor.declineReason ?? "",
@@ -137,23 +155,5 @@ package enum ProductCatalog {
     /// 取数侧补 stub 用。字段权威在 catalog 的 guide，enum 对不上的键跳过。
     package static func fields(for id: ProviderID) -> [CredentialField] {
         (bundled?.guides[id]?.fields ?? []).compactMap { CredentialField(rawValue: $0.key) }
-    }
-
-    private static func summary(for descriptor: ProviderDescriptor, localeTag: String) -> String {
-        let kind: String
-        switch descriptor.kind {
-        case .usage: kind = JNICopy.text("用量后付费", localeTag)
-        case .prepaid: kind = JNICopy.text("预充值余额", localeTag)
-        case .subscription: kind = JNICopy.text("固定订阅", localeTag)
-        case .freeTier: kind = JNICopy.text("免费额度内", localeTag)
-        case .planAndUsage: kind = JNICopy.text("月费加超额", localeTag)
-        }
-        if descriptor.costsMoneyToRefresh {
-            return JNICopy.format("%@ · 要花钱取数 约 $0.01", localeTag, kind)
-        }
-        if descriptor.supportsInboxIngest {
-            return JNICopy.format("%@ · 读数信箱", localeTag, kind)
-        }
-        return kind
     }
 }

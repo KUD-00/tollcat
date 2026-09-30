@@ -17,6 +17,38 @@
         }
       }
     },
+    "%@ · 刷新要花钱 约 $0.01" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Refresh costs about $0.01"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 更新に約 $0.01"
+          }
+        }
+      }
+    },
+    "%@ · 读数信箱" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Reading inbox"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 検針ポスト"
+          }
+        }
+      }
+    },
     "%@ 余额 %@ · 按当前速度还能用 %lld 天" : {
       "localizations" : {
         "en" : {
@@ -433,6 +465,22 @@
         }
       }
     },
+    "免费额度内" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free tier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料枠内"
+          }
+        }
+      }
+    },
     "其他" : {
       "localizations" : {
         "en" : {
@@ -529,6 +577,22 @@
         }
       }
     },
+    "合计上月同期没有花费，%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: nothing spent in the same period last month, %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計は先月同期の支出なし、%@"
+          }
+        }
+      }
+    },
     "合计较上月同期 %@，%@" : {
       "localizations" : {
         "en" : {
@@ -589,6 +653,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "まだ比べられない %@ を含む"
+          }
+        }
+      }
+    },
+    "固定订阅" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscription"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "定額サブスクリプション"
           }
         }
       }
@@ -701,6 +781,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "横ばい"
+          }
+        }
+      }
+    },
+    "按量上月同期没有花费，%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage: nothing spent in the same period last month, %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "従量は先月同期の支出なし、%@"
           }
         }
       }
@@ -833,6 +929,22 @@
         }
       }
     },
+    "新增" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新規"
+          }
+        }
+      }
+    },
     "最久没刷新" : {
       "localizations" : {
         "en" : {
@@ -845,6 +957,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最も更新が古い"
+          }
+        }
+      }
+    },
+    "月费加超额" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan plus overage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "定額＋超過"
           }
         }
       }
@@ -989,6 +1117,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld%%使用"
+          }
+        }
+      }
+    },
+    "用量后付费" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pay-as-you-go"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "従量課金"
           }
         }
       }
@@ -1345,6 +1489,22 @@
         }
       }
     },
+    "预充值余额" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepaid balance"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プリペイド残高"
+          }
+        }
+      }
+    },
     "预算 %@，已花 %@，%@" : {
       "localizations" : {
         "en" : {
@@ -1389,6 +1549,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "月末見込み %@、集計期間 %@"
+          }
+        }
+      }
+    },
+    "（按量 %@ + 订阅 %@）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(Usage %1$@ + subscription %2$@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（従量 %1$@ + サブスク %2$@）"
           }
         }
       }

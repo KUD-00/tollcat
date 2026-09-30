@@ -57,13 +57,8 @@ public struct MonthToDateModuleView: View {
                     .accessibilityLabel(content.spokenProjected ?? captionLine)
             }
 
-            if showsCaptions, let currencyNote = content.currencyNote {
-                Text(currencyNote)
-                    .font(MeterFont.footnote)
-                    .foregroundStyle(Color.meterTertiaryLabel)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityLabel(currencyNote)
-            }
+            // 不写「按日元显示」：显示货币是用户自己选的，货币符号已经说明了。
+            // `content.currencyNote` 只留给分享卡（收图的人不知道 ¥ 是哪种）。
 
             // 限定语跟着数字走，不做成会滚走的横幅。
             if showsCaptions, let filterNote = content.filterNote {

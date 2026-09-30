@@ -6,9 +6,10 @@
     <string name="dashboard_filter_apply">適用</string>
     <string name="dashboard_filter_services">サービス</string>
     <string name="dashboard_filter_all">すべて選択</string>
+    <string name="dashboard_filter_preview_unfiltered">今月 · すべてのサービス</string>
+    <string name="dashboard_subscription_chip">サブスクリプション %1$s</string>
     <string name="dashboard_filter_included">対象</string>
     <string name="dashboard_filter_excluded">除外中</string>
-    <string name="dashboard_filter_excluding">%1$s を除外</string>
     <string name="dashboard_filter_active">フィルター中：%1$s</string>
     <string name="dashboard_attention">注意</string>
     <string name="dashboard_composition_other">その他</string>
@@ -107,7 +108,6 @@
     <string name="dashboard_card_quota">%1$s の無料枠</string>
     <string name="dashboard_card_days">%1$d日</string>
     <string name="dashboard_fab_menu">追加と編集</string>
-    <string name="dashboard_add_subscription">定額サブスクリプションを追加</string>
     <string name="dashboard_fab_close">折りたたむ</string>
     <string name="dashboard_budget_marker">予算 %1$s</string>
     <string name="dashboard_budget_spent">使用済み %1$s</string>

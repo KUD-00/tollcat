@@ -11,22 +11,28 @@ internal sealed class TrayPanelWindow : Window
     {
         Title = Copy.Get("AppDisplayName");
         SystemBackdrop = new MicaBackdrop();
+        // 面板和 Mac 菜单栏面板一样跟主窗口的取景框走，限定语随数字一起出现；
+        // 托盘图标上的常驻数字才走小组件口径（TrayDashboard）。
         var dash = Session.Current.Dashboard;
         var stack = new StackPanel { Spacing = 10, Padding = new Thickness(16), Width = 320 };
         stack.Children.Add(new TextBlock
         {
-            Text = dash.Empty ? Copy.Get("DashboardEmptyTitle") : dash.MonthTitle,
+            Text = dash.Empty ? Copy.Get("DashboardEmptyTitle") : dash.PeriodCaption,
             Opacity = 0.7,
         });
         stack.Children.Add(new TextBlock
         {
-            Text = dash.Empty ? "—" : dash.FormattedVariable,
+            Text = dash.Empty ? "—" : dash.FormattedTotal,
             FontSize = 28,
             FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
         });
+        if (dash.FilterNote is { } filterNote)
+        {
+            stack.Children.Add(new TextBlock { Text = filterNote, Opacity = 0.7 });
+        }
         if (dash.Composition.Count > 0)
         {
-            foreach (var row in dash.Composition.Take(5))
+            foreach (var row in dash.Composition)
             {
                 stack.Children.Add(new TextBlock { Text = $"{row.DisplayName}  {row.Amount}" });
             }

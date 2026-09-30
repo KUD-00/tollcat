@@ -34,8 +34,9 @@ class TollCatViewModel(application: Application) : AndroidViewModel(application)
             MeterCoreNative.load(application)
             val root = SwiftResourceExtractor.extract(application)
             MeterCoreNative.setResourceRoot(root.absolutePath)
-            Proof.log(application)
             session.bootstrap()
+            // 自检只写日志，排在用户要看的东西后面。
+            Proof.log(application)
         }
     }
 }
@@ -69,6 +70,13 @@ class TollCatSession(
     var didFailToReadDashboard by mutableStateOf(false)
         private set
 
+    /**
+     * 第一份仪表盘算好了没有。之前 [dashboard] 还是占位的 vacant，空不代表没账单——
+     * 仪表页这段时间画骨架，不能说「还没有账单」。
+     */
+    var hasComputedDashboard by mutableStateOf(false)
+        private set
+
     var isDemoBannerDismissed by mutableStateOf(false)
 
     /** 刚清完全部数据：空态换一句「已经清掉了」，加回第一家之后关掉。 */
@@ -86,13 +94,15 @@ class TollCatSession(
         // 旧版本明文留在 preferences 里的信箱读钥，启动就搬走，别等到用户点开信箱。
         runCatching { InboxMailboxStore.migrateFromPreferences(credentials, preferences) }
         MoneyDisplay.currency = displayCurrency
+        // 仪表盘不读服务目录，先算它：目录五百多家，冷启动解析要几百毫秒到几秒，
+        // 排在前面的话首屏数字就得陪着等。
+        recompute()
         val nextCatalog = runCatching { Catalog.parse(MeterCoreNative.catalogJson(MoneyDisplay.localeTag())) }
             .getOrElse { Catalog(emptyList(), listOf("USD")) }
         JniGate.onMain {
             catalog = nextCatalog
             Log.i(TAG, "ui=product tabs=仪表,服务,设置 providers=${catalog.providers.size}")
         }
-        recompute()
     }
 
     fun memberships(): List<MembershipRow> = ledger.memberships()
@@ -278,12 +288,21 @@ class TollCatSession(
         return event
     }
 
-    fun openSetup(providerId: String, accountId: String) {
+    /**
+     * 正在打开的连接向导（一个抽屉，盖在当前页面上）。null 是没开。
+     * 不是服务导航里的一层：和 iOS 一样从底部弹出，关掉就回到原来那一页。
+     */
+    var setupTarget by mutableStateOf<SetupTarget?>(null)
+        private set
+
+    /** [accountId] 为 null：接一笔新的，账户到存成功那一刻才建。 */
+    fun openSetup(providerId: String, accountId: String?) {
         tab = AppTab.Services
-        val next = ServicesRoute.Setup(providerId, accountId)
-        if (servicesStack.lastOrNull() != next) {
-            servicesStack = servicesStack + next
-        }
+        setupTarget = SetupTarget(providerId, accountId)
+    }
+
+    fun closeSetup() {
+        setupTarget = null
     }
 
     fun popServices() {
@@ -492,13 +511,13 @@ class TollCatSession(
         val widget = widgetDashboard(next)
         val refreshedAt = lastSuccessfulRefreshAt()
         val now = nowMillis()
-        val other = preferences.appContext.getString(R.string.dashboard_composition_other)
         val failedRead = next.empty && previous.empty && ledger.memberships().isNotEmpty()
         JniGate.onMain {
             dashboard = next
+            hasComputedDashboard = true
             if (!next.empty) didFailToReadDashboard = false
             else if (failedRead) didFailToReadDashboard = true
-            WidgetSnapshot.write(widget, refreshedAt, now, other)
+            WidgetSnapshot.write(widget, refreshedAt, now)
             Log.i(
                 TAG,
                 "dashboard empty=${dashboard.empty} formatted=${dashboard.formattedTotal} confidence=${dashboard.confidence}",
@@ -699,22 +718,42 @@ class TollCatSession(
     }
 
     fun addUsageAccount(providerId: String): AccountRow {
+        val row = draftUsageAccount(providerId)
+        commitAccount(row)
+        bumpData()
+        return row
+    }
+
+    /**
+     * 还没落盘的新账户。接入向导拿它填凭据、测连接，存成功才 [commitAccount]——
+     * 和 iOS 的 `SetupWizardModel.save` 一样，半路关掉不留一个没凭据的空账户。
+     */
+    fun draftUsageAccount(providerId: String): AccountRow {
         val id = UUID.randomUUID().toString()
-        val row = AccountRow(
+        return AccountRow(
             accountId = id,
             providerId = providerId,
             credentialReference = "acct.$id",
             sortIndex = ledger.accounts(providerId).size,
         )
-        ledger.upsertAccount(row)
-        noteUserHasData()
-        bumpData()
-        return row
     }
 
+    fun commitAccount(row: AccountRow) {
+        if (ledger.accounts(row.providerId).none { it.accountId == row.accountId }) {
+            ledger.upsertAccount(row)
+        }
+        noteUserHasData()
+    }
+
+    /** 有账户就换这把钥匙（没指定就第一把）；一把都没有就接一笔新的。 */
     fun openUsageSetup(providerId: String, accountId: String? = null) {
-        val account = ensureAccount(providerId, accountId)
-        openSetup(providerId, account.accountId)
+        val accounts = ledger.accounts(providerId)
+        val existing = accounts.firstOrNull { it.accountId == accountId } ?: accounts.firstOrNull()
+        openSetup(providerId, existing?.accountId)
+    }
+
+    fun openNewUsageSetup(providerId: String) {
+        openSetup(providerId, null)
     }
 
     /// 按 id 覆盖。改名不再需要先删后插——行的身份是 id，不是名字。
@@ -849,5 +888,7 @@ sealed class ServicesRoute {
     /** 不再花钱、但过去花过的那些。入口和「添加服务」同一节。 */
     data object Past : ServicesRoute()
     data class Detail(val providerId: String) : ServicesRoute()
-    data class Setup(val providerId: String, val accountId: String) : ServicesRoute()
 }
+
+/** 连接向导抽屉要接哪一家、哪一份账号。 */
+data class SetupTarget(val providerId: String, val accountId: String?)

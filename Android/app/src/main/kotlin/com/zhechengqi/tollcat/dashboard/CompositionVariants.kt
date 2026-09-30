@@ -60,7 +60,7 @@ fun CompositionSegmentsCard(
     modifier: Modifier = Modifier,
 ) {
     if (rows.isEmpty()) return
-    val slices = compositionSlices(rows, stringResource(R.string.dashboard_composition_other))
+    val slices = rows
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = RoundedCornerShape(28.dp),
@@ -172,8 +172,8 @@ fun CompositionShapeCluster(
 ) {
     if (rows.isEmpty()) return
     // 只有五个落点：超过五家时前四家单独、其余合成「其他」，不能把「其他」挤掉。
-    val slices = compositionSlices(rows, stringResource(R.string.dashboard_composition_other), namedLimit = ClusterSlots.size - 1)
-        .takeIf { rows.size > ClusterSlots.size } ?: rows
+    // 共享层给的是前 5 名 + 「其他」，最多 6 段，正好 6 个落点。
+    val slices = rows.take(ClusterSlots.size)
     val shapes = listOf(
         MaterialShapes.Cookie9Sided,
         MaterialShapes.Sunny,
@@ -233,13 +233,17 @@ private const val ClusterLead = 190f
 
 private data class ClusterSlot(val x: Float, val y: Float, val size: Float)
 
-/** 画布 H4 那张图里的五个落点（388×300 坐标），按花费从大到小依次坐进去，互不重叠。 */
+/**
+ * 画布 H4 那张图里的落点（388×300 坐标），按花费从大到小依次坐进去，互不重叠。
+ * 六个：前 5 名 + 「其他」（和共享层 `CompositionSliceBuilder.namedLimit` 对齐）。
+ */
 private val ClusterSlots = listOf(
     ClusterSlot(4f, 26f, 190f),
     ClusterSlot(208f, 0f, 136f),
     ClusterSlot(200f, 146f, 113f),
     ClusterSlot(120f, 214f, 84f),
     ClusterSlot(318f, 150f, 68f),
+    ClusterSlot(322f, 228f, 60f),
 )
 
 /** 方块树图（画布 P2-5）：bento 本身就是图。最大的一家占左栏，其余在右边按比例切。 */
@@ -251,7 +255,7 @@ fun CompositionTreemap(
     height: Dp = 250.dp,
 ) {
     if (rows.isEmpty()) return
-    val slices = compositionSlices(rows, stringResource(R.string.dashboard_composition_other))
+    val slices = rows
     val tiles = slices.mapIndexed { index, row ->
         TreemapTile(row, CompositionTones.fill(index, row.providerId == "other"), dashboardOpenAction(row.accountId, row.providerId, onOpenRow))
     }

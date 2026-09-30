@@ -86,12 +86,11 @@ object WidgetSnapshot {
         dashboard: DashboardSnapshot,
         lastRefreshAtMillis: Long?,
         nowMillis: Long = System.currentTimeMillis(),
-        otherLabel: String = "其他",
     ) {
         val ctx = appContext ?: return
         // 折算是在主线程回来的，但**编码和落盘不能在主线程**：每次 recompute
         // 一次同步写盘，正是刚修完的亮屏卡顿那条路。
-        val payload = from(dashboard, lastRefreshAtMillis, nowMillis, otherLabel)
+        val payload = from(dashboard, lastRefreshAtMillis, nowMillis)
         scope.launch {
             runCatching {
                 file(ctx).writeText(encode(payload), Charsets.UTF_8)
@@ -114,7 +113,6 @@ object WidgetSnapshot {
         dashboard: DashboardSnapshot,
         lastRefreshAtMillis: Long?,
         nowMillis: Long,
-        otherLabel: String,
     ): Payload {
         if (dashboard.empty) {
             return vacant.copy(
@@ -129,12 +127,22 @@ object WidgetSnapshot {
             monthTitle = dashboard.monthTitle,
             periodCaption = dashboard.periodCaption.ifBlank { dashboard.monthTitle },
             formattedTotal = dashboard.formattedTotal,
-            formattedProjected = dashboard.formattedProjected,
+            formattedProjected = dashboard.formattedProjected.orEmpty(),
             allowsProjection = dashboard.allowsProjection,
             lastRefreshAtMillis = lastRefreshAtMillis,
             asOfMonth = monthKey(nowMillis),
             catMood = dashboard.catMood.ifBlank { "normal" },
-            composition = WidgetComposition.vendorSlices(dashboard.composition, otherLabel),
+            // 和仪表盘同一份图例段（共享层合并好的前几名 + 其他），iOS 小组件也是这样。
+            composition = dashboard.compositionSlices.map { row ->
+                WidgetComposition.Slice(
+                    providerId = row.providerId,
+                    displayName = row.displayName,
+                    amount = row.amount,
+                    percent = row.percent,
+                    fraction = row.fraction,
+                    isOther = row.isOther,
+                )
+            },
         )
     }
 

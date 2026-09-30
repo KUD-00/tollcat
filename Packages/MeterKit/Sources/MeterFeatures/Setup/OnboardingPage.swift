@@ -1,10 +1,11 @@
 import Foundation
 import MeterDesign
 
+/// 页序按新用户心里冒出来的问题排：这是什么 → 数字从哪来 → 凭据放哪 → 从哪开始。
 enum OnboardingPage: Int, CaseIterable, Identifiable, Hashable {
     case number
+    case source
     case keychain
-    case widget
     case add
 
     var id: Int { rawValue }
@@ -16,10 +17,10 @@ enum OnboardingPage: Int, CaseIterable, Identifiable, Hashable {
     /// `-onboarding-page=` 的命名别名稳定；数字下标跟着页序走。
     static func fromLaunchArgument(_ raw: String?) -> OnboardingPage {
         switch raw {
-        case "keychain", "1":
+        case "source", "1":
+            return .source
+        case "keychain", "2":
             return .keychain
-        case "widget", "2":
-            return .widget
         case "add", "3":
             return .add
         default:
@@ -27,30 +28,26 @@ enum OnboardingPage: Int, CaseIterable, Identifiable, Hashable {
         }
     }
 
+    /// 第一页的标题就是品牌主句（BRAND.md 第零节），不另发明自我介绍。
     var title: LocalizedStringResource {
         switch self {
-        case .number: L("这个月花了多少")
+        case .number: L("把各家云账单，装进口袋")
+        case .source: L("数字从哪来")
         case .keychain: L("凭据不出这台设备")
-        case .widget: L("不必打开也能看见")
         case .add: L("加上第一家服务")
         }
     }
 
-    /// 第 3 页那句话按壳分岔：Mac 上没有主屏和锁屏，说「划过去」是句假话。
-    /// **壳从参数进来，不写 `#if os`**——这是文案选择，不是 API 可用性，
-    /// 编译期分岔会让另一边那句话根本不参与编译，也没法在一份预览里同时看两种。
-    func body(shell: MeterShell) -> LocalizedStringResource {
+    var body: LocalizedStringResource {
         switch self {
         case .number:
-            L("各家云和 AI 的账单收成一个数字。打开就能看见这个月已经花了多少。")
+            L("TollCat 把你在 AWS、Cloudflare、OpenAI 这些服务上的花费加在一起，告诉你这个月到现在花了多少，月底大概会到多少。")
+        case .source:
+            L("每家服务开一份只读凭据填进来。刷新时，这台设备直接向它的官方接口要账单，不经过 TollCat 的服务器，也不用注册账号。")
         case .keychain:
             L("API 密钥只进本机 Keychain，不进 iCloud，也不跟备份走。换手机用设置里的导入与导出。")
-        case .widget:
-            shell == .mac
-                ? L("通知里不放金额，也没有金额告警。菜单栏和桌面小组件就能看见这个月的数字。")
-                : L("通知里不放金额，也没有金额告警。把小组件放到主屏或锁屏，划过去就是这个月的数字。")
         case .add:
-            L("先加进列表就行，不必现在就有 API 密钥。只订了 ChatGPT Pro 也可以先加进来。")
+            L("先把在用的服务加进列表，凭据可以之后再填。只付月费的服务，比如 ChatGPT Pro，填上月费就算数。")
         }
     }
 

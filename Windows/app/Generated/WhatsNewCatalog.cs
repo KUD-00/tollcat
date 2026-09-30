@@ -42,6 +42,11 @@ public static class WhatsNewCatalog
             new List<WhatsNewItem>
             {
                 new WhatsNewItem(
+                    "pocketIcon",
+                    null,
+                    new WhatsNewText("新图标：装在口袋里的猫", "A new icon: a cat in your pocket", "新しいアイコン：ポケットの中の猫"),
+                    new WhatsNewText("图标换成一只装在口袋里的猫，身后插着云、AI 和数据库三枚圆牌。打开 App 时，这三枚圆牌会从口袋里飞出来，落到仪表盘上对应的服务旁边。", "The icon is now a cat sitting in a pocket, with three round badges tucked behind it for cloud, AI and database services. When you open the app, the badges fly out of the pocket and land next to the matching services on your dashboard.", "アイコンを、ポケットに入った猫に変えました。後ろにはクラウド、AI、データベースを表す 3 つの丸いバッジが差してあります。アプリを開くと、バッジがポケットから飛び出して、ダッシュボードの対応するサービスの横に収まります。")),
+                new WhatsNewItem(
                     "watchGlance",
                     null,
                     new WhatsNewText("手表上也能看", "On your wrist, too", "手首でも見られます"),
@@ -52,15 +57,10 @@ public static class WhatsNewCatalog
                     new WhatsNewText("Android 版来了", "TollCat on Android", "Android 版ができました"),
                     new WhatsNewText("和 iPhone 上是同一套算法、同一份接入说明，仪表盘按 Material 3 重新做了一遍。凭据只存在这台手机的 Android Keystore 里。", "The same calculations and the same setup guides as on iPhone, with the dashboard rebuilt in Material 3. Your credentials stay in this phone’s Android Keystore.", "iPhone と同じ計算、同じ接続ガイドで、ダッシュボードは Material 3 に合わせて作り直しました。認証情報はこのスマートフォンの Android Keystore にだけ保存されます。")),
                 new WhatsNewItem(
-                    "foreignCurrencyLines",
+                    "readingAccuracy",
                     null,
-                    new WhatsNewText("外币账单的明细也换算了", "Itemized lines in other currencies are converted too", "外貨の明細も換算するように"),
-                    new WhatsNewText("用欧元、日元等币种结账的服务，明细行以前把原币的数字直接标成美元。现在明细和总数用同一个汇率换算。", "For services billed in euros, yen or other currencies, the itemized lines used to show the original amount labelled as dollars. They now use the same exchange rate as the total.", "ユーロや円などで請求されるサービスでは、明細の行が元の通貨の金額のままドルとして表示されていました。明細も合計と同じレートで換算するようにしました。")),
-                new WhatsNewItem(
-                    "failedNotZero",
-                    null,
-                    new WhatsNewText("读不到账单时不再显示 $0", "A failed update no longer shows $0", "取得に失敗したときに $0 と表示しないように"),
-                    new WhatsNewText("有几家服务在凭据失效或接口出错时，会把这个月报成 $0。现在会如实告诉你这次没读到，数字停在上一次。", "A few services reported $0 for the month when a credential had expired or their API returned an error. They now tell you the update failed and keep the last number.", "認証情報の期限切れや API のエラーのときに、今月を $0 と表示してしまうサービスがありました。今は取得に失敗したことをお知らせし、前回の数字をそのまま残します。")),
+                    new WhatsNewText("读数更可靠了", "More reliable readings", "金額がより正確になりました"),
+                    new WhatsNewText("用欧元、日元等币种结账的服务，明细行现在和总数用同一个汇率换算，不再把原币的数字标成美元。凭据失效或接口出错时，也不会再把这个月报成 $0，而是告诉你这次没读到，数字停在上一次。", "For services billed in euros, yen or other currencies, itemized lines now use the same exchange rate as the total instead of showing the original amount as dollars. And when a credential has expired or an API returns an error, the month no longer shows $0: you’re told the update failed and the last number stays.", "ユーロや円などで請求されるサービスでは、明細の行も合計と同じレートで換算するようにしました。元の通貨の金額をドルとして表示することはありません。認証情報の期限切れや API のエラーのときも、今月を $0 と表示せず、取得に失敗したことをお知らせして前回の数字を残します。")),
                 new WhatsNewItem(
                     "securityPass",
                     null,

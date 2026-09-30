@@ -52,9 +52,6 @@ import com.zhechengqi.tollcat.services.SpendBreakdownPreviewSection
 import com.zhechengqi.tollcat.services.SpendBreakdownScreen
 import com.zhechengqi.tollcat.services.SpendBreakdownGrouping
 import com.zhechengqi.tollcat.services.SpendLines
-import com.zhechengqi.tollcat.services.amountCompositionCaption
-import com.zhechengqi.tollcat.services.composedAmountText
-import com.zhechengqi.tollcat.services.compositionForAccounts
 import com.zhechengqi.tollcat.services.conversionRateCaptions
 import com.zhechengqi.tollcat.services.rememberSpendBreakdown
 import com.zhechengqi.tollcat.services.subscriptionCaption
@@ -107,7 +104,9 @@ fun ProviderDetailScreen(
         session.serviceScopedDashboard()
     }
     val liveIds = live.map { it.accountId }.toSet()
-    val compositionRows = compositionForAccounts(scoped.composition, liveIds)
+    // 这一家的钱和「（按量 + 订阅）」都由共享层 `VendorSpend` 算好：含挂在厂商上的无主订阅，
+    // 金额只换算一次。不要把几个账号的金额字符串解析回来再加。
+    val spend = scoped.vendorSpend[providerId]
     val quota = scoped.freeQuota.filter { it.accountId in liveIds }.maxByOrNull { it.usedPercent }
     val hasLive = provider?.hasLiveFetch == true
     val inbox = provider?.supportsInbox == true
@@ -137,24 +136,11 @@ fun ProviderDetailScreen(
     val amountText = when {
         isEnded -> "—"
         quota != null && kind == "freeTier" -> stringResource(R.string.services_free_quota)
-        else -> composedAmountText(compositionRows)
+        else -> spend?.totalText
             ?: snapshot?.currentSpendUsd?.let { formatMoney(it) }
             ?: snapshot?.committedMonthlyUsd?.let { formatMoney(it) }
     }
-    val compositionCaption = if (isEnded || kind == "freeTier") {
-        null
-    } else {
-        amountCompositionCaption(
-            snapshot = snapshot,
-            composition = compositionRows,
-            subscriptions = scoped.subscriptions?.items.orEmpty().filter {
-                it.providerId == providerId && (it.accountId.isBlank() || it.accountId in liveIds)
-            },
-            usageLabel = stringResource(R.string.services_section_usage),
-            subscriptionLabel = stringResource(R.string.services_section_subscription),
-            locale = locale,
-        )
-    }
+    val compositionCaption = spend?.compositionCaption?.takeIf { !isEnded && kind != "freeTier" }
     val rateCaptions = conversionRateCaptions(snapshot?.convertedJson, snapshot?.walletsJson, locale)
     val wallets = walletBreakdown(snapshot?.walletsJson)
     val endedAt = archived.mapNotNull { AccountExtras.archivedAtMillis(it) }.maxOrNull()
@@ -294,7 +280,7 @@ fun ProviderDetailScreen(
                     hasLive = hasLive,
                     inbox = inbox,
                     snapshots = snapshots,
-                    amountByAccount = compositionRows.associate { it.accountId to it.amount },
+                    amountByAccount = scoped.composition.filter { it.accountId in liveIds }.associate { it.accountId to it.amount },
                     fillUsageLabel = stringResource(
                         if (snapshot?.source == "manual") {
                             R.string.services_update_usage
@@ -485,8 +471,7 @@ fun ProviderDetailScreen(
             },
             onAdd = {
                 showingCredentials = false
-                val extra = session.addUsageAccount(providerId)
-                session.openUsageSetup(providerId, extra.accountId)
+                session.openNewUsageSetup(providerId)
             },
         )
     }

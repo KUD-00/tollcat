@@ -3,7 +3,7 @@ import Foundation
 /// 桥载荷的 schema 版本。改了字段名或结构就 +1，Kotlin / C# 侧对不上会打日志。
 /// 两侧声明分别在 ProductDashboard/ProductCatalog（编码）和 CatalogModels（解码）。
 package enum JNISchema {
-    package static let version = 7
+    package static let version = 8
 }
 
 /// Kotlin 解压 SwiftPM resource bundle 后注入的根目录。

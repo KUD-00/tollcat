@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import com.zhechengqi.tollcat.ui.MeterSpacing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -18,7 +19,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumFlexibleTopAppBar
-import androidx.compose.material3.MediumFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -124,9 +125,13 @@ fun ServicesScreen(session: TollCatSession, modifier: Modifier = Modifier) {
         floatingActionButton = {
             if (!fullyEmpty) {
                 val addSpoken = stringResource(R.string.action_add_service)
-                MediumFloatingActionButton(
+                // 和仪表盘那颗 FAB（ToggleFloatingActionButton 的默认档）同一个尺寸、同一个落点：
+                // 两个 tab 右下角的「+」一大一小、错开一截，切 tab 时像按钮自己在缩放、在跳。
+                // 仪表盘那颗包在 FloatingActionButtonMenu 里，菜单自带一圈 16dp 内边距，这里补上同样一圈。
+                FloatingActionButton(
                     onClick = { session.openAdd() },
                     modifier = Modifier
+                        .padding(end = MeterSpacing.md, bottom = MeterSpacing.md)
                         .semantics { contentDescription = addSpoken }
                         .testTag(UITestId.SERVICES_ADD),
                 ) {

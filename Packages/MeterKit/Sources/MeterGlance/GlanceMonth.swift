@@ -12,7 +12,6 @@ public struct GlanceMonth: Codable, Equatable, Sendable {
     public var spokenProjection: String?
     /// 「9月1日至23日」
     public var periodText: String?
-    public var trend: GlanceTrend?
     /// 没设预算就是 nil。
     public var budget: GlanceBudget?
     /// 花得最多的几家，多出来的并成最后一行「其他」。
@@ -25,7 +24,6 @@ public struct GlanceMonth: Codable, Equatable, Sendable {
         projectionText: String? = nil,
         spokenProjection: String? = nil,
         periodText: String? = nil,
-        trend: GlanceTrend? = nil,
         budget: GlanceBudget? = nil,
         services: [GlanceService] = []
     ) {
@@ -35,7 +33,6 @@ public struct GlanceMonth: Codable, Equatable, Sendable {
         self.projectionText = projectionText
         self.spokenProjection = spokenProjection
         self.periodText = periodText
-        self.trend = trend
         self.budget = budget
         self.services = services
     }

@@ -158,7 +158,6 @@
     <string name="services_keystore_body_2">We use the strictest class: only this device, and only after you unlock it. It does not follow backups onto another phone.</string>
     <string name="services_keystore_body_3">When you remove this connection on the Services tab, the matching key is deleted too. It doesn’t stay on this device.</string>
     <string name="services_keystore_caption">Credentials will be saved to Keystore.</string>
-    <string name="services_test_hint">After a successful test, this button becomes Save to Keystore.</string>
     <string name="services_usage_empty_footer">There is no public billing API. Plan fees go under Fixed subscriptions below. Overage can be entered by hand.</string>
     <string name="services_hint_detail">View this service’s bill and connection</string>
     <string name="services_credentials_header">Credentials</string>

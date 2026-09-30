@@ -4,6 +4,8 @@ appId: com.zhechengqi.tollcat
 - launchApp:
     clearState: true
     arguments:
+      -skip-launch-reveal: true
+      skip_launch_reveal: true
       -seed-demo: true
       -skip-onboarding: true
       -clock-preset=design: true

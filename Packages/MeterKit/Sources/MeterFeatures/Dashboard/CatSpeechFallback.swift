@@ -25,7 +25,8 @@ enum CatSpeechFallback {
             changePercent: prompt.changePercent,
             leadAnomalyName: prompt.leadAnomalyName,
             leadAnomalyPercent: prompt.leadAnomalyPercent,
-            leadBalanceName: prompt.leadBalanceName
+            leadBalanceName: prompt.leadBalanceName,
+            includesSubscriptions: prompt.includesSubscriptions
         )
     }
 
@@ -43,14 +44,24 @@ enum CatSpeechFallback {
                 candidate("sleeping-none", String(localized: L("还没有账单。"))),
                 candidate("sleeping-empty", String(localized: L("接入一家，才有数字可看。")))
             )
-        case .dead:
+        case .dead(let includesSubscriptions):
             return (
                 candidate("dead-doubled", String(localized: L("这个月比上个月同期涨了一倍多。"))),
-                candidate("dead-check", String(localized: L("合计已经翻倍了，得看看出了什么事。")))
+                candidate(
+                    "dead-check",
+                    includesSubscriptions
+                        ? String(localized: L("合计已经翻倍了，得看看出了什么事。"))
+                        : String(localized: L("按量已经翻倍了，得看看出了什么事。"))
+                )
             )
-        case .shockedPercent(let percent):
+        case .shockedPercent(let percent, let includesSubscriptions):
             return (
-                candidate("shocked-percent", String(localized: L("合计较上月同期涨了 \(percent)%。"))),
+                candidate(
+                    "shocked-percent",
+                    includesSubscriptions
+                        ? String(localized: L("合计较上月同期涨了 \(percent)%。"))
+                        : String(localized: L("按量较上月同期涨了 \(percent)%。"))
+                ),
                 candidate("shocked-steep", String(localized: L("这个月涨得有点猛。")))
             )
         case .shockedSteep:

@@ -50,6 +50,14 @@ public struct Glance: Codable, Equatable, Sendable {
         lastRefreshAt.map { $0.addingTimeInterval(Self.staleAfter) }
     }
 
+    /// 表盘上那几格看得见的部分。服务列表和每家的详情只在手表 App 里，
+    /// 它们变了不该花复杂功能那条每天有限的额度。
+    public var faceContent: GlanceContent {
+        guard case .month(var month) = content else { return content }
+        month.services = []
+        return .month(month)
+    }
+
     /// 同一份数换了推送时刻不算变化：省下手表那边每天有限的复杂功能推送额度。
     public func carriesSameNews(as other: Glance) -> Bool {
         schema == other.schema

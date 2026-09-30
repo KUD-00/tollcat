@@ -1,0 +1,7 @@
+<resources>
+    <!-- 深色模式的系统启动画面：用图标的深色版，冷启动不闪一屏靛蓝。 -->
+    <style name="Theme.TollCat" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/launch_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+    </style>
+</resources>

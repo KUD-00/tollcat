@@ -95,23 +95,28 @@ struct OnboardingView: View {
         GeometryReader { geo in
             let size = geo.size
             if size.width > 1, size.height > 1 {
-                ScrollView(.horizontal) {
-                    HStack(spacing: 0) {
-                        ForEach(OnboardingPage.allCases, id: \.self) { item in
-                            pageView(item, size: size)
-                                .frame(width: size.width, height: size.height)
-                                .id(item)
+                ScrollViewReader { proxy in
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 0) {
+                            ForEach(OnboardingPage.allCases, id: \.self) { item in
+                                pageView(item, size: size)
+                                    .frame(width: size.width, height: size.height)
+                                    .id(item)
+                            }
                         }
+                        .scrollTargetLayout()
                     }
-                    .scrollTargetLayout()
-                }
-                .scrollTargetBehavior(.paging)
-                .scrollPosition(id: pageID)
-                .scrollIndicators(.hidden)
-                .overlay(alignment: .bottom) {
-                    OnboardingPageControl(page: page, onChange: move)
-                        .frame(minHeight: MeterSpacing.minTap)
-                        .padding(.bottom, MeterSpacing.sm)
+                    .scrollTargetBehavior(.paging)
+                    .scrollPosition(id: pageID)
+                    .scrollIndicators(.hidden)
+                    // `scrollPosition` 的初值在 ScrollView 头一次出现时不生效：
+                    // 从第 3 页起步时计数和圆点写着 3 / 4，画面却停在第一页。
+                    .onAppear { proxy.scrollTo(page, anchor: .leading) }
+                    .overlay(alignment: .bottom) {
+                        OnboardingPageControl(page: page, onChange: move)
+                            .frame(minHeight: MeterSpacing.minTap)
+                            .padding(.bottom, MeterSpacing.sm)
+                    }
                 }
             }
         }
@@ -137,33 +142,37 @@ struct OnboardingView: View {
             if usesWideOnboarding {
                 OnboardingWidePage(
                     title: item.title,
-                    bodyText: item.body(shell: shell),
+                    bodyText: item.body,
                     spokenProgress: progressSpoken(for: item),
-                    previewWidth: previewWidth(for: item),
+                    previewWidth: MeterSpacing.onboardingPreviewWidth,
                     minHeight: size.height
                 ) {
                     stage(for: item)
                 }
             } else {
-                phonePageView(item)
+                phonePageView(item, pageHeight: size.height)
             }
         }
     }
 
     /// 竖屏、窄分屏、超大字号：仍是上图下文。窗口比手机宽时标本和正文限宽居中，不拉成通栏。
-    private func phonePageView(_ item: OnboardingPage) -> some View {
+    ///
+    /// 标本放在一块固定高的图区里居中，标题从图区下沿开始：四页的标本高矮不一，
+    /// 标题和正文却钉在同一条线上，翻页时文字不跳。第一页的标本最高，图区按它留够；
+    /// 超大字号下标本比图区高，就把图区撑开，退回自然排布。
+    private func phonePageView(_ item: OnboardingPage, pageHeight: CGFloat) -> some View {
         ScrollView {
             VStack(spacing: MeterSpacing.lg) {
-                Spacer(minLength: MeterSpacing.md)
                 stage(for: item)
-                    .frame(maxWidth: previewWidth(for: item))
+                    .frame(maxWidth: MeterSpacing.onboardingPreviewWidth)
+                    .frame(maxWidth: .infinity, minHeight: pageHeight * MeterSpacing.onboardingStageShare)
                 Text(item.title)
                     .font(MeterFont.title2)
                     .foregroundStyle(Color.meterLabel)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityValue(progressSpoken(for: item))
-                Text(item.body(shell: shell))
+                Text(item.body)
                     .font(MeterFont.body)
                     .foregroundStyle(Color.meterSecondaryLabel)
                     .multilineTextAlignment(.center)
@@ -178,30 +187,26 @@ struct OnboardingView: View {
         .accessibilityElement(children: .contain)
     }
 
-    private func previewWidth(for page: OnboardingPage) -> CGFloat {
-        switch page {
-        case .widget: MeterSpacing.onboardingWidgetWidth
-        case .number, .keychain, .add: MeterSpacing.onboardingPreviewWidth
-        }
-    }
-
     @ViewBuilder
     private func stage(for item: OnboardingPage) -> some View {
         switch item {
         case .number:
-            VStack(spacing: MeterSpacing.md) {
+            VStack(spacing: MeterSpacing.xs) {
                 OnboardingDashboardPreview(presentation: presentation)
-                currencyPicker
+                // 新用户会把 $43.20 当成自己的账单：「示例数字」和货币下拉挤一行，不另占一段。
+                HStack(spacing: MeterSpacing.sm) {
+                    Text(L("示例数字"))
+                        .font(MeterFont.footnote)
+                        .foregroundStyle(Color.meterSecondaryLabel)
+                    Spacer(minLength: MeterSpacing.sm)
+                    currencyPicker
+                }
+                .padding(.leading, MeterSpacing.md)
             }
+        case .source:
+            OnboardingSourcePreview(shell: shell)
         case .keychain:
             OnboardingKeychainPreview()
-        case .widget:
-            // TODO: Mac 第 3 页标本要单独定制，见 OnboardingMacGlancePreview。
-            if shell == .mac {
-                OnboardingMacGlancePreview(presentation: presentation)
-            } else {
-                OnboardingWidgetPreview(presentation: presentation)
-            }
         case .add:
             OnboardingAddProviderPreview()
         }
@@ -276,8 +281,8 @@ struct OnboardingView: View {
         .frame(width: 1194, height: 834)
 }
 
-#Preview("Pad · Widget") {
-    OnboardingPreviewHost(initialPage: .widget)
+#Preview("Pad · Source") {
+    OnboardingPreviewHost(initialPage: .source)
         .environment(\.meterShell, .pad)
         .frame(width: 1194, height: 834)
 }
@@ -291,8 +296,8 @@ struct OnboardingView: View {
         )
 }
 
-#Preview("Widget") {
-    OnboardingPreviewHost(initialPage: .widget)
+#Preview("Source") {
+    OnboardingPreviewHost(initialPage: .source)
         .preferredColorScheme(.light)
 }
 

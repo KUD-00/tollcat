@@ -73,18 +73,12 @@ package enum JNICopy {
     }
 
     private static let table: [String: Entry] = [
-        "用量后付费": Entry(en: "Pay-as-you-go", ja: "従量課金"),
-        "预充值余额": Entry(en: "Prepaid balance", ja: "プリペイド残高"),
-        "固定订阅": Entry(en: "Subscription", ja: "定額サブスクリプション"),
-        "免费额度内": Entry(en: "Free tier", ja: "無料枠内"),
-        "月费加超额": Entry(en: "Plan plus overage", ja: "定額＋超過"),
-        "%@ · 刷新要花钱 约 $0.01": Entry(en: "%@ · Refresh costs about $0.01", ja: "%@ · 更新に約 $0.01"),
-        "%@ · 读数信箱": Entry(en: "%@ · Reading inbox", ja: "%@ · 検針ポスト"),
         "刚刚": Entry(en: "Just now", ja: "たった今"),
         "这回没读到账单。": Entry(en: "No bill came back this time.", ja: "今回は請求を読み取れませんでした。"),
         "还没有账单。": Entry(en: "No bills yet.", ja: "請求はまだない。"),
         "这个月比上个月同期涨了一倍多。": Entry(en: "This month more than doubled versus last month.", ja: "今月は先月同期の倍以上。"),
         "合计较上月同期涨了 %lld%%。": Entry(en: "Total is up %lld%% versus last month.", ja: "合計は先月同期比 %lld%% 増。"),
+        "按量较上月同期涨了 %lld%%。": Entry(en: "Usage is up %lld%% versus last month.", ja: "従量は先月同期比 %lld%% 増。"),
         "这个月涨得有点猛。": Entry(en: "This month jumped hard.", ja: "今月の伸びがきつい。"),
         "%@ 的余额快见底了。": Entry(en: "%@’s balance is almost gone.", ja: "%@ の残高がもうすぐ尽きる。"),
         "%@ 较上月同期涨了 %lld%%。": Entry(en: "%@ is up %lld%% versus last month.", ja: "%@ は先月同期比 %lld%% 増。"),
@@ -95,8 +89,6 @@ package enum JNICopy {
         "那个月合计 %@。": Entry(en: "That month came to %@.", ja: "その月は合計 %@。"),
         "本月至今 %@，预计月底 %@。": Entry(en: "%1$@ so far this month, %2$@ by month end.", ja: "今月ここまで %1$@、月末見込み %2$@。"),
         "还不能对比": Entry(en: "Not enough to compare", ja: "まだ比べられない"),
-        "本月订阅 %@ · 已计入": Entry(en: "Subscriptions %@ · included", ja: "サブスク %@ · 計上済み"),
-        "本月订阅 %@ · 未计入": Entry(en: "Subscriptions %@ · not included", ja: "サブスク %@ · 未計上"),
         "本月至今": Entry(en: "Month to date", ja: "今月の累計"),
         "预计月底": Entry(en: "Projected", ja: "月末見込み"),
         "还没有接入任何服务。": Entry(en: "No services connected yet.", ja: "まだサービスを接続していません。"),

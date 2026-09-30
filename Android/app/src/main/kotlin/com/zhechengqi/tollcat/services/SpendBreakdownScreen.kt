@@ -249,7 +249,7 @@ private fun SpendBreakdownSummary(content: SpendBreakdownContent) {
             displayName = group.title,
             colorKey = "",
             amount = group.amountCaption,
-            percent = (group.fraction * 100).toInt(),
+            percent = group.sharePercent ?: 0,
             fraction = group.fraction.toFloat(),
         )
     }

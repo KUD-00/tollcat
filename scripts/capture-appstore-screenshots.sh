@@ -352,6 +352,7 @@ launch_app() {
         -clock-preset=design \
         -appearance="$appearance" \
         -stub-catalog \
+        -skip-launch-reveal \
         -stub-inbox \
         -stub-usage-analytics \
         -stub-feedback \

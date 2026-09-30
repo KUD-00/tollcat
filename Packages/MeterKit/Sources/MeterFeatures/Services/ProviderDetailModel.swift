@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import SwiftData
 import MeterCore
+import MeterDashboard
 import MeterPersistence
 import MeterProviders
 
@@ -214,29 +215,12 @@ final class ProviderDetailModel {
     private func makeAmountCompositionCaption() -> String? {
         // 免费额度那一屏的主角是百分比，不是这两块钱加起来的。
         guard !showsFreeQuotaHero else { return nil }
-        var usage = Money.zero
-        var subscription = Money.zero
-        let accountIDs = Set(usageAccounts.map(\.accountID))
-        for fact in monthToDate?.facts ?? [] {
-            guard fact.providerID == providerID, let amount = fact.amountUSD else { continue }
-            // 无主订阅的 fact 没有 accountID，照厂商归到这一页；和服务列表行同一条规则。
-            if let id = fact.accountID, !accountIDs.contains(id) { continue }
-            switch fact.type {
-            case .monthToDateUsage, .prepaidConsumption:
-                usage += amount
-            case .subscriptionIncluded:
-                subscription += amount
-            case .subscriptionSuperseded, .freeQuota, .fetchFailed:
-                continue
-            }
-        }
-        guard usage > .zero, subscription > .zero else { return nil }
-        let presentation = dashboard.moneyPresentation
-        return String(
-            localized: L(
-                "（按量 \(usage.formatted(using: presentation)) + 订阅 \(subscription.formatted(using: presentation))）"
-            )
-        )
+        // 无主订阅的 fact 没有 accountID，照厂商归到这一页；和服务列表行同一条规则（`VendorSpend`）。
+        return VendorSpend.make(
+            providerID: providerID,
+            accounts: Set(usageAccounts.map(\.accountID)),
+            facts: monthToDate?.facts ?? []
+        ).compositionCaption(presentation: dashboard.moneyPresentation)
     }
 
     /// 大数字下面那行「（1 CNY = $0.1404）」。右边跟显示货币走，不是永远美元。

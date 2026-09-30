@@ -17,15 +17,15 @@ enum DashboardRenderer {
         lines.append(
             row(
                 JNICopy.text("本月至今", localeTag),
-                color.wrap(document.formattedVariable, ANSIColor.bold),
+                color.wrap(document.formattedTotal, ANSIColor.bold),
                 nameWidth: 12
             )
         )
-        if !document.formattedProjected.isEmpty {
+        if let projected = document.formattedProjected {
             lines.append(
                 row(
                     JNICopy.text("预计月底", localeTag),
-                    document.formattedProjected,
+                    projected,
                     nameWidth: 12
                 )
             )

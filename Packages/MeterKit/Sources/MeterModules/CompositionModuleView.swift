@@ -32,6 +32,7 @@ public struct CompositionModuleView: View {
                     Circle()
                         .fill(entry.color)
                         .frame(width: MeterSpacing.compositionSwatch, height: MeterSpacing.compositionSwatch)
+                        .launchSwatch(id: entry.id, color: entry.color)
                         .accessibilityHidden(true)
                     Text(entry.name)
                         .font(MeterFont.subheadline)

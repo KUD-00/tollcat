@@ -25,7 +25,9 @@ fun TollCatSheet(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val state = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+    // 不要半展开那一档：内容够高时系统默认有它，返回键落在那一档上什么也不做，
+    // 要按第二下才关。我们总是直接弹到全展开，半截只会是手指拖出来的，留着只添乱。
+    val state = rememberBottomSheetState(SheetValue.Hidden, setOf(SheetValue.Hidden, SheetValue.Expanded))
     LaunchedEffect(Unit) { state.expand() }
     ModalBottomSheet(
         onDismissRequest = onDismiss,

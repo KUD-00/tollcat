@@ -3,7 +3,10 @@ package com.zhechengqi.tollcat.setup
 import android.content.Context
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -15,10 +18,8 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,7 +28,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -47,6 +50,7 @@ import com.zhechengqi.tollcat.ui.FillProgressPhase
 import com.zhechengqi.tollcat.ui.HierarchicalContent
 import com.zhechengqi.tollcat.ui.MeterSpacing
 import com.zhechengqi.tollcat.ui.PrimaryButton
+import com.zhechengqi.tollcat.ui.TollCatSheet
 import com.zhechengqi.tollcat.ui.UITestId
 import com.zhechengqi.tollcat.ui.symbols.MaterialSymbol
 import com.zhechengqi.tollcat.ui.symbols.SymbolIcon
@@ -56,17 +60,18 @@ import com.zhechengqi.tollcat.ui.symbols.SymbolIcon
 fun SetupWizard(
     session: TollCatSession,
     providerId: String,
-    accountId: String,
-    modifier: Modifier = Modifier,
+    accountId: String?,
+    onClose: () -> Unit,
 ) {
     val context = LocalContext.current
     session.dataRevision
     val provider = session.catalog.provider(providerId)
     val guide = remember(providerId) { session.setupGuide(providerId) }
     val name = provider?.displayName ?: providerId
-    val account = session.accounts(providerId).firstOrNull { it.accountId == accountId }
-        ?: session.accounts(providerId).firstOrNull()
-        ?: session.ensureAccount(providerId, accountId)
+    // 新接的一笔先拿草稿账户走完向导；存成功落盘后，同一个 id 就能在账本里查到。
+    val draft = remember(providerId, accountId) { session.draftUsageAccount(providerId) }
+    val targetId = accountId ?: draft.accountId
+    val account = session.accounts(providerId).firstOrNull { it.accountId == targetId } ?: draft
     val usesInbox = provider?.supportsInbox == true
     val fields = guide?.fields.orEmpty().ifEmpty { provider?.fields.orEmpty() }
     val stored = remember(account.credentialReference, session.dataRevision) {
@@ -108,7 +113,7 @@ fun SetupWizard(
         it.accountId != account.accountId && !AccountExtras.isArchived(it)
     }
     val showsNickname = !rotating && siblings.isNotEmpty() && testedOk && collisionReason == null
-    val inboxState = rememberInboxHandoffState(session, providerId, name, account.accountId)
+    val inboxState = rememberInboxHandoffState(session, providerId, name, draft = account)
 
     LaunchedEffect(showsNickname, defaultSiblingName, siblings.firstOrNull()?.accountId) {
         if (showsNickname && siblingNickname.isEmpty()) {
@@ -122,9 +127,6 @@ fun SetupWizard(
         state = inboxState,
     )
 
-    BackHandler(enabled = step != SetupWizardStep.Guide) {
-        step = SetupWizardStep.Guide
-    }
 
     val title = when (step) {
         SetupWizardStep.Guide -> stringResource(R.string.services_setup_guide_title, name)
@@ -137,41 +139,92 @@ fun SetupWizard(
         SetupWizardStep.TOTAL,
     )
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(title)
-                        Text(
-                            text = stepDigits,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.semantics { contentDescription = stepSpoken },
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(
-                        shapes = IconButtonDefaults.shapes(),
-                        onClick = {
-                            when (step) {
-                                SetupWizardStep.Guide -> session.popServices()
-                                SetupWizardStep.Credentials -> step = SetupWizardStep.Guide
-                            }
-                        },
-                    ) {
-                        SymbolIcon(
-                            MaterialSymbol.ArrowBack,
-                            contentDescription = stringResource(R.string.action_back),
-                        )
-                    }
-                },
+    // 和 iOS 一样是一个抽屉，不是服务导航里的一页：盖在服务详情 / 管理凭据上面，
+    // 底部导航栏不露出来；关掉就回到原来那一页。第 2 步在抽屉里往右推进一页。
+    TollCatSheet(onDismiss = onClose) {
+        // 抽屉是另一个窗口，返回键要在这里接：第 2 步先退回第 1 步，第 1 步才关抽屉。
+        BackHandler(enabled = step != SetupWizardStep.Guide) {
+            step = SetupWizardStep.Guide
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .imePadding(),
+        ) {
+            SetupSheetHeader(
+                title = title,
+                stepDigits = stepDigits,
+                stepSpoken = stepSpoken,
+                showsBack = step == SetupWizardStep.Credentials,
+                onBack = { step = SetupWizardStep.Guide },
+                onClose = onClose,
             )
-        },
-        bottomBar = {
-            Surface(color = MaterialTheme.colorScheme.surfaceContainer) {
+            HierarchicalContent(
+                targetState = step,
+                depth = step.ordinal,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) { current ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .testTag(
+                            when (current) {
+                                SetupWizardStep.Guide -> UITestId.SETUP_GUIDE
+                                SetupWizardStep.Credentials -> UITestId.SETUP_CREDENTIALS
+                            },
+                        ),
+                ) {
+                    when (current) {
+                        SetupWizardStep.Guide -> {
+                            if (provider != null) SetupGuideStep(provider, guide)
+                        }
+                        SetupWizardStep.Credentials -> {
+                            if (usesInbox) {
+                                InboxHandoffStep(
+                                    state = inboxState,
+                                    nowMillis = session.nowMillis(),
+                                    defaultSiblingName = defaultSiblingName,
+                                )
+                            } else {
+                                SetupCredentialsStep(
+                                    fields = fields,
+                                    values = values,
+                                    fieldErrors = fieldErrors,
+                                    outcome = outcome,
+                                    onEdited = {
+                                        testedOk = false
+                                        outcome = null
+                                        verifiedSnapshot = null
+                                        collisionReason = null
+                                        saveFailed = false
+                                    },
+                                    onExplainKeystore = { explainKeystore = true },
+                                    onRevisePermissions = { step = SetupWizardStep.Guide },
+                                    collisionReason = collisionReason,
+                                    saveFailed = saveFailed,
+                                    showsNickname = showsNickname,
+                                    siblingNickname = siblingNickname,
+                                    onSiblingNicknameChange = { siblingNickname = it },
+                                    newNickname = newNickname,
+                                    onNewNicknameChange = { newNickname = it },
+                                )
+                                val theoretical = provider != null && SetupProviderFacts.offersSetupFeedback(provider)
+                                if (didTest && theoretical) {
+                                    SetupFeedbackSection(
+                                        providerName = name,
+                                        testedOk = testedOk,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // 主按钮钉在抽屉底部，不跟正文一起滚走；让开系统手势条。
+            Box(Modifier.navigationBarsPadding()) {
                 SetupWizardPrimaryAction(
                     step = step,
                     usesInbox = usesInbox,
@@ -200,6 +253,7 @@ fun SetupWizard(
                             guide = guide,
                             context = context,
                             providerName = name,
+                            onSaved = onClose,
                             setDidTest = { didTest = true },
                             setBusy = { busy = it },
                             setOutcome = { outcome = it },
@@ -211,82 +265,72 @@ fun SetupWizard(
                     },
                     onInboxConnect = {
                         inboxState.connect(defaultSiblingName) { ok ->
-                            if (ok) session.popServices()
+                            if (ok) onClose()
                         }
                     },
                 )
-            }
-        },
-    ) { inner ->
-        HierarchicalContent(
-            targetState = step,
-            depth = step.ordinal,
-            modifier = Modifier
-                .padding(inner)
-                .imePadding()
-                .fillMaxSize(),
-        ) { current ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .testTag(
-                        when (current) {
-                            SetupWizardStep.Guide -> UITestId.SETUP_GUIDE
-                            SetupWizardStep.Credentials -> UITestId.SETUP_CREDENTIALS
-                        },
-                    ),
-            ) {
-                when (current) {
-                    SetupWizardStep.Guide -> {
-                        if (provider != null) SetupGuideStep(provider, guide)
-                    }
-                    SetupWizardStep.Credentials -> {
-                        if (usesInbox) {
-                            InboxHandoffStep(
-                                state = inboxState,
-                                nowMillis = session.nowMillis(),
-                                defaultSiblingName = defaultSiblingName,
-                            )
-                        } else {
-                            SetupCredentialsStep(
-                                fields = fields,
-                                values = values,
-                                fieldErrors = fieldErrors,
-                                outcome = outcome,
-                                onEdited = {
-                                    testedOk = false
-                                    outcome = null
-                                    verifiedSnapshot = null
-                                    collisionReason = null
-                                    saveFailed = false
-                                },
-                                onExplainKeystore = { explainKeystore = true },
-                                onRevisePermissions = { step = SetupWizardStep.Guide },
-                                collisionReason = collisionReason,
-                                saveFailed = saveFailed,
-                                showsNickname = showsNickname,
-                                siblingNickname = siblingNickname,
-                                onSiblingNicknameChange = { siblingNickname = it },
-                                newNickname = newNickname,
-                                onNewNicknameChange = { newNickname = it },
-                            )
-                            val theoretical = provider != null && SetupProviderFacts.offersSetupFeedback(provider)
-                            if (didTest && theoretical) {
-                                SetupFeedbackSection(
-                                    providerName = name,
-                                    testedOk = testedOk,
-                                )
-                            }
-                        }
-                    }
-                }
             }
         }
     }
 
     if (explainKeystore) {
         KeystoreExplainerSheet(onDismiss = { explainKeystore = false })
+    }
+}
+
+/**
+ * 抽屉顶上一行，和 iOS 向导的导航栏同一个排法：第 2 步左边返回，中间标题和「1 / 2」，右边关闭。
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun SetupSheetHeader(
+    title: String,
+    stepDigits: String,
+    stepSpoken: String,
+    showsBack: Boolean,
+    onBack: () -> Unit,
+    onClose: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = MeterSpacing.xs),
+    ) {
+        if (showsBack) {
+            IconButton(
+                onClick = onBack,
+                shapes = IconButtonDefaults.shapes(),
+                modifier = Modifier.align(Alignment.CenterStart),
+            ) {
+                SymbolIcon(MaterialSymbol.ArrowBack, contentDescription = stringResource(R.string.action_back))
+            }
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = MeterSpacing.minTap),
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = stepDigits,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.semantics { contentDescription = stepSpoken },
+            )
+        }
+        IconButton(
+            onClick = onClose,
+            shapes = IconButtonDefaults.shapes(),
+            modifier = Modifier.align(Alignment.CenterEnd),
+        ) {
+            SymbolIcon(MaterialSymbol.Close, contentDescription = stringResource(R.string.action_close))
+        }
     }
 }
 
@@ -372,6 +416,7 @@ private fun performCredentialAction(
     guide: SetupGuideDoc?,
     context: Context,
     providerName: String,
+    onSaved: () -> Unit,
     setDidTest: () -> Unit,
     setBusy: (Boolean) -> Unit,
     setOutcome: (SetupVerifyOutcome) -> Unit,
@@ -392,6 +437,7 @@ private fun performCredentialAction(
             defaultSiblingName = defaultSiblingName,
             verifiedSnapshot = verifiedSnapshot,
             setSaveFailed = setSaveFailed,
+            onSaved = onSaved,
         )
         return
     }
@@ -443,6 +489,7 @@ private fun persistVerified(
     defaultSiblingName: String,
     verifiedSnapshot: SnapshotRow?,
     setSaveFailed: (Boolean) -> Unit,
+    onSaved: () -> Unit,
 ) {
     val filled = values.filterValues { it.isNotBlank() }
     try {
@@ -451,6 +498,7 @@ private fun persistVerified(
         setSaveFailed(true)
         return
     }
+    session.commitAccount(account)
     session.rememberFingerprint(account, filled)
     verifiedSnapshot?.let { session.ledger.replaceAccountSnapshots(account.accountId, it) }
     if (showsNickname) {
@@ -461,7 +509,7 @@ private fun persistVerified(
     } else {
         session.setNickname(account.accountId, AccountExtras.nickname(account))
     }
-    session.popServices()
+    onSaved()
 }
 
 @Preview(name = "Test Light", showBackground = true)

@@ -41,13 +41,11 @@ struct WhatsNewEntryView: View {
 
     private func row(_ item: WhatsNewItem) -> some View {
         HStack(alignment: .top, spacing: MeterSpacing.md) {
-            if let symbol = item.symbol {
-                Image(systemName: symbol)
-                    .font(MeterFont.title2)
-                    .foregroundStyle(Color.accentColor)
-                    .frame(width: MeterSpacing.xl, alignment: .center)
-                    .accessibilityHidden(true)
-            }
+            Image(systemName: item.symbol)
+                .font(MeterFont.title2)
+                .foregroundStyle(Color.accentColor)
+                .frame(width: MeterSpacing.xl, alignment: .center)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: MeterSpacing.xs / 2) {
                 Text(item.title.resolved(language))
                     .font(MeterFont.bodyEmphasized)

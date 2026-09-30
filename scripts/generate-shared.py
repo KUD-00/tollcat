@@ -2591,6 +2591,14 @@ PLAY_WHATSNEW_LIMIT = 500
 ASC_WHATSNEW_LIMIT = 4000
 
 # 厂名不进 catalog。ios 那一班车是 iPhone 和 iPad 同一份。
+# 每个端从 `items[].symbol` 的哪一列取图标。Mac 和 iPhone 一样用 SF Symbols，读 ios 那列。
+CHANGELOG_SYMBOL_COLUMN = {
+    "ios": "ios",
+    "mac": "ios",
+    "android": "android",
+    "windows": "windows",
+}
+
 CHANGELOG_PLATFORM_NAMES = {
     "ios": "iPhone · iPad",
     "mac": "Mac",
@@ -2615,7 +2623,7 @@ def parse_material_symbols() -> list[str]:
 
     Compose 没有「按名字查图标」这回事（那要反射），所以 Android 侧只能认这张
     图标字体表里已有的名字。写错了要在这里红，不能等到那一条在手机上没有图标。
-    SF Symbol 名没法离线校验，`symbol.ios` 只能靠 review。
+    SF Symbol 名这里校验不了（要系统字体），由 `WhatsNewCatalogTests` 在模拟器上逐个解析。
     """
     path = (
         ROOT
@@ -2675,6 +2683,15 @@ def changelog_shows_drawer(entry: dict) -> bool:
 
 def changelog_ordered_platforms(entry: dict) -> list[str]:
     return [name for name in CHANGELOG_PLATFORMS if name in entry["platforms"]]
+
+
+def changelog_entries_for(doc: dict, platforms: set[str]) -> list[dict]:
+    """某个包里编进去的条目：只要这班车到过其中一个端。
+
+    没到过的端不编进去——那些条目按定义不会在这个包里显示，也不保证有这一端的图标，
+    编进去就只能把 symbol 写成可选，缺图标又会变回静默的空洞。
+    """
+    return [entry for entry in doc["entries"] if platforms & set(entry["platforms"])]
 
 
 def _changelog_strings(node) -> list[str]:
@@ -2835,21 +2852,31 @@ def verify_changelog(doc: dict, providers: dict) -> None:
                 for lang in CHANGELOG_LANGS:
                     if gap := changelog_overlay_gap(item, key, lang):
                         raise SystemExit(f"{spot}: {key} 的 {gap}")
+            # 这班车上每个端都要有自己那列图标。以前 symbol 可以只写一列，
+            # 另一端拿到空值就静默少画一个图标（1.3 的手表条在 Android、Android 条在 iOS 都是这样）。
+            # 现在缺哪列就在这里红；生成物里的 symbol 也不再是可选类型。
             symbol = item.get("symbol")
-            if symbol is not None:
-                if not isinstance(symbol, dict) or not symbol:
-                    raise SystemExit(f"{spot}: symbol 要是 {{ios / android / windows: 名字}}")
-                for key, value in symbol.items():
-                    if key not in ("ios", "android", "windows"):
-                        raise SystemExit(f"{spot}: symbol 里没有 {key!r} 这个端")
-                    if not isinstance(value, str) or not value.strip():
-                        raise SystemExit(f"{spot}: symbol.{key} 是空的")
-                if "android" in symbol and material_symbols:
-                    if symbol["android"] not in material_symbols:
-                        raise SystemExit(
-                            f"{spot}: symbol.android {symbol['android']!r} 不在 MaterialSymbol 里。"
-                            "Compose 不能按名字查图标，只能用那张表里已有的 case 名"
-                        )
+            if not isinstance(symbol, dict) or not symbol:
+                raise SystemExit(f"{spot}: symbol 要是 {{ios / android / windows: 名字}}")
+            for key, value in symbol.items():
+                if key not in ("ios", "android", "windows"):
+                    raise SystemExit(f"{spot}: symbol 里没有 {key!r} 这个端")
+                if not isinstance(value, str) or not value.strip():
+                    raise SystemExit(f"{spot}: symbol.{key} 是空的")
+            for name in platforms:
+                column = CHANGELOG_SYMBOL_COLUMN[name]
+                if column not in symbol:
+                    raise SystemExit(
+                        f"{spot}: 这班车上有 {name}，但 symbol.{column} 没写。"
+                        "每个端的抽屉都要一个图标，缺了那一条就只剩文字、和上下对不齐"
+                    )
+            if "android" in symbol and material_symbols:
+                if symbol["android"] not in material_symbols:
+                    raise SystemExit(
+                        f"{spot}: symbol.android {symbol['android']!r} 不在 MaterialSymbol 里。"
+                        "Compose 不能按名字查图标，只能用那张表里已有的 case 名；"
+                        "要新图标先重裁图标字体、在 MaterialSymbol.kt 补一行"
+                    )
 
         hero = entry.get("hero")
         if hero is not None:
@@ -3098,7 +3125,8 @@ def gen_swift_whats_new(doc: dict) -> str:
         ),
         "enum WhatsNewCatalog {",
     ]
-    if not doc["entries"]:
+    entries = changelog_entries_for(doc, {"ios", "mac"})
+    if not entries:
         lines += [
             "    /// 还没发过正式版。发版时在 shared/changelog.json 顶上加一条。",
             "    static let entries: [WhatsNewEntry] = []",
@@ -3108,7 +3136,7 @@ def gen_swift_whats_new(doc: dict) -> str:
         return "\n".join(lines)
 
     lines.append("    static let entries: [WhatsNewEntry] = [")
-    for entry in doc["entries"]:
+    for entry in entries:
         platforms = ", ".join(f".{name}" for name in changelog_ordered_platforms(entry))
         lines.append("        WhatsNewEntry(")
         lines.append(f"            version: {_swift_string(entry['version'])},")
@@ -3130,10 +3158,7 @@ def gen_swift_whats_new(doc: dict) -> str:
         for item in entry["items"]:
             lines.append("                WhatsNewItem(")
             lines.append(f"                    id: {_swift_string(item['id'])},")
-            symbol = (item.get("symbol") or {}).get("ios")
-            lines.append(
-                f"                    symbol: {_swift_string(symbol) if symbol else 'nil'},"
-            )
+            lines.append(f"                    symbol: {_swift_string(item['symbol']['ios'])},")
             lines.append(_swift_text(item, "title", "                    ") + ",")
             lines.append(_swift_text(item, "body", "                    "))
             lines.append("                ),")
@@ -3161,6 +3186,8 @@ def gen_kotlin_whats_new(doc: dict) -> str:
         "",
         "package com.zhechengqi.tollcat.settings",
         "",
+        "import com.zhechengqi.tollcat.ui.symbols.MaterialSymbol",
+        "",
         "/** 更新说明的三语文本。中文是规范列，展示时按 locale 选。 */",
         "data class WhatsNewText(val zh: String, val en: String, val ja: String) {",
         "    fun resolve(language: String): String = when {",
@@ -3170,10 +3197,10 @@ def gen_kotlin_whats_new(doc: dict) -> str:
         "    }",
         "}",
         "",
-        "/** 抽屉里的一条。`id` 稳定，改名等于换一条。 */",
+        "/** 抽屉里的一条。`id` 稳定，改名等于换一条。图标直接是枚举：写错名字编译不过，也没有空值。 */",
         "data class WhatsNewItem(",
         "    val id: String,",
-        "    val symbol: String?,",
+        "    val symbol: MaterialSymbol,",
         "    val title: WhatsNewText,",
         "    val body: WhatsNewText,",
         ")",
@@ -3196,12 +3223,13 @@ def gen_kotlin_whats_new(doc: dict) -> str:
         "/** 新的在上。编译期铺进来，不下发——理由见 shared/changelog.json 的注释。 */",
         "object WhatsNewCatalog {",
     ]
-    if not doc["entries"]:
+    entries = changelog_entries_for(doc, {"android"})
+    if not entries:
         lines += ["    val entries: List<WhatsNewEntry> = emptyList()", "}", ""]
         return "\n".join(lines)
 
     lines.append("    val entries: List<WhatsNewEntry> = listOf(")
-    for entry in doc["entries"]:
+    for entry in entries:
         platforms = ", ".join(_kotlin_string(name) for name in changelog_ordered_platforms(entry))
         hero = entry.get("hero")
         if hero is None:
@@ -3222,11 +3250,10 @@ def gen_kotlin_whats_new(doc: dict) -> str:
             "            items = listOf(",
         ]
         for item in entry["items"]:
-            symbol = (item.get("symbol") or {}).get("android")
             lines += [
                 "                WhatsNewItem(",
                 f"                    id = {_kotlin_string(item['id'])},",
-                f"                    symbol = {_kotlin_string(symbol) if symbol else 'null'},",
+                f"                    symbol = MaterialSymbol.{item['symbol']['android']},",
                 f"                    title = {_kotlin_text(item, 'title')},",
                 f"                    body = {_kotlin_text(item, 'body')},",
                 "                ),",

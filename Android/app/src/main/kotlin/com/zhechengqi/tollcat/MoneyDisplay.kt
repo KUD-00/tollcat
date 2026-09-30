@@ -17,7 +17,10 @@ object MoneyDisplay {
      * USD 十进制字符串 → 显示币种字符串。已经带符号的（JNI 返回的）原样退回。
      * `.so` 没装上（Compose 预览）时回落成 `$%.2f`，只影响预览。
      */
-    fun formatUsd(raw: String): String {
+    fun formatUsd(raw: String): String = formatUsd(raw, currency)
+
+    /** 指定币种的版本：开场预览要跟着下拉里刚选的币种改写，不等 session 回写。 */
+    fun formatUsd(raw: String, currency: String): String {
         val trimmed = raw.trim()
         if (trimmed.isEmpty() || trimmed.toDoubleOrNull() == null) return trimmed
         if (!MeterCoreNative.loaded) {

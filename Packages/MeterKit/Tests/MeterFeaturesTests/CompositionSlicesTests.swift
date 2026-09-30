@@ -111,6 +111,22 @@ struct CompositionSlicesTests {
             )
         }
     }
+
+    @Test("「其他」加的是 Money：非美元显示时只换算一次")
+    func otherIsConvertedOnce() {
+        let rates = ExchangeRates(usdPerUnit: ["JPY": Decimal(string: "0.0067")!])
+        let jpy = MoneyPresentation(currencyCode: "JPY", rates: rates)
+        let slices = CompositionSliceBuilder.make(from: segments(count: 8), presentation: jpy)
+        let other = slices.last
+        #expect(other?.isOther == true)
+        #expect(other?.amountText == Money(usd: 17).formatted(using: jpy))
+        #expect(other?.percent == 17)
+    }
+
+    @Test("色板档数和共享层的「前 N 名」一样多")
+    func paletteMatchesNamedLimit() {
+        #expect(MeterColor.compositionNamedLimit == CompositionSliceBuilder.namedLimit)
+    }
 }
 
 /// 「含订阅」口径下无主订阅也要占段，饼图才加得回大数字。

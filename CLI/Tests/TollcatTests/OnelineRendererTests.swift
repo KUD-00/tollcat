@@ -6,7 +6,7 @@ struct OnelineRendererTests {
         let document = DashboardDocument(
             empty: false,
             rawJSON: "{}",
-            formattedVariable: "$43.20",
+            formattedTotal: "$43.20",
             formattedProjected: "$61.00",
             monthTitle: "September",
             comparisonCaption: nil,
@@ -28,8 +28,8 @@ struct OnelineRendererTests {
         let document = DashboardDocument(
             empty: true,
             rawJSON: "{}",
-            formattedVariable: "",
-            formattedProjected: "",
+            formattedTotal: "",
+            formattedProjected: nil,
             monthTitle: "",
             comparisonCaption: nil,
             comparisonPercentText: nil,

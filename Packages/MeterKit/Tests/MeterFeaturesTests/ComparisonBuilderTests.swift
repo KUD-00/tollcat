@@ -237,4 +237,43 @@ struct ComparisonBuilderTests {
         components.hour = hour
         return calendar.date(from: components)!
     }
+
+    @Test("上月同期是 0、这个月花了钱：写「新增」、算上涨，不是「持平」")
+    func zeroPreviousIsNewSpendNotFlat() {
+        var windowStart = DateComponents()
+        windowStart.year = 2026
+        windowStart.month = 7
+        windowStart.day = 1
+        let start = calendar.date(from: windowStart)!
+        let content = ComparisonBuilder.make(
+            from: MonthToDate(
+                totalUSD: Money(usd: 20),
+                projectedMonthEndUSD: Money(usd: 20),
+                confidence: .exact,
+                estimatedAccounts: [],
+                facts: [
+                    Fact(
+                        providerID: .aws,
+                        accountID: AccountID.fixture(for: .aws),
+                        kind: .usage,
+                        amountUSD: Money(usd: 20),
+                        comparisonUSD: .zero,
+                        changeRatio: nil,
+                        confidence: .exact,
+                        type: .monthToDateUsage
+                    )
+                ],
+                comparisonUSD: .zero,
+                changeRatio: nil,
+                comparisonWindow: ComparisonWindow(start: start, end: start, dayOfMonth: 16),
+                variableUSD: Money(usd: 20),
+                projectedVariableUSD: Money(usd: 20)
+            ),
+            calendar: calendar
+        )
+        #expect(content.percentText == "新增")
+        #expect(content.tone == .up)
+        #expect(content.current > content.previous)
+        #expect(content.currentText == Money(usd: 20).formatted())
+    }
 }

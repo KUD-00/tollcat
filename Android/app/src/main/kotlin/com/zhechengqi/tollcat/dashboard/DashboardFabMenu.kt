@@ -37,7 +37,8 @@ import com.zhechengqi.tollcat.ui.symbols.SymbolIcon
 
 /**
  * 仪表盘的 FAB 菜单（画布 R3-1）：一颗 M3 Expressive ToggleFloatingActionButton，
- * 点开竖着长出三项——添加服务 / 加一笔固定订阅 / 编辑仪表盘。分享挪到了顶栏。
+ * 点开竖着长出两项——添加服务 / 编辑仪表盘。分享挪到了顶栏。
+ * 「加一笔固定订阅」不放这里：和 iOS 一样只在服务详情里加，订阅是记在某一家名下的事。
  * 展开时加号转成叉；背后的遮罩和返回键收起由 [DashboardFabScrim] 负责。
  */
 @Composable
@@ -45,7 +46,6 @@ fun DashboardFabMenu(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     onAddService: () -> Unit,
-    onAddSubscription: () -> Unit,
     onEditDashboard: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -88,14 +88,6 @@ fun DashboardFabMenu(
         FloatingActionButtonMenuItem(
             onClick = {
                 onExpandedChange(false)
-                onAddSubscription()
-            },
-            text = { Text(stringResource(R.string.dashboard_add_subscription)) },
-            icon = { SymbolIcon(MaterialSymbol.Payments, contentDescription = null) },
-        )
-        FloatingActionButtonMenuItem(
-            onClick = {
-                onExpandedChange(false)
                 onEditDashboard()
             },
             text = { Text(stringResource(R.string.dashboard_edit)) },
@@ -132,7 +124,6 @@ private fun DashboardFabMenuPreview() {
                 expanded = true,
                 onExpandedChange = {},
                 onAddService = {},
-                onAddSubscription = {},
                 onEditDashboard = {},
             )
         }

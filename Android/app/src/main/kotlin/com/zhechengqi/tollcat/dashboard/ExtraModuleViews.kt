@@ -5,6 +5,7 @@
 
 package com.zhechengqi.tollcat.dashboard
 
+import com.zhechengqi.tollcat.ui.LocalStaticRender
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -607,11 +608,13 @@ private fun ModuleHeader(title: String) {
             style = MaterialTheme.typography.titleLargeEmphasized,
             modifier = Modifier.weight(1f),
         )
-        SymbolIcon(
-            MaterialSymbol.ArrowForward,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        if (!LocalStaticRender.current) {
+            SymbolIcon(
+                MaterialSymbol.ArrowForward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 

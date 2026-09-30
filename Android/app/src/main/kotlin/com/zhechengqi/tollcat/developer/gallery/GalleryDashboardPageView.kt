@@ -44,7 +44,11 @@ private data class PageVariant(val label: String, val dashboard: DashboardSnapsh
 private const val DesignClockMillis = 1_786_881_600_000L
 
 private val pageVariants: List<PageVariant> by lazy {
-    val base = DashboardPreviewData.snapshot.copy(subscriptionCaption = "本月订阅 $4.00 · 已计入")
+    val base = DashboardPreviewData.snapshot.copy(
+        subscriptionCaption = "（订阅 $4.00）",
+        subscriptionAmountText = "$4.00",
+        showsSubscriptionScope = true,
+    )
     listOf(
         PageVariant("有急事", base, includesSubscriptions = true),
         PageVariant("没急事", base.copy(anomalies = emptyList()), includesSubscriptions = true),
@@ -55,7 +59,7 @@ private val pageVariants: List<PageVariant> by lazy {
                 periodCaption = "七月",
                 allowsProjection = false,
                 formattedTotal = "$56.40",
-                formattedVariable = "$56.40",
+                formattedProjected = null,
                 anomalies = emptyList(),
                 balanceAlerts = emptyList(),
                 freeQuota = emptyList(),
@@ -69,9 +73,10 @@ private val pageVariants: List<PageVariant> by lazy {
         PageVariant(
             "数据陈旧",
             base.copy(
-                formattedVariable = "$43.20",
+                formattedTotal = "$43.20",
                 formattedProjected = "$83.70",
-                subscriptionCaption = "本月订阅 $24.00 · 未计入",
+                subscriptionCaption = null,
+                subscriptionAmountText = null,
                 staleCaption = "部分数据陈旧，仍显示上次成功的数字",
             ),
             includesSubscriptions = false,
@@ -129,7 +134,6 @@ fun GalleryDashboardPageView(onBack: () -> Unit, modifier: Modifier = Modifier) 
             expanded = fabExpanded,
             onExpandedChange = { fabExpanded = it },
             onAddService = {},
-            onAddSubscription = {},
             onEditDashboard = {},
             modifier = Modifier
                 .align(Alignment.BottomEnd)

@@ -15,14 +15,11 @@
   <data name="TabSettings" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="HeroLabel" xml:space="preserve">
-    <value>本月合计</value>
-  </data>
   <data name="ProjectedCaption" xml:space="preserve">
     <value>预计月底 {0}</value>
   </data>
   <data name="SubscriptionCaption" xml:space="preserve">
-    <value>本月订阅 +{0}</value>
+    <value>订阅 {0}</value>
   </data>
   <data name="ModuleComposition" xml:space="preserve">
     <value>构成</value>

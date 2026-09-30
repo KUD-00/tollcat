@@ -5,6 +5,7 @@ import com.zhechengqi.tollcat.AccountExtras
 import com.zhechengqi.tollcat.AccountRow
 import com.zhechengqi.tollcat.CatalogProvider
 import com.zhechengqi.tollcat.CompositionRow
+import com.zhechengqi.tollcat.VendorSpendRow
 import com.zhechengqi.tollcat.DashboardSnapshot
 import com.zhechengqi.tollcat.FreeQuotaRow
 import com.zhechengqi.tollcat.R
@@ -184,7 +185,7 @@ fun buildServiceRows(
                     provider = provider,
                     snapshot = snapshot,
                     accounts = accounts,
-                    composed = compositionForAccounts(scoped.composition, ids),
+                    spend = scoped.vendorSpend[membership.providerId],
                     quota = quotaForAccounts(scoped.freeQuota, ids),
                     nowMillis = nowMillis,
                     freeQuota = freeQuota,
@@ -228,7 +229,8 @@ private fun vendorRow(
     provider: CatalogProvider,
     snapshot: SnapshotRow?,
     accounts: List<AccountRow>,
-    composed: List<CompositionRow>,
+    /** 这一家的钱：共享层 `VendorSpend` 算好的（含挂在厂商上的无主订阅）。 */
+    spend: VendorSpendRow?,
     quota: FreeQuotaRow?,
     nowMillis: Long,
     freeQuota: String,
@@ -251,7 +253,8 @@ private fun vendorRow(
         provider = provider,
         snapshot = snapshot,
         accountCount = accounts.size,
-        composedAmount = composedAmountText(composed),
+        composedAmount = spend?.totalText,
+        composedValue = spend?.totalValue ?: 0.0,
         quotaPercent = quota?.usedPercent,
         lastSuccess = lastSuccess,
         isStale = isStale,
@@ -296,6 +299,7 @@ private fun accountRow(
         snapshot = snapshot,
         accountCount = accountCount,
         composedAmount = composed?.amount?.takeIf { it.isNotBlank() && it != "—" },
+        composedValue = composed?.amountValue ?: 0.0,
         quotaPercent = quota?.usedPercent,
         lastSuccess = lastSuccess,
         isStale = isStale,
@@ -320,6 +324,7 @@ private fun row(
     snapshot: SnapshotRow?,
     accountCount: Int,
     composedAmount: String?,
+    composedValue: Double,
     quotaPercent: Int?,
     lastSuccess: Long?,
     isStale: Boolean,
@@ -337,7 +342,7 @@ private fun row(
     val ratio = snapshot?.freeQuotaUsedRatio
     if (kind == "freeTier") {
         val percent = quotaPercent
-            ?: ratio?.let { (it * 100).toInt() }
+            ?: ratio?.let(::quotaUsedPercent)
         if (percent != null) {
             return ServiceRowUi(
                 providerId = providerId,
@@ -358,7 +363,7 @@ private fun row(
     }
 
     val amount = composedAmount?.takeIf { it.isNotBlank() && it != "—" }
-    val amountValue = parseAmount(amount) ?: 0.0
+    val amountValue = if (amount == null) 0.0 else composedValue
     val subtitle = when {
         accountCount > 1 -> usageCount(accountCount)
         snapshot?.source == "manual" -> typed
@@ -404,6 +409,10 @@ private fun quotaForAccounts(rows: List<FreeQuotaRow>, accountIds: Set<String>):
 internal fun formatMoney(raw: String): String = com.zhechengqi.tollcat.MoneyDisplay.formatUsd(raw)
 
 /**
+ * **只解析用户敲的数字和桥给的原始十进制串**（`"12.34"`），不解析写好的金额（`"¥1,234"`）：
+ * 写好的金额已经按显示币种换算过，解析回来再加、再格式化就会换算两次。
+ * 要合计、要排序，找桥要现成的字段（`vendorSpend`、`amountValue`）。
+ *
  * 逗号默认是千分位（`1,234.56`）。只有「数字,一到两位数字」才当小数逗号：
  * 德语、法语等键盘敲出来的 `10,50`，以及早先按默认 locale 存下的 `12,34`，
  * 以前被去掉逗号读成 1050 / 1234。千分位后面恒为三位，两者不会混。

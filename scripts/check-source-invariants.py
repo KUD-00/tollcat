@@ -2267,6 +2267,119 @@ def check_kotlin_has_no_http(root: Path, errors: list[str]) -> None:
             )
 
 
+# 跟随端（Android / Windows / CLI）只画共享层算好的数和字，不自己重算。
+# 2026-09-29 一轮审视里九处跨端不一致全是这一类：把写好的金额字符串解析回来再加
+# （换算两次，日元放大 150 倍）、按 UI 状态在两个字段之间挑一个配对（「月底」比
+# 「到今天」还少）、自己截断百分比、自己拼「本月订阅」这种说错取景框的话。
+FOLLOWER_DERIVATION_PATTERNS: tuple[tuple[str, str], ...] = (
+    (
+        r"\b(summedAmount|composedAmountText|composedAmountValue|vendorSlices|"
+        r"compositionForAccounts|amountCompositionCaption|dashboardFilterNote)\b",
+        "重新长出了已经删掉的重算函数；合计、合并、限定语找桥要（vendorSpend / compositionSlices / filterNote）",
+    ),
+    (
+        r"\bfun\s+compositionSlices\b",
+        "在跟随端合并「其他」；用桥给的 compositionSlices（共享层 CompositionSliceBuilder）",
+    ),
+    (
+        r"parseDecimalInput\([^)]*\b(amount|amountText|totalText|formatted\w*)\b",
+        "把写好的金额解析回数字：它已经按显示币种换算过，再加再格式化就换算两次；要数找桥要 amountValue / totalValue",
+    ),
+    (
+        r"(formatUsd|formatMoney)\(\s*(plainDecimal\(|\s*\.format\()",
+        "把本地算出来的和当美元再格式化一遍；合计要在共享层用 Money 加好再写成字",
+    ),
+    (
+        r"\b[Ff]ormattedVariable\b",
+        "formattedVariable 已经删了：首屏那一对数（formattedTotal + formattedProjected）跟口径走，不要再在两种口径之间挑",
+    ),
+    (
+        r"if\s*\([^)]*[Ii]ncludesSubscriptions[^)]*\)\s*\{?\s*[\w.]*\.(formatted\w*|Formatted\w*|amountText)\b",
+        "按口径在两个金额字段之间挑一个——口径已经在共享层重算进去了，直接用那一个字段",
+    ),
+)
+
+
+def check_follower_derivation(root: Path, errors: list[str]) -> None:
+    """跟随端不重算：见 ARCHITECTURE.md「跟随端只画，不算」。"""
+    targets: list[Path] = []
+    for directory, pattern in (
+        ("Android/app/src/main/kotlin", "*.kt"),
+        ("Windows/app", "*.cs"),
+        ("CLI/Sources", "*.swift"),
+    ):
+        base = root / directory
+        if base.is_dir():
+            targets += [
+                path for path in sorted(base.rglob(pattern))
+                if "/obj/" not in str(path) and "/bin/" not in str(path)
+            ]
+    # 百分比截断常写在字符串模板里（`"${(r * 100).toInt()}%"`），遮掉字符串就看不见了，
+    # 所以这一条扫原文、逐行跳过注释。
+    truncated_percent = re.compile(r"\*\s*100\)\s*\.toInt\(\)|\(int\)\s*\([^)]*\*\s*100")
+    for path in targets:
+        text = path.read_text(encoding="utf-8")
+        masked = mask_comments_and_strings(text)
+        for regex, why in FOLLOWER_DERIVATION_PATTERNS:
+            for match in re.finditer(regex, masked):
+                line = masked.count("\n", 0, match.start()) + 1
+                errors.append(f"{rel(root, path)}:{line} {why}")
+        for number, line_text in enumerate(text.splitlines(), start=1):
+            stripped = line_text.lstrip()
+            if stripped.startswith(("//", "*", "/*")):
+                continue
+            if truncated_percent.search(line_text):
+                errors.append(
+                    f"{rel(root, path)}:{number} 自己截断百分比；iOS 和桥都是四舍五入，"
+                    "用桥给的 percent / usedPercent（或 quotaUsedPercent）"
+                )
+
+    # 桥只转发共享层的结果：首屏、订阅、对比的钱从 `MonthToDateModuleContent` /
+    # `ComparisonModuleContent` / `VendorSpend` 取，不直接读 `MonthToDate` 上的金额字段。
+    bridge = root / "Android/native/Sources/MeterBridge"
+    if bridge.is_dir():
+        raw_money = re.compile(
+            r"\.(totalUSD|variableUSD|subscriptionUSD|projectedMonthEndUSD|projectedVariableUSD|comparisonUSD)\b"
+        )
+        for path in sorted(bridge.glob("*.swift")):
+            masked = mask_comments_and_strings(path.read_text(encoding="utf-8"))
+            for match in raw_money.finditer(masked):
+                line = masked.count("\n", 0, match.start()) + 1
+                errors.append(
+                    f"{rel(root, path)}:{line} 桥直接读 MonthToDate.{match.group(1)}——"
+                    "从共享层的 *Content / VendorSpend 取，缺字段就加到那个值类型上"
+                )
+
+    # 分享图照着仪表盘出：Android 的卡必须嵌仪表盘同一批组件，不许退回 Canvas 手画一张
+    # （手画版和仪表盘各长各的，仪表盘一改样子图就对不上）。
+    share_dir = root / "Android/app/src/main/kotlin/com/zhechengqi/tollcat/share"
+    share_card = share_dir / "ShareCard.kt"
+    share_text = gate_text(root, share_card, errors)
+    if share_text is not None:
+        for needed in ("DashboardHeroHeader(", "DashboardModuleStack("):
+            if needed not in share_text:
+                errors.append(f"{rel(root, share_card)} 没有用 {needed[:-1]}：分享图要照着仪表盘出，不另画一套")
+    if share_dir.is_dir():
+        for path in sorted(share_dir.glob("*.kt")):
+            if "drawText(" in mask_comments_and_strings(path.read_text(encoding="utf-8")):
+                errors.append(f"{rel(root, path)} 在分享图里手画文字：用仪表盘的 Compose 组件，交给 ShareCardRenderer 渲")
+
+    # 「前几名 + 其他」的 N 两端要一样：共享层 CompositionSliceBuilder 和 Android 色阶。
+    builder = root / "Packages/MeterKit/Sources/MeterDashboard/CompositionSliceBuilder.swift"
+    tones = root / "Android/app/src/main/kotlin/com/zhechengqi/tollcat/dashboard/CompositionTones.kt"
+    builder_text = gate_text(root, builder, errors)
+    tones_text = gate_text(root, tones, errors)
+    if builder_text is not None and tones_text is not None:
+        shared = re.search(r"static let namedLimit = (\d+)", builder_text)
+        android = re.search(r"const val namedLimit = (\d+)", tones_text)
+        if not shared or not android:
+            errors.append("读不出 CompositionSliceBuilder.namedLimit / CompositionTones.namedLimit")
+        elif shared.group(1) != android.group(1):
+            errors.append(
+                f"构成「前 N 名」两端不一致：共享层 {shared.group(1)}，Android 色阶 {android.group(1)}"
+            )
+
+
 def check_jni_schema(root: Path, errors: list[str]) -> None:
     swift = (
         root / "Android" / "native" / "Sources" / "MeterBridge" / "BridgeJSON.swift"
@@ -2470,6 +2583,7 @@ def main() -> int:
     check_jni_schema(root, errors)
     check_transfer_envelope(root, errors)
     check_kotlin_has_no_http(root, errors)
+    check_follower_derivation(root, errors)
     check_worker_boundaries(root, errors)
     check_plain_http(root, errors)
     check_cli_invariants(root, errors)

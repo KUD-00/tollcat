@@ -95,6 +95,7 @@ fun DashboardHeroHeader(
                 onFilter = onFilter,
                 onShare = onShare,
             )
+            HeroStaleLine(state.staleCaption, content)
             Spacer(Modifier.height(20.dp))
             Column(Modifier.padding(end = 12.dp)) {
                 HeroBody(state, content, container, onToggleSubscriptions)
@@ -114,6 +115,7 @@ fun DashboardHeroHeader(
                         style = MaterialTheme.typography.titleMediumEmphasized,
                         color = content,
                     )
+                    HeroStaleLine(state.staleCaption, content)
                     Spacer(Modifier.height(12.dp))
                 }
                 HeroBody(state, content, container, onToggleSubscriptions)
@@ -249,10 +251,10 @@ private fun ColumnScope.HeroBody(
             )
         }
     }
+    // 「有几家没更新上」不在这里：它说的是这个月份的数字新不新，挂在月份标题底下（HeroStaleLine）。
     val notes = buildList {
-        state.subscriptionNote?.takeIf { it.isNotBlank() }?.let { add(HeroNote(it, MaterialSymbol.Payments, false)) }
-        state.filterNote?.takeIf { it.isNotBlank() }?.let { add(HeroNote(it, MaterialSymbol.FilterList, false)) }
-        state.staleCaption?.takeIf { it.isNotBlank() }?.let { add(HeroNote(it, MaterialSymbol.Sync, true)) }
+        state.subscriptionNote?.takeIf { it.isNotBlank() }?.let { add(HeroNote(it, MaterialSymbol.Payments)) }
+        state.filterNote?.takeIf { it.isNotBlank() }?.let { add(HeroNote(it, MaterialSymbol.FilterList)) }
     }
     if (notes.isNotEmpty()) {
         Spacer(Modifier.height(16.dp))
@@ -261,18 +263,14 @@ private fun ColumnScope.HeroBody(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             notes.forEach { note ->
-                val colors = if (note.warning) {
-                    MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
-                } else {
-                    content.copy(alpha = 0.14f) to content
-                }
-                HeroChip(text = note.text, symbol = note.symbol, container = colors.first, contentColor = colors.second)
+                HeroChip(
+                    text = note.text,
+                    symbol = note.symbol,
+                    container = content.copy(alpha = 0.14f),
+                    contentColor = content,
+                )
             }
         }
-    }
-    state.currencyNote?.takeIf { it.isNotBlank() }?.let { note ->
-        Spacer(Modifier.height(8.dp))
-        Text(note, style = MaterialTheme.typography.bodySmall, color = content.copy(alpha = 0.8f))
     }
     val toggle = onToggleSubscriptions.takeIf { state.showsScopeToggle }
     if (toggle != null) {
@@ -349,7 +347,33 @@ private fun heroAmountSize(amount: String): TextUnit = when {
     else -> 40.sp
 }
 
-private data class HeroNote(val text: String, val symbol: MaterialSymbol, val warning: Boolean)
+private data class HeroNote(val text: String, val symbol: MaterialSymbol)
+
+/**
+ * 数字没全部更新上时，月份标题底下的一行小字。不用错误色底：
+ * 读数只是旧了一点，不是出错，红底会把视线从总数上抢走。颜色跟着顶栏走，比标题退一档。
+ */
+@Composable
+private fun HeroStaleLine(caption: String?, content: Color) {
+    if (caption.isNullOrBlank()) return
+    // 折成两行时图标跟第一行走，不在两行中间飘着。
+    Row(
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier
+            .padding(top = 2.dp)
+            .semantics(mergeDescendants = true) {},
+    ) {
+        SymbolIcon(
+            MaterialSymbol.Sync,
+            contentDescription = null,
+            size = 16.dp,
+            tint = content.copy(alpha = 0.78f),
+            modifier = Modifier.padding(top = 2.dp),
+        )
+        Text(caption, style = MaterialTheme.typography.labelLarge, color = content.copy(alpha = 0.78f))
+    }
+}
 
 @Composable
 private fun HeroChip(
