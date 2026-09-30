@@ -61,8 +61,11 @@ class InboxHandoffState(
     private val session: TollCatSession,
     private val providerId: String,
     private val displayName: String,
-    private val accountId: String,
+    /** 新接的一笔是还没落盘的草稿，接上那一刻才写进账本。 */
+    private val draft: AccountRow,
 ) {
+    private val accountId = draft.accountId
+
     var phase by mutableStateOf(InboxHandoffPhase.Idle)
         private set
     var failure by mutableStateOf<InboxFailure?>(null)
@@ -130,13 +133,11 @@ class InboxHandoffState(
             onDone(false)
             return
         }
-        val account = currentAccount() ?: run {
-            onDone(false)
-            return
-        }
+        val account = currentAccount()
         val oldKey = AccountExtras.ingestKeyId(account)
         try {
             InboxMailboxStore.save(session.credentials, mailbox, readKey)
+            session.commitAccount(account)
             session.ledger.upsertAccount(AccountExtras.withInbox(account, keyId))
             if (showsNickname) {
                 siblings().firstOrNull()?.let { sibling ->
@@ -189,7 +190,7 @@ class InboxHandoffState(
     }
 
     private fun isRotating(): Boolean {
-        val account = currentAccount() ?: return false
+        val account = currentAccount()
         return session.hasCredentials(account) || AccountExtras.usesInbox(account)
     }
 
@@ -198,8 +199,8 @@ class InboxHandoffState(
             it.accountId != accountId && !AccountExtras.isArchived(it)
         }
 
-    private fun currentAccount(): AccountRow? =
-        session.accounts(providerId).firstOrNull { it.accountId == accountId }
+    private fun currentAccount(): AccountRow =
+        session.accounts(providerId).firstOrNull { it.accountId == accountId } ?: draft
 
     private fun provisionOnJni() {
         try {
@@ -264,10 +265,10 @@ fun rememberInboxHandoffState(
     session: TollCatSession,
     providerId: String,
     displayName: String,
-    accountId: String,
+    draft: AccountRow,
 ): InboxHandoffState {
-    return remember(providerId, accountId) {
-        InboxHandoffState(session, providerId, displayName, accountId)
+    return remember(providerId, draft.accountId) {
+        InboxHandoffState(session, providerId, displayName, draft)
     }
 }
 

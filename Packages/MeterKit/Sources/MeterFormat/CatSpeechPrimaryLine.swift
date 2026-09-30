@@ -7,8 +7,10 @@ import MeterCore
 public enum CatSpeechPrimaryLine: Equatable, Sendable {
     case sleepingUnread
     case sleepingNone
-    case dead
-    case shockedPercent(Int)
+    /// `includesSubscriptions`：大数字这会儿算没算订阅。句子里「合计」「按量」跟着它换，
+    /// 不然切到「按量」时猫还在说「合计涨了多少」，和首屏对不上。
+    case dead(includesSubscriptions: Bool)
+    case shockedPercent(Int, includesSubscriptions: Bool)
     case shockedSteep
     case alertBalance(name: String)
     case alertAnomaly(name: String, percent: Int)
@@ -30,6 +32,7 @@ public enum CatSpeechPrimaryLine: Equatable, Sendable {
         public var leadAnomalyName: String?
         public var leadAnomalyPercent: Int?
         public var leadBalanceName: String?
+        public var includesSubscriptions: Bool
 
         public init(
             mood: CatMood,
@@ -40,7 +43,8 @@ public enum CatSpeechPrimaryLine: Equatable, Sendable {
             changePercent: Int?,
             leadAnomalyName: String?,
             leadAnomalyPercent: Int?,
-            leadBalanceName: String?
+            leadBalanceName: String?,
+            includesSubscriptions: Bool
         ) {
             self.mood = mood
             self.hasAnyProvider = hasAnyProvider
@@ -51,6 +55,7 @@ public enum CatSpeechPrimaryLine: Equatable, Sendable {
             self.leadAnomalyName = leadAnomalyName
             self.leadAnomalyPercent = leadAnomalyPercent
             self.leadBalanceName = leadBalanceName
+            self.includesSubscriptions = includesSubscriptions
         }
     }
 
@@ -59,10 +64,10 @@ public enum CatSpeechPrimaryLine: Equatable, Sendable {
         case .sleeping:
             return facts.hasAnyProvider ? .sleepingUnread : .sleepingNone
         case .dead:
-            return .dead
+            return .dead(includesSubscriptions: facts.includesSubscriptions)
         case .shocked:
             if let percent = facts.changePercent {
-                return .shockedPercent(percent)
+                return .shockedPercent(percent, includesSubscriptions: facts.includesSubscriptions)
             }
             return .shockedSteep
         case .alert:

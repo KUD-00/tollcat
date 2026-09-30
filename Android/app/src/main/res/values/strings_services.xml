@@ -155,7 +155,6 @@
     <string name="services_keystore_body_2">我们只用最严的一档：只在这台设备上、只有你解锁之后才能读。它不会跟着备份出现在别的手机上。</string>
     <string name="services_keystore_body_3">你在服务页删掉这家接入时，对应的钥匙会一起删掉，不会留在这台设备上。</string>
     <string name="services_keystore_caption">凭据会存进 Keystore。</string>
-    <string name="services_test_hint">测通后，这颗按钮会变成保存到 Keystore。</string>
     <string name="services_usage_empty_footer">没有公开账单接口。套餐月费记在下面的固定订阅。超额用量可以手填。</string>
     <string name="services_hint_detail">查看这家的账单和接入</string>
     <string name="services_credentials_header">凭据</string>

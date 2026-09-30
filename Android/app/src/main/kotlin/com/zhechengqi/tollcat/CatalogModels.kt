@@ -5,7 +5,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /** JNI 载荷 schema 版本，和 Swift `JNISchema.version` 同步改。 */
-internal const val EXPECTED_JNI_SCHEMA = 7
+internal const val EXPECTED_JNI_SCHEMA = 8
 
 internal fun warnOnSchemaDrift(root: JSONObject, what: String) {
     val version = root.optInt("jniSchema", EXPECTED_JNI_SCHEMA)
@@ -28,7 +28,10 @@ data class CatalogProvider(
     val costsMoneyToRefresh: Boolean,
     val supportsInbox: Boolean,
     val hasLiveFetch: Boolean,
+    /** 服务介绍（接入指南的 summary），确认抽屉读它。 */
     val summary: String,
+    /** 添加列表那一行的计费方式小字（共享层 `ProviderListingCaption`）。不是介绍。 */
+    val listingCaption: String = "",
     /** 搜索别名（中英混排），来自编译期 descriptor，不参与展示。 */
     val searchKeywords: List<String>,
     /** available / pendingVerification / declined，和 iOS `ProviderAccessStatus` 同一组值。 */
@@ -116,6 +119,7 @@ data class Catalog(
                     supportsInbox = item.optBoolean("supportsInbox"),
                     hasLiveFetch = item.optBoolean("hasLiveFetch"),
                     summary = item.optString("summary"),
+                    listingCaption = item.optString("listingCaption"),
                     searchKeywords = item.optJSONArray("searchKeywords").orEmpty().mapString(),
                     accessStatus = item.optString("accessStatus", "available"),
                     declineReason = item.optString("declineReason"),
@@ -151,6 +155,27 @@ data class CompositionRow(
     val fraction: Float,
     /** 出键粒度是账号：同一家两份账号是两段。合成「其他」和画廊夹具留空。 */
     val accountId: String = "",
+    /** 只有「其他」那一段有：并进来的那几家（共享层 `CompositionSliceBuilder` 给的）。 */
+    val mergedNames: List<String> = emptyList(),
+    /** 排序用的数（已按显示币种）。别把 [amount] 那串字解析回数字。 */
+    val amountValue: Double = 0.0,
+    /** 共享层给的图例段 id，启动过渡按它找落点。 */
+    val id: String = "",
+) {
+    val isOther: Boolean get() = providerId == OTHER_ID
+
+    companion object {
+        const val OTHER_ID = "other"
+    }
+}
+
+/** 一家（厂商）这个月的钱，共享层 `VendorSpend` 算好写成字。服务行和详情大数字读它。 */
+data class VendorSpendRow(
+    val totalText: String,
+    /** 排序用的数（已按显示币种）。 */
+    val totalValue: Double,
+    /** 「（按量 $11.05 + 订阅 $5.00）」。两块都有钱才有。 */
+    val compositionCaption: String?,
 )
 
 data class UpcomingRow(
@@ -290,20 +315,42 @@ data class DashboardSnapshot(
     val periodCaption: String = "",
     /** 只有当月才有「预计月底」；回看过去月份时隐藏。 */
     val allowsProjection: Boolean,
+    /**
+     * 首屏那一对数：到今天 + 月底预计。两个都跟当前口径（算没算订阅）走，由共享层
+     * `MonthToDateModuleContent` 一起算好——成对取，不要在这一端另挑一个字段配。
+     * 回看过去的月份没有月底预计，[formattedProjected] 为 null。
+     */
     val formattedTotal: String,
-    val formattedVariable: String,
-    val formattedProjected: String,
+    val formattedProjected: String?,
     val confidence: String,
     /** 估的那几**份账号**（UUID）——不压成 ProviderID：一家的其中一份是估的 ≠ 这家全是估的。 */
     val estimatedAccountIds: List<String>,
-    val subscriptionFormatted: String?,
+    /** 「（订阅 $4.00）」：只在算进订阅时有，和 iOS 首屏、分享卡同一句。 */
     val subscriptionCaption: String? = null,
+    /** 和 [subscriptionCaption] 同条件的裸金额，给顶栏胶囊配「订阅」标签用。 */
+    val subscriptionAmountText: String? = null,
+    /** 有观察到的订阅才摆「合计 / 按量」切换。 */
+    val showsSubscriptionScope: Boolean = false,
     val staleCaption: String? = null,
+    /** 「七月 · 不含订阅 · 排除 AWS」这类限定语。筛选没动过就是 null。 */
+    val filterNote: String? = null,
     val currencyNote: String?,
+    /** 全部段（详情页的列表用）。 */
     val composition: List<CompositionRow>,
+    /** 前几名 + 「其他」合并好的图例段（卡片、条、分享图、小组件用）。 */
+    val compositionSlices: List<CompositionRow> = composition,
+    /** 冷启动过渡：口袋里每枚圆牌（cloud / spark / database）落到哪一段图例（段 id）。共享层算好。 */
+    val launchTargets: Map<String, String> = emptyMap(),
+    /** providerID → 这一家的钱。 */
+    val vendorSpend: Map<String, VendorSpendRow> = emptyMap(),
     val upcoming: List<UpcomingRow>,
     val freeQuota: List<FreeQuotaRow>,
+    /** 较上月同期那一对：上月同期 + 本月能对比的部分，同一口径。别拿 [formattedTotal] 配它。 */
     val formattedComparison: String?,
+    val formattedComparisonCurrent: String? = null,
+    /** 两根柱的高度按这两个数画（已按显示币种），不要从取整的百分比倒推。 */
+    val comparisonCurrentValue: Double? = null,
+    val comparisonPreviousValue: Double? = null,
     val changePercent: Int?,
     /** 共享层选好的猫气泡句（已本地化）。 */
     val catSpeech: String,
@@ -329,11 +376,9 @@ data class DashboardSnapshot(
             monthTitle = "",
             allowsProjection = true,
             formattedTotal = "—",
-            formattedVariable = "—",
-            formattedProjected = "—",
+            formattedProjected = null,
             confidence = "exact",
             estimatedAccountIds = emptyList(),
-            subscriptionFormatted = null,
             currencyNote = null,
             composition = emptyList(),
             upcoming = emptyList(),
@@ -366,26 +411,31 @@ data class DashboardSnapshot(
                 periodCaption = root.optString("periodCaption").ifBlank { root.optString("monthTitle") },
                 allowsProjection = root.optBoolean("allowsProjection", true),
                 formattedTotal = root.optString("formattedTotal", "—"),
-                formattedVariable = root.optString("formattedVariable", "—"),
-                formattedProjected = root.optString("formattedProjected", "—"),
+                formattedProjected = root.optString("formattedProjected").ifBlank { null },
                 confidence = root.optString("confidence", "exact"),
                 estimatedAccountIds = root.optJSONArray("estimatedAccountIDs").orEmpty().mapString(),
-                subscriptionFormatted = root.optString("subscriptionFormatted").ifBlank { null },
                 subscriptionCaption = root.optString("subscriptionCaption").ifBlank { null },
+                subscriptionAmountText = root.optString("subscriptionAmountText").ifBlank { null },
+                showsSubscriptionScope = root.optBoolean("showsSubscriptionScope", false),
                 staleCaption = root.optString("staleCaption").ifBlank { null },
+                filterNote = root.optString("filterNote").ifBlank { null },
                 currencyNote = root.optString("currencyNote").ifBlank { null },
-                composition = root.optJSONArray("composition").orEmpty().mapObject { item ->
-                    CompositionRow(
-                        accountId = item.optString("accountID"),
-                        providerId = item.optString("providerID"),
-                        displayName = item.optString("displayName"),
-                        colorKey = item.optString("colorKey"),
-                        amount = item.optString("amount"),
-                        percent = item.optInt("percent"),
-                        fraction = item.optDouble("fraction").toFloat(),
+                composition = root.optJSONArray("composition").orEmpty().mapObject(::compositionRow),
+                compositionSlices = root.optJSONArray("compositionSlices").orEmpty().mapObject(::compositionRow),
+                launchTargets = root.optJSONObject("launchTargets")?.let { targets ->
+                    targets.keys().asSequence().associateWith { targets.optString(it) }
+                }.orEmpty(),
+                vendorSpend = root.optJSONArray("vendorSpend").orEmpty().mapObject { item ->
+                    item.optString("providerID") to VendorSpendRow(
+                        totalText = item.optString("totalText"),
+                        totalValue = item.optDouble("totalValue", 0.0),
+                        compositionCaption = item.optString("compositionCaption").ifBlank { null },
                     )
-                },
+                }.toMap(),
                 formattedComparison = root.optString("formattedComparison").ifBlank { null },
+                formattedComparisonCurrent = root.optString("formattedComparisonCurrent").ifBlank { null },
+                comparisonCurrentValue = root.optDoubleOrNull("comparisonCurrentValue"),
+                comparisonPreviousValue = root.optDoubleOrNull("comparisonPreviousValue"),
                 changePercent = if (root.has("changePercent")) root.optInt("changePercent") else null,
                 catSpeech = root.optString("catSpeech"),
                 comparisonPercentText = root.optString("comparisonPercentText").ifBlank { null },
@@ -643,6 +693,28 @@ private fun JSONObject.optionalInt(key: String): Int? {
 }
 
 internal fun JSONArray?.orEmpty(): JSONArray = this ?: JSONArray()
+
+private fun JSONObject.optDoubleOrNull(key: String): Double? {
+    if (!has(key) || isNull(key)) return null
+    return optDouble(key).takeIf { !it.isNaN() }
+}
+
+/** 构成段 / 图例段同一种形状；「其他」那一段的 providerId 统一写成 [CompositionRow.OTHER_ID]。 */
+private fun compositionRow(item: JSONObject): CompositionRow {
+    val isOther = item.optBoolean("isOther", false)
+    return CompositionRow(
+        accountId = item.optString("accountID"),
+        providerId = if (isOther) CompositionRow.OTHER_ID else item.optString("providerID"),
+        displayName = item.optString("displayName"),
+        colorKey = item.optString("colorKey"),
+        amount = item.optString("amount"),
+        percent = item.optInt("percent"),
+        fraction = item.optDouble("fraction").toFloat(),
+        mergedNames = item.optJSONArray("mergedNames").orEmpty().mapString(),
+        amountValue = item.optDouble("amountValue", 0.0),
+        id = item.optString("id"),
+    )
+}
 
 private fun JSONArray.mapString(): List<String> {
     return (0 until length()).map { optString(it) }.filter { it.isNotBlank() }

@@ -67,19 +67,14 @@ fun DashboardPopulatedView(
     scrollState: ScrollState = rememberScrollState(),
     onHeroBehindStatusBar: (Boolean) -> Unit = {},
 ) {
-    val order = moduleOrder.ifEmpty {
-        DashboardModules.normalized(DashboardModules.defaultOn + extraModules)
-    }
+    val order = DashboardModules.resolvedOrder(moduleOrder, extraModules)
     val hero = dashboardHeroState(
         dashboard = dashboard,
-        filterNote = dashboardFilterNote(filter, accounts),
+        filterNote = dashboard.filterNote,
         includesSubscriptions = includesSubscriptions,
         canToggleScope = onToggleSubscriptions != null,
         nowMillis = nowMillis,
     )
-    val attention = AttentionSummary.from(dashboard, order)
-    // 单个月不成趋势：一根柱会被画成占满整块的色块。
-    val trend = dashboard.trend.filter { it.fraction > 0f }.takeIf { it.size >= 2 }.orEmpty()
 
     var heroHeight by remember { mutableIntStateOf(0) }
     val statusBar = WindowInsets.statusBars.getTop(LocalDensity.current)
@@ -109,32 +104,17 @@ fun DashboardPopulatedView(
                 onDismissDemo = onDismissDemo,
                 modifier = SectionPadding,
             )
-            DashboardAttentionSection(summary = attention, onOpen = onOpenProvider)
-            if (DashboardModules.COMPOSITION in order) {
-                CompositionBarsCard(
-                    rows = dashboard.composition,
-                    onOpenRow = onOpenProvider,
-                    onOpenAll = onOpenComposition,
-                    modifier = SectionPadding,
-                )
-                TrendSummaryCard(points = trend, onOpen = onOpenComparison, modifier = SectionPadding)
-            }
-            order.forEach { id ->
-                when (id) {
-                    DashboardModules.SERVICES ->
-                        PinnedServicesModuleView(dashboard.pinnedServices, onOpen = onOpenProvider, modifier = SectionPadding)
-                    DashboardModules.SUBSCRIPTIONS ->
-                        SubscriptionsModuleCard(dashboard.subscriptions, onOpen = onOpenSubscriptions, modifier = SectionPadding)
-                    DashboardModules.HEATMAP ->
-                        HeatmapModuleView(dashboard.heatmap, onOpen = onOpenHeatmap, modifier = SectionPadding)
-                    DashboardModules.CATEGORIES ->
-                        CategoriesModuleView(dashboard.categories, onOpen = onOpenCategories, modifier = SectionPadding)
-                    DashboardModules.SUPERLATIVES ->
-                        SuperlativesModuleView(dashboard.superlatives, onOpen = onOpenProvider, modifier = SectionPadding)
-                    DashboardModules.BUDGET ->
-                        dashboard.budget?.let { BudgetModuleView(it, modifier = SectionPadding) }
-                }
-            }
+            DashboardModuleStack(
+                dashboard = dashboard,
+                order = order,
+                onOpenComposition = onOpenComposition,
+                onOpenComparison = onOpenComparison,
+                onOpenProvider = onOpenProvider,
+                onOpenHeatmap = onOpenHeatmap,
+                onOpenCategories = onOpenCategories,
+                onOpenSubscriptions = onOpenSubscriptions,
+                itemModifier = SectionPadding,
+            )
             if (refreshFailed) {
                 Text(
                     text = stringResource(R.string.dashboard_refresh_failed),
@@ -156,7 +136,9 @@ private fun DashboardPopulatedViewPreview() {
     TollCatTheme {
         DashboardPopulatedView(
             dashboard = DashboardPreviewData.snapshot.copy(
-                subscriptionCaption = "本月订阅 $4.00 · 已计入",
+                subscriptionCaption = "（订阅 $4.00）",
+                subscriptionAmountText = "$4.00",
+                showsSubscriptionScope = true,
             ),
             filter = DashboardFilterState(includesSubscriptions = true),
             accounts = emptyList(),

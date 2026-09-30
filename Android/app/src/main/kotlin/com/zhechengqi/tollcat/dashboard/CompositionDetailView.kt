@@ -39,12 +39,12 @@ import com.zhechengqi.tollcat.ui.symbols.SymbolIcon
 @Composable
 fun CompositionDetailView(
     rows: List<CompositionRow>,
+    /** 条上画的段：共享层合并好的前几名 + 「其他」。下面的列表列全部 [rows]。 */
+    slices: List<CompositionRow>,
     onBack: () -> Unit,
     onOpenProvider: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val otherLabel = stringResource(R.string.dashboard_composition_other)
-    val slices = compositionSlices(rows, otherLabel)
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -107,6 +107,7 @@ private fun CompositionDetailViewPreview() {
             rows = DashboardPreviewData.snapshot.composition.mapIndexed { index, row ->
                 row.copy(accountId = "acct-$index")
             },
+            slices = DashboardPreviewData.snapshot.compositionSlices,
             onBack = {},
             onOpenProvider = {},
         )

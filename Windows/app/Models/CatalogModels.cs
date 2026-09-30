@@ -4,7 +4,7 @@ namespace TollCat;
 
 internal static class JniSchema
 {
-    public const int EXPECTED_JNI_SCHEMA = 7;
+    public const int EXPECTED_JNI_SCHEMA = 8;
 }
 
 internal sealed record CatalogField(string Key, string Label, bool IsSecret, string Hint);
@@ -177,15 +177,17 @@ internal sealed record TrendRow(string Month, string Amount, double Fraction);
 
 internal sealed record DashboardSnapshot(
     bool Empty,
-    string MonthTitle,
-    bool AllowsProjection,
+    // 期间标题（「九月」「近 3 个月」「有数据以来」）和筛选限定语，共享层给好的，照着画。
+    string PeriodCaption,
+    string? FilterNote,
+    // 到今天 + 月底预计：成对跟着同一个口径走，桥从共享层一起取。回看过去的月份没有预计。
     string FormattedTotal,
-    string FormattedVariable,
-    string FormattedProjected,
+    string? FormattedProjected,
     string Confidence,
     IReadOnlyList<string> EstimatedAccountIds,
-    string? SubscriptionFormatted,
-    string? CurrencyNote,
+    // 「$4.00」：只在算进订阅时有（和 iOS 首屏同一条规则）。标签只写「订阅」：多月时它是几个月的合计。
+    string? SubscriptionAmountText,
+    // 图例段：共享层合并好的前 5 名 + 「其他」。这一端没有详情页，卡片和托盘都画它。
     IReadOnlyList<CompositionRow> Composition,
     IReadOnlyList<UpcomingRow> Upcoming,
     IReadOnlyList<FreeQuotaRow> FreeQuota,
@@ -201,8 +203,8 @@ internal sealed record DashboardSnapshot(
     string CatMood)
 {
     public static DashboardSnapshot Vacant { get; } = new(
-        true, "", true, "—", "—", "—", "exact", [],
-        null, null, [], [], [], null, null, "",
+        true, "", null, "—", null, "exact", [],
+        null, [], [], [], null, null, "",
         null, null, null, [], [], [], "sleeping");
 
     public static DashboardSnapshot Parse(string json)
@@ -214,23 +216,21 @@ internal sealed record DashboardSnapshot(
         {
             return Vacant with
             {
-                MonthTitle = Catalog.Str(root, "monthTitle"),
+                PeriodCaption = Catalog.Str(root, "monthTitle"),
                 CatSpeech = Catalog.Str(root, "catSpeech"),
                 CatMood = Catalog.Str(root, "catMood", "sleeping"),
             };
         }
         return new DashboardSnapshot(
             Empty: false,
-            MonthTitle: Catalog.Str(root, "monthTitle"),
-            AllowsProjection: !root.TryGetProperty("allowsProjection", out var ap) || ap.ValueKind != JsonValueKind.False,
+            PeriodCaption: Catalog.Str(root, "periodCaption", Catalog.Str(root, "monthTitle")),
+            FilterNote: NullIfBlank(Catalog.Str(root, "filterNote")),
             FormattedTotal: Catalog.Str(root, "formattedTotal", "—"),
-            FormattedVariable: Catalog.Str(root, "formattedVariable", "—"),
-            FormattedProjected: Catalog.Str(root, "formattedProjected", "—"),
+            FormattedProjected: NullIfBlank(Catalog.Str(root, "formattedProjected")),
             Confidence: Catalog.Str(root, "confidence", "exact"),
             EstimatedAccountIds: Catalog.Strs(root, "estimatedAccountIDs"),
-            SubscriptionFormatted: NullIfBlank(Catalog.Str(root, "subscriptionFormatted")),
-            CurrencyNote: NullIfBlank(Catalog.Str(root, "currencyNote")),
-            Composition: Map(root, "composition", item => new CompositionRow(
+            SubscriptionAmountText: NullIfBlank(Catalog.Str(root, "subscriptionAmountText")),
+            Composition: Map(root, "compositionSlices", item => new CompositionRow(
                 Catalog.Str(item, "accountID"), Catalog.Str(item, "providerID"),
                 Catalog.Str(item, "displayName"), Catalog.Str(item, "colorKey"),
                 Catalog.Str(item, "amount"), Catalog.Int(item, "percent"),
@@ -318,8 +318,6 @@ internal sealed record DashboardFilterState(
     public const int MaxMonthsBack = 11;
 
     public IReadOnlySet<string> Excluded => ExcludedAccountIds ?? new HashSet<string>();
-
-    public bool IsActive => MonthsBack > 0 || !IncludesSubscriptions || Excluded.Count > 0;
 
     public string ToJson()
     {

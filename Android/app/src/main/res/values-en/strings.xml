@@ -3,6 +3,7 @@
      Android 独有的句子：改 Android/app/strings-android-only.json。 -->
 <resources>
     <string name="app_name">TollCat</string>
+    <string name="action_close">Close</string>
     <string name="tab_dashboard">Dashboard</string>
     <string name="tab_services">Services</string>
     <string name="tab_settings">Settings</string>

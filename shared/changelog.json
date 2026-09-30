@@ -16,8 +16,10 @@
     "  写了以写的为准：修好一个让数字算错的 bug 该打断（true），一整班车全是看不见的管道改动就别弹（false）。",
     "  drawer:false 只关掉抽屉——落地页、设置里的全量列表、商店文案、Sparkle 说明照常生成。",
     "items[].id：稳定 id，给以后的远程文本 overlay 用。改名等于换一条，别改。全文件唯一。",
-    "items[].symbol：各端各写，不假装统一。ios 是 SF Symbol 名（离线校验不了，靠 review），",
-    "  android 必须是 MaterialSymbol.kt 里已有的 case 名（闸上核对：Compose 不能按名字查图标），windows 是 Fluent 图标名。",
+    "items[].symbol：各端各写，不假装统一，但这班车 platforms 里的每个端都必须有自己那列（闸上核对，缺一列就红）。",
+    "  ios 那列 iPhone / iPad / Mac 共用，是 SF Symbol 名（WhatsNewCatalogTests 在模拟器上逐个解析）；",
+    "  android 必须是 MaterialSymbol.kt 里已有的 case 名（闸上核对：Compose 不能按名字查图标，生成物直接引用枚举），",
+    "  没有就先重裁图标字体、在 MaterialSymbol.kt 补一行；windows 是 Fluent 图标名。",
     "  落地页忽略它——SF Symbols 的授权不允许上网页。",
     "hero：可选，三档。{kind:cat, mood} 走 CatView，{kind:glyph, provider} 走已生成的服务图标，",
     "  {kind:shot, name} 是位图，放 shared/whatsnew/media/<name>-{light,dark}@3x.png。",
@@ -45,9 +47,27 @@
       },
       "items": [
         {
+          "id": "pocketIcon",
+          "symbol": {
+            "ios": "cat",
+            "android": "Pets"
+          },
+          "title": "新图标：装在口袋里的猫",
+          "body": "图标换成一只装在口袋里的猫，身后插着云、AI 和数据库三枚圆牌。打开 App 时，这三枚圆牌会从口袋里飞出来，落到仪表盘上对应的服务旁边。",
+          "en": {
+            "title": "A new icon: a cat in your pocket",
+            "body": "The icon is now a cat sitting in a pocket, with three round badges tucked behind it for cloud, AI and database services. When you open the app, the badges fly out of the pocket and land next to the matching services on your dashboard."
+          },
+          "ja": {
+            "title": "新しいアイコン：ポケットの中の猫",
+            "body": "アイコンを、ポケットに入った猫に変えました。後ろにはクラウド、AI、データベースを表す 3 つの丸いバッジが差してあります。アプリを開くと、バッジがポケットから飛び出して、ダッシュボードの対応するサービスの横に収まります。"
+          }
+        },
+        {
           "id": "watchGlance",
           "symbol": {
-            "ios": "applewatch"
+            "ios": "applewatch",
+            "android": "Watch"
           },
           "title": "手表上也能看",
           "body": "iPhone 版带上了 Apple Watch App 和表盘上的小组件，抬手就能看到这个月到现在花了多少。锁屏上也能放一个。",
@@ -63,6 +83,7 @@
         {
           "id": "androidFirstRelease",
           "symbol": {
+            "ios": "smartphone",
             "android": "Widgets"
           },
           "title": "Android 版来了",
@@ -77,37 +98,20 @@
           }
         },
         {
-          "id": "foreignCurrencyLines",
+          "id": "readingAccuracy",
           "symbol": {
-            "ios": "dollarsign.circle",
-            "android": "Payments"
+            "ios": "checkmark.seal",
+            "android": "CheckCircle"
           },
-          "title": "外币账单的明细也换算了",
-          "body": "用欧元、日元等币种结账的服务，明细行以前把原币的数字直接标成美元。现在明细和总数用同一个汇率换算。",
+          "title": "读数更可靠了",
+          "body": "用欧元、日元等币种结账的服务，明细行现在和总数用同一个汇率换算，不再把原币的数字标成美元。凭据失效或接口出错时，也不会再把这个月报成 $0，而是告诉你这次没读到，数字停在上一次。",
           "en": {
-            "title": "Itemized lines in other currencies are converted too",
-            "body": "For services billed in euros, yen or other currencies, the itemized lines used to show the original amount labelled as dollars. They now use the same exchange rate as the total."
+            "title": "More reliable readings",
+            "body": "For services billed in euros, yen or other currencies, itemized lines now use the same exchange rate as the total instead of showing the original amount as dollars. And when a credential has expired or an API returns an error, the month no longer shows $0: you’re told the update failed and the last number stays."
           },
           "ja": {
-            "title": "外貨の明細も換算するように",
-            "body": "ユーロや円などで請求されるサービスでは、明細の行が元の通貨の金額のままドルとして表示されていました。明細も合計と同じレートで換算するようにしました。"
-          }
-        },
-        {
-          "id": "failedNotZero",
-          "symbol": {
-            "ios": "exclamationmark.triangle",
-            "android": "Warning"
-          },
-          "title": "读不到账单时不再显示 $0",
-          "body": "有几家服务在凭据失效或接口出错时，会把这个月报成 $0。现在会如实告诉你这次没读到，数字停在上一次。",
-          "en": {
-            "title": "A failed update no longer shows $0",
-            "body": "A few services reported $0 for the month when a credential had expired or their API returned an error. They now tell you the update failed and keep the last number."
-          },
-          "ja": {
-            "title": "取得に失敗したときに $0 と表示しないように",
-            "body": "認証情報の期限切れや API のエラーのときに、今月を $0 と表示してしまうサービスがありました。今は取得に失敗したことをお知らせし、前回の数字をそのまま残します。"
+            "title": "金額がより正確になりました",
+            "body": "ユーロや円などで請求されるサービスでは、明細の行も合計と同じレートで換算するようにしました。元の通貨の金額をドルとして表示することはありません。認証情報の期限切れや API のエラーのときも、今月を $0 と表示せず、取得に失敗したことをお知らせして前回の数字を残します。"
           }
         },
         {

@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 import MeterCore
+import MeterDashboard
 @testable import MeterFeatures
 
 struct ServiceRowBuilderTests {
@@ -213,6 +214,23 @@ struct ServiceRowBuilderTests {
         let cny = MoneyPresentation(currencyCode: "CNY", rates: rates)
         let text = subtitle(cny)
         #expect(text == String(localized: L("余额 CN¥14.17")) || text == String(localized: L("余额 ¥14.17")), "\(text ?? "nil")")
+    }
+
+    @Test("一家的钱含挂在厂商上的无主订阅（没有账号的那笔也算）")
+    func vendorSpendIncludesVendorLevelSubscription() {
+        let first = AccountID(rawValue: UUID())
+        let second = AccountID(rawValue: UUID())
+        let facts = [
+            Fact(providerID: .aws, accountID: first, kind: .usage, amountUSD: Money(usd: 30), confidence: .exact, type: .monthToDateUsage),
+            Fact(providerID: .aws, accountID: second, kind: .usage, amountUSD: Money(usd: 10), confidence: .exact, type: .monthToDateUsage),
+            Fact(providerID: .aws, accountID: nil, kind: .subscription, amountUSD: Money(usd: 5), confidence: .exact, type: .subscriptionIncluded),
+            Fact(providerID: .openai, accountID: nil, kind: .subscription, amountUSD: Money(usd: 99), confidence: .exact, type: .subscriptionIncluded),
+        ]
+        let spend = VendorSpend.make(providerID: .aws, accounts: [first, second], facts: facts)
+        #expect(spend.total == Money(usd: 45))
+        #expect(spend.usage == Money(usd: 40))
+        #expect(spend.subscription == Money(usd: 5))
+        #expect(spend.compositionCaption(presentation: .usd)?.contains("$40.00") == true)
     }
 }
 

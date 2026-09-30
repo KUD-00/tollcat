@@ -69,8 +69,8 @@ fun ComparisonDetailView(
         previousLabel = previousLabel,
         tone = ComparisonContent.Tone.Unknown,
     )
-    val currentAmount = dashboard.formattedVariable.ifBlank { dashboard.formattedTotal }
-        .takeIf { it.isNotBlank() && it != "—" }
+    // 和上月同期成对：同一口径、只算能对比的部分，不是首屏那个合计。
+    val currentAmount = dashboard.formattedComparisonCurrent
     val previousAmount = dashboard.formattedComparison
     val comparable = dashboard.comparisonItems.filter { it.isComparable }
     val incomparable = dashboard.comparisonItems.filter { !it.isComparable }

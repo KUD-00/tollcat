@@ -17,8 +17,12 @@ package enum ProductSpeech {
             return JNICopy.text("还没有账单。", localeTag)
         case .dead:
             return JNICopy.text("这个月比上个月同期涨了一倍多。", localeTag)
-        case .shockedPercent(let percent):
-            return JNICopy.format("合计较上月同期涨了 %lld%%。", localeTag, String(percent))
+        case .shockedPercent(let percent, let includesSubscriptions):
+            return JNICopy.format(
+                includesSubscriptions ? "合计较上月同期涨了 %lld%%。" : "按量较上月同期涨了 %lld%%。",
+                localeTag,
+                String(percent)
+            )
         case .shockedSteep:
             return JNICopy.text("这个月涨得有点猛。", localeTag)
         case .alertBalance(let name):

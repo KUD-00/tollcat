@@ -1,5 +1,10 @@
 import Foundation
 import Testing
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
 @testable import MeterFeatures
 
 /// 生成物本身的形状。结构由 `scripts/generate-shared.py` 的 `verify_changelog` 把关，
@@ -38,6 +43,34 @@ struct WhatsNewCatalogTests {
         for entry in WhatsNewCatalog.entries {
             #expect(!entry.items.isEmpty, "\(entry.version) 的 items 是空的")
         }
+    }
+
+    @Test("每条图标都是这台系统认得的 SF Symbol：写错名字就是一个空洞")
+    func everySymbolResolves() {
+        let entries = WhatsNewCatalog.entries + [WhatsNewEntry.preview, WhatsNewEntry.previewOlder]
+        for entry in entries {
+            for item in entry.items {
+                #expect(
+                    Self.systemSymbolExists(item.symbol),
+                    "\(entry.version).\(item.id) 的 \(item.symbol) 不是 SF Symbol"
+                )
+            }
+        }
+    }
+
+    @Test("包里只编到过 iPhone / iPad / Mac 的条目：别端的条目不保证有 SF Symbol")
+    func onlyApplePlatformEntries() {
+        for entry in WhatsNewCatalog.entries {
+            #expect(!entry.platforms.isDisjoint(with: [.ios, .mac]), "\(entry.version)")
+        }
+    }
+
+    private static func systemSymbolExists(_ name: String) -> Bool {
+        #if canImport(UIKit)
+        UIImage(systemName: name) != nil
+        #else
+        NSImage(systemSymbolName: name, accessibilityDescription: nil) != nil
+        #endif
     }
 
     @Test("只有最新一条能带截图：包体要恒定")

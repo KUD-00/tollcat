@@ -77,10 +77,11 @@ public final class WatchGlancePublisher: NSObject, WCSessionDelegate, @unchecked
     }
 
     /// 表盘上看得出来的变化：数变了、跨月了，或者手表那份已经旧到在说「几小时前更新」。
-    /// 只是刷新时间往后挪了几分钟、数一分没变，就不花复杂功能的额度。
+    /// 只是刷新时间往后挪了几分钟、数一分没变，就不花复杂功能的额度；
+    /// 只有手表 App 里的服务列表 / 详情变了也不花——那些走 applicationContext 就够。
     static func changesTheFace(from previous: Glance?, to next: Glance) -> Bool {
         guard let previous else { return true }
-        if previous.content != next.content || previous.monthStart != next.monthStart {
+        if previous.faceContent != next.faceContent || previous.monthStart != next.monthStart {
             return true
         }
         guard let staleAt = previous.staleAt else { return next.lastRefreshAt != nil }

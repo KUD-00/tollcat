@@ -119,6 +119,22 @@
         }
       }
     },
+    "日期" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日付"
+          }
+        }
+      }
+    },
     "服务" : {
       "localizations" : {
         "en" : {
@@ -199,6 +215,38 @@
         }
       }
     },
+    "花在哪了" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where it went"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内訳"
+          }
+        }
+      }
+    },
+    "近 30 天" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 30 days"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近 30 日間"
+          }
+        }
+      }
+    },
     "还没有账单" : {
       "localizations" : {
         "en" : {
@@ -243,6 +291,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "今月いくら使ったか、このペースで月末にいくらくらいになるか。"
+          }
+        }
+      }
+    },
+    "金额" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金額"
           }
         }
       }

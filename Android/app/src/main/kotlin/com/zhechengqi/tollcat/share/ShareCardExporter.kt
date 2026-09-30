@@ -8,10 +8,9 @@ import android.graphics.Bitmap
 import androidx.core.content.FileProvider
 import java.io.File
 
-/** 把本月合计卡写成 PNG，走系统 Sharesheet。不再取一次账单。 */
+/** 把渲好的分享卡写成 PNG，走系统 Sharesheet。不再取一次账单。 */
 object ShareCardExporter {
-    fun share(context: Context, content: ShareCardContent, chooserTitle: String) {
-        val bitmap = ShareCardBitmap.render(content)
+    fun share(context: Context, bitmap: Bitmap, chooserTitle: String) {
         val dir = File(context.cacheDir, "share").apply { mkdirs() }
         val file = File(dir, "tollcat-share.png")
         file.outputStream().use { out ->

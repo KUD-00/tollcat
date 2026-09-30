@@ -46,6 +46,9 @@ extension MonthToDateModuleContent {
             projectedCaption: filter.allowsProjection
                 ? L("预计月底 \(projected.formatted(using: presentation))")
                 : nil,
+            projectedAmountText: filter.allowsProjection
+                ? projected.formatted(using: presentation)
+                : nil,
             // 统计区间那半句。当月能外推、多月区间：日期自己说话，前面不加「合计」。
             // 过去某个整月已经结束，才用「整月」把时态说清楚。
             periodCaption: Self.periodCaption(
@@ -70,6 +73,7 @@ extension MonthToDateModuleContent {
             currencyNote: presentation.isUSD ? nil : DisplayCurrencyCopy.shownAs(presentation.currencyCode),
             subscriptionCaption: subscriptionLine?.caption,
             spokenSubscription: subscriptionLine?.spoken,
+            subscriptionAmountText: subscriptionLine?.amountText,
             subscriptionAccountID: subscriptionLine?.accountID,
             includesSubscriptions: filter.includesSubscriptions,
             showsSubscriptionScope: subscription > .zero
@@ -94,7 +98,7 @@ extension MonthToDateModuleContent {
         included: Bool,
         accountIDs: [AccountID],
         presentation: MoneyPresentation
-    ) -> (caption: String, spoken: String, accountID: AccountID?)? {
+    ) -> (caption: String, spoken: String, amountText: String, accountID: AccountID?)? {
         // 关掉订阅时这行不出现：口径切换已经说明「按量」，再写「未计入」是同一句话两遍。
         // 算进时也不写「已计入」——括号里的金额就是分解，不是限定语。
         guard included, amount > .zero else { return nil }
@@ -105,6 +109,7 @@ extension MonthToDateModuleContent {
         return (
             L("（订阅 \(formatted)）"),
             L("订阅 \(spokenAmount)"),
+            formatted,
             accountID
         )
     }

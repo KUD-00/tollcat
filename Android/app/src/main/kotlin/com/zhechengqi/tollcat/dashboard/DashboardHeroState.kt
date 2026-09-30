@@ -2,7 +2,9 @@ package com.zhechengqi.tollcat.dashboard
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import com.zhechengqi.tollcat.DashboardSnapshot
+import com.zhechengqi.tollcat.R
 
 /**
  * 仪表盘顶栏要画的一切，已经本地化好。顶栏自己不读快照，
@@ -20,7 +22,6 @@ data class DashboardHeroState(
     val showsScopeToggle: Boolean,
     val staleCaption: String?,
     val filterNote: String?,
-    val currencyNote: String?,
 )
 
 @Composable
@@ -32,21 +33,20 @@ fun dashboardHeroState(
     nowMillis: Long,
 ): DashboardHeroState {
     val locale = LocalConfiguration.current.locales[0]
-    val amount = if (includesSubscriptions) {
-        dashboard.formattedTotal
-    } else {
-        dashboard.formattedVariable.ifBlank { dashboard.formattedTotal }
-    }
     return DashboardHeroState(
         periodTitle = dashboard.periodCaption.ifBlank { dashboard.monthTitle },
-        amount = amount,
-        projected = dashboard.formattedProjected.takeIf { dashboard.allowsProjection && it.isNotBlank() },
+        // 口径已经在共享层算进去了：切「合计 / 按量」是重算，不是在这里换一个字段。
+        amount = dashboard.formattedTotal,
+        projected = dashboard.formattedProjected,
         monthProgress = if (dashboard.allowsProjection) MonthProgress.at(nowMillis, locale) else null,
-        subscriptionNote = dashboard.subscriptionCaption,
+        // 和 iOS 首屏同一条规则：只在算进订阅时出现（金额和条件都由共享层给）。
+        // 标签只写「订阅」——多月取景框里这是几个月的合计，不是「本月订阅」。
+        subscriptionNote = dashboard.subscriptionAmountText?.let {
+            stringResource(R.string.dashboard_subscription_chip, it)
+        },
         includesSubscriptions = includesSubscriptions,
-        showsScopeToggle = canToggleScope && !dashboard.subscriptionCaption.isNullOrBlank(),
+        showsScopeToggle = canToggleScope && dashboard.showsSubscriptionScope,
         staleCaption = dashboard.staleCaption,
         filterNote = filterNote,
-        currencyNote = dashboard.currencyNote,
     )
 }

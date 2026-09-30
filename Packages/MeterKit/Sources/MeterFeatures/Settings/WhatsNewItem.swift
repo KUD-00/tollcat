@@ -6,7 +6,8 @@ struct WhatsNewItem: Identifiable, Hashable, Sendable {
     /// 结构编译进包，只有 `title` / `body` 可能被按这个 id 覆盖。
     var id: String
     /// SF Symbol 名。Android / Windows 各有自己那一列，不假装统一。
-    var symbol: String?
+    /// 不是可选：生成器要求这班车上每个端都写了图标，缺图标的条目编不进包。
+    var symbol: String
     var title: WhatsNewText
     var body: WhatsNewText
 }

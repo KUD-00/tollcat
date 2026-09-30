@@ -174,16 +174,13 @@ private fun WhatsNewEntryBody(
         entry.items.forEach { item ->
             Spacer(Modifier.height(20.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
-                // symbol.android 是 MaterialSymbol 的 case 名，生成器上有闸；
-                // 没写或对不上就不画图标，那一条只有文字。
-                symbol(item.symbol)?.let {
-                    SymbolIcon(
-                        symbol = it,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(Modifier.width(16.dp))
-                }
+                // 生成物里直接是枚举，没有空值：缺图标的条目在生成器上就红了。
+                SymbolIcon(
+                    symbol = item.symbol,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(Modifier.width(16.dp))
                 Column {
                     Text(
                         text = item.title.resolve(language),
@@ -216,11 +213,6 @@ private fun WhatsNewHeroContent(hero: WhatsNewHero) {
         // res/drawable-nodpi，接线等第一条真的带图的条目落地。
         is WhatsNewHero.Shot -> Unit
     }
-}
-
-private fun symbol(name: String?): MaterialSymbol? {
-    if (name == null) return null
-    return MaterialSymbol.entries.firstOrNull { it.name.equals(name, ignoreCase = true) }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

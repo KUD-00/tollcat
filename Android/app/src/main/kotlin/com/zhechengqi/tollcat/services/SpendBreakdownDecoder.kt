@@ -30,6 +30,7 @@ object SpendBreakdownDecoder {
                 amountCaption = amount,
                 fraction = item.optDouble("fraction", 0.0),
                 shareCaption = item.optString("shareCaption").ifBlank { null },
+                sharePercent = if (item.has("sharePercent")) item.optInt("sharePercent") else null,
                 detailCaption = item.optString("detailCaption").ifBlank { null },
                 // 有原价就写抵扣了多少；没有就退回厂商自己写的那句额度说明。
                 allowanceCaption = item.optString("discountText").ifBlank { null }?.let(allowance)

@@ -208,15 +208,12 @@ public enum MeterSpacing {
     /// 开屏 / 首次引导。画廊里仍按这个尺寸看猫；开场页不再用猫当整页插图。
     public static let catOnboarding: CGFloat = 168
 
-    /// 开屏小组件预览。接近系统中号 Widget 的高度，不要再长成一张海报。
-    public static let onboardingWidget: CGFloat = 160
-
-    /// 开场里仪表 / 凭据 / 添加列表那块标本的宽。跟手机逻辑列对齐，
-    /// 不要跟窗口一起拉成一张宽卡。
+    /// 开场每一页标本的宽。跟手机逻辑列对齐，不要跟窗口一起拉成一张宽卡。
     public static let onboardingPreviewWidth: CGFloat = phoneColumn
 
-    /// 中号小组件标本的宽。系统中号大约这个数，拉宽就不再像小组件。
-    public static let onboardingWidgetWidth: CGFloat = 338
+    /// 开场竖排时图区占页高的比例。四页标本高矮不一，图区高度固定，标题才钉在同一条线上。
+    /// 按最高的第一页（仪表 + 货币那一行）在 iPhone 17 Pro 上放得下定的。
+    public static let onboardingStageShare: CGFloat = 0.56
 
     /// 利用指南抽屉。比开屏小一号，medium detent 里还要留下标题和两三句话。
     public static let catUsageGuide: CGFloat = 96

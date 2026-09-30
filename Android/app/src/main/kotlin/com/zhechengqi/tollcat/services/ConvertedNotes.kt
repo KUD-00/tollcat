@@ -86,61 +86,6 @@ fun walletBreakdown(walletsJson: String?): List<ConvertedNote> {
     return if (wallets.size >= 2) wallets else emptyList()
 }
 
-/**
- * 大数字下面「（按量 $11.05 + 订阅 $5.00）」。两块都有钱才出——
- * 只有一块时那一块就是大数字本身。
- */
-fun amountCompositionCaption(
-    snapshot: SnapshotRow?,
-    composition: List<CompositionRow>,
-    subscriptions: List<SubscriptionModuleItem>,
-    usageLabel: String,
-    subscriptionLabel: String,
-    locale: Locale,
-): String? {
-    val spend = parseAmount(snapshot?.currentSpendUsd)
-    val committed = parseAmount(snapshot?.committedMonthlyUsd)
-    if (spend != null && spend > 0.0 && committed != null && committed > 0.0) {
-        val usage = if (spend > committed) spend - committed else spend
-        if (usage > 0.004 && committed > 0.004 && usage != committed) {
-            return wrapped(
-                "$usageLabel ${formatMoney(plainDecimal(usage))} + $subscriptionLabel ${formatMoney(plainDecimal(committed))}",
-                locale,
-            )
-        }
-    }
-    val total = composedAmountValue(composition)
-    val sub = subscriptions.mapNotNull { parseAmount(it.amountText) }.sum()
-    val usage = total - sub
-    if (usage > 0.004 && sub > 0.004) {
-        return wrapped(
-            "$usageLabel ${formatMoney(plainDecimal(usage))} + $subscriptionLabel ${formatMoney(plainDecimal(sub))}",
-            locale,
-        )
-    }
-    return null
-}
-
-fun composedAmountText(rows: List<CompositionRow>): String? {
-    val texts = rows.map { it.amount }.filter { it.isNotBlank() && it != "—" }
-    if (texts.isEmpty()) return null
-    if (texts.size == 1) return texts.first()
-    val sum = texts.mapNotNull { parseAmount(it) }.sum()
-    if (sum <= 0.0) return null
-    return formatMoney(plainDecimal(sum))
-}
-
-fun composedAmountValue(rows: List<CompositionRow>): Double =
-    rows.mapNotNull { parseAmount(it.amount) }.sum()
-
-fun compositionForAccounts(
-    rows: List<CompositionRow>,
-    accountIds: Set<String>,
-): List<CompositionRow> = rows.filter { it.accountId in accountIds }
-
-internal fun plainDecimal(value: Double): String =
-    java.math.BigDecimal.valueOf(value).stripTrailingZeros().toPlainString()
-
 private fun wrapped(body: String, locale: Locale): String {
     val fullwidth = locale.language == "zh" || locale.language == "ja"
     return if (fullwidth) "（$body）" else "($body)"

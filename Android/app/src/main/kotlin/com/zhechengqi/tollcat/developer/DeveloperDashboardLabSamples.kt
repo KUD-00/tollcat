@@ -168,7 +168,7 @@ private fun LabModuleView(
             fullBleed = false,
         )
         DashboardModules.COMPOSITION -> CompositionBarsCard(
-            rows = dashboard.composition,
+            rows = dashboard.compositionSlices,
             onOpenRow = {},
             onOpenAll = {},
         )

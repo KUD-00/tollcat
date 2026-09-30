@@ -11,30 +11,27 @@
         <scene sceneID="scene">
             <objects>
                 <viewController id="launch" sceneMemberID="viewController">
+                    <!-- 口袋全景贴底、和屏幕一样宽，最宽 560pt（iPad 上居中）。
+                         压缩阻力必须压低：默认 750 和「等于屏宽」打平，图片会按自己 1024 的尺寸撑到 560。
+                         App 里的过渡覆盖层 LaunchRevealOverlay 按同一条规则摆，第一帧才能严丝合缝。 -->
                     <view key="view" contentMode="scaleToFill" id="root">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchCat" translatesAutoresizingMaskIntoConstraints="NO" id="cat">
-                                <rect key="frame" x="201" y="692" width="249" height="256"/>
+                            <imageView clipsSubviews="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="LaunchPocket" translatesAutoresizingMaskIntoConstraints="NO" id="pocket">
+                                <rect key="frame" x="0.0" y="502" width="430" height="430"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="cat" secondAttribute="height" multiplier="2111:2167" id="cat-aspect"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="cat-w-max">
-                                        <variation key="widthClass=regular" constant="240"/>
-                                    </constraint>
+                                    <constraint firstAttribute="width" secondItem="pocket" secondAttribute="height" multiplier="1:1" id="pocket-aspect"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="560" id="pocket-w-max"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="safe"/>
                         <color key="backgroundColor" name="LaunchBackground"/>
                         <constraints>
-                            <constraint firstItem="cat" firstAttribute="width" secondItem="root" secondAttribute="width" multiplier="0.58" priority="750" id="cat-w-c"/>
-                            <constraint firstItem="cat" firstAttribute="trailing" secondItem="root" secondAttribute="trailing" constant="20" id="cat-t">
-                                <variation key="widthClass=regular" constant="24"/>
-                            </constraint>
-                            <constraint firstItem="cat" firstAttribute="bottom" secondItem="root" secondAttribute="bottom" constant="16" id="cat-b">
-                                <variation key="widthClass=regular" constant="20"/>
-                            </constraint>
+                            <constraint firstItem="pocket" firstAttribute="width" secondItem="root" secondAttribute="width" priority="999" id="pocket-w"/>
+                            <constraint firstItem="pocket" firstAttribute="centerX" secondItem="root" secondAttribute="centerX" id="pocket-x"/>
+                            <constraint firstItem="pocket" firstAttribute="bottom" secondItem="root" secondAttribute="bottom" id="pocket-b"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -44,9 +41,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchCat" width="2111" height="2167"/>
+        <image name="LaunchPocket" width="1024" height="1024"/>
         <namedColor name="LaunchBackground">
-            <color red="0.949" green="0.949" blue="0.969" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.345" green="0.337" blue="0.839" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

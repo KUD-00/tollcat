@@ -7,6 +7,8 @@ public enum GlanceText {
     public static var monthTitle: LocalizedStringResource { L("本月") }
     public static var budgetTitle: LocalizedStringResource { L("预算") }
     public static var servicesTitle: LocalizedStringResource { L("服务") }
+    public static var sublinesTitle: LocalizedStringResource { L("花在哪了") }
+    public static var last30Days: LocalizedStringResource { L("近 30 天") }
 
     public static var noBills: LocalizedStringResource { L("还没有账单") }
     public static var noBillsHint: LocalizedStringResource { L("在 iPhone 上添加服务") }

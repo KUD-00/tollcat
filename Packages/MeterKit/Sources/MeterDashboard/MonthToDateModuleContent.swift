@@ -11,6 +11,10 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
     /// **统计区间不在这里**，在 `periodCaption`。两半分开存，2×2 那一档才能
     /// 只留前半句——126pt 宽里「预计月底 $87.70 · 9月1日至6日」要折成三行。
     public var projectedCaption: String?
+    /// 「$87.70」，和 `amountText` 同一个口径（算没算订阅跟着取景框）。回看过去的月份为 nil。
+    /// 标签和数字分开排的地方（Android 顶栏、CLI、Widget）读它，不要各自从 `MonthToDate`
+    /// 里另挑一个字段——挑错一个，「月底」就会比「到今天」还少。
+    public var projectedAmountText: String?
     /// 「9月1日至6日」；过去某个整月是「整月 · 七月」。多月就是日期本身，不加「合计」。
     public var periodCaption: String?
     public var projectedValue: Double
@@ -27,6 +31,10 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
     /// 「（订阅 $4）」。只在算进订阅时出现；关掉或没有订阅就是 nil。
     public var subscriptionCaption: String?
     public var spokenSubscription: String?
+    /// 「$4.00」：和 `subscriptionCaption` 同一个条件（算进了、又有订阅）才有，其余为 nil。
+    /// 标签和数字分开排的地方（Android 顶栏的胶囊、Windows）配自己的「订阅」二字。
+    /// 取景框是多个月时它是这几个月的订阅合计——所以标签不能写「本月」。
+    public var subscriptionAmountText: String?
     /// 只有一个账号时首屏那一行可以推进详情。
     public var subscriptionAccountID: AccountID?
     /// 当前口径：大数字算没算订阅。驱动数字旁边那颗切换。
@@ -40,6 +48,7 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
         totalValue: Double,
         spokenTotal: String,
         projectedCaption: String? = nil,
+        projectedAmountText: String? = nil,
         periodCaption: String? = nil,
         projectedValue: Double,
         spokenProjected: String? = nil,
@@ -49,6 +58,7 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
         currencyNote: String? = nil,
         subscriptionCaption: String? = nil,
         spokenSubscription: String? = nil,
+        subscriptionAmountText: String? = nil,
         subscriptionAccountID: AccountID? = nil,
         includesSubscriptions: Bool,
         showsSubscriptionScope: Bool
@@ -58,6 +68,7 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
         self.totalValue = totalValue
         self.spokenTotal = spokenTotal
         self.projectedCaption = projectedCaption
+        self.projectedAmountText = projectedAmountText
         self.periodCaption = periodCaption
         self.projectedValue = projectedValue
         self.spokenProjected = spokenProjected
@@ -67,6 +78,7 @@ public struct MonthToDateModuleContent: Equatable, Sendable {
         self.currencyNote = currencyNote
         self.subscriptionCaption = subscriptionCaption
         self.spokenSubscription = spokenSubscription
+        self.subscriptionAmountText = subscriptionAmountText
         self.subscriptionAccountID = subscriptionAccountID
         self.includesSubscriptions = includesSubscriptions
         self.showsSubscriptionScope = showsSubscriptionScope

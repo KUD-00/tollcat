@@ -5,13 +5,19 @@
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_continue">Continue</string>
     <string name="onboarding_add_first">Add First Service</string>
-    <string name="onboarding_page_number_title">How much this month</string>
-    <string name="onboarding_page_number_body">Bills from your cloud and AI services, in one number. Open the app and see what you’ve spent this month.</string>
+    <string name="onboarding_page_number_title">Your cloud bills, in your pocket</string>
+    <string name="onboarding_page_number_body">TollCat adds up what you spend on services like AWS, Cloudflare, and OpenAI, so you can see what this month has cost so far and roughly where it will end up.</string>
+    <string name="onboarding_sample_numbers">Sample numbers</string>
+    <string name="onboarding_page_source_title">Where the numbers come from</string>
+    <string name="onboarding_page_source_body">You give each service its own read-only credential. When you refresh, this device asks that service’s official API for the bill directly. Nothing goes through a TollCat server, and there’s no account to sign up for.</string>
+    <string name="onboarding_source_this_device">This device</string>
+    <string name="onboarding_source_read_only">Read-only</string>
     <string name="onboarding_page_credentials_title">Credentials stay on this device</string>
     <string name="onboarding_page_credentials_body">API keys live in this device’s Keystore. They don’t leave with cloud backup. Move to a new phone with Import &amp; Export in Settings.</string>
-    <string name="onboarding_page_widget_title">See it without opening the app</string>
-    <string name="onboarding_page_widget_body">No amounts in notifications, and no amount alerts. Put the widget on the home screen — that’s this month’s number.</string>
+    <string name="onboarding_fact_this_device">Only on this device</string>
+    <string name="onboarding_fact_no_cloud_backup">Not in cloud backup</string>
+    <string name="onboarding_fact_unlocked_only">Readable only after you unlock</string>
     <string name="onboarding_page_add_title">Add your first service</string>
-    <string name="onboarding_page_add_body">Add it to the list first — you don’t need an API key yet. ChatGPT Pro alone is enough to add.</string>
+    <string name="onboarding_page_add_body">Start by adding the services you use; credentials can come later. For a plan you only pay monthly, like ChatGPT Pro, entering the fee is enough.</string>
     <string name="onboarding_progress">%1$d / %2$d</string>
 </resources>

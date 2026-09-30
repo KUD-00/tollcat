@@ -11,11 +11,12 @@ enum CatSpeechFacts {
         locale: Locale = .current,
         presentation: MoneyPresentation = .usd
     ) -> CatSpeechPrompt {
-        // 从量口径：和 MonthToDateModuleContent 的首屏主角同一笔钱。
-        // 用含订阅的 totalUSD 会让猫和首屏在同一屏说出两个对不上的数。
-        let totalText = monthToDate?.variableUSD.formatted(using: presentation)
+        // 和 MonthToDateModuleContent 的首屏主角同一笔钱：跟着取景框的口径，
+        // 算进订阅时是 totalUSD / projectedMonthEndUSD。猫只说按量的话，
+        // 切到「合计」时就会和首屏在同一屏说出两个对不上的数。
+        let totalText = monthToDate?.totalUSD.formatted(using: presentation)
             ?? Money.zero.formatted(using: presentation)
-        let projectedText = monthToDate?.projectedVariableUSD.formatted(using: presentation)
+        let projectedText = monthToDate?.projectedMonthEndUSD.formatted(using: presentation)
             ?? Money.zero.formatted(using: presentation)
         let changePercent = monthToDate?.changeRatio.map { Int(($0 * 100).rounded()) }
 
@@ -51,7 +52,8 @@ enum CatSpeechFacts {
             changePercent: changePercent,
             leadAnomalyName: leadAnomaly?.0,
             leadAnomalyPercent: leadAnomaly?.1,
-            leadBalanceName: leadBalance.map { displayName($0.providerID) }
+            leadBalanceName: leadBalance.map { displayName($0.providerID) },
+            includesSubscriptions: monthToDate?.filter.includesSubscriptions ?? true
         )
     }
 

@@ -3,13 +3,19 @@
     <string name="onboarding_skip">跳过</string>
     <string name="onboarding_continue">继续</string>
     <string name="onboarding_add_first">添加第一个服务</string>
-    <string name="onboarding_page_number_title">这个月花了多少</string>
-    <string name="onboarding_page_number_body">各家云和 AI 的账单收成一个数字。打开就能看见这个月已经花了多少。</string>
+    <string name="onboarding_page_number_title">把各家云账单，装进口袋</string>
+    <string name="onboarding_page_number_body">TollCat 把你在 AWS、Cloudflare、OpenAI 这些服务上的花费加在一起，告诉你这个月到现在花了多少，月底大概会到多少。</string>
+    <string name="onboarding_sample_numbers">示例数字</string>
+    <string name="onboarding_page_source_title">数字从哪来</string>
+    <string name="onboarding_page_source_body">每家服务开一份只读凭据填进来。刷新时，这台设备直接向它的官方接口要账单，不经过 TollCat 的服务器，也不用注册账号。</string>
+    <string name="onboarding_source_this_device">这台设备</string>
+    <string name="onboarding_source_read_only">只读</string>
     <string name="onboarding_page_credentials_title">凭据不出这台设备</string>
     <string name="onboarding_page_credentials_body">API 密钥只进本机 Keystore，不跟云备份走。换手机用设置里的导入与导出。</string>
-    <string name="onboarding_page_widget_title">不必打开也能看见</string>
-    <string name="onboarding_page_widget_body">通知里不放金额，也没有金额告警。把小组件放到主屏，划过去就是这个月的数字。</string>
+    <string name="onboarding_fact_this_device">只在这台设备</string>
+    <string name="onboarding_fact_no_cloud_backup">不跟云端备份走</string>
+    <string name="onboarding_fact_unlocked_only">解锁后才能读</string>
     <string name="onboarding_page_add_title">加上第一家服务</string>
-    <string name="onboarding_page_add_body">先加进列表就行，不必现在就有 API 密钥。只订了 ChatGPT Pro 也可以先加进来。</string>
+    <string name="onboarding_page_add_body">先把在用的服务加进列表，凭据可以之后再填。只付月费的服务，比如 ChatGPT Pro，填上月费就算数。</string>
     <string name="onboarding_progress">%1$d / %2$d</string>
 </resources>

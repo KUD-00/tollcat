@@ -32,6 +32,8 @@ XCSTRINGS = (
     "Packages/MeterKit/Sources/MeterFeatures/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterDesign/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterFormat/Resources/Localizable.xcstrings",
+    "Packages/MeterKit/Sources/MeterModules/Resources/Localizable.xcstrings",
+    "Packages/MeterKit/Sources/MeterDashboard/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterPersistence/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterProviders/Resources/Localizable.xcstrings",
     "Packages/MeterKit/Sources/MeterTips/Resources/Localizable.xcstrings",

@@ -11,6 +11,9 @@ public struct ComparisonModuleContent: Equatable, Sendable {
     public var previous: Double
     /// 上月同期那笔钱，已经按显示币种写好。还不能对比时为 nil。
     public var previousText: String? = nil
+    /// 和 `previousText` 配对的本月那笔钱：同一口径、只算能对比的部分。
+    /// 不要拿首屏大数字来配——那里含还不能对比的金额，口径也可能不同。
+    public var currentText: String? = nil
     public var currentLabel: String
     public var previousLabel: String
     public var tone: Tone
@@ -26,6 +29,7 @@ public struct ComparisonModuleContent: Equatable, Sendable {
         current: Double,
         previous: Double,
         previousText: String? = nil,
+        currentText: String? = nil,
         currentLabel: String,
         previousLabel: String,
         tone: Tone,
@@ -39,6 +43,7 @@ public struct ComparisonModuleContent: Equatable, Sendable {
         self.current = current
         self.previous = previous
         self.previousText = previousText
+        self.currentText = currentText
         self.currentLabel = currentLabel
         self.previousLabel = previousLabel
         self.tone = tone

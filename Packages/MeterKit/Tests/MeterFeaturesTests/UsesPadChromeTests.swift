@@ -34,15 +34,6 @@ struct UsesPadChromeTests {
         )
     }
 
-    @Test("Mac 上开场第 3 页那句话不提主屏和锁屏")
-    func macOnboardingCopyDropsHomeScreen() {
-        let mac = String(localized: OnboardingPage.widget.body(shell: .mac))
-        let phone = String(localized: OnboardingPage.widget.body(shell: .phone))
-        #expect(mac != phone)
-        #expect(!mac.contains("锁屏"))
-        #expect(phone.contains("锁屏"))
-    }
-
     @Test("compact 一律走手机壳，和窗口长宽无关")
     func compactNeverUsesPadChrome() {
         #expect(

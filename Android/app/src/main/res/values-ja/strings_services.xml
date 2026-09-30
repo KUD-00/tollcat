@@ -158,7 +158,6 @@
     <string name="services_keystore_body_2">最も厳しいクラスだけを使います。この端末、ロック解除後だけ読めます。バックアップで別の端末には渡りません。</string>
     <string name="services_keystore_body_3">サービス画面でこの接続を削除すると、対応する鍵も一緒に消えます。このデバイスには残りません。</string>
     <string name="services_keystore_caption">認証情報は Keystore に保存されます。</string>
-    <string name="services_test_hint">テストが通ると、このボタンは Keystore に保存 に変わります。</string>
     <string name="services_usage_empty_footer">公開の請求 API はありません。プラン料金は下の「固定サブスク」に記録します。超過分は手入力できます。</string>
     <string name="services_hint_detail">このサービスの請求と接続を表示</string>
     <string name="services_credentials_header">認証情報</string>

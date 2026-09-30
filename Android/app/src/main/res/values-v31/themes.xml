@@ -1,0 +1,8 @@
+<resources>
+    <!-- Android 12+ 的系统启动画面：底色 + 居中图标，两样都由 scripts/render-app-icon.py 生成。
+         交接之后 LaunchRevealOverlay 从这枚图标的位置放大铺满，接上和 iOS 一样的过渡。 -->
+    <style name="Theme.TollCat" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/launch_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+    </style>
+</resources>

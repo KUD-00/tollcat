@@ -14,11 +14,11 @@ object DashboardPreviewData {
         monthTitle = "八月",
         allowsProjection = true,
         formattedTotal = "$47.20",
-        formattedVariable = "$47.20",
         formattedProjected = "$87.70",
         confidence = "estimated",
         estimatedAccountIds = emptyList(),
-        subscriptionFormatted = "$4.00",
+        subscriptionAmountText = "$4.00",
+        showsSubscriptionScope = true,
         currencyNote = null,
         composition = listOf(
             CompositionRow("aws", "AWS", "aws", "$21.40", 45, 0.4534f),

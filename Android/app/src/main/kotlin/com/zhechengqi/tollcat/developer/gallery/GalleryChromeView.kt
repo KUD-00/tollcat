@@ -46,7 +46,6 @@ fun GalleryChromeView(onBack: () -> Unit, modifier: Modifier = Modifier) {
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
                     onAddService = {},
-                    onAddSubscription = {},
                     onEditDashboard = {},
                     modifier = Modifier
                         .align(Alignment.BottomEnd)

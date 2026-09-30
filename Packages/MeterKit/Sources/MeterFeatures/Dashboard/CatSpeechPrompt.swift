@@ -17,6 +17,8 @@ struct CatSpeechPrompt: Sendable {
     var leadAnomalyName: String?
     var leadAnomalyPercent: Int?
     var leadBalanceName: String?
+    /// 大数字这会儿算没算订阅：「合计」还是「按量」。
+    var includesSubscriptions = true
 
     var languageCode: String {
         locale.language.languageCode?.identifier ?? "zh"

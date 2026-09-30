@@ -26,13 +26,17 @@ fun PrimaryButton(
     val pressSpec = MaterialTheme.motionScheme.defaultSpatialSpec<Float>()
     Button(
         onClick = onClick,
+        // 放大要在 animateContentSize 外面：它自带按矩形裁切，放大画在里面的话，
+        // 胶囊的圆角一按就被切成直角，像被一个盒子框住。
         modifier = modifier
             .heightIn(min = height)
-            .animateContentSize()
-            .indication(interactionSource, ScaleIndicationNodeFactory(pressSpec)),
+            .indication(interactionSource, ScaleIndicationNodeFactory(pressSpec))
+            .animateContentSize(),
         enabled = enabled,
         interactionSource = interactionSource,
-        shapes = ButtonDefaults.shapes(),
+        // 按下时的形状要跟高度同档：`shapes()` 给的是小号按钮的按压圆角，
+        // 套在中号高度上一按就几乎成直角。
+        shapes = ButtonDefaults.shapesFor(height),
         contentPadding = ButtonDefaults.contentPaddingFor(height),
         content = content,
     )

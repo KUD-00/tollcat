@@ -162,18 +162,13 @@ enum ServiceRowBuilder {
         }
     }
 
+    /// 「哪些 fact 算这一家的」只有一份实现，在 `VendorSpend`（桥给 Android 的也是它）。
     private static func factsForVendor(
         _ providerID: ProviderID,
         accounts: Set<AccountID>,
         monthToDate: MonthToDate?
     ) -> [Fact] {
-        (monthToDate?.facts ?? []).filter { fact in
-            guard fact.providerID == providerID else { return false }
-            if let id = fact.accountID {
-                return accounts.contains(id)
-            }
-            return true
-        }
+        VendorSpend.facts(for: providerID, accounts: accounts, in: monthToDate?.facts ?? [])
     }
 
     private static func makeRow(

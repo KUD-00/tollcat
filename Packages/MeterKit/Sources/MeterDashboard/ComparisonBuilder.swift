@@ -49,7 +49,13 @@ public enum ComparisonBuilder {
         }
 
         let ratio = comparison.ratio ?? 0
-        let percentText = comparison.ratio.map(DashboardPercentFormat.signed) ?? L("持平")
+        // 上月同期是 0、这个月花了钱：涨幅没法写成百分比，但绝不是「持平」。
+        let isNewSpend = comparison.ratio == nil
+            && comparison.previous == .zero
+            && comparison.current > .zero
+        let percentText = isNewSpend
+            ? L("新增")
+            : (comparison.ratio.map(DashboardPercentFormat.signed) ?? L("持平"))
         let previousAmount = comparison.previous.formatted(using: presentation)
         // 口径写在窗口说明里：两种口径的这一页不该「看起来一样」。
         let scopeWord = includesSubscriptions
@@ -66,11 +72,20 @@ public enum ComparisonBuilder {
         captionParts.append(scopeWord)
         let windowCaption = captionParts.joined(separator: " · ")
         let caption = windowCaption
-        let spoken = includesSubscriptions
-            ? L("合计较上月同期 \(DashboardPercentFormat.spokenSigned(ratio))，\(caption)")
-            : L("按量较上月同期 \(DashboardPercentFormat.spokenSigned(ratio))，\(caption)")
+        let spoken: String
+        if isNewSpend {
+            spoken = includesSubscriptions
+                ? L("合计上月同期没有花费，\(caption)")
+                : L("按量上月同期没有花费，\(caption)")
+        } else {
+            spoken = includesSubscriptions
+                ? L("合计较上月同期 \(DashboardPercentFormat.spokenSigned(ratio))，\(caption)")
+                : L("按量较上月同期 \(DashboardPercentFormat.spokenSigned(ratio))，\(caption)")
+        }
         let tone: ComparisonModuleContent.Tone
-        if let ratio = comparison.ratio {
+        if isNewSpend {
+            tone = .up
+        } else if let ratio = comparison.ratio {
             if ratio > 0 { tone = .up }
             else if ratio < 0 { tone = .down }
             else { tone = .flat }
@@ -86,6 +101,7 @@ public enum ComparisonBuilder {
             current: NSDecimalNumber(decimal: presentation.amount(from: comparison.current)).doubleValue,
             previous: NSDecimalNumber(decimal: presentation.amount(from: comparison.previous)).doubleValue,
             previousText: previousAmount,
+            currentText: comparison.current.formatted(using: presentation),
             currentLabel: currentLabel,
             previousLabel: previousLabel,
             tone: tone,

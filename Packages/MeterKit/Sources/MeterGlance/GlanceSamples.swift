@@ -21,7 +21,6 @@ public enum GlanceSamples {
                 projectionText: "预计月底 $61.57",
                 spokenProjection: "预计月底 61.57 美元",
                 periodText: "9月1日至23日",
-                trend: trend(total: 47.20, projected: 61.57),
                 budget: GlanceBudget(
                     fraction: 0.59,
                     percentText: "59%",
@@ -31,7 +30,7 @@ public enum GlanceSamples {
                     spokenLabel: "预算 80 美元，已花 47.20 美元"
                 ),
                 services: [
-                    GlanceService(rank: 0, name: "AWS", amountText: "$21.40", spokenAmount: "21.40 美元"),
+                    GlanceService(rank: 0, name: "AWS", amountText: "$21.40", spokenAmount: "21.40 美元", detail: awsDetail),
                     GlanceService(rank: 1, name: "Cloudflare", amountText: "$11.05", spokenAmount: "11.05 美元"),
                     GlanceService(rank: 2, name: "OpenAI", amountText: "$7.62", spokenAmount: "7.62 美元"),
                     GlanceService(rank: 3, name: "GitHub", amountText: "$4.00", spokenAmount: "4 美元"),
@@ -48,7 +47,6 @@ public enum GlanceSamples {
         detail.amountText = "$71.40"
         detail.compactAmountText = "$71"
         detail.projectionText = "预计月底 $93.13"
-        detail.trend = trend(total: 71.40, projected: 93.13)
         detail.budget = GlanceBudget(
             fraction: 0.8925,
             percentText: "89%",
@@ -77,15 +75,44 @@ public enum GlanceSamples {
         content: .noBills
     )
 
-    static func trend(total: Double, projected: Double) -> GlanceTrend {
-        let weights: [Double] = [3, 2, 2, 4, 3, 1, 1, 3, 5, 3, 2, 2, 1, 1, 4, 3, 3, 2, 6, 3, 2, 1, 2]
-        let sum = weights.reduce(0, +)
-        let top = max(total, projected)
-        var running = 0.0
-        let cumulative = weights.map { weight -> Double in
-            running += weight / sum * total
-            return running / top
+    /// AWS 那一页。30 天里前 7 天落在 8 月，后 23 天是 9 月 1 日到今天；9 月那段加起来 $21.40。
+    static let awsDetail: GlanceServiceDetail = {
+        let august: [Double] = [0.62, 0.71, 0.55, 0.80, 0.94, 0.66, 0.58]
+        let september: [Double] = [
+            0.72, 0.81, 0.64, 0.95, 1.10, 0.58, 0.52, 0.88, 1.32, 0.97, 0.84, 0.79,
+            0.61, 0.55, 1.18, 1.05, 0.92, 0.86, 2.14, 1.12, 0.93, 0.70, 1.22,
+        ]
+        let today = Calendar.utc.startOfDay(for: now)
+        let values = august + september
+        let days = values.enumerated().map { index, value in
+            GlanceDay(
+                date: Calendar.utc.date(byAdding: .day, value: index - (values.count - 1), to: today)!,
+                value: value,
+                amountText: "$" + String(format: "%.2f", value)
+            )
         }
-        return GlanceTrend(cumulative: cumulative, projectedEnd: projected / top, dayCount: 30)
-    }
+        return GlanceServiceDetail(
+            shareText: "占本月 45%",
+            change: GlanceChange(
+                text: "较上月同期 +12%",
+                detailText: "本月 $21.40 · 8月同期 $19.10",
+                direction: .up
+            ),
+            days: days,
+            sublines: [
+                GlanceSubline(id: "ec2", title: "EC2", amountText: "$12.08"),
+                GlanceSubline(id: "s3", title: "S3", amountText: "$4.61"),
+                GlanceSubline(id: "cloudfront", title: "CloudFront", amountText: "$3.26"),
+                GlanceSubline(id: "other", title: "其他", amountText: "$1.45"),
+            ]
+        )
+    }()
+}
+
+private extension Calendar {
+    static let utc: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        return calendar
+    }()
 }

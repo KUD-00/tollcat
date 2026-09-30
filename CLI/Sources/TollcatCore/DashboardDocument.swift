@@ -10,8 +10,9 @@ struct DashboardComposition: Equatable, Sendable {
 struct DashboardDocument: Equatable, Sendable {
     var empty: Bool
     var rawJSON: String
-    var formattedVariable: String
-    var formattedProjected: String
+    /// 到今天 + 月底预计，成对跟着同一个口径走（桥从共享层一起取）。回看过去的月份没有预计。
+    var formattedTotal: String
+    var formattedProjected: String?
     var monthTitle: String
     var comparisonCaption: String?
     var comparisonPercentText: String?
@@ -27,10 +28,8 @@ struct DashboardDocument: Equatable, Sendable {
         return DashboardDocument(
             empty: object["empty"] as? Bool ?? false,
             rawJSON: json,
-            formattedVariable: object["formattedVariable"] as? String
-                ?? object["formattedTotal"] as? String
-                ?? "",
-            formattedProjected: object["formattedProjected"] as? String ?? "",
+            formattedTotal: object["formattedTotal"] as? String ?? "",
+            formattedProjected: string(object["formattedProjected"]),
             monthTitle: object["monthTitle"] as? String ?? "",
             comparisonCaption: string(object["comparisonCaption"]),
             comparisonPercentText: string(object["comparisonPercentText"]),

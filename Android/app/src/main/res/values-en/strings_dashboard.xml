@@ -6,9 +6,10 @@
     <string name="dashboard_filter_apply">Apply</string>
     <string name="dashboard_filter_services">Services</string>
     <string name="dashboard_filter_all">Select All</string>
+    <string name="dashboard_filter_preview_unfiltered">This month · all services</string>
+    <string name="dashboard_subscription_chip">Subscription %1$s</string>
     <string name="dashboard_filter_included">Included</string>
     <string name="dashboard_filter_excluded">Excluded</string>
-    <string name="dashboard_filter_excluding">Excl. %1$s</string>
     <string name="dashboard_filter_active">Filtered: %1$s</string>
     <string name="dashboard_attention">Needs Attention</string>
     <string name="dashboard_composition_other">Other</string>
@@ -107,7 +108,6 @@
     <string name="dashboard_card_quota">%1$s free tier</string>
     <string name="dashboard_card_days">%1$d days</string>
     <string name="dashboard_fab_menu">Add and edit</string>
-    <string name="dashboard_add_subscription">Add a fixed subscription</string>
     <string name="dashboard_fab_close">Collapse</string>
     <string name="dashboard_budget_marker">Budget %1$s</string>
     <string name="dashboard_budget_spent">Spent %1$s</string>

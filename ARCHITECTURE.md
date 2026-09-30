@@ -375,8 +375,40 @@ the same Chinese source string the String Catalog uses (`%@` / `%lld`, literal `
 - `MeterDateFormat`'s default locale is `PortableLocale.formatting` for the same reason:
   `Locale.current` isn't reliable on a JNI thread.
 
-Sentences only one shell needs stay in that shell (Android's hero chip "本月订阅 … · 未计入"
-comes from `JNICopy`) — but amounts, percentages, orderings and thresholds never do.
+#### Follower shells draw; they do not compute
+
+Android, Windows and the CLI get their numbers and sentences **from the shared content
+values, through the bridge, as finished strings** — the same values iOS renders. A follower
+may put a label next to a value ("By month end" beside `formattedProjected`, "订阅" beside
+`subscriptionAmountText`) and may shrink two bridge-provided numbers into bar heights. It
+may not:
+
+- **parse a formatted amount back into a number** to add, sort or re-format it. The string
+  is already in the display currency; summing it and formatting the sum as dollars converts
+  twice (JPY came out 150× too big). Sums live in `MeterDashboard` as `Money`
+  (`CompositionSliceBuilder` for "Other", `VendorSpend` for a vendor's total and its
+  usage + subscription split); sort keys come over the bridge as `amountValue` / `totalValue`.
+- **pick one of two fields based on UI state.** The scope (subscriptions in or out) and the
+  filter are applied when the bridge recomputes. The headline pair `formattedTotal` +
+  `formattedProjected` always follows the current scope; there is no usage-only twin to
+  choose from. Pairing a scope-following total with a usage-only projection is how
+  "so far ¥7,206, by month end ¥6,823" happened.
+- **round, truncate or re-derive a percentage** (use the bridge's `percent` /
+  `usedPercent` / `sharePercent`; the one local conversion of a raw quota ratio is
+  `quotaUsedPercent`, rounded like iOS).
+- **write its own sentence about the data** — period titles, filter qualifiers,
+  subscription lines. They come from `DashboardFilterSummary` / `MonthToDateModuleContent`;
+  a follower's "本月订阅" said "this month" over a three-month window.
+
+The bridge itself only forwards: it reads money from `MonthToDateModuleContent`,
+`ComparisonModuleContent`, `CompositionSliceBuilder` and `VendorSpend`, never from the raw
+`MonthToDate` amount fields. **When a follower needs a value that isn't there, add it to the
+shared value type** (the way `projectedAmountText`, `subscriptionAmountText`,
+`ComparisonModuleContent.currentText` were added) — do not derive it on the far side.
+
+`check-source-invariants.py::check_follower_derivation` fails the commit on the known shapes
+of this mistake (parsing amounts, `formattedVariable`, scope-picking, truncated percentages,
+the bridge reading raw `MonthToDate` money, the two "top N" constants drifting apart).
 
 ### MeterModules — the dashboard modules
 
@@ -507,7 +539,7 @@ commit gate red.
 | API contract (field limits, category enums, anonymous page allowlist) | `shared/api-contract.json` | `worker/src/contract.ts`, `TipFieldLimits.swift`, `FeedbackFieldLimits.swift`, `UsageAnalyticsScreen.swift`, `UsageFieldLimits.swift`, `UsageScreens.kt`, `UsageScreens.cs`, site forms (patch-style) | same as above |
 | Onboarding catalog (tutorials, plans, exchange rates) | `Packages/.../MeterPersistence/Catalog/catalog.json` (Chinese is the canonical field; `en` / `ja` are optional overlays, resolved at display time, falling back to Chinese) | worker, Android bridge, and Windows shell resources are all symlinks (the `check_catalog_sync` gate) | — |
 | Tutorial source citations (audit only; the app never opens these) | `docs/setup-guide-sources.json` | — (`check_setup_guide_sources`: every catalog guide with steps has a `sourceURL`; changing fields/steps without refreshing `stepsFingerprint` fails the gate) | `python3 scripts/refresh-setup-guide-source.py <id>` |
-| Brand icon (app icon, favicon, Android launcher, BrandMark.astro) | `scripts/render-app-icon.py` (cat geometry from `shared/cat.json`) | Every slot across App/site/docs/Android | `python3 scripts/render-app-icon.py` |
+| Brand icon and launch screen (app icon, favicon, Android launcher + splash icon, Windows tiles, BrandMark.astro, launch-screen layers, `LaunchPocketGeometry` on both platforms) | `scripts/render-app-icon.py` (cat geometry from `shared/cat.json`) | Every icon slot across App/Watch/Mac/site/docs/Windows/Android, `LaunchPocket` + `LaunchBackground` in the App catalog, `MeterFeatures/Resources/LaunchPocket.xcassets`, Android `launch_*` / `splash_icon` drawables and `launch_colors.xml` | `python3 scripts/render-app-icon.py` |
 | System permission usage strings | `INFOPLIST_KEY_NS*UsageDescription` in `project.yml` (Chinese) + `App/Resources/InfoPlist.xcstrings` (en / ja) | System permission dialogs | — |
 | Landing-page SNS images | `.github/readme/hero-{zh,en,ja}.png` | `site/public/og-{locale}.png` (copied at Astro startup) | after swapping a README hero, `pnpm build` |
 | UI smoke anchors (iOS accessibilityIdentifier / Android testTag) | `shared/ui-test-ids.json` | `MeterDesign/UITestID.swift`, `Android/.../ui/UITestId.kt`; `maestro/*.yaml` may only reference ids from the table, and every id in the table must be used by some flow | `scripts/generate-shared.py` |
@@ -624,7 +656,8 @@ python3 scripts/generate-android-strings.py
 # Regenerate Windows en-US / ja-JP resw
 python3 scripts/generate-windows-strings.py
 
-# After changing the brand icon: refill every slot across App / site / docs / Android launcher
+# After changing the brand icon: refill every slot across App / site / docs / Windows / Android,
+# plus the launch-screen layers and token geometry on both platforms
 python3 scripts/render-app-icon.py
 
 # Permissions / privacy manifest / app icon / App Group: the App Store submission checks that source can catch

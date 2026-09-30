@@ -109,7 +109,7 @@ struct ShareCardTests {
     @Test("最多列 5 家，第 6 名往后合并成其他，跟仪表构成环同一条线")
     func segmentsAreCapped() {
         let many = content(segmentCount: 7)
-        #expect(many.segments.count == ShareCardBuilder.namedLimit + 1)
+        #expect(many.segments.count == CompositionSliceBuilder.namedLimit + 1)
         #expect(many.segments.last?.isOther == true)
         #expect(content(segmentCount: 2).segments.count == 2)
         #expect(content(segmentCount: 5).segments.allSatisfy { !$0.isOther })

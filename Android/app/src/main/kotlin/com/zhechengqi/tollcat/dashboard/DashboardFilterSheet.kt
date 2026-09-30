@@ -1,7 +1,8 @@
 package com.zhechengqi.tollcat.dashboard
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,15 +33,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.zhechengqi.tollcat.DashboardSnapshot
 import com.zhechengqi.tollcat.R
 import com.zhechengqi.tollcat.TollCatTheme
+import com.zhechengqi.tollcat.services.ServiceGlyph
 import com.zhechengqi.tollcat.ui.AmountText
 import com.zhechengqi.tollcat.ui.MeterSpacing
 import com.zhechengqi.tollcat.ui.PrimaryButton
@@ -105,12 +114,11 @@ private fun DashboardFilterSheetBody(
     val custom = isCustomRange(draft, spanOptions)
     var customExpanded by remember { mutableStateOf(custom) }
     val (oldestBack, newestBack) = draft.windowBacks(nowMillis, deepest)
-    val previewAmount = if (draft.includesSubscriptions) {
-        preview.formattedTotal
-    } else {
-        preview.formattedVariable.ifBlank { preview.formattedTotal }
-    }
-    val previewNote = filterPreviewNote(draft, preview, accounts, spanOptions, nowMillis)
+    // 预览是按草稿取景框重算出来的，口径已经在里面。
+    val previewAmount = preview.formattedTotal
+    // 按草稿重算出来的那份自带限定语（共享层 `DashboardFilterSummary.full`，和 iOS 同一句）。
+    // 什么都没筛时给一句占位，免得这一行时有时无地把布局顶来顶去。
+    val previewNote = preview.filterNote ?: stringResource(R.string.dashboard_filter_preview_unfiltered)
     val previewSpoken = stringResource(R.string.dashboard_filter_preview_a11y, previewAmount, previewNote)
     val everythingExcluded = accounts.isNotEmpty() &&
         accounts.all { it.accountId in draft.excludedAccountIds }
@@ -212,9 +220,10 @@ private fun DashboardFilterSheetBody(
                     }
                 }
             }
-            ChipRow {
+            // 一行一家，竖着排：横滑的胶囊一多就溢出屏外，看不见的那几家等于不存在。
+            Column {
                 accounts.forEach { account ->
-                    AccountFilterChip(
+                    AccountFilterRow(
                         account = account,
                         included = account.accountId !in draft.excludedAccountIds,
                         onToggle = { onDraftChange(draft.toggleAccount(account.accountId)) },
@@ -263,8 +272,13 @@ private fun selectedCheck(selected: Boolean): (@Composable () -> Unit)? {
     }
 }
 
+/**
+ * 服务一行：左边图标和名字，右边开关，整行都能点。长按弹「只看这一家」——
+ * 和 iOS 那一行的 contextMenu 同一个动作；读屏走自定义操作。
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun AccountFilterChip(
+private fun AccountFilterRow(
     account: DashboardFilterAccount,
     included: Boolean,
     onToggle: () -> Unit,
@@ -273,85 +287,66 @@ private fun AccountFilterChip(
     val label = accountLabel(account)
     val onlyLabel = stringResource(R.string.dashboard_filter_only, label)
     var menu by remember { mutableStateOf(false) }
-    FilterChip(
-        selected = included,
-        onClick = onToggle,
-        label = { Text(label) },
-        leadingIcon = selectedCheck(included),
-        trailingIcon = {
-            Box {
-                SymbolIcon(
-                    MaterialSymbol.MoreVert,
-                    contentDescription = onlyLabel,
-                    size = FilterChipDefaults.IconSize,
-                    modifier = Modifier.clickable { menu = true },
+    Box {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MeterSpacing.sm),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = MeterSpacing.minTap)
+                .clip(MaterialTheme.shapes.medium)
+                .combinedClickable(
+                    role = Role.Switch,
+                    onClick = onToggle,
+                    onLongClick = { menu = true },
                 )
-                DropdownMenu(
-                    expanded = menu,
-                    onDismissRequest = { menu = false },
-                ) {
-                    DropdownMenuItem(
-                        text = { Text(onlyLabel) },
-                        onClick = {
-                            menu = false
+                .semantics(mergeDescendants = true) {
+                    toggleableState = ToggleableState(included)
+                    customActions = listOf(
+                        CustomAccessibilityAction(onlyLabel) {
                             onOnlyThis()
+                            true
                         },
                     )
                 }
-            }
-        },
-        modifier = Modifier
-            .heightIn(min = MeterSpacing.minTap)
-            .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(onlyLabel) {
-                        onOnlyThis()
-                        true
-                    },
-                )
-            },
-    )
+                .padding(vertical = MeterSpacing.xxs),
+        ) {
+            ServiceGlyph(
+                name = label,
+                colorKey = account.colorKey.ifBlank { account.providerId },
+                modifier = Modifier.alpha(if (included) 1f else 0.38f),
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (included) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
+            // 开关只是状态的样子，点击交给整行，免得点在开关上和点在行上走两条路。
+            Switch(checked = included, onCheckedChange = null)
+        }
+        DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+            DropdownMenuItem(
+                text = { Text(onlyLabel) },
+                onClick = {
+                    menu = false
+                    onOnlyThis()
+                },
+            )
+        }
+    }
 }
 
 @Composable
 private fun monthChipTitle(monthsBack: Int, nowMillis: Long): String {
     if (monthsBack == 0) return stringResource(R.string.dashboard_comparison_this_month)
     return formatDashboardMonth(monthsBack, nowMillis)
-}
-
-@Composable
-private fun filterPreviewNote(
-    draft: DashboardFilterState,
-    preview: DashboardSnapshot,
-    accounts: List<DashboardFilterAccount>,
-    spanOptions: List<SpanOption>,
-    nowMillis: Long,
-): String {
-    val period = periodPreviewLabel(draft, preview, spanOptions, nowMillis)
-    val excluded = dashboardFilterNote(draft, accounts)
-    val parts = buildList {
-        if (!draft.isCurrentMonth) add(period)
-        if (excluded != null) add(excluded)
-    }
-    if (parts.isNotEmpty()) return parts.joinToString(" · ")
-    return listOf(
-        stringResource(R.string.dashboard_comparison_this_month),
-        stringResource(R.string.dashboard_filter_services),
-    ).joinToString(" · ")
-}
-
-@Composable
-private fun periodPreviewLabel(
-    draft: DashboardFilterState,
-    preview: DashboardSnapshot,
-    spanOptions: List<SpanOption>,
-    nowMillis: Long,
-): String {
-    spanOptions.firstOrNull { it.matches(draft) }?.let { return it.title() }
-    if (draft.periodKind == DashboardFilterState.KIND_MONTHS && draft.monthCount == 1) {
-        return monthChipTitle(draft.monthsBack, nowMillis)
-    }
-    return preview.periodCaption.ifBlank { preview.monthTitle }
 }
 
 private data class SpanOption(

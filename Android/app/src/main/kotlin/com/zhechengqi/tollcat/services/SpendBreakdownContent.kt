@@ -47,6 +47,8 @@ data class SpendBreakdownGroup(
     val amountCaption: String,
     val fraction: Double,
     val shareCaption: String?,
+    /** 和 [shareCaption] 同一个数；不到 1% 或没花钱时为 null。 */
+    val sharePercent: Int? = null,
     val detailCaption: String?,
     val allowanceCaption: String?,
     val isZeroBilled: Boolean,

@@ -9,8 +9,6 @@ import MeterModules
 /// 格式化全在这一层做完：`MeterDesign` 不认识 `Money`，
 /// 卡上要画什么字必须在传进去之前定死。
 enum ShareCardBuilder: Sendable {
-    /// 图例只留前 5 名；再多的合并成「其他」，跟仪表构成环同一条线。
-    static let namedLimit = CompositionSlices.namedLimit
 
     /// 二维码指向的地址。**写死在这里**，和 `ProviderDescriptor` 的 URL 同一条红线：
     /// 远程可改的地址等于让别人替你决定这张卡把人送到哪。
@@ -130,28 +128,14 @@ enum ShareCardBuilder: Sendable {
         _ composition: [CompositionSegment],
         presentation: MoneyPresentation
     ) -> [ShareCardContent.Segment] {
-        func item(_ segment: CompositionSegment, isOther: Bool = false) -> ShareCardContent.Segment {
+        // 「前几名 + 其他」和仪表盘同一条规则、同一份实现。
+        CompositionSliceBuilder.make(from: composition, presentation: presentation).map { slice in
             ShareCardContent.Segment(
-                name: segment.displayName,
-                amountText: segment.amount.formatted(using: presentation),
-                fraction: segment.fraction,
-                isOther: isOther
+                name: slice.displayName,
+                amountText: slice.amountText,
+                fraction: slice.fraction,
+                isOther: slice.isOther
             )
         }
-        guard composition.count > namedLimit else {
-            return composition.map { item($0) }
-        }
-
-        let named = composition.prefix(namedLimit).map { item($0) }
-        let rest = composition.dropFirst(namedLimit)
-        let amount = rest.reduce(Money.zero) { $0 + $1.amount }
-        let fraction = rest.reduce(0.0) { $0 + $1.fraction }
-        let other = ShareCardContent.Segment(
-            name: String(localized: L("其他")),
-            amountText: amount.formatted(using: presentation),
-            fraction: fraction,
-            isOther: true
-        )
-        return named + [other]
     }
 }

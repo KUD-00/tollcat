@@ -2,6 +2,8 @@
 
 package com.zhechengqi.tollcat.dashboard
 
+import androidx.compose.foundation.layout.FlowRow
+import com.zhechengqi.tollcat.ui.LocalStaticRender
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -134,7 +136,7 @@ fun UrgentAttentionBanner(
                 }
                 Text(sentence, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             }
-            if (target != null) {
+            if (target != null && !LocalStaticRender.current) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -157,6 +159,19 @@ fun AttentionCardRow(
     modifier: Modifier = Modifier,
     joinedToBanner: Boolean = false,
 ) {
+    // 渲成分享图时只有一帧：横滑的一排屏幕外那几张不会被画出来，改成换行排全。
+    if (LocalStaticRender.current) {
+        FlowRow(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = SectionPadding),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            items.forEach { item -> AttentionCard(item = item, onOpen = onOpen, shape = RoundedCornerShape(Outer)) }
+        }
+        return
+    }
     LazyRow(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = SectionPadding),

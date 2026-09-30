@@ -5,13 +5,19 @@
     <string name="onboarding_skip">スキップ</string>
     <string name="onboarding_continue">続ける</string>
     <string name="onboarding_add_first">最初のサービスを追加</string>
-    <string name="onboarding_page_number_title">今月いくら使った</string>
-    <string name="onboarding_page_number_body">クラウドとAIの請求を一つの数字に。開けば今月いくら使ったかわかる。</string>
+    <string name="onboarding_page_number_title">クラウドの請求を、ポケットに</string>
+    <string name="onboarding_page_number_body">AWS、Cloudflare、OpenAI などで使った金額を TollCat が足し合わせて、今月ここまでの合計と、月末にどのくらいになりそうかを表示します。</string>
+    <string name="onboarding_sample_numbers">サンプルの数字</string>
+    <string name="onboarding_page_source_title">数字の出どころ</string>
+    <string name="onboarding_page_source_body">サービスごとに読み取り専用の認証情報を入れます。更新すると、この端末が各サービスの公式 API に直接請求額を問い合わせます。TollCat のサーバーは経由せず、アカウント登録もいりません。</string>
+    <string name="onboarding_source_this_device">この端末</string>
+    <string name="onboarding_source_read_only">読み取り専用</string>
     <string name="onboarding_page_credentials_title">認証情報はこの端末から出ない</string>
-    <string name="onboarding_page_credentials_body">APIキーはこの端末のKeystoreだけ。クラウドバックアップにも入らない。機種変更は設定の「読み込みと書き出し」で。</string>
-    <string name="onboarding_page_widget_title">開かなくても見える</string>
-    <string name="onboarding_page_widget_body">通知に金額は出しません。ウィジェットをホーム画面に置けば、今月の数字が見えます。</string>
+    <string name="onboarding_page_credentials_body">API キーはこの端末の Keystore にだけ保存され、クラウドバックアップにも入りません。機種変更のときは、設定の「読み込みと書き出し」を使います。</string>
+    <string name="onboarding_fact_this_device">この端末だけ</string>
+    <string name="onboarding_fact_no_cloud_backup">クラウドバックアップに入らない</string>
+    <string name="onboarding_fact_unlocked_only">ロック解除後だけ読める</string>
     <string name="onboarding_page_add_title">最初のサービスを追加</string>
-    <string name="onboarding_page_add_body">まずはリストに入れる。APIキーは今なくていい。ChatGPT Pro だけでも追加できる。</string>
+    <string name="onboarding_page_add_body">まずは使っているサービスを一覧に追加しましょう。認証情報はあとからで大丈夫です。ChatGPT Pro のように月額だけのプランなら、月額を入れれば足ります。</string>
     <string name="onboarding_progress">%1$d / %2$d</string>
 </resources>

@@ -13,7 +13,6 @@
 		0392A81D23B8CAB9B61F2D2E /* RailwayBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF94B38D8F98A5F6EEF93E /* RailwayBillingProviderTests.swift */; };
 		046CABBF1054DBBE4CB5DB1D /* DeviceTransferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DA7850CF50D557AC465427 /* DeviceTransferTests.swift */; };
 		05B89A66300CBDAD54437ED6 /* MeterModules in Frameworks */ = {isa = PBXBuildFile; productRef = C68599A6D1FF52D3B7E187D8 /* MeterModules */; };
-		060A44B181C536271C063C86 /* LaunchCat-dark.svg in Resources */ = {isa = PBXBuildFile; fileRef = 7D5DC7D16B38CD67D7E6E06A /* LaunchCat-dark.svg */; };
 		065A1063C1ACD7F51560A34D /* QdrantBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F8539CD9BC8F9CF8CAEFD6 /* QdrantBillingProviderTests.swift */; };
 		07B0A0E80D70A02985C76591 /* InboxMailboxTransferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0B5A6116B16FACA55E6A84 /* InboxMailboxTransferTests.swift */; };
 		087B45D4EDB69E7F8C65FB83 /* ExchangeRateCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE2ABA46DA14D4EE73BAFF9 /* ExchangeRateCatalogTests.swift */; };
@@ -60,7 +59,6 @@
 		24587CFEEECAF06620FEB2BE /* DNSimpleBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AEA82C246FF0B7AD9378F1 /* DNSimpleBillingProviderTests.swift */; };
 		2464A59EC9C298CFEED714B7 /* ServersComBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923D6115A540120EBF70B82E /* ServersComBillingProviderTests.swift */; };
 		24C6F3F9568EC24E92FCBE39 /* OxahostBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C1B005F5CAF81FDC2C0302 /* OxahostBillingProviderTests.swift */; };
-		2554A1032EFE2762B4F8ED44 /* LaunchCat.svg in Resources */ = {isa = PBXBuildFile; fileRef = FC49A91017913DD8A05732B8 /* LaunchCat.svg */; };
 		2661B2B319CF6A57C17CBE77 /* MeterGlance in Frameworks */ = {isa = PBXBuildFile; productRef = 1D508642B3D42DC7513FB338 /* MeterGlance */; };
 		269FD17A44AB04F28C014F08 /* ConoHaBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9337AD30B892EA355F023C7D /* ConoHaBillingProviderTests.swift */; };
 		2859C044ABB4DD222105BE83 /* HTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CD7A3DCFA228CCF89CB7E4 /* HTTPClientTests.swift */; };
@@ -404,6 +402,7 @@
 		FB2E09763CB3515D803FB712 /* AppPreferencesRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF01D87C57F7916ABE8825D3 /* AppPreferencesRecordTests.swift */; };
 		FB63330B6338202F9327A544 /* TollCatWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3E00D9B07E90EE99DDE58302 /* TollCatWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FB6D74ABC20D0EEABDA35FFF /* DeepSeekBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D566C40DC25D1CA1C813C0 /* DeepSeekBillingProviderTests.swift */; };
+		FD5F92734F6188FB11CC3234 /* LaunchTokenTargetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119C1D4FF2B0F2C3185B5344 /* LaunchTokenTargetsTests.swift */; };
 		FD7E38BF42533D247D85848F /* ReminderSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F8690B728E0E2B20C4FA44 /* ReminderSchedulerTests.swift */; };
 		FE9FDEC15D2E821058DD7EE2 /* ThreePLGuysBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F40908345647C290633C059 /* ThreePLGuysBillingProviderTests.swift */; };
 		FF32E45EB832C3B4E05B6165 /* AzureBillingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C8881AB93A1F2CE51A291C /* AzureBillingProviderTests.swift */; };
@@ -512,6 +511,7 @@
 		0F6CD42E35B4EE8551CC8728 /* UnleashBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnleashBillingProviderTests.swift; sourceTree = "<group>"; };
 		0FE12542E801514CA4ADE775 /* ManualUsageKindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualUsageKindTests.swift; sourceTree = "<group>"; };
 		1006039E75E7CD891AD1BD1E /* Api2PdfBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api2PdfBillingProviderTests.swift; sourceTree = "<group>"; };
+		119C1D4FF2B0F2C3185B5344 /* LaunchTokenTargetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchTokenTargetsTests.swift; sourceTree = "<group>"; };
 		11CD7A3DCFA228CCF89CB7E4 /* HTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientTests.swift; sourceTree = "<group>"; };
 		13929234529577725B58E882 /* DeviceTransferCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTransferCoverageTests.swift; sourceTree = "<group>"; };
 		145C1935AC90FF5B13D4A645 /* PrintifyBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintifyBillingProviderTests.swift; sourceTree = "<group>"; };
@@ -658,7 +658,6 @@
 		7AB74EF725E26628C8A4FF7A /* FormspringBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormspringBillingProviderTests.swift; sourceTree = "<group>"; };
 		7C33745077C74624756825B8 /* GlanceCodecTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceCodecTests.swift; sourceTree = "<group>"; };
 		7C6DA848F3347637E5044CC5 /* ProviderCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderCatalogTests.swift; sourceTree = "<group>"; };
-		7D5DC7D16B38CD67D7E6E06A /* LaunchCat-dark.svg */ = {isa = PBXFileReference; path = "LaunchCat-dark.svg"; sourceTree = "<group>"; };
 		7E66E799573C75321F599094 /* InboxSettingsEmptyStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxSettingsEmptyStateTests.swift; sourceTree = "<group>"; };
 		7F5FA3DEE95A277B2867B5DF /* ProviderAssemblyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderAssemblyTests.swift; sourceTree = "<group>"; };
 		802F135E7667A2B9E7780557 /* TransferCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferCodeTests.swift; sourceTree = "<group>"; };
@@ -848,7 +847,6 @@
 		FBE2ABA46DA14D4EE73BAFF9 /* ExchangeRateCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateCatalogTests.swift; sourceTree = "<group>"; };
 		FC20CBE671AABDA710DB01D8 /* GlanceTimelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceTimelineTests.swift; sourceTree = "<group>"; };
 		FC27C4AB91668E9822593ED2 /* DashboardFilterSurfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardFilterSurfaceTests.swift; sourceTree = "<group>"; };
-		FC49A91017913DD8A05732B8 /* LaunchCat.svg */ = {isa = PBXFileReference; path = LaunchCat.svg; sourceTree = "<group>"; };
 		FC709B5C78E8D45697DBD7EB /* FixtureAggregationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureAggregationTests.swift; sourceTree = "<group>"; };
 		FC9F0323DB7AD294BED09671 /* LoginetBillingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginetBillingProviderTests.swift; sourceTree = "<group>"; };
 		FD04EC72BABA785717233E4D /* GlanceStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceStyleTests.swift; sourceTree = "<group>"; };
@@ -1011,8 +1009,6 @@
 			children = (
 				6DD17961F4335E20907D405F /* Assets.xcassets */,
 				8DC1FAE4991B98CFDA101122 /* InfoPlist.xcstrings */,
-				7D5DC7D16B38CD67D7E6E06A /* LaunchCat-dark.svg */,
-				FC49A91017913DD8A05732B8 /* LaunchCat.svg */,
 				D3CEDA04FC33639C669B15CB /* Localizable.xcstrings */,
 				90F96B04F5ECF81E2914913A /* PrivacyInfo.xcprivacy */,
 			);
@@ -1096,6 +1092,7 @@
 				4AB3857A51C5CDBA3DE4FE31 /* InboxServiceRowTests.swift */,
 				7E66E799573C75321F599094 /* InboxSettingsEmptyStateTests.swift */,
 				E11F627F3D6552DA0133EA47 /* KeyboardDismissGuardrailTests.swift */,
+				119C1D4FF2B0F2C3185B5344 /* LaunchTokenTargetsTests.swift */,
 				34D01482F6D716B0B8EFAF50 /* LedgerSyncTests.swift */,
 				01DEC17B10F97E7C6913E21E /* LegalURLTests.swift */,
 				B11AF81FB133AAB658CCE630 /* ListRowHitTargetGuardrailTests.swift */,
@@ -1703,8 +1700,6 @@
 			files = (
 				46D5501A42276E25BA713900 /* Assets.xcassets in Resources */,
 				F12A6F4841D21E9F890F8D1B /* InfoPlist.xcstrings in Resources */,
-				060A44B181C536271C063C86 /* LaunchCat-dark.svg in Resources */,
-				2554A1032EFE2762B4F8ED44 /* LaunchCat.svg in Resources */,
 				DEC8B7E33AAFD746BD7E195B /* LaunchScreen.storyboard in Resources */,
 				F1EC5E2DB1E05DB8ED736DD4 /* Localizable.xcstrings in Resources */,
 				B858692ACE69003ECAD01553 /* PrivacyInfo.xcprivacy in Resources */,
@@ -1914,6 +1909,7 @@
 				32FCE9E53E4B1DF7FA59C2F3 /* KeychainCredentialStoreTests.swift in Sources */,
 				B6CF5960E46AB6245F3F1202 /* KingsoftCloudBillingProviderTests.swift in Sources */,
 				E42E5EB98D65E107ECC6C81A /* LatitudeSHBillingProviderTests.swift in Sources */,
+				FD5F92734F6188FB11CC3234 /* LaunchTokenTargetsTests.swift in Sources */,
 				DD035E8D88C1FA490A48816F /* LeasewebBillingProviderTests.swift in Sources */,
 				135F2FDEF472C662C7CD6458 /* LedgerCodecTests.swift in Sources */,
 				7B54E04B23DFEB722595635F /* LedgerFixture.swift in Sources */,

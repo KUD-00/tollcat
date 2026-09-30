@@ -34,7 +34,7 @@ internal sealed class DashboardPage : Page
         header.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         var title = new TextBlock
         {
-            Text = dash.Empty ? Copy.Get("DashboardEmptyTitle") : dash.MonthTitle,
+            Text = dash.Empty ? Copy.Get("DashboardEmptyTitle") : dash.PeriodCaption,
             Style = (Style)Application.Current.Resources["TitleTextBlockStyle"],
         };
         var refresh = new Button
@@ -68,29 +68,29 @@ internal sealed class DashboardPage : Page
         }
 
         var hero = new StackPanel { Spacing = 4 };
-        hero.Children.Add(new TextBlock { Text = Copy.Get("HeroLabel"), Opacity = 0.7 });
         hero.Children.Add(new TextBlock
         {
-            Text = dash.FormattedVariable,
+            Text = dash.FormattedTotal,
             FontSize = 42,
             FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
             FontFamily = new FontFamily("Cascadia Mono, Consolas"),
         });
-        if (dash.AllowsProjection)
+        if (dash.FormattedProjected is { } projected)
         {
             hero.Children.Add(new TextBlock
             {
-                Text = Copy.Format("ProjectedCaption", dash.FormattedProjected),
+                Text = Copy.Format("ProjectedCaption", projected),
                 Opacity = 0.75,
             });
         }
-        if (dash.SubscriptionFormatted is not null)
+        if (dash.SubscriptionAmountText is { } subscription)
         {
-            hero.Children.Add(new TextBlock { Text = Copy.Format("SubscriptionCaption", dash.SubscriptionFormatted) });
+            hero.Children.Add(new TextBlock { Text = Copy.Format("SubscriptionCaption", subscription) });
         }
-        if (dash.CurrencyNote is not null)
+        // 限定语跟着数字走：筛过的数不能看起来像一个完全正常的本月合计。
+        if (dash.FilterNote is { } filterNote)
         {
-            hero.Children.Add(new TextBlock { Text = dash.CurrencyNote, Opacity = 0.7 });
+            hero.Children.Add(new TextBlock { Text = filterNote, Opacity = 0.7 });
         }
         stack.Children.Add(hero);
 

@@ -6,40 +6,28 @@ import SwiftUI
 import MeterFormat
 
 /// 图例只留前几名；再多的合并成「其他」，避免图例无限变长。
-/// 「几名」由构成色板的档数决定（`MeterColor.compositionNamedLimit`）。
+/// 合并规则在 `CompositionSliceBuilder`，这里只按位置配色。
 public enum CompositionSlices {
-    public static var namedLimit: Int { MeterColor.compositionNamedLimit }
+    /// 规则本身在 `CompositionSliceBuilder`（跨端共用）；色板档数必须和它一样多。
+    public static var namedLimit: Int { CompositionSliceBuilder.namedLimit }
 
     public static func make(
         from segments: [CompositionSegment],
         presentation: MoneyPresentation = .usd
     ) -> [CompositionDonut.Slice] {
-        guard segments.count > namedLimit else {
-            return segments.enumerated().map { index, segment in
-                namedSlice(segment, color: MeterColor.composition(index: index), presentation: presentation)
+        CompositionSliceBuilder.make(from: segments, presentation: presentation)
+            .enumerated()
+            .map { index, slice in
+                CompositionDonut.Slice(
+                    id: slice.id,
+                    color: slice.isOther ? MeterColor.compositionOther : MeterColor.composition(index: index),
+                    fraction: slice.fraction,
+                    name: slice.displayName,
+                    amountText: slice.amountText,
+                    spokenAmount: slice.spokenAmount,
+                    mergedNames: slice.mergedNames
+                )
             }
-        }
-
-        let named = Array(segments.prefix(namedLimit))
-        let rest = Array(segments.dropFirst(namedLimit))
-        var slices = named.enumerated().map { index, segment in
-            namedSlice(segment, color: MeterColor.composition(index: index), presentation: presentation)
-        }
-
-        let amount = rest.reduce(Money.zero) { $0 + $1.amount }
-        let fraction = rest.reduce(0) { $0 + $1.fraction }
-        slices.append(
-            CompositionDonut.Slice(
-                id: "other",
-                color: MeterColor.compositionOther,
-                fraction: fraction,
-                name: String(localized: L("其他")),
-                amountText: amount.formatted(using: presentation),
-                spokenAmount: SpokenMoney.label(for: amount, presentation: presentation),
-                mergedNames: rest.map(\.displayName)
-            )
-        )
-        return slices
     }
 
     public static func spokenOther(from slices: [CompositionDonut.Slice]) -> String? {
@@ -48,20 +36,5 @@ public enum CompositionSlices {
         }
         let members = other.mergedNames.joined(separator: "、")
         return String(localized: L("其他包含 \(members)"))
-    }
-
-    private static func namedSlice(
-        _ segment: CompositionSegment,
-        color: Color,
-        presentation: MoneyPresentation
-    ) -> CompositionDonut.Slice {
-        CompositionDonut.Slice(
-            id: segment.id,
-            color: color,
-            fraction: segment.fraction,
-            name: segment.displayName,
-            amountText: segment.amount.formatted(using: presentation),
-            spokenAmount: SpokenMoney.label(for: segment.amount, presentation: presentation)
-        )
     }
 }

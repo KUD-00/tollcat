@@ -19,14 +19,11 @@
   <data name="TabSettings" xml:space="preserve">
     <value>設定</value>
   </data>
-  <data name="HeroLabel" xml:space="preserve">
-    <value>今月の合計</value>
-  </data>
   <data name="ProjectedCaption" xml:space="preserve">
     <value>月末見込み {0}</value>
   </data>
   <data name="SubscriptionCaption" xml:space="preserve">
-    <value>サブスク +{0}</value>
+    <value>サブスクリプション {0}</value>
   </data>
   <data name="ModuleComposition" xml:space="preserve">
     <value>内訳</value>

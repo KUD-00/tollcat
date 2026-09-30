@@ -3,9 +3,10 @@
     <string name="dashboard_filter_apply">用这个</string>
     <string name="dashboard_filter_services">服务</string>
     <string name="dashboard_filter_all">全选</string>
+    <string name="dashboard_filter_preview_unfiltered">本月 · 全部服务</string>
+    <string name="dashboard_subscription_chip">订阅 %1$s</string>
     <string name="dashboard_filter_included">算在内</string>
     <string name="dashboard_filter_excluded">已排除</string>
-    <string name="dashboard_filter_excluding">排除 %1$s</string>
     <string name="dashboard_filter_active">筛选中：%1$s</string>
     <string name="dashboard_attention">需要注意</string>
     <string name="dashboard_composition_other">其他</string>
@@ -104,7 +105,6 @@
     <string name="dashboard_card_quota">%1$s 免费额度</string>
     <string name="dashboard_card_days">%1$d 天</string>
     <string name="dashboard_fab_menu">添加和编辑</string>
-    <string name="dashboard_add_subscription">加一笔固定订阅</string>
     <string name="dashboard_fab_close">收起</string>
     <string name="dashboard_budget_marker">预算 %1$s</string>
     <string name="dashboard_budget_spent">已花 %1$s</string>

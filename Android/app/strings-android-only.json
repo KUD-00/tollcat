@@ -4,6 +4,11 @@
     "ja": "戻る",
     "zh": "返回"
   },
+  "action_close": {
+    "en": "Close",
+    "ja": "閉じる",
+    "zh": "关闭"
+  },
   "action_save_credentials": {
     "en": "Save to Keystore",
     "ja": "Keystore に保存",
@@ -241,13 +246,18 @@
   },
   "onboarding_page_credentials_body": {
     "en": "API keys live in this device’s Keystore. They don’t leave with cloud backup. Move to a new phone with Import & Export in Settings.",
-    "ja": "APIキーはこの端末のKeystoreだけ。クラウドバックアップにも入らない。機種変更は設定の「読み込みと書き出し」で。",
+    "ja": "API キーはこの端末の Keystore にだけ保存され、クラウドバックアップにも入りません。機種変更のときは、設定の「読み込みと書き出し」を使います。",
     "zh": "API 密钥只进本机 Keystore，不跟云备份走。换手机用设置里的导入与导出。"
   },
-  "onboarding_page_widget_body": {
-    "en": "No amounts in notifications, and no amount alerts. Put the widget on the home screen — that’s this month’s number.",
-    "ja": "通知に金額は出しません。ウィジェットをホーム画面に置けば、今月の数字が見えます。",
-    "zh": "通知里不放金额，也没有金额告警。把小组件放到主屏，划过去就是这个月的数字。"
+  "onboarding_fact_no_cloud_backup": {
+    "en": "Not in cloud backup",
+    "ja": "クラウドバックアップに入らない",
+    "zh": "不跟云端备份走"
+  },
+  "onboarding_fact_unlocked_only": {
+    "en": "Readable only after you unlock",
+    "ja": "ロック解除後だけ読める",
+    "zh": "解锁后才能读"
   },
   "onboarding_progress": {
     "en": "%1$d / %2$d",
@@ -368,11 +378,6 @@
     "en": "For example a fixed monthly plan. Usage stays in the section above — don’t record the same money twice.",
     "ja": "月額の定額料金など。従量は上の欄に記録し、同じ金額を二度書かないでください。",
     "zh": "例如固定月费。用量记在上面，不要把同一笔钱写两遍。"
-  },
-  "services_test_hint": {
-    "en": "After a successful test, this button becomes Save to Keystore.",
-    "ja": "テストが通ると、このボタンは Keystore に保存 に変わります。",
-    "zh": "测通后，这颗按钮会变成保存到 Keystore。"
   },
   "settings_about_body": {
     "en": "TollCat folds every vendor’s bill into the same calendar month. The ledger is USD, conversion is the same Swift MeterCore, and the UI is Material 3.",
