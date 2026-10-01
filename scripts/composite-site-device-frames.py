@@ -5,6 +5,7 @@
 （`render-appstore-devices.py`）用的是同一份，两处不许各写一遍。
 
 iPhone 竖屏是叠在**活屏幕**上的透明机壳（锁屏动画还在孔里），所以只导出机壳本身。
+Android 那台（Pixel 10 Pro，Android Studio 的 device art）同理，见 `android_device_art.py`。
 iPad / Mac 是合成好的 mock-up PNG。
 
   python3 scripts/composite-site-device-frames.py
@@ -13,6 +14,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import android_device_art
 from apple_bezels import ROOT, composite, overlay
 
 SHOTS = ROOT / "site" / "src" / "assets" / "screenshots"
@@ -27,6 +29,10 @@ def main() -> None:
     # 落地页 hero 那台：机壳本身，屏幕留空给活内容。
     overlay("iphone-17-pro-silver", DEST / "iphone-17-pro-silver.png", MAX_EDGE)
     overlay("iphone-17-pro-deep-blue", DEST / "iphone-17-pro-deep-blue.png", MAX_EDGE)
+    # 平台切到 Android 时换这台。开孔百分比印出来，抄进 global.css 的 .phone-device-android。
+    for name in android_device_art.TONES:
+        android_device_art.overlay(name, DEST / f"{name}.png", MAX_EDGE)
+    print("    android hole:", android_device_art.hole())
 
     for locale in LOCALES:
         for appearance in APPEARANCES:

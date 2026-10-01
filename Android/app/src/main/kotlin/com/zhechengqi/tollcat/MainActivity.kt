@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
     private var launchActive by mutableStateOf(false)
     /** 系统启动画面交给 App 了（没有系统启动画面时一开始就是）。 */
     private var launchHandedOver by mutableStateOf(false)
-    /** 系统启动图标在窗口里的位置：过渡从这里放大铺满。 */
+    /** 系统启动图标在窗口里的位置：过渡从这里放大。 */
     private var launchIcon by mutableStateOf<Rect?>(null)
     private val launchRegistry = LaunchSwatchRegistry()
 
@@ -80,6 +80,7 @@ class MainActivity : ComponentActivity() {
         DisposableEffect(onboarding) { onDispose { onboarding.dispose() } }
         LaunchRevealOverlay(
             iconBounds = launchIcon,
+            systemSplash = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
             handedOver = launchHandedOver,
             targets = session.dashboard.launchTargets,
             registry = launchRegistry,
@@ -104,8 +105,8 @@ class MainActivity : ComponentActivity() {
                     SystemClock.uptimeMillis() - started > SPLASH_HOLD_MS
                 if (ready) {
                     content.viewTreeObserver.removeOnPreDrawListener(this)
-                    // 系统等 App 太久会自己撤掉启动画面，不再调下面的交接回调；那样覆盖层就从全屏口袋直接起步，
-                    // 不能一直盖在 App 上。
+                    // 系统等 App 太久会自己撤掉启动画面，不再调下面的交接回调；覆盖层停在系统图标的推定位置，
+                    // 到点自己放大起步，不能一直盖在 App 上。
                     content.postDelayed({ launchHandedOver = true }, HANDOVER_FALLBACK_MS)
                 }
                 return ready

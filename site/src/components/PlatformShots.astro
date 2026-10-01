@@ -1,0 +1,22 @@
+---
+import PhoneShot from './PhoneShot.astro';
+import type { PhoneShotPair } from '../screenshots';
+
+type Props = {
+  apple: PhoneShotPair;
+  android: PhoneShotPair;
+  alt: string;
+  widths: number[];
+  sizes: string;
+  /** 首屏那张：预加载由 Home 头部按平台注入，这里只把抓取优先级提上去。 */
+  priority?: boolean;
+};
+const { apple, android, alt, widths, sizes, priority = false } = Astro.props;
+---
+
+<div class="platform-shot only-apple">
+  <PhoneShot light={apple.light} dark={apple.dark} alt={alt} widths={widths} sizes={sizes} fetchpriority={priority ? 'high' : undefined} />
+</div>
+<div class="platform-shot only-android">
+  <PhoneShot light={android.light} dark={android.dark} alt={alt} widths={widths} sizes={sizes} fetchpriority={priority ? 'high' : undefined} />
+</div>

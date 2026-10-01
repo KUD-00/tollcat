@@ -628,7 +628,160 @@ html[data-theme-pref="dark"] .theme-trigger .theme-glyph[data-for="dark"] {
 }
 
 .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
   margin-top: 1.75rem;
+}
+
+/* ── 平台：iPhone / Android ──────────────────────────────────────
+   两套机壳、截图和几句凭据说明都在页面里，platform-boot 在首帧前写 html[data-platform]，
+   这里只亮一套。没有 JS 时属性不存在，按 iPhone 走。 */
+html:not([data-platform="android"]) .only-android,
+html[data-platform="android"] .only-apple {
+  display: none !important;
+}
+
+.platform-shot picture {
+  display: block;
+}
+
+.hero-status {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+/* 截图机型。和 iOS 的分段控件一个样子：一条底槽，一颗滑块跟着选中项走。 */
+.platform-switch {
+  display: none;
+  position: relative;
+  margin-top: 1.25rem;
+  padding: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+html[data-platform] .platform-switch {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.platform-switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 0 0 0.5px rgb(0 0 0 / 0.04);
+  transition: transform 0.35s var(--ease);
+}
+
+html[data-platform="android"] .platform-switch::before {
+  transform: translateX(100%);
+}
+
+html[data-theme="dark"] .platform-switch::before {
+  background: color-mix(in srgb, var(--ink) 18%, var(--paper));
+  box-shadow: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .platform-switch::before {
+    background: color-mix(in srgb, var(--ink) 18%, var(--paper));
+    box-shadow: none;
+  }
+}
+
+.platform-switch button {
+  position: relative;
+  z-index: 1;
+  min-width: 6.5rem;
+  min-height: 36px;
+  padding: 0.4rem 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: color 0.25s var(--ease);
+}
+
+html:not([data-platform="android"]) .platform-switch [data-platform-option="apple"],
+html[data-platform="android"] .platform-switch [data-platform-option="android"] {
+  color: var(--ink);
+}
+
+.platform-switch button:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platform-switch::before,
+  .platform-switch button {
+    transition: none;
+  }
+}
+
+/* ── 开场 ────────────────────────────────────────────────────────
+   和 App 启动画面同一屏：品牌紫铺满，完整的口袋居中。画的大小和上提量是 IntroArt 根上的
+   三个变量（render-app-icon.py 生成，和故事板、Android 覆盖层同一组数）。
+   intro.js 从画的中心开一个圆洞往外扩，页面从洞里展开。JS 没跑起来的话，4 秒后自己淡掉。 */
+@property --intro-hole {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.intro {
+  display: none;
+}
+
+html[data-intro="play"] .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  animation: intro-failsafe 0.4s ease-out 4s forwards;
+}
+
+.intro-card {
+  --intro-hole: 0px;
+  position: absolute;
+  inset: 0;
+  background: #5856d6;
+  /* 洞的圆心由 intro.js 写进来，对准画的中心。 */
+  -webkit-mask: radial-gradient(circle at var(--intro-x, 50%) var(--intro-y, 50%), transparent var(--intro-hole), #000 calc(var(--intro-hole) + 1px));
+  mask: radial-gradient(circle at var(--intro-x, 50%) var(--intro-y, 50%), transparent var(--intro-hole), #000 calc(var(--intro-hole) + 1px));
+}
+
+.intro-art {
+  --intro-size: min(calc(min(100vw, 100dvh) * var(--intro-fraction, 0.5)), var(--intro-max, 280px));
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  width: var(--intro-size);
+  height: var(--intro-size);
+  margin: calc(var(--intro-size) / -2) 0 0 calc(var(--intro-size) / -2);
+  translate: 0 calc(-1 * var(--intro-lift, 4dvh));
+}
+
+@keyframes intro-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .phone-device {
@@ -699,6 +852,44 @@ html[data-theme="dark"] .phone-device {
 .device-screen img {
   width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Pixel 10 Pro（Android Studio 的 device art）。开孔直接读 device art 的 layout：
+   `python3 scripts/android_device_art.py` 会印出这几个数。 */
+html[data-platform="android"] .phone-device {
+  --phone-hole-x: 4.1903%;
+  --phone-hole-y: 2.0236%;
+  --phone-hole-w: 90.9091%;
+  --phone-hole-h: 96.3238%;
+  aspect-ratio: 1408 / 2965;
+}
+
+html[data-platform="android"] .phone-device .device-screen {
+  border-radius: 7.73% / 3.47%;
+}
+
+html[data-platform="android"] .lock-stage {
+  aspect-ratio: 1280 / 2856;
+}
+
+/* Android 状态栏：时间不加粗，右边只有 Wi-Fi 和一颗胶囊电池。 */
+html[data-platform="android"] .lock-time {
+  font-weight: 500;
+}
+
+html[data-platform="android"] .lock-signal,
+html[data-platform="android"] .lock-battery {
+  display: none;
+}
+
+.lock-battery-droid {
+  display: none;
+  width: 1.2rem;
+  height: 0.6rem;
+}
+
+html[data-platform="android"] .lock-battery-droid {
   display: block;
 }
 
@@ -1270,6 +1461,16 @@ html[data-theme="dark"] .device-photo {
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 4.5rem;
     align-items: start;
+  }
+
+  /* Pixel 比 iPhone 瘦一点：同样的高度预算，宽度按它自己的比例反推，底框才不出画。 */
+  html[data-platform="android"] .story {
+    --phone-fit: min(28rem, calc((100dvh - 8.25rem) * 1408 / 2965));
+    --phone-hero: min(
+      33rem,
+      calc((100dvh - 8.25rem) * 1408 / 2965 * var(--phone-bleed)),
+      calc(var(--page-gutter) + var(--phone-fit) + 3rem)
+    );
   }
 
   .story-scenes {

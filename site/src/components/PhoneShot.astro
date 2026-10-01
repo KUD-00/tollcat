@@ -11,6 +11,7 @@ type Props = {
   quality?: number;
   loading?: 'eager' | 'lazy';
   priority?: boolean;
+  fetchpriority?: 'high';
 };
 const {
   light,
@@ -21,6 +22,7 @@ const {
   quality = 80,
   loading = 'lazy',
   priority = false,
+  fetchpriority,
 } = Astro.props;
 const darkImage = await getImage({
   src: dark,
@@ -47,5 +49,6 @@ const darkImage = await getImage({
     quality={quality}
     loading={loading}
     priority={priority}
+    fetchpriority={fetchpriority}
   />
 </picture>

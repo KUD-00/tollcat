@@ -1,11 +1,15 @@
 ---
 import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import BrandMark from '../components/BrandMark.astro';
 import CredentialLockScreen from '../components/CredentialLockScreen.astro';
 import CredentialsDialog from '../components/CredentialsDialog.astro';
+import GitHubMark from '../components/GitHubMark.astro';
+import IntroStage from '../components/IntroStage.astro';
 import JsonLd from '../components/JsonLd.astro';
 import PhoneFrame from '../components/PhoneFrame.astro';
-import PhoneShot from '../components/PhoneShot.astro';
+import PlatformShots from '../components/PlatformShots.astro';
+import PlatformSwitch from '../components/PlatformSwitch.astro';
 import PlatformDialog from '../components/PlatformDialog.astro';
 import PlatformGlyph from '../components/PlatformGlyph.astro';
 import PlatformsCluster from '../components/PlatformsCluster.astro';
@@ -14,12 +18,15 @@ import SupportListDialog from '../components/SupportListDialog.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { localePath, siteConfig, type Locale } from '../config';
 import { t } from '../i18n';
-import { ipadShots, macShots, phoneShots } from '../screenshots';
+import { androidPhoneShots, ipadShots, macShots, phoneShots } from '../screenshots';
 import { supportListHref } from '../supportList';
 import storyPhoneUrl from '../scripts/story-phone.js?url';
 import heroRotateUrl from '../scripts/hero-rotate.js?url';
 import dialogSheetUrl from '../scripts/dialog-sheet.js?url';
 import platformDialogUrl from '../scripts/platform-dialog.js?url';
+import platformUrl from '../scripts/platform.js?url';
+import introBootUrl from '../scripts/intro-boot.js?url';
+import introUrl from '../scripts/intro.js?url';
 
 type Props = { locale: Locale };
 const { locale } = Astro.props;
@@ -29,17 +36,31 @@ const privacyHref = localePath(locale, 'privacy');
 const phoneSizes = '(min-width: 960px) 28rem, 15.5rem';
 const phoneWidths = [256, 512, 768, 1024];
 const pack = phoneShots(locale);
+const droid = androidPhoneShots(locale);
 const ipad = ipadShots(locale);
 const mac = macShots(locale);
 const githubHref = siteConfig.githubUrl ?? '#platforms';
 const shots = [
-  { ...pack.dashboard, alt: copy.gallery.dashboard },
-  { ...pack.wizard, alt: copy.gallery.wizard },
-  { ...pack.services, alt: copy.gallery.services },
+  { apple: pack.dashboard, android: droid.dashboard, alt: copy.gallery.dashboard },
+  { apple: pack.wizard, android: droid.wizard, alt: copy.gallery.wizard },
+  { apple: pack.services, android: droid.services, alt: copy.gallery.services },
 ];
+// 首屏那张的预加载按平台挑：两套截图都在页面里，静态 <link> 分不出访客用哪台。
+// 头部的小脚本读 platform-boot 写好的 html[data-platform]，只给对的那套发预加载。
 const lcpOpts = { format: 'webp' as const, width: 512, widths: phoneWidths, quality: 80 };
-const lcpLight = await getImage({ src: pack.dashboard.light, ...lcpOpts });
-const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
+async function lcpPreloads(pair: { light: ImageMetadata; dark: ImageMetadata }) {
+  const light = await getImage({ src: pair.light, ...lcpOpts });
+  const dark = await getImage({ src: pair.dark, ...lcpOpts });
+  return [
+    { href: light.src, srcset: light.srcSet.attribute, media: '(prefers-color-scheme: light)' },
+    { href: dark.src, srcset: dark.srcSet.attribute, media: '(prefers-color-scheme: dark)' },
+  ];
+}
+const preloads = {
+  apple: await lcpPreloads(pack.dashboard),
+  android: await lcpPreloads(droid.dashboard),
+  sizes: phoneSizes,
+};
 ---
 
 <BaseLayout
@@ -51,26 +72,24 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
   home
 >
   <JsonLd slot="head" locale={locale} kind="home" />
-  <link
-    slot="head"
-    rel="preload"
-    as="image"
-    href={lcpLight.src}
-    imagesrcset={lcpLight.srcSet.attribute}
-    imagesizes={phoneSizes}
-    media="(prefers-color-scheme: light)"
-    fetchpriority="high"
-  />
-  <link
-    slot="head"
-    rel="preload"
-    as="image"
-    href={lcpDark.src}
-    imagesrcset={lcpDark.srcSet.attribute}
-    imagesizes={phoneSizes}
-    media="(prefers-color-scheme: dark)"
-    fetchpriority="high"
-  />
+  <script slot="head" is:inline define:vars={{ preloads }}>
+    (() => {
+      const list = preloads[document.documentElement.dataset.platform === 'android' ? 'android' : 'apple'];
+      for (const item of list) {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = item.href;
+        link.setAttribute('imagesrcset', item.srcset);
+        link.setAttribute('imagesizes', preloads.sizes);
+        link.media = item.media;
+        link.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(link);
+      }
+    })();
+  </script>
+  <script slot="head" is:inline src={introBootUrl}></script>
+  <IntroStage />
   <main id="main">
     <div class="story wrap" data-story data-active="0">
       <div class="story-scenes">
@@ -88,27 +107,25 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
             <div class="hero-actions">
               {
                 store ? (
-                  <a class="btn" href={store} translate="no">
+                  <a class="btn only-apple" href={store} translate="no">
                     {copy.hero.ctaStore}
                   </a>
                 ) : (
-                  <span class="btn" aria-disabled="true">
+                  <span class="btn only-apple" aria-disabled="true">
                     {copy.hero.ctaSoon}
                   </span>
                 )
               }
+              <a class="btn only-android" href={githubHref} rel="noopener noreferrer">
+                <GitHubMark class="platform-glyph" />
+                {copy.hero.androidSource}
+              </a>
+              <span class="hero-status only-android">{copy.hero.ctaAndroid}</span>
             </div>
+            <PlatformSwitch class="hero-switch" label={copy.hero.platformLabel} />
           </div>
           <PhoneFrame class="scene-phone">
-            <PhoneShot
-              light={shots[0].light}
-              dark={shots[0].dark}
-              alt={shots[0].alt}
-              widths={phoneWidths}
-              sizes={phoneSizes}
-              loading="eager"
-              priority
-            />
+            <PlatformShots {...shots[0]} widths={phoneWidths} sizes={phoneSizes} priority />
           </PhoneFrame>
         </section>
 
@@ -125,13 +142,7 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
             <p class="lede">{copy.setup.lede}</p>
           </div>
           <PhoneFrame class="scene-phone">
-            <PhoneShot
-              light={shots[1].light}
-              dark={shots[1].dark}
-              alt={shots[1].alt}
-              widths={phoneWidths}
-              sizes={phoneSizes}
-            />
+            <PlatformShots {...shots[1]} widths={phoneWidths} sizes={phoneSizes} />
           </PhoneFrame>
         </section>
 
@@ -154,13 +165,7 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
           </div>
           <ProviderMarquee label={copy.a11y.providers} />
           <PhoneFrame class="scene-phone">
-            <PhoneShot
-              light={shots[2].light}
-              dark={shots[2].dark}
-              alt={shots[2].alt}
-              widths={phoneWidths}
-              sizes={phoneSizes}
-            />
+            <PlatformShots {...shots[2]} widths={phoneWidths} sizes={phoneSizes} />
           </PhoneFrame>
         </section>
 
@@ -188,7 +193,8 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
               }
             </h2>
             <p class="lede">
-              {copy.credentials.lede}{' '}
+              <span class="only-apple">{copy.credentials.lede}</span>
+              <span class="only-android">{copy.credentials.ledeAndroid}</span>{' '}
               <a href={privacyHref} data-dialog="credentials" aria-haspopup="dialog">
                 {copy.credentials.link}
               </a>
@@ -228,7 +234,7 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
                 {copy.platforms.mac}
               </a>
               <a
-                class="btn"
+                class="btn only-apple"
                 href={githubHref}
                 data-dialog="platform"
                 data-platform="android"
@@ -238,6 +244,14 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
                 <PlatformGlyph name="android" />
                 {copy.platforms.android}
               </a>
+              {
+                store && (
+                  <a class="btn only-android" href={store} translate="no">
+                    <PlatformGlyph name="apple" />
+                    {copy.platforms.iphone}
+                  </a>
+                )
+              }
               <a
                 class="btn"
                 href={githubHref}
@@ -270,13 +284,7 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
               {
                 shots.map((shot, index) => (
                   <div class="screen" data-i={String(index)} aria-hidden={index === 0 ? undefined : 'true'}>
-                    <PhoneShot
-                      light={shot.light}
-                      dark={shot.dark}
-                      alt={shot.alt}
-                      widths={phoneWidths}
-                      sizes={phoneSizes}
-                    />
+                    <PlatformShots {...shot} widths={phoneWidths} sizes={phoneSizes} priority={index === 0} />
                   </div>
                 ))
               }
@@ -306,7 +314,14 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
             <details>
               <summary>{item.q}</summary>
               <p>
-                {item.a}
+                {item.android ? (
+                  <>
+                    <span class="only-apple">{item.a}</span>
+                    <span class="only-android">{item.android.a}</span>
+                  </>
+                ) : (
+                  item.a
+                )}
                 {
                   item.href && (
                     <>
@@ -347,3 +362,5 @@ const lcpDark = await getImage({ src: pack.dashboard.dark, ...lcpOpts });
 <script is:inline type="module" src={heroRotateUrl}></script>
 <script is:inline type="module" src={platformDialogUrl}></script>
 <script is:inline type="module" src={dialogSheetUrl}></script>
+<script is:inline type="module" src={platformUrl}></script>
+<script is:inline type="module" src={introUrl}></script>
