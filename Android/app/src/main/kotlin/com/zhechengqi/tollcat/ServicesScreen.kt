@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import com.zhechengqi.tollcat.ui.TollCatPullToRefreshBox
 import com.zhechengqi.tollcat.ui.MeterSpacing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,8 +24,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -148,14 +147,12 @@ fun ServicesScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                     .fillMaxSize(),
             )
         } else {
-            val refreshState = rememberPullToRefreshState()
-            PullToRefreshBox(
+            TollCatPullToRefreshBox(
                 isRefreshing = session.isRefreshing,
                 onRefresh = { session.refreshAll() },
                 modifier = Modifier
                     .padding(inner)
                     .fillMaxSize(),
-                state = refreshState,
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
