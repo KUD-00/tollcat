@@ -114,6 +114,15 @@ function hrefFor(to: 'github' | undefined): string | undefined {
                     </p>
                   )
                 }
+                {
+                  index === 0 && copy.showHere && (
+                    <p class="platform-download platform-show-here">
+                      <button type="button" class="btn" data-platform-set={platform}>
+                        {copy.showHere}
+                      </button>
+                    </p>
+                  )
+                }
                 {slide.paragraphs.map((paragraph) => (
                   <p>{paragraph}</p>
                 ))}

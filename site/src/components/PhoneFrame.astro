@@ -1,5 +1,8 @@
 ---
 import { getImage, Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import pixelDark from '../assets/screenshots/pixel-10-pro-obsidian.png';
+import pixelLight from '../assets/screenshots/pixel-10-pro-porcelain.png';
 import bezelDark from '../assets/screenshots/iphone-17-pro-deep-blue.png';
 import bezelLight from '../assets/screenshots/iphone-17-pro-silver.png';
 
@@ -7,34 +10,36 @@ type Props = { class?: string };
 const { class: className } = Astro.props;
 const widths = [240, 400, 512, 800];
 const sizes = '(min-width: 960px) 28rem, 15.5rem';
-const darkImage = await getImage({
-  src: bezelDark,
-  format: 'webp',
-  width: 400,
-  widths,
-  quality: 85,
-});
+
+// 两台机壳都在页面里，CSS 按 html[data-platform] 只亮一台。都走 lazy：
+// display:none 的那台浏览器不会去下载，访客只付自己那台的流量。
+const bezels: { platform: 'apple' | 'android'; light: ImageMetadata; dark: ImageMetadata }[] = [
+  { platform: 'apple', light: bezelLight, dark: bezelDark },
+  { platform: 'android', light: pixelLight, dark: pixelDark },
+];
+const chrome = await Promise.all(
+  bezels.map(async (bezel) => ({
+    ...bezel,
+    darkImage: await getImage({ src: bezel.dark, format: 'webp', width: 400, widths, quality: 85 }),
+  })),
+);
 ---
 
 <figure class:list={['phone-device', className]}>
   <div class="device-screen phone-device-screen">
     <slot />
   </div>
-  <picture class="phone-device-chrome">
-    <source
-      srcset={darkImage.srcSet.attribute}
-      sizes={sizes}
-      media="(prefers-color-scheme: dark)"
-      data-theme-src="dark"
-    />
-    <Image
-      src={bezelLight}
-      alt=""
-      width={400}
-      widths={widths}
-      sizes={sizes}
-      quality={85}
-      loading="eager"
-    />
-  </picture>
+  {
+    chrome.map((bezel) => (
+      <picture class:list={['phone-device-chrome', `only-${bezel.platform}`]}>
+        <source
+          srcset={bezel.darkImage.srcSet.attribute}
+          sizes={sizes}
+          media="(prefers-color-scheme: dark)"
+          data-theme-src="dark"
+        />
+        <Image src={bezel.light} alt="" width={400} widths={widths} sizes={sizes} quality={85} loading="lazy" />
+      </picture>
+    ))
+  }
 </figure>

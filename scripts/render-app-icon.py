@@ -9,8 +9,10 @@
 - 口袋前片挡住猫和圆牌的下半截，袋口上方给圆牌压一道暗带，看起来是插进去的。
 
 iOS 的方形图标整张都露出来，整组以袋口为中心放大 IOS_K；Android 的 adaptive icon
-会被遮罩裁掉一圈，前景用原尺寸。启动画面（iOS 故事板、两端的过渡覆盖层、Android
-系统启动图标）都用 iOS 这版构图：过渡要从同一张图起飞。
+会被遮罩裁掉一圈，前景缩小。启动画面（iOS 故事板、两端的过渡覆盖层、Android
+系统启动图标）用同一张「完整口袋」：图标构图补上口袋的底边和圆角，装进自己的 1024
+方框（LAUNCH），居中摆在屏上——图标是被方框裁过的画，铺满一屏会成一只贴着屏底的巨猫。
+过渡要从同一张图起飞。
 
 输出一律是烘焙好的绝对坐标：没有 CSS 变量、没有 <use>、没有 clipPath id、
 没有 dasharray。Xcode 资源目录里的 SVG 和 Android VectorDrawable 只认这一路。
@@ -56,19 +58,22 @@ SHADOW_ALPHA = 0.26
 # ---------------------------------------------------------------- 构图
 
 # 猫：cat.json 的剪影 + 星星眼（眼睛挖空，透出后面的底色）。
-CAT_K, CAT_PIVOT, CAT_AT = 0.9, (512, 532), (512, 520)
+# 口袋压矮以后猫往下坐、略放大；再大就把两侧圆牌全挡住了——画面横向已经没有余量。
+CAT_K, CAT_PIVOT, CAT_AT = 0.95, (512, 532), (512, 579.6)
 EYE_K = 1.15
 # 星星眼比 cat.json 的原位往上挪，腾出位置给嘴：嘴要露在袋口上面、两只爪子中间。
 EYE_LIFT = 52
 MOUTH_K, MOUTH_AT = 0.7, (512, 584)
-# 口袋前片：袋口是一条二次曲线，两侧和底边出画。
-POCKET_EDGE = ((84, 590), (512, 680), (940, 590))
-STITCH_EDGE = ((130, 642), (512, 730), (894, 642))
+# 口袋前片：袋口是一条二次曲线。图标里两侧和底边出画；启动画面没有方框，把底边画完整
+# （LAUNCH_POCKET_*），不然一屏靛蓝上贴底放大的是一张裁过的图。
+POCKET_EDGE = ((84, 690), (512, 780), (940, 690))
+STITCH_EDGE = ((130, 742), (512, 830), (894, 742))
 STITCH_BOTTOM = 1060
 STITCH_WIDTH, STITCH_DASH, STITCH_GAP = 14, 36, 24
-PAWS = ((428, 632, 50, 34), (596, 632, 50, 34))
+PAWS = ((428, 732, 50, 34), (596, 732, 50, 34))
 SHADOW_BAND = 30
 GLYPH_K = 0.8
+LAUNCH_POCKET_BOTTOM, LAUNCH_POCKET_CORNER = 1100, 300
 
 
 @dataclass(frozen=True)
@@ -78,21 +83,30 @@ class Token:
     cy: float
     r: float
     deg: float
+    # 图案相对圆心的偏移（以半径为单位）。两侧那两枚有一半藏在猫身后，图案画在露出来的那一侧。
+    gx: float = 0.0
+    gy: float = 0.0
 
 
 # 画的顺序就是叠放顺序：数据库在 AI 那枚后面。
 TOKENS = (
-    Token("database", 872, 492, 66, 8),
-    Token("cloud", 176, 540, 100, -10),
-    Token("ai", 844, 540, 90, 8),
+    Token("database", 864, 532, 75, 8),
+    Token("cloud", 178, 588, 114, -10, gx=-0.26, gy=0.02),
+    Token("ai", 842, 588, 103, 8, gx=0.28),
 )
 
 IOS_K = 1.15
 IOS_CENTER = (512, 600)
-# adaptive icon：108dp 画布，遮罩直径约 72dp。整幅按 0.76 居中，和预览里「圆形遮罩」一样大。
-ANDROID_K = 0.8
-# Android 系统启动图标：288dp 画布里 192dp 的圆。放的是 iOS 构图，圆刚好内切画面。
+# adaptive icon：108dp 画布，遮罩直径约 72dp。两侧圆牌的外沿要落在圆里。
+ANDROID_K = 0.76
+# Android 系统启动图标：288dp 画布里 192dp 的圆。放的是启动构图，按 SPLASH_FIT 缩进圆里。
 SPLASH_K = 192 / 288
+# 启动画面的方框：居中，宽 = 屏幕短边 × 比例，封顶；整体往上提一点，落在视觉中心。
+# 两端的故事板 / 覆盖层都读生成出去的这三个数（LaunchPocketGeometry）。
+LAUNCH_ART_FRACTION = 0.5
+LAUNCH_ART_MAX = 280
+LAUNCH_LIFT = 0.04
+LAUNCH_MARGIN = 24
 
 
 # ---------------------------------------------------------------- 几何工具
@@ -128,7 +142,7 @@ def about(k: float, pivot: tuple[float, float], at: tuple[float, float] | None =
 IDENT = Aff()
 IOS = about(IOS_K, IOS_CENTER)
 ANDROID_FG = about(ANDROID_K, (512, 512))
-SPLASH = IOS.then(about(SPLASH_K, (512, 512)))
+# LAUNCH / SPLASH 依赖画面元素的外框，定义在 launch_frame() 之后。
 
 
 def num(v: float) -> str:
@@ -337,7 +351,7 @@ def shadow_segment(tok: Token) -> Path2 | None:
 
 def token_els(tok: Token, v: dict, t: Aff, mono: bool = False) -> list[El]:
     color = v[tok.kind]
-    local = Aff(GLYPH_K * tok.r, tok.deg, tok.cx, tok.cy).then(t)
+    local = Aff(GLYPH_K * tok.r, tok.deg, tok.cx + tok.gx * tok.r, tok.cy + tok.gy * tok.r).then(t)
     fills, strokes, dots = glyph_parts(tok.kind)
     els: list[El] = []
     if not mono:
@@ -353,22 +367,46 @@ def token_els(tok: Token, v: dict, t: Aff, mono: bool = False) -> list[El]:
     return els
 
 
-def pocket_els(v: dict, t: Aff, paws: bool = True) -> list[El]:
+def pocket_front(closed: bool) -> Path2:
     (x0, y0), (qx, qy), (x2, y2) = POCKET_EDGE
-    front = Path2().M(x0, y0).Q(qx, qy, x2, y2).L(x2, 1100).L(x0, 1100).Z()
-    els = [El(front.d(t), fill=v["pocket"])]
+    p = Path2().M(x0, y0).Q(qx, qy, x2, y2)
+    if not closed:
+        return p.L(x2, 1100).L(x0, 1100).Z()
+    b, r = LAUNCH_POCKET_BOTTOM, LAUNCH_POCKET_CORNER
+    return p.L(x2, b - r).Q(x2, b, x2 - r, b).L(x0 + r, b).Q(x0, b, x0, b - r).Z()
+
+
+def stitch_u() -> list[tuple[float, float]]:
+    """完整口袋的缝线：从袋口左端下去，沿圆角底边绕一圈，回到右端。和外缘同一个间距。"""
+    (sx0, sy0), _, (sx2, sy2) = STITCH_EDGE
+    gap = sx0 - POCKET_EDGE[0][0]
+    b, r = LAUNCH_POCKET_BOTTOM - gap, LAUNCH_POCKET_CORNER - gap
+    pts = [(sx0, sy0), (sx0, b - r)]
+    pts += [quad((sx0, b - r), (sx0, b), (sx0 + r, b), i / 40) for i in range(1, 41)]
+    pts.append((sx2 - r, b))
+    pts += [quad((sx2 - r, b), (sx2, b), (sx2, b - r), i / 40) for i in range(1, 41)]
+    pts.append((sx2, sy2))
+    return pts
+
+
+def pocket_els(v: dict, t: Aff, paws: bool = True, closed: bool = False) -> list[El]:
+    els = [El(pocket_front(closed).d(t), fill=v["pocket"])]
     curve = [quad(*STITCH_EDGE, i / 400) for i in range(401)]
     (sx0, sy0), _, (sx2, sy2) = STITCH_EDGE
     stitch = dashes(curve)
-    stitch.extend(dashes([(sx0, sy0), (sx0, STITCH_BOTTOM)]))
-    stitch.extend(dashes([(sx2, sy2), (sx2, STITCH_BOTTOM)]))
+    if closed:
+        stitch.extend(dashes(stitch_u()))
+    else:
+        stitch.extend(dashes([(sx0, sy0), (sx0, STITCH_BOTTOM)]))
+        stitch.extend(dashes([(sx2, sy2), (sx2, STITCH_BOTTOM)]))
     els.append(El(stitch.d(t), stroke=v["stitch"], width=STITCH_WIDTH * t.k))
     if paws:
         els += [El(ellipse(x, y, rx, ry).d(t), fill=v["cat"]) for x, y, rx, ry in PAWS]
     return els
 
 
-def scene(variant: str, t: Aff, parts=("bg", "tokens", "cat", "pocket"), size: float = 1024) -> list[El]:
+def scene(variant: str, t: Aff, parts=("bg", "tokens", "cat", "pocket"), size: float = 1024,
+          closed: bool = False) -> list[El]:
     v = VARIANTS[variant]
     els: list[El] = []
     if "bg" in parts:
@@ -382,8 +420,33 @@ def scene(variant: str, t: Aff, parts=("bg", "tokens", "cat", "pocket"), size: f
     if "cat" in parts:
         els.append(El(cat_path().d(t), fill=v["cat"], evenodd=True))
     if "pocket" in parts:
-        els += pocket_els(v, t)
+        els += pocket_els(v, t, closed=closed)
     return els
+
+
+def launch_frame() -> tuple[Aff, float]:
+    """启动构图：完整口袋在 IOS 空间里的外框，装进 1024 方框、四周留 LAUNCH_MARGIN、居中。
+    返回变换和 Android 系统启动图标要再缩的倍数（内容离圆心最远的点落在 192dp 的圆里）。"""
+    # 外框用控制点算：贝塞尔曲线落在控制点的凸包里，外框只会略大不会小。
+    base: list[tuple[float, float]] = []
+    for tok in TOKENS:
+        base += [(tok.cx + tok.r * math.cos(i * math.pi / 32), tok.cy + tok.r * math.sin(i * math.pi / 32))
+                 for i in range(64)]
+    for path in (transformed(parse(SIL), about(CAT_K, CAT_PIVOT, CAT_AT)), pocket_front(closed=True)):
+        for op, a in path.cmds:
+            if op not in ("A", "Z"):
+                base += [(a[i], a[i + 1]) for i in range(0, len(a), 2)]
+    pts = [IOS(x, y) for x, y in base]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    k = (1024 - 2 * LAUNCH_MARGIN) / max(max(xs) - min(xs), max(ys) - min(ys))
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    frame = IOS.then(Aff(k, 0, 512 - k * cx, 512 - k * cy))
+    far = max(math.hypot(px - 512, py - 512) for px, py in (frame(x, y) for x, y in base))
+    return frame, min(1.0, 0.97 * 512 / far)
+
+
+LAUNCH, SPLASH_FIT = launch_frame()
+SPLASH = LAUNCH.then(about(SPLASH_K * SPLASH_FIT, (512, 512)))
 
 
 # ---------------------------------------------------------------- 输出格式
@@ -488,39 +551,46 @@ def android_monochrome() -> str:
 def splash_icon(variant: str) -> str:
     r = 512 * SPLASH_K
     circle = ellipse(512, 512, r, r).d(IDENT)
-    return vector(scene(variant, SPLASH, parts=("tokens", "cat", "pocket")),
-                  f"Android 12+ 系统启动图标（{variant}）：iOS 构图缩进 192dp 的圆里，底色由 windowSplashScreenBackground 给。",
+    return vector(scene(variant, SPLASH, parts=("tokens", "cat", "pocket"), closed=True),
+                  f"Android 12+ 系统启动图标（{variant}）：完整口袋缩进 192dp 的圆里，底色由 windowSplashScreenBackground 给。",
                   288, clip=circle)
 
 
 def launch_layer_svg(variant: str, parts, bbox=None) -> str:
     if bbox is None:
-        return svg(scene(variant, IOS, parts=parts))
+        return svg(scene(variant, LAUNCH, parts=parts, closed=True))
     x, y, w, h = bbox
-    t = IOS.then(Aff(1, 0, -x, -y))
-    return svg(scene(variant, t, parts=parts, size=w), w, h)
+    t = LAUNCH.then(Aff(1, 0, -x, -y))
+    return svg(scene(variant, t, parts=parts, size=w, closed=True), w, h)
 
 
 def launch_layer_vector(variant: str, parts, name: str, bbox=None) -> str:
     if bbox is None:
-        return vector(scene(variant, IOS, parts=parts), f"启动过渡的一层：{name}（{variant}），1024 画面空间，贴底铺满屏宽。", 360)
+        return vector(scene(variant, LAUNCH, parts=parts, closed=True),
+                      f"启动过渡的一层：{name}（{variant}），1024 启动画面空间，完整口袋居中。", 360)
     x, y, w, h = bbox
-    t = IOS.then(Aff(1, 0, -x, -y))
-    return vector(scene(variant, t, parts=parts, size=w), f"启动过渡的一层：{name}（{variant}）。", 48, w, h)
+    t = LAUNCH.then(Aff(1, 0, -x, -y))
+    return vector(scene(variant, t, parts=parts, size=w, closed=True), f"启动过渡的一层：{name}（{variant}）。", 48, w, h)
 
 
 def token_bbox(tok: Token) -> tuple[float, float, float, float]:
-    cx, cy = IOS(tok.cx, tok.cy)
-    r = tok.r * IOS.k
+    cx, cy = LAUNCH(tok.cx, tok.cy)
+    r = tok.r * LAUNCH.k
     return (cx - r, cy - r, 2 * r, 2 * r)
 
 
 def launch_tokens() -> list[dict]:
     out = []
     for tok in TOKENS:
-        cx, cy = IOS(tok.cx, tok.cy)
-        out.append(dict(kind=tok.kind, x=round(cx, 2), y=round(cy, 2), r=round(tok.r * IOS.k, 2)))
+        cx, cy = LAUNCH(tok.cx, tok.cy)
+        out.append(dict(kind=tok.kind, x=round(cx, 2), y=round(cy, 2), r=round(tok.r * LAUNCH.k, 2)))
     return out
+
+
+LAUNCH_LAYOUT_DOC = (
+    f"启动画面的方框：居中，边长 = min(屏宽, 屏高) × {LAUNCH_ART_FRACTION}，最大 {LAUNCH_ART_MAX}，"
+    f"再往上提屏高的 {LAUNCH_LIFT}。故事板、两端覆盖层都按这条摆。"
+)
 
 
 def swift_geometry() -> str:
@@ -529,12 +599,17 @@ def swift_geometry() -> str:
         for t in launch_tokens()
     )
     return f"""// {GENERATED}
+import CoreGraphics
 import MeterDashboard
 
-/// 启动画面里三枚服务圆牌在画面里的位置（1024 见方，画面贴底、和屏幕一样宽）。
-/// 顺序就是叠放顺序。图层图片在 `LaunchPocket.xcassets`，同一次生成。
+/// 启动画面的几何（1024 见方的画面空间）。{LAUNCH_LAYOUT_DOC}
+/// `LaunchScreen.storyboard` 是手写的，约束要和这里的三个数一致。
+/// 圆牌顺序就是叠放顺序。图层图片在 `LaunchPocket.xcassets`，同一次生成。
 enum LaunchPocketGeometry {{
     static let canvas: Double = 1024
+    static let artFraction: CGFloat = {LAUNCH_ART_FRACTION}
+    static let maxArt: CGFloat = {LAUNCH_ART_MAX}
+    static let lift: CGFloat = {LAUNCH_LIFT}
     static let tokens: [LaunchPocketToken] = [
 {rows}
     ]
@@ -550,11 +625,20 @@ def kotlin_geometry() -> str:
     return f"""// {GENERATED}
 package com.zhechengqi.tollcat.launch
 
+import androidx.compose.ui.unit.dp
 import com.zhechengqi.tollcat.R
 
-/** 启动画面里三枚服务圆牌的位置（1024 见方，画面贴底、和屏幕一样宽）。顺序就是叠放顺序。 */
+/**
+ * 启动画面的几何（1024 见方的画面空间）。{LAUNCH_LAYOUT_DOC}
+ * 圆牌顺序就是叠放顺序。
+ */
 internal object LaunchPocketGeometry {{
     const val CANVAS = 1024f
+    const val ART_FRACTION = {LAUNCH_ART_FRACTION}f
+    val MAX_ART = {LAUNCH_ART_MAX}.dp
+    const val LIFT = {LAUNCH_LIFT}f
+    /** 系统启动图标里，画面方框占那个 192dp 圆的比例（内容离圆心最远的点刚好落在圆里）。 */
+    const val SPLASH_FIT = {round(SPLASH_FIT, 4)}f
     val tokens = listOf(
 {rows}
     )
@@ -650,8 +734,32 @@ def squircle(im: Image.Image, radius_ratio: float = 0.2237) -> Image.Image:
     return im
 
 
+ASTRO_CLASS_PROPS = """---
+type Props = { class?: string };
+const { class: className } = Astro.props;
+---
+
+"""
+
+
 def brand_mark() -> str:
-    return svg(scene("light", IOS), root_attrs='class="brand-mark" viewBox="0 0 1024 1024" aria-hidden="true"')
+    # 页头 28px、hero 和页脚各自加一个 class 定尺寸，组件必须接得住 class。
+    return ASTRO_CLASS_PROPS + svg(
+        scene("light", IOS),
+        root_attrs="class:list={['brand-mark', className]} viewBox=\"0 0 1024 1024\" aria-hidden=\"true\"",
+    )
+
+
+def intro_art() -> str:
+    """落地页开场：和 App 启动画面同一张画、同一条摆法（完整口袋，居中，短边 × 比例、封顶、上提）。
+    摆法的三个数写成 CSS 变量挂在根上，页面不再自己抄一份。"""
+    layout = (f"--intro-fraction: {LAUNCH_ART_FRACTION}; --intro-max: {LAUNCH_ART_MAX}px; "
+              f"--intro-lift: {LAUNCH_LIFT * 100:g}dvh;")
+    return ASTRO_CLASS_PROPS + svg(
+        scene("light", LAUNCH, parts=("tokens", "cat", "pocket"), closed=True),
+        root_attrs="class:list={['intro-art', className]} viewBox=\"0 0 1024 1024\" "
+                   f"style=\"{layout}\" aria-hidden=\"true\" focusable=\"false\"",
+    )
 
 
 # ---------------------------------------------------------------- 安装
@@ -703,6 +811,7 @@ def main() -> None:
     shutil.copy2(OUT / "app-icon-dark.svg", docs / "app-icon-dark.svg")
     shutil.copy2(OUT / "app-icon-tinted.svg", docs / "app-icon-tinted.svg")
     (ROOT / "site/src/components/BrandMark.astro").write_text(brand_mark())
+    (ROOT / "site/src/components/IntroArt.astro").write_text(intro_art())
     # Windows 的磁贴、商店图和启动图都是同一张 512 方图。
     for name in ("Square150x150Logo", "Square44x44Logo", "StoreLogo", "Wide310x150Logo", "SplashScreen"):
         shutil.copy2(OUT / "icon-512.png", ROOT / f"Windows/app/Assets/{name}.png")

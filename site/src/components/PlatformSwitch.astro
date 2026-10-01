@@ -1,0 +1,11 @@
+---
+type Props = { label: string; class?: string };
+const { label, class: className } = Astro.props;
+---
+
+<!-- 选中态由 html[data-platform] 驱动（boot 脚本在首帧前写好），不靠 aria-checked，免得闪一下。
+     没有 JS 时整组不显示：换不了，就别摆一个按不动的开关。 -->
+<div class:list={['platform-switch', className]} role="radiogroup" aria-label={label} data-platform-switch>
+  <button type="button" role="radio" aria-checked="true" data-platform-option="apple" translate="no">iPhone</button>
+  <button type="button" role="radio" aria-checked="false" data-platform-option="android" translate="no">Android</button>
+</div>

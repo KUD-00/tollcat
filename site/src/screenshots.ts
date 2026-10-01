@@ -18,6 +18,24 @@ import wizardJaDark from './assets/screenshots/iphone-wizard-ja-dark.png';
 import wizardJaLight from './assets/screenshots/iphone-wizard-ja-light.png';
 import wizardZhDark from './assets/screenshots/iphone-wizard-zh-dark.png';
 import wizardZhLight from './assets/screenshots/iphone-wizard-zh-light.png';
+import androidDashboardZhLight from './assets/screenshots/android-dashboard-zh-light.png';
+import androidDashboardZhDark from './assets/screenshots/android-dashboard-zh-dark.png';
+import androidDashboardEnLight from './assets/screenshots/android-dashboard-en-light.png';
+import androidDashboardEnDark from './assets/screenshots/android-dashboard-en-dark.png';
+import androidDashboardJaLight from './assets/screenshots/android-dashboard-ja-light.png';
+import androidDashboardJaDark from './assets/screenshots/android-dashboard-ja-dark.png';
+import androidServicesZhLight from './assets/screenshots/android-services-zh-light.png';
+import androidServicesZhDark from './assets/screenshots/android-services-zh-dark.png';
+import androidServicesEnLight from './assets/screenshots/android-services-en-light.png';
+import androidServicesEnDark from './assets/screenshots/android-services-en-dark.png';
+import androidServicesJaLight from './assets/screenshots/android-services-ja-light.png';
+import androidServicesJaDark from './assets/screenshots/android-services-ja-dark.png';
+import androidWizardZhLight from './assets/screenshots/android-wizard-zh-light.png';
+import androidWizardZhDark from './assets/screenshots/android-wizard-zh-dark.png';
+import androidWizardEnLight from './assets/screenshots/android-wizard-en-light.png';
+import androidWizardEnDark from './assets/screenshots/android-wizard-en-dark.png';
+import androidWizardJaLight from './assets/screenshots/android-wizard-ja-light.png';
+import androidWizardJaDark from './assets/screenshots/android-wizard-ja-dark.png';
 import ipadDashboardEnDark from './assets/screenshots/ipad-bezel-dashboard-en-dark.png';
 import ipadDashboardEnLight from './assets/screenshots/ipad-bezel-dashboard-en-light.png';
 import ipadDashboardJaDark from './assets/screenshots/ipad-bezel-dashboard-ja-dark.png';
@@ -68,6 +86,29 @@ const shots: Record<Locale, { dashboard: PhoneShotPair; wizard: PhoneShotPair; s
 
 export function phoneShots(locale: Locale) {
   return shots[locale];
+}
+
+/** Android 那套（Pixel 模拟器，`scripts/capture-site-android-screenshots.sh`）。和 iPhone 三屏一一对应。 */
+const android: Record<Locale, { dashboard: PhoneShotPair; wizard: PhoneShotPair; services: PhoneShotPair }> = {
+  zh: {
+    dashboard: { light: androidDashboardZhLight, dark: androidDashboardZhDark },
+    wizard: { light: androidWizardZhLight, dark: androidWizardZhDark },
+    services: { light: androidServicesZhLight, dark: androidServicesZhDark },
+  },
+  en: {
+    dashboard: { light: androidDashboardEnLight, dark: androidDashboardEnDark },
+    wizard: { light: androidWizardEnLight, dark: androidWizardEnDark },
+    services: { light: androidServicesEnLight, dark: androidServicesEnDark },
+  },
+  ja: {
+    dashboard: { light: androidDashboardJaLight, dark: androidDashboardJaDark },
+    wizard: { light: androidWizardJaLight, dark: androidWizardJaDark },
+    services: { light: androidServicesJaLight, dark: androidServicesJaDark },
+  },
+};
+
+export function androidPhoneShots(locale: Locale) {
+  return android[locale];
 }
 
 const ipad: Record<Locale, { dashboard: PhoneShotPair; portrait: PhoneShotPair }> = {

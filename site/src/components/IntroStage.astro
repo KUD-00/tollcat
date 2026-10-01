@@ -1,0 +1,10 @@
+---
+import IntroArt from './IntroArt.astro';
+---
+
+<!-- 开场那一屏。默认 display:none，只有 intro-boot 在首帧前点了 data-intro="play" 才出现；
+     JS 万一没跑起来，CSS 自己会在几秒后把它藏掉，不会把页面永远盖住。 -->
+<div class="intro" data-intro-stage aria-hidden="true">
+  <div class="intro-card"></div>
+  <IntroArt />
+</div>
