@@ -122,16 +122,27 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
+      # Automatic signing archives with an Apple Development identity and only
+      # re-signs for distribution at export. With no development identity in the
+      # keychain, -allowProvisioningUpdates mints a fresh "Created via API" cert
+      # on every run; the private key dies with the runner, and after a dozen
+      # runs the account hits its certificate cap and every archive fails with
+      # "Choose a certificate to revoke" (1.3.0). So CI carries one long-lived
+      # development cert in DEV_CERTIFICATE_BASE64 and Xcode reuses it.
       - name: Import signing certificate
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          DEV_CERTIFICATE_BASE64: ${{ secrets.DEV_CERTIFICATE_BASE64 }}
+          DEV_P12_PASSWORD: ${{ secrets.DEV_P12_PASSWORD }}
         run: |
           set -euo pipefail
           cert="$RUNNER_TEMP/build_certificate.p12"
+          dev_cert="$RUNNER_TEMP/dev_certificate.p12"
           keychain="$RUNNER_TEMP/app-signing.keychain-db"
           password="$(openssl rand -base64 24)"
           echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$cert"
+          echo "$DEV_CERTIFICATE_BASE64" | base64 --decode > "$dev_cert"
           security create-keychain -p "$password" "$keychain"
           security set-keychain-settings -lut 21600 "$keychain"
           security unlock-keychain -p "$password" "$keychain"
@@ -139,13 +150,16 @@ jobs:
             -P "$P12_PASSWORD" \
             -A -t cert -f pkcs12 \
             -k "$keychain"
+          security import "$dev_cert" -P "$DEV_P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
           security set-key-partition-list \
             -S apple-tool:,apple: \
             -k "$password" \
             "$keychain"
           security list-keychain -d user -s "$keychain" login.keychain-db
-          rm -f "$cert"
+          rm -f "$cert" "$dev_cert"
           echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+          security find-identity -v -p codesigning "$keychain" | grep -F "Apple Development" \
+            || { echo "no Apple Development identity: check secret DEV_CERTIFICATE_BASE64" >&2; exit 1; }
 
       - name: Write App Store Connect API key
         env:
@@ -294,16 +308,22 @@ jobs:
       # The direct-download build is signed with Developer ID Application, not the
       # App Store distribution certificate. Only the account holder can create it
       # on the developer site; Xcode's automatic signing won't generate it for CI.
+      # The archive itself is still development-signed (see the ios job's
+      # import step for why DEV_CERTIFICATE_BASE64 rides along).
       - name: Import Developer ID certificate
         env:
           DEVELOPER_ID_CERTIFICATE_BASE64: ${{ secrets.DEVELOPER_ID_CERTIFICATE_BASE64 }}
           DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+          DEV_CERTIFICATE_BASE64: ${{ secrets.DEV_CERTIFICATE_BASE64 }}
+          DEV_P12_PASSWORD: ${{ secrets.DEV_P12_PASSWORD }}
         run: |
           set -euo pipefail
           cert="$RUNNER_TEMP/developer_id.p12"
+          dev_cert="$RUNNER_TEMP/dev_certificate.p12"
           keychain="$RUNNER_TEMP/mac-signing.keychain-db"
           password="$(openssl rand -base64 24)"
           echo "$DEVELOPER_ID_CERTIFICATE_BASE64" | base64 --decode > "$cert"
+          echo "$DEV_CERTIFICATE_BASE64" | base64 --decode > "$dev_cert"
           security create-keychain -p "$password" "$keychain"
           security set-keychain-settings -lut 21600 "$keychain"
           security unlock-keychain -p "$password" "$keychain"
@@ -311,15 +331,18 @@ jobs:
             -P "$DEVELOPER_ID_P12_PASSWORD" \
             -A -t cert -f pkcs12 \
             -k "$keychain"
+          security import "$dev_cert" -P "$DEV_P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
           security set-key-partition-list \
             -S apple-tool:,apple: \
             -k "$password" \
             "$keychain"
           security list-keychain -d user -s "$keychain" login.keychain-db
-          rm -f "$cert"
+          rm -f "$cert" "$dev_cert"
           echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
           security find-identity -v -p codesigning "$keychain" | grep -F "Developer ID Application" \
             || { echo "no Developer ID Application identity in the imported p12" >&2; exit 1; }
+          security find-identity -v -p codesigning "$keychain" | grep -F "Apple Development" \
+            || { echo "no Apple Development identity: check secret DEV_CERTIFICATE_BASE64" >&2; exit 1; }
 
       # Developer ID provisioning profiles are NOT cloud-managed. Automatic
       # signing asks App Store Connect to mint one and gets "Cloud signing
@@ -507,7 +530,8 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate --spec project-mac.yml
 
-      # Two certificates, one keychain:
+      # Three certificates, one keychain:
+      #   Apple Development             signs the archive   (see the ios job's import step)
       #   Apple Distribution            signs TollCat.app   (the same cert the iOS job uses)
       #   Mac Installer Distribution    signs the .pkg      (nothing else can)
       # Developer ID — what the `mac` job imports — is for distribution OUTSIDE
@@ -518,6 +542,8 @@ jobs:
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           MAC_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.MAC_INSTALLER_CERTIFICATE_BASE64 }}
           MAC_INSTALLER_P12_PASSWORD: ${{ secrets.MAC_INSTALLER_P12_PASSWORD }}
+          DEV_CERTIFICATE_BASE64: ${{ secrets.DEV_CERTIFICATE_BASE64 }}
+          DEV_P12_PASSWORD: ${{ secrets.DEV_P12_PASSWORD }}
         run: |
           set -euo pipefail
           keychain="$RUNNER_TEMP/mac-appstore-signing.keychain-db"
@@ -532,7 +558,10 @@ jobs:
           echo "$MAC_INSTALLER_CERTIFICATE_BASE64" | base64 --decode > "$installer_cert"
           security import "$app_cert" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
           security import "$installer_cert" -P "$MAC_INSTALLER_P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
-          rm -f "$app_cert" "$installer_cert"
+          dev_cert="$RUNNER_TEMP/dev_certificate.p12"
+          echo "$DEV_CERTIFICATE_BASE64" | base64 --decode > "$dev_cert"
+          security import "$dev_cert" -P "$DEV_P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          rm -f "$app_cert" "$installer_cert" "$dev_cert"
 
           security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain"
           security list-keychain -d user -s "$keychain" login.keychain-db
@@ -544,6 +573,8 @@ jobs:
             || { echo "no Apple Distribution identity: check secret BUILD_CERTIFICATE_BASE64" >&2; exit 1; }
           security find-identity -v "$keychain" | grep -F "3rd Party Mac Developer Installer" \
             || { echo "no Mac Installer Distribution identity: check secret MAC_INSTALLER_CERTIFICATE_BASE64 (the cert is named '3rd Party Mac Developer Installer')" >&2; exit 1; }
+          security find-identity -v -p codesigning "$keychain" | grep -F "Apple Development" \
+            || { echo "no Apple Development identity: check secret DEV_CERTIFICATE_BASE64" >&2; exit 1; }
 
       - name: Write App Store Connect API key
         env:

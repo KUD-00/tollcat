@@ -81,7 +81,8 @@ public struct HTTPExchange: Identifiable, Sendable, Hashable {
             return "URLError \(urlError.code.rawValue)"
         }
         let nsError = error as NSError
-        if nsError.domain == NSURLErrorDomain || nsError.userInfo[NSURLErrorFailingURLStringErrorKey] != nil
+        // 字符串键的常量 iOS 18.4 起弃用，但别的域的错误照样可能带着它，按字面值查。
+        if nsError.domain == NSURLErrorDomain || nsError.userInfo["NSErrorFailingURLStringKey"] != nil
             || nsError.userInfo[NSURLErrorFailingURLErrorKey] != nil
         {
             return "\(nsError.domain) \(nsError.code)"
