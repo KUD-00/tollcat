@@ -17,8 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -54,6 +52,7 @@ import com.zhechengqi.tollcat.share.ShareCardRenderer
 import androidx.activity.compose.LocalActivity
 import kotlinx.coroutines.launch
 import com.zhechengqi.tollcat.share.ShareCardExporter
+import com.zhechengqi.tollcat.ui.TollCatPullToRefreshBox
 import com.zhechengqi.tollcat.ui.FadeThroughContent
 import com.zhechengqi.tollcat.ui.HierarchicalContent
 
@@ -123,12 +122,10 @@ fun DashboardScreen(session: TollCatSession, modifier: Modifier = Modifier) {
                 .padding(padding)
                 .fillMaxSize(),
         ) {
-            val refreshState = rememberPullToRefreshState()
-            PullToRefreshBox(
+            TollCatPullToRefreshBox(
                 isRefreshing = session.isRefreshing,
                 onRefresh = { session.refreshAll() },
                 modifier = Modifier.fillMaxSize(),
-                state = refreshState,
             ) {
                 // 空态三相：没服务→引导；首份还没算出来或首笔数据在路上→骨架；有数据→正文。
                 // fade-through 让内容盖着骨架淡入（skeleton loader 定式的收尾）。

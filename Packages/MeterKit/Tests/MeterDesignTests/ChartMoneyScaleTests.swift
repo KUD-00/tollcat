@@ -188,23 +188,16 @@ struct CompositionDonutSelectionTests {
 
     @Test("角度按绘制值的前缀和落段，段边界归前一段")
     func angleFallsIntoCumulativeBucket() {
-        #expect(CompositionDonut.slice(at: 0.0, slices: slices, reveal: 1)?.id == "aws")
-        #expect(CompositionDonut.slice(at: 0.49, slices: slices, reveal: 1)?.id == "aws")
-        #expect(CompositionDonut.slice(at: 0.5, slices: slices, reveal: 1)?.id == "aws")
-        #expect(CompositionDonut.slice(at: 0.51, slices: slices, reveal: 1)?.id == "cf")
-        #expect(CompositionDonut.slice(at: 0.99, slices: slices, reveal: 1)?.id == "oa")
-    }
-
-    @Test("进场半途（reveal < 1）时映射跟着缩放走，不落错段")
-    func mappingScalesWithReveal() {
-        #expect(CompositionDonut.slice(at: 0.2, slices: slices, reveal: 0.5)?.id == "aws")
-        #expect(CompositionDonut.slice(at: 0.3, slices: slices, reveal: 0.5)?.id == "cf")
-        #expect(CompositionDonut.slice(at: 0.45, slices: slices, reveal: 0.5)?.id == "oa")
+        #expect(CompositionDonut.slice(at: 0.0, slices: slices)?.id == "aws")
+        #expect(CompositionDonut.slice(at: 0.49, slices: slices)?.id == "aws")
+        #expect(CompositionDonut.slice(at: 0.5, slices: slices)?.id == "aws")
+        #expect(CompositionDonut.slice(at: 0.51, slices: slices)?.id == "cf")
+        #expect(CompositionDonut.slice(at: 0.99, slices: slices)?.id == "oa")
     }
 
     @Test("负角度和超出总和的角度不命中")
     func outOfRangeMisses() {
-        #expect(CompositionDonut.slice(at: -0.1, slices: slices, reveal: 1) == nil)
-        #expect(CompositionDonut.slice(at: 1.5, slices: slices, reveal: 1) == nil)
+        #expect(CompositionDonut.slice(at: -0.1, slices: slices) == nil)
+        #expect(CompositionDonut.slice(at: 1.5, slices: slices) == nil)
     }
 }

@@ -41,11 +41,17 @@ public struct CompositionDonut: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.compositionRevealEpoch) private var revealEpoch
-    /// 渲成图片时进场动画跑不起来（`onAppear` 不跑），画的必须是满圈。
-    @Environment(\.meterStaticRender) private var isStaticRender
-    /// 0 是空的，1 是满的。进场从 0 转到 1；刷新时保持 1，只过渡各段角度。
-    @State private var reveal: Double
-    /// 按住圆环时命中的累计角度值，域和绘制值同一套（fraction × reveal 的前缀和）。
+    /// 每加一，进场遮罩就从 0° 扫到 360° 一次。
+    ///
+    /// 圆环的数据永远按满圈画，进场只是盖在上面的一层扇形遮罩，静止值是满的。
+    /// 以前是把各段角度乘一个从 0 起步的进度：`onAppear` 哪次没跑到（List 的 cell 重挂、
+    /// 渲成图片），圆环就一直空着；全零的角度还会让 Swift Charts 从 0/0 插值。
+    /// 现在动画没跑、跑一半被打断，退回去的都是完整的饼图。
+    @State private var revealTrigger = 0
+    /// 上一次扫起来的时刻。冷启动时 `onAppear` 和「回到前台」的纪元加一前后脚到，
+    /// 第二下在扫到一半时把遮罩打回 0，圆环会整个消失半秒再跳满——扫着的时候不重来。
+    @State private var revealStartedAt: Date?
+    /// 按住圆环时命中的累计角度值，域就是各段 fraction 的前缀和。
     @State private var selectedAngle: Double?
 
     public init(
@@ -62,7 +68,6 @@ public struct CompositionDonut: View {
         self.size = size
         self.isAnimated = isAnimated
         self.isInteractive = isInteractive
-        _reveal = State(initialValue: isAnimated ? 0 : 1)
     }
 
     public var body: some View {
@@ -114,10 +119,10 @@ public struct CompositionDonut: View {
     private var donutChart: some View {
         Chart(slices) { slice in
             SectorMark(
-                angle: .value(String(localized: L("占比")), max(slice.fraction, 0) * drawnReveal),
+                angle: .value(String(localized: L("占比")), max(slice.fraction, 0)),
                 innerRadius: .ratio(0.58),
                 outerRadius: .ratio(outerRatio(slice)),
-                angularInset: 1.5 * drawnReveal
+                angularInset: 1.5
             )
             .foregroundStyle(slice.color)
             .opacity(sliceOpacity(slice))
@@ -137,20 +142,26 @@ public struct CompositionDonut: View {
             }
         }
         .frame(width: size, height: size)
+        .keyframeAnimator(initialValue: 1.0, trigger: revealTrigger) { chart, sweep in
+            chart.mask { DonutRevealSweep(progress: sweep) }
+        } keyframes: { _ in
+            MoveKeyframe(0)
+            CubicKeyframe(1, duration: Self.revealDuration)
+        }
         .accessibilityHidden(true)
     }
 
     private var selectedSlice: Slice? {
         guard isInteractive, let selectedAngle else { return nil }
-        return Self.slice(at: selectedAngle, slices: slices, reveal: reveal)
+        return Self.slice(at: selectedAngle, slices: slices)
     }
 
-    /// 角度值 → 段：按绘制值（fraction × reveal）的前缀和走。给测试留的纯函数。
-    static func slice(at value: Double, slices: [Slice], reveal: Double) -> Slice? {
+    /// 角度值 → 段：按各段 fraction 的前缀和走。给测试留的纯函数。
+    static func slice(at value: Double, slices: [Slice]) -> Slice? {
         guard value >= 0 else { return nil }
         var cumulative = 0.0
         for slice in slices {
-            cumulative += max(slice.fraction, 0) * reveal
+            cumulative += max(slice.fraction, 0)
             if value <= cumulative { return slice }
         }
         return nil
@@ -166,24 +177,18 @@ public struct CompositionDonut: View {
         return selected.id == slice.id ? 1 : 0.35
     }
 
-    /// 画出来的那一份进场进度。静态渲图时恒为满圈：`reveal` 的初值是 0，
-    /// 而把它拉到 1 的 `onAppear` 在 `ImageRenderer` 里永远不会跑。
-    private var drawnReveal: Double {
-        isStaticRender ? 1 : reveal
-    }
-
+    /// 渲成图片时 `onAppear` 不跑，触发器不动，画的就是满圈——不用再单独判静态渲染。
     private func playReveal() {
-        if !isAnimated || reduceMotion {
-            reveal = 1
+        guard isAnimated, !reduceMotion else { return }
+        let now = Date()
+        if let started = revealStartedAt, now.timeIntervalSince(started) < Self.revealDuration {
             return
         }
-        var snap = Transaction()
-        snap.disablesAnimations = true
-        withTransaction(snap) { reveal = 0 }
-        withAnimation(.smooth(duration: 0.45)) {
-            reveal = 1
-        }
+        revealStartedAt = now
+        revealTrigger &+= 1
     }
+
+    private static let revealDuration: TimeInterval = 0.45
 
     private var legend: some View {
         VStack(alignment: .leading, spacing: MeterSpacing.xs) {
