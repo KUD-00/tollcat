@@ -8,7 +8,10 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.zhechengqi.tollcat"
+        // Play 上的包名，上架后永远不能改：倒写自己的域名 tollcat.app。Apple 端早已上架、
+        // 改不了，仍是 com.zhechengqi.tollcat。namespace（Kotlin 包路径和 R 类）和它互不相干，
+        // 不跟着改；adb 启动要写全类名 app.tollcat/com.zhechengqi.tollcat.MainActivity。
+        applicationId = "app.tollcat"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

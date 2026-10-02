@@ -18,6 +18,8 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 BUNDLE="com.zhechengqi.tollcat"
+# Android 的包名（applicationId）和 Apple 的 bundle id 不同；流程里的 appId 由这里按平台传。
+ANDROID_PACKAGE="app.tollcat"
 IPHONE_NAME="${IPHONE_NAME:-iPhone 17 Pro}"
 DERIVED="${DERIVED:-/tmp/dd-maestro}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
@@ -38,8 +40,8 @@ if ! command -v java >/dev/null && [[ -x "/Applications/Android Studio.app/Conte
 fi
 
 maestro_test() {
-    local device="$1"
-    local -a args=(--device "$device" test)
+    local device="$1" app_id="$2"
+    local -a args=(--device "$device" test -e "APP_ID=$app_id")
     if [[ -n "${MAESTRO_OUTPUT:-}" ]]; then
         args+=(--format junit --output "$MAESTRO_OUTPUT")
     fi
@@ -96,7 +98,7 @@ run_ios() {
     xcrun simctl install "$udid" "$app"
 
     echo "==> maestro (iOS)"
-    maestro_test "$udid"
+    maestro_test "$udid" "$BUNDLE"
 }
 
 run_android() {
@@ -122,7 +124,7 @@ run_android() {
     fi
 
     echo "==> maestro (Android, $serial)"
-    maestro_test "$serial"
+    maestro_test "$serial" "$ANDROID_PACKAGE"
 }
 
 case "$TARGET" in

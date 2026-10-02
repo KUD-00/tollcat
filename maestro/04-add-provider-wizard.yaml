@@ -1,6 +1,6 @@
 # 空库：从服务空态进添加目录，选 Cloudflare，确认，走到填凭据那一步。
 # 不填凭据、不点「测试连接」——那要打真网络，不是冒烟该做的事。
-appId: com.zhechengqi.tollcat
+appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true

@@ -140,7 +140,7 @@ Mac 和 iOS 是**两条各自独立的审核队列**，互不阻塞。
 
 - **App Store Connect**：API key 权限 App Manager 以上；bundle id 已建；App 记录、隐私标签、截图三语；TestFlight 内部测试组加上自己。
 - **Mac App Store（通用购买）**：ASC 上给同一条 App 记录 Add Platform → macOS，Certificates/Identifiers 里把 App ID 对 macOS 启用。这两步不做，CI 里 `-allowProvisioningUpdates` 拿不到 Mac App Store 的 profile，archive 直接失败。加平台不可逆，且从此两个平台共享价格与内购。macOS 截图是独立尺寸档（1280×800 / 1440×900 / 2560×1600 / 2880×1800），描述与关键词也要单独一份。
-- **Play Console**：建 App、上传密钥（生成 upload keystore，base64 进 secret）、内测轨道加自己、数据安全表单。首几次 AAB 手工上传，Play 上传自动化等真跑通再加。
+- **Play Console**：建 App（包名 `app.tollcat`，和 Apple 端的 `com.zhechengqi.tollcat` 不同，上架后不能改）、上传密钥（生成 upload keystore，base64 进 secret）、内测轨道加自己、数据安全表单。首几次 AAB 手工上传，Play 上传自动化等真跑通再加。
 - **Cloudflare**：建一个 API token 只给 toll-api 和 tollcat-site 两个 Worker 加 D1；本机以后不再 `wrangler deploy`，改 dispatch deploy-edge。
 - **winget**：`Windows/winget/com.zhechengqi.tollcat.yaml` 和 `TollCat.appinstaller` 的 URL 现在指 Release latest。Windows 真发之前照 Mac 的做法改成滚动 Release `windows-appinstaller`，否则只发 iOS 的一班车会让 Windows 用户下到 404。MSIX 出来后向 winget-pkgs 提 PR。
 

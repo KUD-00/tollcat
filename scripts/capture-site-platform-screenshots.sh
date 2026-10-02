@@ -23,6 +23,9 @@ fi
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 ADB="${ADB:-$ANDROID_HOME/platform-tools/adb}"
 BUNDLE="com.zhechengqi.tollcat"
+# Android 的包名和 Apple 的 bundle id 不同；Activity 要写全类名。
+ANDROID_PACKAGE="app.tollcat"
+ANDROID_ACTIVITY="$ANDROID_PACKAGE/com.zhechengqi.tollcat.MainActivity"
 LOCALES=(zh en ja)
 APPEARANCES=(light dark)
 
@@ -293,12 +296,12 @@ launch_android() {
     local locale="$1"
     local appearance="$2"
     local night
-    "$ADB" shell pm clear "$BUNDLE" >/dev/null
-    "$ADB" shell cmd locale set-app-locales "$BUNDLE" --locales "$(locale_android "$locale")" >/dev/null || true
+    "$ADB" shell pm clear "$ANDROID_PACKAGE" >/dev/null
+    "$ADB" shell cmd locale set-app-locales "$ANDROID_PACKAGE" --locales "$(locale_android "$locale")" >/dev/null || true
     if [[ "$appearance" == "dark" ]]; then night=yes; else night=no; fi
     "$ADB" shell cmd uimode night "$night" >/dev/null || true
     "$ADB" logcat -c >/dev/null || true
-    "$ADB" shell am start -W -n "$BUNDLE/.MainActivity" \
+    "$ADB" shell am start -W -n "$ANDROID_ACTIVITY" \
         --ez seed_demo true \
         --ez skip_onboarding true \
         --ez hide_cat true \

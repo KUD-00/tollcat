@@ -1,5 +1,5 @@
 # 设置页能到，「打开猫猫」能拨；拨完回仪表盘数字还在。
-appId: com.zhechengqi.tollcat
+appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true
