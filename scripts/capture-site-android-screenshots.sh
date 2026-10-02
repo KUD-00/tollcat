@@ -8,7 +8,9 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/site/src/assets/screenshots"
-BUNDLE="com.zhechengqi.tollcat"
+BUNDLE="app.tollcat"
+# applicationId 和 namespace 不同，Activity 要写全类名。
+ACTIVITY="$BUNDLE/com.zhechengqi.tollcat.MainActivity"
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 ADB="${ADB:-$ANDROID_HOME/platform-tools/adb}"
 # 向导那一屏等抽屉撑开的时长。
@@ -77,7 +79,7 @@ wait_dashboard() {
 
 launch() {
     # shellcheck disable=SC2086
-    "$ADB" shell am start -W -n "$BUNDLE/.MainActivity" \
+    "$ADB" shell am start -W -n "$ACTIVITY" \
         --ez skip_launch_reveal true \
         --es appearance "$1" \
         --es clock_preset design \

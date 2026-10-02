@@ -120,9 +120,10 @@ echo "==> Gradle installDebug"
 builtin cd "$ROOT/Android"
 ./gradlew --no-daemon :app:installDebug
 
-"$ADB" shell am force-stop com.zhechengqi.tollcat >/dev/null 2>&1 || true
+# applicationId 和 namespace 不同，`.MainActivity` 会按 app.tollcat 补全成不存在的类，要写全类名。
+"$ADB" shell am force-stop app.tollcat >/dev/null 2>&1 || true
 "$ADB" logcat -c || true
-"$ADB" shell am start -W -n com.zhechengqi.tollcat/.MainActivity
+"$ADB" shell am start -W -n app.tollcat/com.zhechengqi.tollcat.MainActivity
 
 prove() {
     "$ADB" logcat -d -b main -s TollCat:* 2>/dev/null || "$ADB" logcat -d | grep TollCat || true

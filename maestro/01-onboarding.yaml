@@ -1,6 +1,6 @@
 # 全新安装：开场引导 → 跳过 → 仪表盘空态 → 服务空态 → 添加目录。
-# 两端同一个 appId、同一套 id；不带任何启动参数，就是用户第一次打开的样子。
-appId: com.zhechengqi.tollcat
+# 两端同一套 id；appId 两端不同（Apple com.zhechengqi.tollcat / Android app.tollcat），由 maestro-smoke.sh 传进来；不带任何启动参数，就是用户第一次打开的样子。
+appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true

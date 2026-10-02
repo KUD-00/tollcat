@@ -1,5 +1,5 @@
 # 种子之后：服务列表有行，点 Cloudflare 进详情，返回还在列表。
-appId: com.zhechengqi.tollcat
+appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true
