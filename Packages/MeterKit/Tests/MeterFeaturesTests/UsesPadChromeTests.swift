@@ -70,6 +70,47 @@ struct UsesPadChromeTests {
         )
     }
 
+    /// iPhone Duo（iOS 27.1）：外屏 466×678，compact 宽；内屏 669×951，两向都是 regular，
+    /// 而且内屏不认竖屏锁，横过来就是 951×669。折叠、展开、转向都会在这几格之间跳，
+    /// 换判据之前先看这一条。
+    @Test("iPhone Duo：合上和打开竖拿走手机壳，打开横拿才是 iPad 壳")
+    func iPhoneDuoPoses() {
+        // 合上，外屏竖拿。竖屏锁对外屏有效。
+        #expect(
+            UsesPadChrome.shell(
+                sizeClass: .compact,
+                size: CGSize(width: 466, height: 678),
+                platform: .phone
+            ) == .phone
+        )
+        // 打开竖拿：regular 但竖着，和 iPad 竖屏同一条规则。合上 ↔ 打开不换壳，
+        // 我们自己的视图树不拆（尺寸类只有 RootView 读）；系统那层是否保住推进去的页，
+        // 要在 Device Hub 里看。
+        #expect(
+            UsesPadChrome.shell(
+                sizeClass: .regular,
+                size: CGSize(width: 669, height: 951),
+                platform: .phone
+            ) == .phone
+        )
+        // 打开横拿。
+        #expect(
+            UsesPadChrome.shell(
+                sizeClass: .regular,
+                size: CGSize(width: 951, height: 669),
+                platform: .phone
+            ) == .pad
+        )
+        // 内屏分屏：每边 compact，不管长宽都是手机壳。半屏的确切点数以 Device Hub 为准。
+        #expect(
+            UsesPadChrome.shell(
+                sizeClass: .compact,
+                size: CGSize(width: 475, height: 669),
+                platform: .phone
+            ) == .phone
+        )
+    }
+
     @Test("还没量到窗口时不要误开 iPad 壳")
     func zeroSizeStaysOnPhoneChrome() {
         #expect(
