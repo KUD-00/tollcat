@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -46,16 +45,22 @@ import kotlinx.coroutines.launch
 /**
  * 冷启动过渡，和 iOS `LaunchRevealOverlay` 同一段时间线（SPEC「启动画面与过渡」）。
  *
- * Android 12 起系统启动画面只能是底色 + 居中图标，画不了全屏口袋。所以这层先从那枚图标的
- * 位置起步、放大铺满，变成和 iOS 一样的全屏口袋（相当于 iOS 从主屏图标放大那一下），
- * 再让圆牌飞到构成卡片条头的服务小块上，猫和口袋沉下去，底色淡掉。
+ * Android 12 起系统启动画面只能是底色 + 居中图标。系统启动图标画的就是这只完整口袋（缩进
+ * 192dp 的圆里），这层从那枚图标的位置起步、放大到和 iOS 故事板一样的位置和大小（相当于
+ * iOS 从主屏图标放大那一下），再让圆牌飞到构成卡片条头的服务小块上，猫和口袋沉下去，底色淡掉。
  *
- * 口袋全景贴底、和屏幕一样宽、最宽 [MAX_ART]，和 iOS 故事板一条规则。
+ * 方框的摆法（居中、短边比例、封顶、上提）只在 [LaunchPocketGeometry] 一处，和 iOS 同一组数。
  */
 @Composable
 internal fun LaunchRevealOverlay(
-    /** 系统启动图标（iconView）在窗口里的位置。null：没有系统启动画面（Android 11 及以下），全屏口袋直接起步。 */
+    /** 系统启动图标（iconView）在窗口里的位置，交接回调里量到的。还没量到就按 [systemSplash] 推定。 */
     iconBounds: Rect?,
+    /**
+     * 这次启动有系统启动画面（Android 12+）。系统图标总在窗口正中、[SPLASH_ICON] 见方，交接回调来之前
+     * 就按这个位置画：系统等太久会自己撤掉启动画面、回调晚到甚至不来，这层露出来时也和系统画面重合。
+     * false（Android 11 及以下）：没有图标可接，口袋直接在终点起步。
+     */
+    systemSplash: Boolean,
     /** 系统画面已经交给 App。之前这层被系统画面盖着，停在起点不动。 */
     handedOver: Boolean,
     /** 圆牌 kind → 图例段 id，共享层算好（`launchTargets`）。 */
@@ -73,7 +78,7 @@ internal fun LaunchRevealOverlay(
     val density = LocalDensity.current
     val lift = with(density) { LIFT.toPx() }
 
-    // 第一次组合时系统还没交接，iconBounds 一定还是 null：从 0 起，交接时再看有没有图标。
+    // 第一次组合时系统还没交接：停在系统图标的位置（grow = 0），交接后放大。
     val grow = remember { Animatable(0f) }
     val sink = remember { Animatable(0f) }
     val background = remember { Animatable(1f) }
@@ -91,7 +96,7 @@ internal fun LaunchRevealOverlay(
             onFinished()
             return@LaunchedEffect
         }
-        if (iconBounds != null) {
+        if (systemSplash) {
             grow.animateTo(1f, tween(320, easing = STANDARD))
             delay(120)
         } else {
@@ -154,14 +159,23 @@ internal fun LaunchRevealOverlay(
     ) {
         val width = constraints.maxWidth.toFloat()
         val height = constraints.maxHeight.toFloat()
-        val art = min(width, with(density) { MAX_ART.toPx() })
+        val art = min(
+            min(width, height) * LaunchPocketGeometry.ART_FRACTION,
+            with(density) { LaunchPocketGeometry.MAX_ART.toPx() },
+        )
         val left = (width - art) / 2f
-        val top = height - art
+        val top = height / 2f - height * LaunchPocketGeometry.LIFT - art / 2f
         val unit = art / LaunchPocketGeometry.CANVAS
         // 起点：系统把启动图标画在 iconView 里，看得见的那个圆正好是 iconView 的边界（192dp），
-        // 口袋图的方框内切这个圆。
-        val restScale = iconBounds?.let { it.width / art } ?: 1f
-        val restShift = iconBounds?.let { it.center - Offset(left + art / 2f, top + art / 2f) } ?: Offset.Zero
+        // 画面方框在圆里按 SPLASH_FIT 缩过（整只口袋落在圆里）。
+        val splashIcon = iconBounds ?: if (systemSplash) {
+            val side = with(density) { SPLASH_ICON.toPx() }
+            Rect(Offset(width / 2f, height / 2f) - Offset(side / 2f, side / 2f), Size(side, side))
+        } else {
+            null
+        }
+        val restScale = splashIcon?.let { it.width * LaunchPocketGeometry.SPLASH_FIT / art } ?: 1f
+        val restShift = splashIcon?.let { it.center - Offset(left + art / 2f, top + art / 2f) } ?: Offset.Zero
         val g = grow.value
         val artDp = with(density) { art.toDp() }
 
@@ -181,9 +195,6 @@ internal fun LaunchRevealOverlay(
                     scaleY = scale
                     translationX = lerp(restShift.x, 0f, g)
                     translationY = lerp(restShift.y, 0f, g)
-                    // 放大途中从圆（系统图标的遮罩）变回方；放大完就不再裁，圆牌才飞得出去。
-                    clip = iconBounds != null && g < 1f
-                    shape = RoundedCornerShape(CornerSize(((1f - g) * 50f).roundToInt()))
                 },
         ) {
             LaunchPocketGeometry.tokens.forEach { token ->
@@ -241,8 +252,9 @@ private class TokenFlight {
     val fly = Animatable(0f)
 }
 
-private val MAX_ART = 560.dp
 private val LIFT = 14.dp
+/** Android 12+ 系统启动图标看得见的那个圆（iconView 的边界），平台规定的尺寸。 */
+private val SPLASH_ICON = 192.dp
 private const val SINK = 0.28f
 private val STANDARD = CubicBezierEasing(0.2f, 0f, 0f, 1f)
 private val DECELERATE = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
@@ -255,6 +267,7 @@ private val EMPHASIZED = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
 private fun LaunchRevealOverlayPreview() {
     LaunchRevealOverlay(
         iconBounds = null,
+        systemSplash = false,
         handedOver = true,
         targets = emptyMap(),
         registry = remember { LaunchSwatchRegistry() },

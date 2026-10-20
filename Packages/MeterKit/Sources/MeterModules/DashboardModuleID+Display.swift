@@ -5,7 +5,7 @@ import MeterDashboard
 /// 所以住在视图层；模块本身（id、开关规则）在 MeterDashboard，桥上也编得过。
 public extension DashboardModuleID {
     /// 编辑列表里的名字。也是宽壳卡的小标题。
-    public var title: LocalizedStringResource {
+    var title: LocalizedStringResource {
         switch self {
         case .monthToDate: L("本月合计")
         case .composition: L("构成")
@@ -23,7 +23,7 @@ public extension DashboardModuleID {
     }
 
     /// 编辑列表里一句话说明这块回答什么。
-    public var summary: LocalizedStringResource {
+    var summary: LocalizedStringResource {
         switch self {
         case .monthToDate: L("始终在最上面。")
         case .composition: L("钱花在哪几家，附较上月同期和近几个月。")
@@ -40,7 +40,7 @@ public extension DashboardModuleID {
         }
     }
 
-    public var systemImage: String {
+    var systemImage: String {
         switch self {
         case .monthToDate: "sum"
         case .composition: "chart.pie"

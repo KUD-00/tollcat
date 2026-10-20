@@ -3,17 +3,14 @@ import MeterDashboard
 import MeterDesign
 import SwiftUI
 
-/// 冷启动时盖在最上面的启动画面。第一帧和 `LaunchScreen.storyboard` 一模一样（口袋全景贴底、
-/// 和屏幕一样宽、最宽 `maxArtWidth`），然后口袋里的圆牌飞到构成图例对应那一家的色块上，
+/// 冷启动时盖在最上面的启动画面。第一帧和 `LaunchScreen.storyboard` 一模一样（完整口袋居中，
+/// 尺寸规则见 `LaunchPocketGeometry`），然后口袋里的圆牌飞到构成图例对应那一家的色块上，
 /// 猫和口袋沉下去，底色淡掉。时间线见 SPEC「启动画面与过渡」。
 struct LaunchRevealOverlay: View {
     let reveal: LaunchReveal
     /// Preview 里停在静帧上看构图。
     var animates = true
     let onFinished: () -> Void
-
-    /// 和故事板里 `pocket-w-max` 同一个数。
-    static let maxArtWidth: CGFloat = 560
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var lifted: Set<LaunchTokenKind> = []
@@ -30,8 +27,11 @@ struct LaunchRevealOverlay: View {
     var body: some View {
         GeometryReader { proxy in
             let size = proxy.size
-            let art = min(size.width, Self.maxArtWidth)
-            let origin = CGPoint(x: (size.width - art) / 2, y: size.height - art)
+            let art = Self.artSide(in: size)
+            let origin = CGPoint(
+                x: (size.width - art) / 2,
+                y: size.height / 2 - size.height * LaunchPocketGeometry.lift - art / 2
+            )
             let unit = art / LaunchPocketGeometry.canvas
             let global = proxy.frame(in: .global).origin
             ZStack(alignment: .topLeading) {
@@ -56,6 +56,11 @@ struct LaunchRevealOverlay: View {
         .allowsHitTesting(false)
         .accessibilityHidden(true)
         .task { await run() }
+    }
+
+    /// 故事板的约束：`pocket-w`（屏宽）、`pocket-w-short`（屏高）、`pocket-w-max` 取最小，数在 `LaunchPocketGeometry`。
+    static func artSide(in size: CGSize) -> CGFloat {
+        min(min(size.width, size.height) * LaunchPocketGeometry.artFraction, LaunchPocketGeometry.maxArt)
     }
 
     /// 猫和口袋往下沉多少（画面宽的比例）。

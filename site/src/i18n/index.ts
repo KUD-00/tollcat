@@ -1,6 +1,7 @@
 import { localePath, siteConfig, type Locale } from '../config';
 
-export type Faq = { q: string; a: string; href?: string; link?: string };
+/** `android`：页面切到 Android 时换掉的答案（凭据存哪、怎么备份，两边说法不同）。 */
+export type Faq = { q: string; a: string; href?: string; link?: string; android?: { a: string } };
 
 /** 法务页的一段：普通段落，或一组「平台：一句话」的条目。 */
 export type LegalBlock = string | { list: { term: string; text: string }[] };
@@ -12,6 +13,8 @@ export type TrustSlide = {
   paragraphs: string[];
   to?: 'github' | 'privacy' | 'verify';
   link?: string;
+  /** 页面切到 Android 时换掉的那一则。钥匙串、iCloud、App Store 签名这几件事两边不一样。 */
+  android?: { title: string; paragraphs: string[] };
 };
 
 export type PlatformShot = 'dashboard' | 'portrait' | 'window' | 'menubar';
@@ -39,6 +42,8 @@ export type PlatformDialogCopy = {
     label: string;
     note: string;
   };
+  /** 「在本页换成这个平台的画面」。只有 Android 有：截图本页就能换。 */
+  showHere?: string;
 };
 
 export function faqPlain(item: Faq, origin = siteConfig.url): string {
@@ -91,6 +96,11 @@ export type Copy = {
     lede: string;
     ctaSoon: string;
     ctaStore: string;
+    /** 截图机型切换（iPhone / Android）的无障碍名。两个选项是产品名，不翻。 */
+    platformLabel: string;
+    /** Android 主按钮位置：没上架就写现状，不写「即将」（BRAND 第六节）。 */
+    ctaAndroid: string;
+    androidSource: string;
   };
   meter: {
     value: string;
@@ -114,6 +124,7 @@ export type Copy = {
     title: string[];
     starLabel: string;
     lede: string;
+    ledeAndroid: string;
     link: string;
     phoneLabel: string;
     dialog: {
@@ -131,6 +142,8 @@ export type Copy = {
     ipad: string;
     mac: string;
     android: string;
+    /** 页面切到 Android 时，「更多平台」里那颗安卓按钮换成 iPhone。 */
+    iphone: string;
     windows: string;
     clusterLabel: string;
     dialog: {
@@ -315,6 +328,9 @@ const zh: Copy = {
     lede: '账单 App，管你自己在付的那些云和 AI。把各家花费加在一起，给你一个总数。凭据不出这台设备。',
     ctaSoon: 'App Store 即将上架',
     ctaStore: '在 App Store 获取',
+    platformLabel: '截图机型',
+    ctaAndroid: '还没上 Google Play',
+    androidSource: '源码在 GitHub',
   },
   meter: {
     value: '$43.20',
@@ -338,6 +354,7 @@ const zh: Copy = {
     title: ['凭据只在设备上，', '绝对安全'],
     starLabel: '打开这项主张的说明',
     lede: '钥匙只写进这台手机。不进 iCloud，也不经过 TollCat 的服务器。',
+    ledeAndroid: '钥匙只写进这台手机。不进云端备份，也不经过 TollCat 的服务器。',
     link: '为什么这么说',
     phoneLabel: '演示：各家图标收入这台设备上的锁里。',
     dialog: {
@@ -356,6 +373,12 @@ const zh: Copy = {
           ],
           to: 'github',
           link: 'github.com/KUD-00/tollcat',
+          android: {
+            title: '开源以及验证',
+            paragraphs: [
+              '源码在 GitHub 上，MIT 许可。Android 版也在同一个仓库里，可以自己编译，装到自己的手机上看它做什么。',
+            ],
+          },
         },
         {
           title: '钥匙串有多严',
@@ -363,6 +386,13 @@ const zh: Copy = {
             'Keychain 是这台 iPhone 自带的加密钥匙串。钥匙由系统保管，不会写进这个 App 自己的文件里。',
             '我们只用最严的一档：设备解锁之后才可读，不进 iCloud，也不跟系统备份走。你删掉一家服务，对应那条钥匙一起删。',
           ],
+          android: {
+            title: '钥匙锁在哪',
+            paragraphs: [
+              '钥匙先用 Android Keystore 里的一把密钥加密，再存进这台手机。那把密钥由系统保管，导不出来，也不会写进这个 App 自己的文件里。',
+              '手机设了锁屏的话，要解锁之后才解得开。这个 App 不参加系统备份，钥匙不会进 Google 的云端备份。你删掉一家服务，对应那条钥匙一起删。',
+            ],
+          },
         },
         {
           title: '请求怎么走',
@@ -377,6 +407,13 @@ const zh: Copy = {
             '钥匙故意不进 iCloud，换机不能靠系统同步。旧手机导出一份加密的 .tollcat，新手机输入屏幕上的 10 位码。',
             '码离开导入页就失效。文件 24 小时后不能再导入——这只缩小误发的窗口，不是加密本身的强度。历史读数不随文件走，导入后再刷一次即可。',
           ],
+          android: {
+            title: '换手机怎么办',
+            paragraphs: [
+              '钥匙故意不进云端备份，换机不能靠系统迁移。旧手机导出一份加密的 .tollcat，新手机输入屏幕上的 10 位码。',
+              '码离开导入页就失效。文件 24 小时后不能再导入——这只缩小误发的窗口，不是加密本身的强度。历史读数不随文件走，导入后再刷一次即可。',
+            ],
+          },
         },
         {
           title: '服务器碰得到什么',
@@ -395,6 +432,7 @@ const zh: Copy = {
     ipad: 'iPad 版',
     mac: 'Mac 版',
     android: '安卓版',
+    iphone: 'iPhone 版',
     windows: 'Windows 版',
     clusterLabel: 'iPad 横屏和 Mac 窗口。',
     dialog: {
@@ -444,11 +482,15 @@ const zh: Copy = {
       },
       android: {
         title: '安卓版',
-        lede: '还没做完，敬请期待。',
+        lede: '已经做好了，只是还没上 Google Play。',
+        showHere: '在这页换成 Android 截图',
         slides: [
           {
-            title: '还在做',
-            paragraphs: ['仓库里有一份早期的 Android 版本。'],
+            title: '同一套账，Android 的手感',
+            paragraphs: [
+              '算账的逻辑和 iPhone 版是同一份，数字一分不差。界面按 Android 的习惯重新做过，凭据同样只存在手机本地。',
+              '等不及上架的话，可以拿 GitHub 上的源码自己编一份。',
+            ],
             to: 'github',
             link: 'GitHub',
           },
@@ -485,6 +527,9 @@ const zh: Copy = {
       {
         q: 'API Key 会离开这台设备吗？',
         a: '不会。Key 只存在这台手机的 Keychain 里（WhenUnlockedThisDeviceOnly）：不进 iCloud，也不随系统备份走。取账单时由这台设备直连各家官方 API，中间没有任何服务器经手凭据。',
+        android: {
+          a: '不会。Key 用 Android Keystore 里的密钥加密后，只存在这台手机上：不进 Google 的云端备份，手机设了锁屏的话要解锁后才解得开。取账单时由这台设备直连各家官方 API，中间没有任何服务器经手凭据。',
+        },
       },
       {
         q: '想用的服务似乎不支持？',
@@ -495,6 +540,9 @@ const zh: Copy = {
       {
         q: '换手机怎么办？',
         a: '凭据故意不进 iCloud，换机靠导出：旧手机导出一份加密的 .tollcat 文件，新手机输入屏幕上的 10 位码导入。码一离开导入页就失效，文件过 24 小时也作废。历史数据不在文件里，导入后刷新一次就回来了。',
+        android: {
+          a: '凭据故意不进云端备份，换机靠导出：旧手机导出一份加密的 .tollcat 文件，新手机输入屏幕上的 10 位码导入。码一离开导入页就失效，文件过 24 小时也作废。历史数据不在文件里，导入后刷新一次就回来了。',
+        },
       },
       {
         q: '收费吗？',
@@ -506,7 +554,7 @@ const zh: Copy = {
       },
       {
         q: '支持哪些设备？货币呢？',
-        a: 'iPhone、iPad 和 Mac。iOS 26 或 macOS 26。账本一律按美元记。显示货币只改变金额怎么显示，不会去查实时汇率。',
+        a: 'iPhone、iPad 和 Mac，需要 iOS 26 或 macOS 26。Android 版也做好了，支持 Android 9 以上，只是还没上 Google Play。账本一律按美元记。显示货币只改变金额怎么显示，不会去查实时汇率。',
       },
       {
         q: '源码在哪？',
@@ -516,7 +564,7 @@ const zh: Copy = {
       },
       {
         q: '安卓版呢？',
-        a: '还没做完，敬请期待！等不及的话，欢迎来 GitHub 搭把爪。',
+        a: '做好了，只是还没上 Google Play。等不及的话，可以拿 GitHub 上的源码自己编一份，也欢迎顺手搭把爪。',
         href: siteConfig.githubUrl,
         link: 'GitHub',
       },
@@ -811,6 +859,9 @@ const en: Copy = {
     lede: 'A billing app for the cloud and AI services you pay for. It adds up what they cost into one total. Credentials stay on this device.',
     ctaSoon: 'Coming to the App Store',
     ctaStore: 'Get it on the App Store',
+    platformLabel: 'Screenshots from',
+    ctaAndroid: 'Not on Google Play yet',
+    androidSource: 'Source on GitHub',
   },
   meter: {
     value: '$43.20',
@@ -834,6 +885,7 @@ const en: Copy = {
     title: ['The keys stay on this phone.', 'Nowhere else'],
     starLabel: 'What this claim actually means',
     lede: 'Credentials are written only to this iPhone. Not iCloud. Not any TollCat server.',
+    ledeAndroid: 'Credentials are written only to this phone. Not a cloud backup. Not any TollCat server.',
     link: 'What that actually means',
     phoneLabel: 'Animation: service icons gather into a lock on this device.',
     dialog: {
@@ -852,6 +904,12 @@ const en: Copy = {
           ],
           to: 'github',
           link: 'github.com/KUD-00/tollcat',
+          android: {
+            title: 'Open source, and how to check',
+            paragraphs: [
+              'The source is on GitHub, MIT licensed, and the Android app lives in the same repo. You can build it and run it on your own phone.',
+            ],
+          },
         },
         {
           title: 'The phone’s own keychain',
@@ -859,6 +917,13 @@ const en: Copy = {
             'Keychain is the encrypted keystore that ships with the iPhone. The system holds the keys; this app does not write them into its own files.',
             'We use the strictest class: readable only after you unlock this device, not copied to iCloud, not included in backups. Delete a service and that key is deleted with it.',
           ],
+          android: {
+            title: 'Where the keys are locked',
+            paragraphs: [
+              'Your keys are encrypted with a master key held in Android Keystore, then stored on this phone. The system holds that master key; it cannot be exported, and this app never writes it into its own files.',
+              'If the phone has a screen lock, the keys only open after you unlock it. The app opts out of system backup, so nothing goes to Google’s cloud backup. Delete a service and that key is deleted with it.',
+            ],
+          },
         },
         {
           title: 'Where a refresh goes',
@@ -873,6 +938,13 @@ const en: Copy = {
             'Keys stay out of iCloud on purpose, so a new phone is an export you start. Save an encrypted .tollcat on the old phone, then type the 10-character code on the new one.',
             'Leave the import page and the code is gone. The file cannot be imported after 24 hours — that only shrinks the window if you sent it by mistake, and is not the strength of the encryption. History does not travel with the file; refresh once after import.',
           ],
+          android: {
+            title: 'A new phone',
+            paragraphs: [
+              'Keys stay out of cloud backup on purpose, so a new phone is an export you start. Save an encrypted .tollcat on the old phone, then type the 10-character code on the new one.',
+              'Leave the import page and the code is gone. The file cannot be imported after 24 hours — that only shrinks the window if you sent it by mistake, and is not the strength of the encryption. History does not travel with the file; refresh once after import.',
+            ],
+          },
         },
         {
           title: 'What the server never sees',
@@ -891,6 +963,7 @@ const en: Copy = {
     ipad: 'iPad',
     mac: 'Mac',
     android: 'Android',
+    iphone: 'iPhone',
     windows: 'Windows',
     clusterLabel: 'An iPad in landscape and a Mac window.',
     dialog: {
@@ -940,11 +1013,15 @@ const en: Copy = {
       },
       android: {
         title: 'Android',
-        lede: 'Not done yet — stay tuned!',
+        lede: 'It’s built. It’s just not on Google Play yet.',
+        showHere: 'Show Android screenshots on this page',
         slides: [
           {
-            title: 'Still in the shop',
-            paragraphs: ['The repo has an early Android build.'],
+            title: 'Same math, made for Android',
+            paragraphs: [
+              'It does the math with the same code as the iPhone app, so the totals match to the cent. The screens were rebuilt the Android way, and credentials stay on the phone here too.',
+              'If you can’t wait for the store, build it yourself from the source on GitHub.',
+            ],
             to: 'github',
             link: 'GitHub',
           },
@@ -981,6 +1058,9 @@ const en: Copy = {
       {
         q: 'Do API keys leave this device?',
         a: 'No. They are written only to on-device Keychain with WhenUnlockedThisDeviceOnly: not iCloud, not system backups. Fetch requests go from this device to each vendor’s official API. No server ever handles a provider credential.',
+        android: {
+          a: 'No. They are encrypted with a key in Android Keystore and stored only on this phone: not in Google’s cloud backup, and if the phone has a screen lock, they only open after you unlock it. Fetch requests go from this device to each vendor’s official API. No server ever handles a provider credential.',
+        },
       },
       {
         q: 'Missing a service you use?',
@@ -991,6 +1071,9 @@ const en: Copy = {
       {
         q: 'What about a new phone?',
         a: 'Credentials deliberately stay out of iCloud, so moving is an export: save an encrypted .tollcat file on the old phone, then type the 10-character code shown on screen into the new one. The code dies when you leave the import page, and the file expires after 24 hours. History does not travel with the file — refresh once after import.',
+        android: {
+          a: 'Credentials deliberately stay out of cloud backup, so moving is an export: save an encrypted .tollcat file on the old phone, then type the 10-character code shown on screen into the new one. The code dies when you leave the import page, and the file expires after 24 hours. History does not travel with the file — refresh once after import.',
+        },
       },
       {
         q: 'Does it cost money?',
@@ -1002,7 +1085,7 @@ const en: Copy = {
       },
       {
         q: 'Which devices? What about currency?',
-        a: 'iPhone, iPad, and Mac. iOS 26 or macOS 26. The ledger is kept in US dollars. Display currency only changes how amounts are written; it does not call a live FX API.',
+        a: 'iPhone, iPad, and Mac, on iOS 26 or macOS 26. The Android app is built too and runs on Android 9 or later; it’s just not on Google Play yet. The ledger is kept in US dollars. Display currency only changes how amounts are written; it does not call a live FX API.',
       },
       {
         q: 'Where is the source?',
@@ -1012,7 +1095,7 @@ const en: Copy = {
       },
       {
         q: 'What about Android?',
-        a: 'Not done yet — stay tuned! Too impatient to wait? Come lend a paw on GitHub.',
+        a: 'It’s built — just not on Google Play yet. Too impatient to wait? Build it yourself from the source on GitHub, and feel free to lend a paw while you’re there.',
         href: siteConfig.githubUrl,
         link: 'GitHub',
       },
@@ -1308,6 +1391,9 @@ const ja: Copy = {
     lede: '自分で払っているクラウドと AI サービスの請求アプリ。支出を足し合わせて、ひとつの合計に。認証情報はこの端末から出ない。',
     ctaSoon: 'App Store 近日公開',
     ctaStore: 'App Store で入手',
+    platformLabel: 'スクリーンショットの機種',
+    ctaAndroid: 'Google Play にはまだありません',
+    androidSource: 'ソースは GitHub に',
   },
   meter: {
     value: '$43.20',
@@ -1331,6 +1417,7 @@ const ja: Copy = {
     title: ['認証情報は、この端末だけ。', 'ここから出さない'],
     starLabel: 'この主張の説明を開く',
     lede: '認証情報はこの iPhone にだけ書きます。iCloud にも、TollCat のサーバーにも入りません。',
+    ledeAndroid: '認証情報はこのスマートフォンにだけ書きます。クラウドのバックアップにも、TollCat のサーバーにも入りません。',
     link: 'それが指すもの',
     phoneLabel: '各サービスのアイコンが、この端末の錠に収まるデモ。',
     dialog: {
@@ -1349,6 +1436,12 @@ const ja: Copy = {
           ],
           to: 'github',
           link: 'github.com/KUD-00/tollcat',
+          android: {
+            title: 'オープンソースと検証',
+            paragraphs: [
+              'ソースは GitHub にあり、MIT ライセンスです。Android 版も同じリポジトリにあるので、自分でビルドして、自分の端末で動かせます。',
+            ],
+          },
         },
         {
           title: '端末のキーチェーン',
@@ -1356,6 +1449,13 @@ const ja: Copy = {
             'Keychain は iPhone に入っている暗号化されたキー保管です。鍵はシステムが持ち、このアプリのファイルには書きません。',
             'いちばん厳しい区分を使います。この端末のロックを外したあとだけ読め、iCloud にもバックアップにも入りません。サービスを消すと、その鍵も消えます。',
           ],
+          android: {
+            title: '鍵のしまい場所',
+            paragraphs: [
+              '鍵は Android Keystore にある暗号鍵で暗号化してから、この端末に保存します。その暗号鍵はシステムが持ち、取り出せません。このアプリのファイルにも書きません。',
+              '画面ロックを設定していれば、ロックを外したあとでないと開けません。このアプリはシステムのバックアップに参加しないので、Google のクラウドバックアップにも入りません。サービスを消すと、その鍵も消えます。',
+            ],
+          },
         },
         {
           title: '通信の経路',
@@ -1370,6 +1470,13 @@ const ja: Copy = {
             '鍵は意図して iCloud に入れないので、移行は自分で始める書き出しです。旧端末で暗号化した .tollcat を出し、新端末で画面の 10 桁コードを入力します。',
             '取り込み画面を離れるとコードは消えます。ファイルは 24 時間後に取り込めません。誤送信の窓を狭めるだけであり、暗号の強さそのものではありません。履歴はファイルに入らないので、取り込み後に一度更新してください。',
           ],
+          android: {
+            title: '機種変更',
+            paragraphs: [
+              '鍵は意図してクラウドのバックアップに入れないので、移行は自分で始める書き出しです。旧端末で暗号化した .tollcat を出し、新端末で画面の 10 桁コードを入力します。',
+              '取り込み画面を離れるとコードは消えます。ファイルは 24 時間後に取り込めません。誤送信の窓を狭めるだけであり、暗号の強さそのものではありません。履歴はファイルに入らないので、取り込み後に一度更新してください。',
+            ],
+          },
         },
         {
           title: 'サーバーが扱わないもの',
@@ -1388,6 +1495,7 @@ const ja: Copy = {
     ipad: 'iPad 版',
     mac: 'Mac 版',
     android: 'Android 版',
+    iphone: 'iPhone 版',
     windows: 'Windows 版',
     clusterLabel: '横向きの iPad と Mac のウィンドウ。',
     dialog: {
@@ -1437,11 +1545,15 @@ const ja: Copy = {
       },
       android: {
         title: 'Android 版',
-        lede: 'まだ開発中です。お楽しみに！',
+        lede: 'できあがっています。Google Play にはまだ並んでいません。',
+        showHere: 'このページを Android の画面に切り替える',
         slides: [
           {
-            title: 'まだ途中',
-            paragraphs: ['リポジトリに初期の Android 版があります。'],
+            title: '同じ計算、Android の手ざわり',
+            paragraphs: [
+              '計算は iPhone 版と同じコードで行うので、合計は 1 セントまで一致します。画面は Android の流儀で作り直してあり、認証情報はこちらでも端末の中だけです。',
+              'ストアに並ぶまで待てない方は、GitHub のソースからご自分でビルドできます。',
+            ],
             to: 'github',
             link: 'GitHub',
           },
@@ -1478,6 +1590,9 @@ const ja: Copy = {
       {
         q: 'API キーはこの端末から出ますか？',
         a: '出ません。端末の Keychain に WhenUnlockedThisDeviceOnly で書きます。iCloud にもシステムバックアップにも入りません。取得リクエストはこの端末から各社の公式 API へ出ます。プロバイダの認証情報を扱うサーバーはありません。',
+        android: {
+          a: '出ません。Android Keystore の暗号鍵で暗号化して、この端末にだけ保存します。Google のクラウドバックアップには入らず、画面ロックを設定していればロックを外すまで開けません。取得リクエストはこの端末から各社の公式 API へ出ます。プロバイダの認証情報を扱うサーバーはありません。',
+        },
       },
       {
         q: '使っているサービスがない？',
@@ -1488,6 +1603,9 @@ const ja: Copy = {
       {
         q: '機種変更のときは？',
         a: '認証情報はあえて iCloud に入れていないので、移行はエクスポートで行います。旧端末で暗号化した .tollcat を書き出し、新端末で画面の 10 桁コードを入力して取り込みます。コードは取り込み画面を離れると消え、ファイルも 24 時間で無効になります。履歴はファイルに入らないので、取り込み後に一度更新してください。',
+        android: {
+          a: '認証情報はあえてクラウドのバックアップに入れていないので、移行はエクスポートで行います。旧端末で暗号化した .tollcat を書き出し、新端末で画面の 10 桁コードを入力して取り込みます。コードは取り込み画面を離れると消え、ファイルも 24 時間で無効になります。履歴はファイルに入らないので、取り込み後に一度更新してください。',
+        },
       },
       {
         q: '有料ですか？',
@@ -1499,7 +1617,7 @@ const ja: Copy = {
       },
       {
         q: '対応端末は？通貨は？',
-        a: 'iPhone、iPad、Mac。iOS 26 または macOS 26 が必要です。台帳は米ドルです。表示通貨は金額の書き方だけを変え、リアルタイム為替は取りに行きません。',
+        a: 'iPhone、iPad、Mac。iOS 26 または macOS 26 が必要です。Android 版もできあがっていて Android 9 以降で動きますが、Google Play にはまだ並んでいません。台帳は米ドルです。表示通貨は金額の書き方だけを変え、リアルタイム為替は取りに行きません。',
       },
       {
         q: 'ソースはどこ？',
@@ -1509,7 +1627,7 @@ const ja: Copy = {
       },
       {
         q: 'Android は？',
-        a: 'まだ開発中です。お楽しみに！猫の手も借りたいので、待ちきれない方は GitHub へどうぞ。',
+        a: 'できあがっています。ただ、Google Play にはまだ並んでいません。待ちきれない方は GitHub のソースからビルドできます。猫の手も借りたいので、ついでに手伝ってもらえると喜びます。',
         href: siteConfig.githubUrl,
         link: 'GitHub',
       },

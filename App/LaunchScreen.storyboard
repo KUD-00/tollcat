@@ -11,27 +11,29 @@
         <scene sceneID="scene">
             <objects>
                 <viewController id="launch" sceneMemberID="viewController">
-                    <!-- 口袋全景贴底、和屏幕一样宽，最宽 560pt（iPad 上居中）。
-                         压缩阻力必须压低：默认 750 和「等于屏宽」打平，图片会按自己 1024 的尺寸撑到 560。
-                         App 里的过渡覆盖层 LaunchRevealOverlay 按同一条规则摆，第一帧才能严丝合缝。 -->
+                    <!-- 完整口袋居中：边长 = min(屏宽, 屏高) × 0.5，最大 280pt，中心往上提屏高的 4%
+                         （centerY 乘数 0.92 = 1 − 2×0.04）。三个数和生成的 LaunchPocketGeometry 一致，
+                         App 里的过渡覆盖层 LaunchRevealOverlay 按同一条规则摆，第一帧才能严丝合缝。
+                         压缩阻力必须压低：默认 750 和「等于 0.5 屏宽」打平，图片会按自己 1024 的尺寸撑到上限。 -->
                     <view key="view" contentMode="scaleToFill" id="root">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="LaunchPocket" translatesAutoresizingMaskIntoConstraints="NO" id="pocket">
-                                <rect key="frame" x="0.0" y="502" width="430" height="430"/>
+                                <rect key="frame" x="107.5" y="321" width="215" height="215"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="pocket" secondAttribute="height" multiplier="1:1" id="pocket-aspect"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="560" id="pocket-w-max"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="pocket-w-max"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="safe"/>
                         <color key="backgroundColor" name="LaunchBackground"/>
                         <constraints>
-                            <constraint firstItem="pocket" firstAttribute="width" secondItem="root" secondAttribute="width" priority="999" id="pocket-w"/>
+                            <constraint firstItem="pocket" firstAttribute="width" secondItem="root" secondAttribute="width" multiplier="0.5" priority="999" id="pocket-w"/>
+                            <constraint firstItem="pocket" firstAttribute="width" relation="lessThanOrEqual" secondItem="root" secondAttribute="height" multiplier="0.5" id="pocket-w-short"/>
                             <constraint firstItem="pocket" firstAttribute="centerX" secondItem="root" secondAttribute="centerX" id="pocket-x"/>
-                            <constraint firstItem="pocket" firstAttribute="bottom" secondItem="root" secondAttribute="bottom" id="pocket-b"/>
+                            <constraint firstItem="pocket" firstAttribute="centerY" secondItem="root" secondAttribute="centerY" multiplier="0.92" id="pocket-y"/>
                         </constraints>
                     </view>
                 </viewController>

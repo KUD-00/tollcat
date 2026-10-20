@@ -3,6 +3,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { absoluteMarkdownUrl, absoluteUrl, locales, ogImageSize, ogImageUrl, siteConfig, type Locale } from '../config';
 import localeBootUrl from '../scripts/locale-boot.js?url';
+import platformBootUrl from '../scripts/platform-boot.js?url';
 import themeBootUrl from '../scripts/theme-boot.js?url';
 import themeUrl from '../scripts/theme.js?url';
 import '../styles/global.css';
@@ -38,6 +39,7 @@ const markdownHref = absoluteMarkdownUrl(locale, path);
     <meta name="theme-color" data-theme-color="dark" content="#0C0C0E" media="(prefers-color-scheme: dark)" />
     <script is:inline src={localeBootUrl}></script>
     <script is:inline src={themeBootUrl}></script>
+    <script is:inline src={platformBootUrl}></script>
     <meta name="format-detection" content="telephone=no" />
     <link rel="canonical" href={canonical} />
     {

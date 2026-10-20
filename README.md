@@ -85,26 +85,22 @@ If you'd like to support TollCat, there are two ways:
 - [GitHub Sponsors](https://github.com/sponsors/KUD-00)
 - A tip inside the app (Settings → Tip) — it treats the kitty
 
-## Ads and sponsorship
+## Sponsorship
 
-Tips alone probably won't pay for this. If enough people end up using TollCat for it to be worth keeping alive, we'll take sponsorship. Two shapes, both tied to services you already pay for:
+Tips alone probably won't pay for this. If enough people end up using TollCat for it to be worth keeping alive, we may take a sponsor, one at a time. That sponsor would show up in three places:
 
-- **One sponsor at a time.** That one gets first place in the store screenshots and the landing page examples, and a sponsor credit under Settings → About.
-- **Notes from the sponsor.** On that service's detail page, and when you're adding it. A new feature it shipped, a plan that's cheaper now. Always about that service — never something unrelated to the bills you're tracking.
+- First place in the store screenshots and the landing page examples
+- A credit under Settings → About, labelled as a sponsor
+- Now and then, a note on its own detail page — a new feature, a plan that's cheaper now
 
-None of it is in the app today. We'd rather write it down here than have it turn up in a release note one day.
+None of it is in the app today. If it happens, these don't change:
 
-Whatever it turns into, these are the lines:
+- **No ad network, no third-party SDK.** Anything you see came from us.
+- **What we say about a service isn't for sale.** That description is our own read, and sponsorship doesn't rewrite it.
+- **What you connect and spend stays on your device.** Sponsor notes come with the public catalog, and your phone picks the relevant one locally.
+- **Nothing interrupts you.** No popups, no notifications, and nothing beside the total on your dashboard.
 
-- **No ad network, no third-party SDK.** Anything you see came from us, not from an ad server.
-- **What we say about a service isn't for sale.** What it does, what's usage-based, when it settles — that description is our own read, and sponsorship doesn't rewrite it. A service is welcome to supply its own blurb, marked "provided by X", sitting alongside ours. That slot is free, and it stays free.
-- **Your phone picks which note to show, not us.** Sponsor notes ride along with the public catalog, which downloads whole; your phone chooses the relevant one locally. Which services you connect and what you spend stay unknown to us and to the sponsor — that never leaves your device, and it isn't slipped into a request either.
-- **Nothing interrupts you.** No full-screen ads, no popups, no notifications, and nothing beside the number on your dashboard.
-- **Sponsored says sponsored.** The About credit is labelled. Sponsors going first in example screenshots is declared right here, once, rather than tagged under every image.
-
-You don't have to take our word for any of that. The app is MIT and the source is right here: a build that crosses one of those lines shows up in the diff, and an issue pointing at it is entirely fair.
-
-Nobody enjoys reading the word "ads" in an app that leads with privacy. That's exactly why the limits go in writing now, while there's still no money on the table.
+The source is MIT and right here, so a build that crosses one of these lines shows up in the diff.
 
 ## License
 

@@ -53,6 +53,11 @@ pnpm preview:cf
 机壳里的画面：
 
 - iPhone：`src/assets/screenshots/iphone-{dashboard|wizard|services}-{zh|en|ja}-{light|dark}.png`。18 张屏幕。机身是官方 iPhone 17 Pro Product Bezel（浅色 Silver / 深色 Deep Blue），`PhoneFrame` 叠在画面上，锁屏动画仍在开孔里。
+- Android：`src/assets/screenshots/android-{dashboard|wizard|services}-{zh|en|ja}-{light|dark}.png`，和 iPhone 三屏一一对应。Pixel_10a 模拟器（1080×2424）装好 debug 包后跑 `bash scripts/capture-site-android-screenshots.sh`：状态栏走 demo 模式钉成 9:41，种子先落库再冷启动一次才截。机身是 Android Studio 自带的 Pixel 10 Pro device art（浅色 Porcelain，深色压成 Obsidian），`scripts/android_device_art.py` 导出叠层、印出开孔百分比，抄进 `global.css` 的 `html[data-platform="android"] .phone-device`。
+
+**机型切换。** `platform-boot.js` 在首帧前按 UA（或访客手动切过的记忆）写 `html[data-platform]`：Android 访客看 Pixel，其他人看 iPhone。两套机壳和截图都在页面里，CSS 只亮一套（`.only-apple` / `.only-android`），全部 `loading="lazy"`，藏起来的那套不会下载；首屏预加载由 Home 头部的小脚本按平台注入。凭据那几句（Keychain / iCloud 对 Android Keystore / 云端备份）、主按钮、「更多平台」里那颗按钮也跟着换。
+
+**开场。** 首页每个标签页演一次：整屏品牌紫、完整的口袋居中，和 App 启动画面同一张画、同一条摆法（`IntroArt.astro` 由 `render-app-icon.py` 生成，大小和上提量写在它根上的 CSS 变量里）。停一拍，从口袋中心开一个圆洞往外扩，页面从洞里展开。减少动态效果、带锚点进来、爬虫和测速都不演；JS 没跑起来，CSS 4 秒后自己淡掉。
 - 平台页：iPad 11" 横屏、Mac 主窗口、Mac 菜单栏面板；Android 仪表在 JNI 对得上、模拟器没 ANR 时才写入。`bash scripts/capture-site-platform-screenshots.sh`（iPad 默认同本机的 `docs/appstore/screenshots`，那批原图不进仓库，重截见 `scripts/capture-appstore-screenshots.sh`；Mac / Android 现截。Android 先 `scripts/android-run.sh`）。脚本末尾会跑 `scripts/composite-site-device-frames.py`：导出 iPhone 17 Pro 机壳叠层，并把 iPad / Mac 嵌进官方 Product Bezel（iPad Pro 11" / MacBook Pro 14"）。机壳清单、开孔和合成都在 `scripts/apple_bezels.py`——**商店宣传图用的是同一份**，两处不许各写一遍。开孔是量出来的（屏幕那块透明，从图边泛洪一遍剩下的就是它），量到的结果缓存在 `.cache/apple-bezels/holes.json`。原版 bezel 也缓存在那儿，不进 git；落地页用的是 `iphone-17-pro-*`、`ipad-bezel-*`、`macbook-window-*`。
 
 语言跟页面走，亮暗跟页头主题走（和厂标 marquee 同一套 `<picture data-theme-src>`）。

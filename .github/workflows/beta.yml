@@ -57,20 +57,29 @@ jobs:
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          # Without a development identity the archive mints a new cert every
+          # run until the account hits its cap (see release.yml's ios job).
+          DEV_CERTIFICATE_BASE64: ${{ secrets.DEV_CERTIFICATE_BASE64 }}
+          DEV_P12_PASSWORD: ${{ secrets.DEV_P12_PASSWORD }}
         run: |
           set -euo pipefail
           cert="$RUNNER_TEMP/build_certificate.p12"
+          dev_cert="$RUNNER_TEMP/dev_certificate.p12"
           keychain="$RUNNER_TEMP/app-signing.keychain-db"
           password="$(openssl rand -base64 24)"
           echo "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$cert"
+          echo "$DEV_CERTIFICATE_BASE64" | base64 --decode > "$dev_cert"
           security create-keychain -p "$password" "$keychain"
           security set-keychain-settings -lut 21600 "$keychain"
           security unlock-keychain -p "$password" "$keychain"
           security import "$cert" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security import "$dev_cert" -P "$DEV_P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
           security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain"
           security list-keychain -d user -s "$keychain" login.keychain-db
-          rm -f "$cert"
+          rm -f "$cert" "$dev_cert"
           echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+          security find-identity -v -p codesigning "$keychain" | grep -F "Apple Development" \
+            || { echo "no Apple Development identity: check secret DEV_CERTIFICATE_BASE64" >&2; exit 1; }
 
       - name: Write App Store Connect API key
         env:
